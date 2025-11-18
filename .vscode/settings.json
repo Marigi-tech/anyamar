@@ -1,0 +1,8 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.autoIndent": "full",
+  "editor.insertSpaces": true,
+  "material-icon-theme.folders.color": "#ef5350",
+  "editor.tabSize": 2
+}
