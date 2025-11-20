@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/data/notifiers.dart';
-import 'package:test_app/views/pages/welcome_page.dart';
+import 'package:test_app/views/pages/initial_pages/landing_page/landing_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -18,7 +18,7 @@ class ProfilePage extends StatelessWidget {
               themeIsDarkNotifier.value = true;
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => WelcomePage()),
+                MaterialPageRoute(builder: (_) => LandingPage()),
               );
             },
           ),

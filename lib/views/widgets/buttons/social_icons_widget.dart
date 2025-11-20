@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:test_app/data/models/social_icon_model.dart';
+
+Widget socialIconButton(SocialIconModel socialIcon) {
+  return InkWell(
+    onTap: () {}, // TODO: Add sign-in logic
+    borderRadius: BorderRadius.circular(12),
+    child: Container(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(socialIcon.iconPath, width: 20, height: 20),
+          SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              socialIcon.iconName,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15.0),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

@@ -1,0 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:test_app/views/pages/initial_pages/login_page/login_page_form.dart';
+
+class LoginPageMobile extends StatefulWidget {
+  const LoginPageMobile({super.key});
+
+  @override
+  State<LoginPageMobile> createState() => _LoginPageMobileState();
+}
+
+class _LoginPageMobileState extends State<LoginPageMobile> {
+  @override
+  Widget build(BuildContext context) {
+    return LogInPageForm();
+  }
+}
