@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/data/constants.dart';
+import 'package:test_app/data/constants/constants.dart';
 import 'package:test_app/data/notifiers.dart';
-import 'package:test_app/views/pages/welcome_page.dart';
+import 'package:test_app/views/pages/initial_pages/landing_page/landing_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,13 +37,13 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            fontFamily: 'Lato',
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromARGB(255, 69, 250, 78),
-
+              seedColor: AppColorsConstant.greenColor,
               brightness: value ? Brightness.dark : Brightness.light,
             ),
           ),
-          home: WelcomePage(),
+          home: LandingPage(),
         );
       },
     );
