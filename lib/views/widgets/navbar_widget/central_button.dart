@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/data/constants/gradients.dart';
+
+import 'package:test_app/data/notifiers.dart';
+
+class CentralButton extends StatefulWidget {
+  final int index;
+  final BoxDecoration backgroundColor;
+  const CentralButton({
+    super.key,
+    required this.index,
+    required this.backgroundColor,
+  });
+
+  @override
+  State<CentralButton> createState() => _CentralButtonState();
+}
+
+class _CentralButtonState extends State<CentralButton> {
+  late BoxDecoration backgroundColor;
+  @override
+  void initState() {
+    backgroundColor = widget.backgroundColor;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onHover: (event) {
+        setState(() {
+          backgroundColor = AppGradient.gradientLightGreen;
+        });
+      },
+      onExit: (event) {
+        setState(() {
+          backgroundColor = AppGradient.gradientGreen;
+        });
+      },
+      child: GestureDetector(
+        onTap: () {
+          selectedPageNotfier.value = widget.index;
+        },
+
+        child: Container(
+          height: 55,
+          width: 55,
+
+          decoration: BoxDecoration(
+            gradient: backgroundColor.gradient,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColorsConstant.lightGreenColor.withValues(alpha: 0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.home,
+            color: AppColorsConstant.whiteColor,
+            size: 22,
+          ),
+        ),
+      ),
+    );
+  }
+}

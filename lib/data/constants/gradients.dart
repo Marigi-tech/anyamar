@@ -75,4 +75,12 @@ class AppGradient {
       ],
     ),
   );
+  //Transparent
+  static const BoxDecoration gradientTransparent = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.transparent, Colors.transparent],
+    ),
+  );
 }
