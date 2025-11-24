@@ -33,6 +33,9 @@ class AppColorsConstant {
   static const Color blueColor = Colors.blue;
   static const Color lightBlueColor = Colors.lightBlue;
   static const Color darkBlueColor = Color.fromARGB(255, 13, 71, 161);
+  static const Color blueGreyColor = Colors.blueGrey;
+  static const Color darkNavColor = Color.fromARGB(255, 51, 48, 48);
+  static const Color lightNavColor = Color.fromARGB(255, 250, 245, 245);
 }
 
 //Dictates social signups
