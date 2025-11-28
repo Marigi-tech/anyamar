@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/data/constants/commons.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -96,6 +98,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               },
               child: Text('Open dialog'),
+            ),
+            //Change brightness
+            IconButton(
+              onPressed: () {
+                themeIsDarkNotifier.value = !themeIsDarkNotifier.value;
+              },
+              icon: Icon(
+                themeIsDarkNotifier.value == true
+                    ? Icons.light_mode
+                    : Icons.dark_mode,
+                size: 14,
+              ),
             ),
           ],
         ),

@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:test_app/data/notifiers.dart';
-import 'package:test_app/responsiveness/responsiveness.dart';
-import 'package:test_app/views/pages/dashboard_pages/chats_page.dart';
-import 'package:test_app/views/pages/dashboard_pages/finances_page.dart';
-import 'package:test_app/views/pages/dashboard_pages/home_page.dart';
-import 'package:test_app/views/pages/dashboard_pages/properties_page.dart';
-import 'package:test_app/views/pages/dashboard_pages/profile_page.dart';
-import 'package:test_app/views/pages/dashboard_pages/settings_page.dart';
-import 'package:test_app/views/widgets/navbar_widget/navbar_widget.dart';
-import 'package:test_app/views/widgets/theme_toggle_widget.dart';
+import 'package:test_app/data/constants/commons.dart';
 
-class WidgetTree extends StatelessWidget {
+class WidgetTree extends StatefulWidget {
   const WidgetTree({super.key});
 
   @override
+  State<WidgetTree> createState() => _WidgetTreeState();
+}
+
+class _WidgetTreeState extends State<WidgetTree> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool isSidebarCollapsed = false; // controls collapse/expand
+
+  @override
   Widget build(BuildContext context) {
-    //TODO:Place actual page list here
-    List<Widget> pages = [
+    final bool isMobile = Responsiveness.isMobile(context);
+
+    final List<Widget> pages = [
       PropertiesPage(),
       FinancesPage(),
       HomePage(),
@@ -24,48 +24,53 @@ class WidgetTree extends StatelessWidget {
       ProfilePage(),
     ];
 
-    String? title = 'Anyamar ';
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
-        actions: [
-          ThemeToggleWidget(),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => SettingsPage()),
-              );
-            },
-            icon: Icon(Icons.settings),
-          ),
-        ],
-      ),
-      drawer: Visibility(
-        visible: Responsiveness.isDesktop(context) ? true : false,
-        child: Drawer(
-          child: Column(
-            children: const [
-              DrawerHeader(child: Text('Welcome')),
-              ListTile(title: Text('Log Out')),
-            ],
-          ),
-        ),
-      ),
-      body: ValueListenableBuilder(
-        valueListenable: selectedPageNotfier,
-        builder: (context, value, child) {
-          print('This is the value $value');
+    final List<Widget> webPages = [
+      HomePage(),
+      PropertiesPage(),
+      FinancesPage(),
+      TenantsPage(),
+      ChatsPage(),
+      SettingsPage(),
+      ProfilePage(),
+    ];
 
-          return pages.elementAt(value);
+    return Scaffold(
+      key: scaffoldKey,
+
+      // Mobile drawer only
+      body: ValueListenableBuilder(
+        valueListenable: isSidebarCollapsedNotifier,
+        builder: (context, value, child) {
+          return Row(
+            children: [
+              /// Desktop Sidebar with animation
+              if (!isMobile) //For desktop / tablets and above (not phones)
+                AnimatedContainer(
+                  duration: const Duration(microseconds: 1),
+                  curve: Curves.easeInOut,
+                  width: isSidebarCollapsedNotifier.value ? 90 : 250,
+                  child: SidebarWidget(pages: pages),
+                ),
+
+              // Page Area
+              Expanded(
+                child: isMobile
+                    ? ValueListenableBuilder<int>(
+                        valueListenable: selectedPageNotifier,
+                        builder: (_, value, __) => pages.elementAt(value),
+                      )
+                    : ValueListenableBuilder<int>(
+                        valueListenable: selectedWebPageNotifier,
+                        builder: (_, value, __) => webPages.elementAt(value),
+                      ),
+              ),
+            ],
+          );
         },
       ),
 
-      bottomNavigationBar: Visibility(
-        visible: !Responsiveness.isDesktop(context) ? true : false,
-        child: NavbarWidget(),
-      ),
+      // Only mobile bottom nav
+      bottomNavigationBar: isMobile ? const NavbarWidget() : null,
     );
   }
 }

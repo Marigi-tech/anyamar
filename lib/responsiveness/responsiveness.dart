@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/responsiveness/screen_size.dart';
+import 'package:test_app/data/constants/commons.dart';
 
 class Responsiveness extends StatelessWidget {
   final Widget mobile;
