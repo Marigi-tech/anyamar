@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
           ListTile(
             title: Text('Log out'),
             onTap: () {
-              selectedPageNotfier.value = 0;
+              selectedPageNotifier.value = 0;
               themeIsDarkNotifier.value = true;
               Navigator.pushReplacement(
                 context,

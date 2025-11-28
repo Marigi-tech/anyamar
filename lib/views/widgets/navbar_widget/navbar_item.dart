@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/constants/constants.dart';
-import 'package:test_app/data/constants/gradients.dart';
-import 'package:test_app/data/notifiers.dart';
-import 'package:test_app/views/widgets/navbar_widget/central_button.dart';
+import 'package:test_app/data/constants/commons.dart';
 
 class NavItem extends StatefulWidget {
   final IconData icon;
@@ -47,7 +44,7 @@ class _NavItemState extends State<NavItem> {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = selectedPageNotfier.value == widget.index;
+    bool isSelected = selectedPageNotifier.value == widget.index;
 
     return Tooltip(
       message: widget.label, // 👈 Tooltip text
@@ -76,11 +73,11 @@ class _NavItemState extends State<NavItem> {
         },
 
         child: ValueListenableBuilder(
-          valueListenable: selectedPageNotfier,
+          valueListenable: selectedPageNotifier,
           builder: (context, value, child) {
             return GestureDetector(
               onTap: () {
-                selectedPageNotfier.value = widget.index;
+                selectedPageNotifier.value = widget.index;
               },
 
               child: Row(

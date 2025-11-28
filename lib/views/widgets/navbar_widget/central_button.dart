@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/constants/constants.dart';
-import 'package:test_app/data/constants/gradients.dart';
-
-import 'package:test_app/data/notifiers.dart';
+import 'package:test_app/data/constants/commons.dart';
 
 class CentralButton extends StatefulWidget {
   final int index;
@@ -41,7 +38,7 @@ class _CentralButtonState extends State<CentralButton> {
       },
       child: GestureDetector(
         onTap: () {
-          selectedPageNotfier.value = widget.index;
+          selectedPageNotifier.value = widget.index;
         },
 
         child: Container(

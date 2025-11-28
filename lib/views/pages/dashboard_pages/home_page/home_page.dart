@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/data/constants.dart';
-import 'package:test_app/views/widgets/hero_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,7 +10,12 @@ class HomePage extends StatelessWidget {
       padding: EdgeInsets.all(20.0),
       child: Column(
         children: [
-          HeroWidget(title: 'Welcome home'),
+          Row(
+            children: [
+              //Enter cards here
+            ],
+          ),
+          // HeroWidget(title: 'Welcome home'),
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),

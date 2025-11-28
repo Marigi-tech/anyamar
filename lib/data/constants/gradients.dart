@@ -83,4 +83,29 @@ class AppGradient {
       colors: [Colors.transparent, Colors.transparent],
     ),
   );
+  //Red color
+
+  static const BoxDecoration gradientRed = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        AppColorsConstant.redColor,
+        Color.fromARGB(255, 207, 19, 5),
+        Color.fromARGB(255, 121, 27, 21),
+      ],
+    ),
+  );
+  //Light Red
+  static const BoxDecoration gradientLightRed = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Color.fromARGB(255, 207, 19, 5),
+        AppColorsConstant.redColor,
+        Color.fromARGB(255, 121, 27, 21),
+      ],
+    ),
+  );
 }

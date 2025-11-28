@@ -15,7 +15,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: selectedPageNotfier,
+      valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
         return Padding(
           padding: EdgeInsets.only(left: 10, right: 20, top: 20, bottom: 20),
@@ -32,7 +32,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 child: NavigationBar(
                   selectedIndex: selectedPage,
                   onDestinationSelected: (value) {
-                    selectedPageNotfier.value = value;
+                    selectedPageNotifier.value = value;
                   },
                   height: 60.0,
                   destinations: const [

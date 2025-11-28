@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/models/social_icon_model.dart';
-export 'package:flutter_svg/flutter_svg.dart';
+import 'package:test_app/data/constants/commons.dart';
 
 //Dictates the app's theme (dark or light)
 class AppThemeModeConstant {
@@ -36,6 +35,7 @@ class AppColorsConstant {
   static const Color blueGreyColor = Colors.blueGrey;
   static const Color darkNavColor = Color.fromARGB(255, 51, 48, 48);
   static const Color lightNavColor = Color.fromARGB(255, 250, 245, 245);
+  static const Color redColor = Colors.red;
 }
 
 //Dictates social signups
