@@ -6,6 +6,9 @@ class SignUpPageMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SignUpForm();
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: SignUpForm(),
+    );
   }
 }

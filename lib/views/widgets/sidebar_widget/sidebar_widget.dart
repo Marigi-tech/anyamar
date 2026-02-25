@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/views/pages/initial_pages/landing_page/landing_page.dart';
 
@@ -12,24 +13,15 @@ class SidebarWidget extends StatelessWidget {
       valueListenable: isSidebarCollapsedNotifier,
       builder: (context, isCollapsed, child) {
         // --- CONTAINER SETUP ---
-        return Container(
-          // Set width based on the notifier state
-          // width: isCollapsed ? getSizeFromContext(context).width * .058 : null,
-          // Full width (or constrained by parent) for expanded state
-          // Apply horizontal padding ONLY when expanded, not when collapsed.
-          padding: isCollapsed
-              ? null // No padding when collapsed, helps prevent overflow
-              : const EdgeInsets.symmetric(horizontal: 30.0),
-
-          decoration: BoxDecoration(
+        return Card(
+          elevation: 6.0,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(5),
               bottomRight: Radius.circular(5),
             ),
-            color: themeIsDarkNotifier.value
-                ? AppColorsConstant.darkNavColor
-                : AppColorsConstant.lightNavColor,
           ),
+          margin: EdgeInsets.zero,
 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -43,25 +35,21 @@ class SidebarWidget extends StatelessWidget {
                       isSidebarCollapsedNotifier.value = !isCollapsed;
                     },
                     icon: Icon(
-                      isCollapsed ? Icons.expand_more_rounded : Icons.minimize,
+                      isCollapsed
+                          ? Icons.expand_more_rounded
+                          : CupertinoIcons.minus_circled,
                     ),
                   ),
                 ],
               ),
 
-              Visibility(
-                visible: true,
-                maintainSize: true, // Keep the space it would occupy
-                maintainAnimation: true,
-                maintainState: true,
-                child: Text(
-                  isCollapsed ? 'A' : 'Anyamar',
-                  style: TextStyle(
-                    color: AppColorsConstant.darkBlueColor,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 6.0,
-                  ),
+              Text(
+                isCollapsed ? 'A' : 'Anyamar',
+                style: TextStyle(
+                  color: AppColorsConstant.darkBlueColor,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 6.0,
                 ),
               ),
 
@@ -70,47 +58,57 @@ class SidebarWidget extends StatelessWidget {
               const SizedBox(height: 20.0),
               // --- DASHBOARD LINKS ---
               Expanded(
-                child: ListView.builder(
-                  itemCount: dashboardItems.length,
-                  itemBuilder: (context, index) {
-                    final item = dashboardItems[index];
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: 180,
+                    ), //?prevents renderflex issues arising from collapsing the sidebar
 
-                    return ValueListenableBuilder(
-                      valueListenable: selectedWebPageNotifier,
-                      builder: (context, pageIndex, child) {
-                        return item.index == 7
-                            //---Log out button--//
-                            ? Padding(
-                                padding: EdgeInsets.only(top: 30.0),
-                                child: SideBarItemWidget(
-                                  icon: item.icon,
-                                  title: item.title,
-                                  isLogOutButton: true,
-                                  index: item.index,
-                                  onPressedCallBack: () {
-                                    selectedPageNotifier.value = 0;
+                    child: ListView.builder(
+                      itemCount: dashboardItems.length,
+                      itemBuilder: (context, index) {
+                        final item = dashboardItems[index];
 
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => LandingPage(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : SideBarItemWidget(
-                                icon: item.icon,
-                                title: item.title,
-                                index: item.index,
-                                onPressedCallBack: () async {
-                                  selectedWebPageNotifier.value = item.index!;
-                                  selectedSideItemNotifier.value = item.index!;
-                                },
-                              );
+                        return ValueListenableBuilder(
+                          valueListenable: selectedWebPageNotifier,
+                          builder: (context, pageIndex, child) {
+                            return item.index == 7
+                                //---Log out button--//
+                                ? Padding(
+                                    padding: EdgeInsets.only(top: 30.0),
+                                    child: SideBarItemWidget(
+                                      icon: item.icon,
+                                      title: item.title,
+                                      isLogOutButton: true,
+                                      index: item.index,
+                                      onPressedCallBack: () {
+                                        selectedPageNotifier.value = 0;
+
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => LandingPage(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : SideBarItemWidget(
+                                    icon: item.icon,
+                                    title: item.title,
+                                    index: item.index,
+                                    onPressedCallBack: () async {
+                                      selectedWebPageNotifier.value =
+                                          item.index!;
+                                      selectedSideItemNotifier.value =
+                                          item.index!;
+                                    },
+                                  );
+                          },
+                        );
                       },
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ),
             ],

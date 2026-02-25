@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_app/data/constants/constants.dart';
 import 'package:test_app/views/pages/initial_pages/reset_password/forgot_password_page.dart';
 import 'package:test_app/views/pages/initial_pages/form_pages.dart';
-import 'package:test_app/views/widget_tree.dart';
+import 'package:test_app/views/pages/widget_tree/widget_tree.dart';
 import 'package:test_app/views/widgets/buttons/button_widget.dart';
 import 'package:test_app/views/widgets/form_elements/text_input_widget.dart';
 import 'package:test_app/views/widgets/social_icons_widget.dart';

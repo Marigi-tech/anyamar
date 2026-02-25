@@ -11,6 +11,9 @@ class LoginPageMobile extends StatefulWidget {
 class _LoginPageMobileState extends State<LoginPageMobile> {
   @override
   Widget build(BuildContext context) {
-    return LogInPageForm();
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: LogInPageForm(),
+    );
   }
 }

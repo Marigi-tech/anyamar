@@ -34,7 +34,7 @@ class AppColorsConstant {
   static const Color darkBlueColor = Color.fromARGB(255, 13, 71, 161);
   static const Color blueGreyColor = Colors.blueGrey;
   static const Color darkNavColor = Color.fromARGB(255, 51, 48, 48);
-  static const Color lightNavColor = Color.fromARGB(255, 250, 245, 245);
+  static const Color lightNavColor = Color.fromARGB(255, 238, 239, 240);
   static const Color redColor = Colors.red;
 }
 

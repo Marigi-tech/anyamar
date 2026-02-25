@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/data/constants/constants.dart';
 import 'package:test_app/views/pages/initial_pages/form_pages.dart';
-import 'package:test_app/views/widget_tree.dart';
+import 'package:test_app/views/pages/initial_pages/login_page/login_page.dart';
+import 'package:test_app/views/pages/widget_tree/widget_tree.dart';
 import 'package:test_app/views/widgets/buttons/button_widget.dart';
 import 'package:test_app/views/widgets/form_elements/text_input_widget.dart';
 import 'package:test_app/views/widgets/social_icons_widget.dart';
@@ -18,6 +19,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  Color? textColor;
 
   @override
   void dispose() {
@@ -66,6 +68,43 @@ class _SignUpFormState extends State<SignUpForm> {
               TextInputWidget(
                 fieldController: confirmPasswordController,
                 hintText: 'Confirm password',
+              ),
+              SizedBox(height: 15.0),
+              //? Sign in option
+              Align(
+                alignment: Alignment.topRight,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  onHover: (event) {
+                    setState(() {
+                      textColor = AppColorsConstant.greenColor;
+                    });
+                  },
+                  onExit: (event) {
+                    setState(() {
+                      textColor = null;
+                    });
+                  },
+
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginPage()),
+                      );
+                    },
+                    child: Text(
+                      'Already have an account? sign In',
+                      style: TextStyle(
+                        fontSize: 13,
+                        letterSpacing: 0.6,
+                        color: textColor,
+                        fontWeight: FontWeight.w100,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
               ),
 
               SizedBox(height: 50.0),

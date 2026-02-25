@@ -20,13 +20,11 @@ class CollapsedSideItem extends StatefulWidget {
 }
 
 class _CollapsedSideItemState extends State<CollapsedSideItem> {
-  late BoxDecoration backgroundColor;
   late bool isHovered;
   late bool isSelected;
 
   @override
   void initState() {
-    backgroundColor = _getNormalGradient();
     isHovered = false;
     isSelected = _getIsSelected();
     super.initState();
@@ -36,20 +34,9 @@ class _CollapsedSideItemState extends State<CollapsedSideItem> {
     return selectedSideItemNotifier.value == widget.index ? true : false;
   }
 
-  BoxDecoration _getHoverGradient() {
-    return widget.isLogOutButton == true
-        ? AppGradient.gradientRed
-        : AppGradient.gradientLightGreen;
-  }
-
-  BoxDecoration _getNormalGradient() {
-    return selectedSideItemNotifier.value == widget.index
-        ? AppGradient.gradientLightBlue
-        : AppGradient.gradientTransparent;
-  }
-
   @override
   Widget build(BuildContext context) {
+    isSelected = _getIsSelected();
     return Tooltip(
       message: widget.title, // 👈 Tooltip text
       waitDuration: const Duration(milliseconds: 300),
@@ -64,30 +51,48 @@ class _CollapsedSideItemState extends State<CollapsedSideItem> {
         fontSize: 12,
       ),
       child: Padding(
-        padding: EdgeInsets.only(bottom: 13.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 06.0),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           onHover: (event) {
             setState(() {
               isHovered = true;
-              backgroundColor = _getHoverGradient();
             });
           },
           onExit: (event) {
             setState(() {
-              backgroundColor = _getNormalGradient();
+              isHovered = false;
             });
           },
           child: GestureDetector(
             onTap: widget.onPressedCallBack,
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                gradient: backgroundColor.gradient,
-                shape: BoxShape.circle,
+            child: Card(
+              elevation: isHovered || isSelected ? 6.0 : 0,
+              shape: RoundedRectangleBorder(
+                side: isHovered || isSelected
+                    ? BorderSide(
+                        color: AppColorsConstant.lightGreenColor,
+                        width: 0.09,
+                      )
+                    : BorderSide.none,
+
+                borderRadius: isHovered || isSelected
+                    ? BorderRadius.circular(50)
+                    : BorderRadius.zero,
               ),
 
-              child: Icon(widget.icon, size: 18),
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Icon(
+                  widget.icon,
+                  size: 18,
+                  color: widget.isLogOutButton == true
+                      ? AppColorsConstant.redColor
+                      : isHovered || isSelected
+                      ? AppColorsConstant.lightGreenColor
+                      : AppColorsConstant.blueGreyColor,
+                ),
+              ),
             ),
           ),
         ),
