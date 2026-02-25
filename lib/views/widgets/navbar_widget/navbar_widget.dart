@@ -18,54 +18,121 @@ class _NavbarWidgetState extends State<NavbarWidget> {
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
         return Padding(
-          padding: EdgeInsets.only(left: 10, right: 20, top: 20, bottom: 20),
-          child: PhysicalModel(
-            elevation: 20,
-            color: Colors.transparent,
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(35),
-              child: Material(
-                color: themeIsDarkNotifier.value == true
-                    ? AppColorsConstant.darkNavColor.withValues(alpha: 0.95)
-                    : AppColorsConstant.lightNavColor.withValues(alpha: 0.95),
-                child: NavigationBar(
-                  selectedIndex: selectedPage,
-                  onDestinationSelected: (value) {
-                    selectedPageNotifier.value = value;
-                  },
-                  height: 60.0,
-                  destinations: const [
-                    NavItem(
-                      icon: CupertinoIcons.building_2_fill,
-                      label: "Properties",
-                      index: 0,
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 20,
+            top: 10,
+            bottom: 20,
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+
+            children: [
+              ///------  Navigation bar ---------------------//
+              ValueListenableBuilder(
+                valueListenable: themeIsDarkNotifier,
+                builder: (context, mode, child) {
+                  return PhysicalModel(
+                    elevation: 20,
+                    color: Colors.transparent,
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(35),
+                      child: Material(
+                        color: mode
+                            ? AppColorsConstant.darkNavColor.withValues(
+                                alpha: 0.95,
+                              )
+                            : AppColorsConstant.lightNavColor.withValues(
+                                alpha: 0.95,
+                              ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          child: NavigationBar(
+                            backgroundColor: themeIsDarkNotifier.value
+                                ? AppColorsConstant.darkNavColor.withValues(
+                                    alpha: 0.95,
+                                  )
+                                : AppColorsConstant.lightNavColor.withValues(
+                                    alpha: 0.95,
+                                  ),
+                            selectedIndex: selectedPage,
+                            onDestinationSelected: (value) {
+                              selectedPageNotifier.value = value;
+                            },
+                            height: 45,
+                            destinations: const [
+                              SizedBox(width: 60),
+                              SizedBox(width: 60),
+                              SizedBox(width: 60),
+                              SizedBox(width: 60),
+                              SizedBox(width: 60),
+                              SizedBox(width: 60),
+                              SizedBox(width: 60),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    NavItem(
-                      icon: CupertinoIcons.money_dollar_circle,
-                      label: "Finances",
-                      index: 1,
-                    ),
-                    NavItem(
-                      icon: CupertinoIcons.home,
-                      label: 'Home',
-                      index: 2,
-                      isHomeButton: true,
-                    ),
-                    NavItem(
-                      icon: CupertinoIcons.chat_bubble_2,
-                      label: "Chats",
-                      index: 3,
-                    ),
-                    NavItem(
-                      icon: CupertinoIcons.person,
-                      label: "Profile",
-                      index: 4,
-                    ),
-                  ],
+                  );
+                },
+              ),
+
+              ///------------ The navigation items --------------------------------//
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  NavItem(
+                    icon: CupertinoIcons.house,
+                    label: "Properties",
+                    index: 0,
+                  ),
+                  NavItem(
+                    icon: CupertinoIcons.money_dollar_circle,
+                    label: "Finances",
+                    index: 1,
+                  ),
+                  NavItem(
+                    icon: CupertinoIcons.person_2,
+                    label: "Tenants",
+                    index: 2,
+                  ),
+
+                  const SizedBox(width: 70),
+
+                  NavItem(
+                    icon: CupertinoIcons.chat_bubble_2,
+                    label: "Chats",
+                    index: 4,
+                  ),
+                  NavItem(
+                    icon: CupertinoIcons.gear,
+                    label: "Settings",
+                    index: 5,
+                  ),
+                  NavItem(
+                    icon: CupertinoIcons.person,
+                    label: "Profile",
+                    index: 6,
+                  ),
+                ],
+              ),
+
+              /// FLOATING HOME BUTTON
+              Positioned(
+                top: -20,
+                child: NavItem(
+                  icon: CupertinoIcons.home,
+                  label: "Home",
+                  index: 3,
+                  isHomeButton: true,
                 ),
               ),
-            ),
+            ],
           ),
         );
       },

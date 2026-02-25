@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:test_app/data/constants/commons.dart';
 
 class TextInputWidget extends StatefulWidget {
   final bool? isPassword;
@@ -26,6 +26,22 @@ class _TextInputWidgetState extends State<TextInputWidget> {
       obscureText: widget.isPassword == true ? true : false,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: AppColorsConstant.blueGreyColor,
+            width: 1,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: AppColorsConstant.greenColor,
+            width: 1.2,
+          ),
+        ),
+
         hintText: widget.hintText,
         suffix: widget.isPassword == true
             ? MouseRegion(

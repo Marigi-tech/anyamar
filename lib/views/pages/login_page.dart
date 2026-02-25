@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/widget_tree.dart';
+import 'package:test_app/views/pages/widget_tree/widget_tree.dart';
 import 'package:test_app/views/widgets/hero_widget.dart';
 
 class LoginPage extends StatefulWidget {

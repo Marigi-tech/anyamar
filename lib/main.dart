@@ -7,6 +7,9 @@ import 'package:test_app/views/pages/initial_pages/landing_page/landing_page.dar
 
 void main() {
   runApp(const MyApp());
+  // List<int> list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // list.retainWhere((item) => item.isEven);
+  // print(list);
 }
 
 class MyApp extends StatefulWidget {
@@ -38,6 +41,11 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Lato',
+            textTheme: TextTheme(
+              headlineLarge: TextStyle(fontFamily: 'Montserrat'),
+              headlineMedium: TextStyle(fontFamily: 'Montserrat'),
+              titleLarge: TextStyle(fontFamily: 'Montserrat'),
+            ),
             colorScheme: ColorScheme.fromSeed(
               seedColor: AppColorsConstant.greenColor,
               brightness: value ? Brightness.dark : Brightness.light,

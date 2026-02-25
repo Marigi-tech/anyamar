@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:test_app/data/constants/commons.dart';
 
 class NavItem extends StatefulWidget {
@@ -33,7 +32,7 @@ class _NavItemState extends State<NavItem> {
   BoxDecoration _getHoverGradient() {
     return widget.isHomeButton == true
         ? AppGradient.gradientLightGreen
-        : AppGradient.gradientLightYellow;
+        : AppGradient.gradientLightBlue;
   }
 
   BoxDecoration _getNormalGradient() {
@@ -97,7 +96,7 @@ class _NavItemState extends State<NavItem> {
                           ),
                           child: Icon(
                             widget.icon,
-                            size: 22,
+                            size: 18,
                             color:
                                 themeIsDarkNotifier.value ==
                                     true //DarkTheme

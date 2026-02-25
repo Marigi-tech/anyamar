@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:test_app/data/constants/commons.dart';
 
 class CentralButton extends StatefulWidget {
@@ -42,8 +41,8 @@ class _CentralButtonState extends State<CentralButton> {
         },
 
         child: Container(
-          height: 55,
-          width: 55,
+          height: 65,
+          width: 65,
 
           decoration: BoxDecoration(
             gradient: backgroundColor.gradient,

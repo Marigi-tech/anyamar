@@ -15,14 +15,16 @@ Widget socialIconButton(SocialIconModel socialIcon) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(socialIcon.iconPath, width: 20, height: 20),
+          SvgPicture.asset(socialIcon.iconPath, width: 13, height: 13),
           SizedBox(width: 8),
           Flexible(
-            child: Text(
-              socialIcon.iconName,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15.0),
-              overflow: TextOverflow.ellipsis,
+            child: FittedBox(
+              child: Text(
+                socialIcon.iconName,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 11.0),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],

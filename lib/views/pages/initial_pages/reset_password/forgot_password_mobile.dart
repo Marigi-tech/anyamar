@@ -6,6 +6,9 @@ class ForgotPasswordMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ForgotPasswordForm();
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: ForgotPasswordForm(),
+    );
   }
 }

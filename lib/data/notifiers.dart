@@ -9,3 +9,4 @@ ValueNotifier<int> selectedWebPageNotifier = ValueNotifier(
 ValueNotifier<bool> themeIsDarkNotifier = ValueNotifier(true);
 ValueNotifier<int> selectedSideItemNotifier = ValueNotifier(0);
 ValueNotifier<bool> isSidebarCollapsedNotifier = ValueNotifier(false);
+ValueNotifier<String> currentTimeNotifier = ValueNotifier('');

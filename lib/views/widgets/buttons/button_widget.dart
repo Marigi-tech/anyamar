@@ -6,12 +6,14 @@ class ColorButtonWidget extends StatefulWidget {
   final VoidCallback onPressedCallBack;
   final String buttonTitle;
   final Color buttonColor;
+  final double? fontSize;
 
   const ColorButtonWidget({
     super.key,
     required this.onPressedCallBack,
     required this.buttonTitle,
     required this.buttonColor,
+    this.fontSize,
   });
 
   @override
@@ -70,7 +72,7 @@ class _ColorButtonWidgetState extends State<ColorButtonWidget> {
             widget.buttonTitle,
             style: TextStyle(
               color: AppColorsConstant.whiteColor,
-              fontSize: 15,
+              fontSize: widget.fontSize ?? 15,
               letterSpacing: 1.0,
             ),
           ),
