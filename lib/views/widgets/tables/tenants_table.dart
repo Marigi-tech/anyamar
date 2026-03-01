@@ -1,7 +1,9 @@
 import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/data/data_sets/properties.dart';
+import 'package:test_app/data/models/tenant_model.dart';
 import 'package:test_app/views/widgets/tables/view_chevron_card.dart';
 
-TableRow buildHeaderRow() {
+TableRow buildTenantHeaderRow(bool isUnitTenant) {
   return TableRow(
     children: [
       Padding(
@@ -24,13 +26,16 @@ TableRow buildHeaderRow() {
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
         child: Text("Unit ", style: TextStyle(fontWeight: FontWeight.w200)),
       ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        child: Text(
-          "Property name",
-          style: TextStyle(fontWeight: FontWeight.w200),
-        ),
-      ),
+      !isUnitTenant
+          ? Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+              child: Text(
+                'Property ',
+                style: TextStyle(fontWeight: FontWeight.w200),
+              ),
+            )
+          : SizedBox(),
+
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
         child: Text("View", style: TextStyle(fontWeight: FontWeight.w200)),
@@ -39,12 +44,11 @@ TableRow buildHeaderRow() {
   );
 }
 
-TableRow buildDataRow(
+TableRow buildTenantDataRow(
   int index,
-  String name,
-  String phoneNumber,
-  String unit,
-  String propertyName,
+  Tenant tenant,
+  BuildContext context,
+  String? propertyName,
 ) {
   return TableRow(
     children: [
@@ -58,7 +62,7 @@ TableRow buildDataRow(
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         child: Text(
-          name,
+          tenant.tenantName,
           style: TextStyle(color: AppColorsConstant.blueGreyColor),
         ),
       ),
@@ -66,28 +70,99 @@ TableRow buildDataRow(
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         child: Text(
-          phoneNumber,
+          tenant.tenantPhoneNumber,
           style: TextStyle(color: AppColorsConstant.blueGreyColor),
         ),
       ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         child: Text(
-          unit,
+          tenant.unitName ?? tenant.unitId,
           style: TextStyle(color: AppColorsConstant.blueGreyColor),
         ),
       ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        child: Text(
-          propertyName,
-          style: TextStyle(color: AppColorsConstant.blueGreyColor),
-        ),
-      ),
+      propertyName != null
+          ? Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+              child: Text(
+                propertyName,
+                style: TextStyle(color: AppColorsConstant.blueGreyColor),
+              ),
+            )
+          : SizedBox(),
+
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         child: ViewChevronCard(onPressedCallBack: () {}),
       ),
     ],
   );
+}
+
+class TenantsTable extends StatelessWidget {
+  // final Property? property;
+  final List<Tenant> propertyTenants;
+  final bool isUnitTenant;
+  const TenantsTable({
+    super.key,
+    required this.propertyTenants,
+    required this.isUnitTenant,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Table(
+        border: TableBorder.symmetric(
+          outside: BorderSide.none,
+          inside: BorderSide(
+            color: AppColorsConstant.blueGreyColor,
+            width: 0.09,
+          ),
+        ),
+        columnWidths: const {
+          0: IntrinsicColumnWidth(),
+          1: FlexColumnWidth(2),
+          2: FlexColumnWidth(2),
+          3: FlexColumnWidth(2),
+          4: FlexColumnWidth(2),
+          5: FlexColumnWidth(1),
+        },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+
+        children: [
+          // Header Row
+          buildTenantHeaderRow(isUnitTenant),
+
+          ...isUnitTenant
+              ? propertyTenants.toList().asMap().entries.map((entry) {
+                  int index = entry.key;
+                  Tenant tenant = entry.value;
+                  return buildTenantDataRow(
+                    index + 1,
+                    tenant,
+                    context,
+                    null,
+                  ); // pass 1-based index
+                })
+              : propertyTenants.toList().asMap().entries.map((entry) {
+                  int index = entry.key;
+                  Tenant tenant = entry.value;
+                  String propertyName = properties
+                      .firstWhere(
+                        (element) => element.propertyId == tenant.propertyId,
+                      )
+                      .propertyName;
+                  return buildTenantDataRow(
+                    index + 1,
+                    tenant,
+                    context,
+                    propertyName,
+                  );
+                }),
+        ],
+      ),
+    );
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:test_app/data/constants/commons.dart';
 
 //Dictates the app's theme (dark or light)
@@ -36,6 +35,8 @@ class AppColorsConstant {
   static const Color darkNavColor = Color.fromARGB(255, 51, 48, 48);
   static const Color lightNavColor = Color.fromARGB(255, 238, 239, 240);
   static const Color redColor = Colors.red;
+  static const Color darkRedColor = Color.fromARGB(255, 133, 14, 6);
+  static const Color transparentColor = Colors.transparent;
 }
 
 //Dictates social signups

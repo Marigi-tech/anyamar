@@ -60,7 +60,7 @@ class _UncollapsedSidebarItemState extends State<UncollapsedSideItem> {
               shape: RoundedRectangleBorder(
                 side: isHovered || isSelected
                     ? BorderSide(
-                        color: AppColorsConstant.lightGreenColor,
+                        color: AppColorsConstant.blueGreyColor,
                         width: 0.09,
                       )
                     : BorderSide.none,

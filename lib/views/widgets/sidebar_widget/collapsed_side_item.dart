@@ -66,21 +66,15 @@ class _CollapsedSideItemState extends State<CollapsedSideItem> {
           },
           child: GestureDetector(
             onTap: widget.onPressedCallBack,
-            child: Card(
-              elevation: isHovered || isSelected ? 6.0 : 0,
-              shape: RoundedRectangleBorder(
-                side: isHovered || isSelected
-                    ? BorderSide(
-                        color: AppColorsConstant.lightGreenColor,
-                        width: 0.09,
-                      )
-                    : BorderSide.none,
-
-                borderRadius: isHovered || isSelected
-                    ? BorderRadius.circular(50)
-                    : BorderRadius.zero,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: isHovered
+                    ? AppGradient.gradientLightGreen.gradient
+                    : isSelected
+                    ? AppGradient.gradientBlue.gradient
+                    : AppGradient.gradientTransparent.gradient,
               ),
-
               child: Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Icon(
@@ -88,8 +82,8 @@ class _CollapsedSideItemState extends State<CollapsedSideItem> {
                   size: 18,
                   color: widget.isLogOutButton == true
                       ? AppColorsConstant.redColor
-                      : isHovered || isSelected
-                      ? AppColorsConstant.lightGreenColor
+                      : isSelected || isHovered
+                      ? AppColorsConstant.lightNavColor
                       : AppColorsConstant.blueGreyColor,
                 ),
               ),
