@@ -1,10 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/data/data_sets/properties.dart';
+import 'package:test_app/data/models/property_model.dart';
 import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
+import 'package:test_app/views/widgets/table_intro_widget/table_intro_widget.dart';
 import 'package:test_app/views/widgets/tables/properties_table.dart';
 
-class PropertiesPage extends StatelessWidget {
+class PropertiesPage extends StatefulWidget {
   const PropertiesPage({super.key});
+
+  @override
+  State<PropertiesPage> createState() => _PropertiesPageState();
+}
+
+class _PropertiesPageState extends State<PropertiesPage> {
+  List<Property> myProperties = [];
+  List<Property> filteredProperties = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    myProperties = properties.toList();
+
+    filteredProperties = myProperties;
+  }
+
+  void filterSinglePropertyTableData(String query) {
+    final search = query.toLowerCase();
+
+    setState(() {
+      filteredProperties = myProperties
+          .where((t) => t.matchesPropertySearch(search))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +51,11 @@ class PropertiesPage extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // --- HEADER (Flex: 1) ---
             SizedBox(
               height: headerHeight,
               child: IntroTextWidget(dashboardItem: 'Properties'),
             ),
 
-            // --- SCROLLABLE TABLE (Flex: 8) ---
-            // Replaced Expanded(flex: 8, ...) with SizedBox(height: tableHeight, ...)
             SizedBox(
               height: tableHeight,
               child: SingleChildScrollView(
@@ -38,134 +64,17 @@ class PropertiesPage extends StatelessWidget {
                   horizontal: 20.0,
                   vertical: 20.0,
                 ),
-                // The rest of your table structure remains the same
-                child: Table(
-                  border: TableBorder.symmetric(
-                    outside: BorderSide.none,
-                    inside: BorderSide(
-                      color: AppColorsConstant.blueGreyColor,
-                      width: 0.09,
-                    ),
-                  ),
-                  columnWidths: const {
-                    0: IntrinsicColumnWidth(),
-                    1: FlexColumnWidth(2),
-                    2: FlexColumnWidth(2),
-                    3: FlexColumnWidth(2),
-                    4: FlexColumnWidth(1),
-                    5: FlexColumnWidth(1),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    // Header Row
-                    buildHeaderRow(),
 
-                    // Dummy Rows
-                    buildDataRow(
-                      1,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
+                child: Column(
+                  children: [
+                    TableIntroWidget(
+                      dataLength: '${filteredProperties.length}',
+                      dataType: 'properties',
+                      onSearch: filterSinglePropertyTableData,
                     ),
-                    buildDataRow(
-                      2,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      3,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
-                    ),
-                    buildDataRow(
-                      4,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      5,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
-                    ),
-                    buildDataRow(
-                      6,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      7,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
-                    ),
-                    buildDataRow(
-                      8,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      9,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
-                    ),
-                    buildDataRow(
-                      10,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      11,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
-                    ),
-                    buildDataRow(
-                      12,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      13,
-                      "Sunrise Apartments",
-                      "Nairobi",
-                      "J. Mwangi",
-                      "18",
-                    ),
-                    buildDataRow(
-                      14,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
-                    buildDataRow(
-                      15,
-                      "Lavington Heights",
-                      "Nairobi",
-                      "A. Maragwa",
-                      "32",
-                    ),
+
+                    SizedBox(height: 30),
+                    PropertiesTable(myProperties: filteredProperties),
                   ],
                 ),
               ),

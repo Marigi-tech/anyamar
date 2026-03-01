@@ -1,10 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/data/data_sets/tenants.dart';
+import 'package:test_app/data/models/tenant_model.dart';
 import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
+import 'package:test_app/views/widgets/table_intro_widget/table_intro_widget.dart';
 import 'package:test_app/views/widgets/tables/tenants_table.dart';
 
-class TenantsPage extends StatelessWidget {
+class TenantsPage extends StatefulWidget {
   const TenantsPage({super.key});
+
+  @override
+  State<TenantsPage> createState() => _TenantsPageState();
+}
+
+class _TenantsPageState extends State<TenantsPage> {
+  List<Tenant> propertyTenants = [];
+  List<Tenant> filteredTenants = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    propertyTenants = tenants.toList();
+
+    filteredTenants = propertyTenants;
+  }
+
+  void filterSingleTenantTableData(String query) {
+    final search = query.toLowerCase();
+
+    setState(() {
+      filteredTenants = propertyTenants
+          .where((t) => t.matchesTenantSearch(search))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +59,6 @@ class TenantsPage extends StatelessWidget {
             ),
 
             // --- SCROLLABLE TABLE (Flex: 8) ---
-            // Replaced Expanded(flex: 8, ...) with SizedBox(height: tableHeight, ...)
             SizedBox(
               height: tableHeight,
               child: SingleChildScrollView(
@@ -39,133 +67,20 @@ class TenantsPage extends StatelessWidget {
                   horizontal: 20.0,
                   vertical: 20.0,
                 ),
-                // The rest of your table structure remains the same
-                child: Table(
-                  border: TableBorder.symmetric(
-                    outside: BorderSide.none,
-                    inside: BorderSide(
-                      color: AppColorsConstant.blueGreyColor,
-                      width: 0.09,
-                    ),
-                  ),
-                  columnWidths: const {
-                    0: IntrinsicColumnWidth(),
-                    1: FlexColumnWidth(2),
-                    2: FlexColumnWidth(2),
-                    3: FlexColumnWidth(2),
-                    4: FlexColumnWidth(1),
-                    5: FlexColumnWidth(1),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    // Header Row
-                    buildHeaderRow(),
 
-                    // Dummy Rows
-                    buildDataRow(
-                      1,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    TableIntroWidget(
+                      dataLength: '${filteredTenants.length}',
+                      dataType: 'tenants',
+                      onSearch: filterSingleTenantTableData,
                     ),
-                    buildDataRow(
-                      2,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      3,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      4,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      5,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      6,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      7,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      8,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      9,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      10,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      11,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      12,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      13,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      14,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
-                    ),
-                    buildDataRow(
-                      15,
-                      "Yvonne Marigi",
-                      "Unit 45901",
-                      "0799509119",
-                      "Unity Homes",
+
+                    SizedBox(height: 30),
+                    TenantsTable(
+                      isUnitTenant: false,
+                      propertyTenants: filteredTenants,
                     ),
                   ],
                 ),

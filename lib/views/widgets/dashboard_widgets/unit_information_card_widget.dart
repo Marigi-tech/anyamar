@@ -1,29 +1,29 @@
 import 'package:test_app/data/constants/commons.dart';
-import 'package:test_app/data/data_sets/properties.dart';
+import 'package:test_app/data/data_sets/units.dart';
+import 'package:test_app/data/models/property_model.dart';
+import 'package:test_app/data/models/unit_model.dart';
 import 'package:test_app/views/widgets/buttons/button_widget.dart';
-import 'package:test_app/views/widgets/tables/properties_table.dart';
+import 'package:test_app/views/widgets/tables/units_table.dart';
 
-class PropertyInformationCardWidget extends StatefulWidget {
-  const PropertyInformationCardWidget({super.key});
+class UnitInformationCardWidget extends StatelessWidget {
+  final Property property;
+  const UnitInformationCardWidget({super.key, required this.property});
 
-  @override
-  State<PropertyInformationCardWidget> createState() =>
-      _PropertyInformationCardWidgetState();
-}
-
-class _PropertyInformationCardWidgetState
-    extends State<PropertyInformationCardWidget> {
   @override
   Widget build(BuildContext context) {
+    List<Unit> propertyUnits = units
+        .where((element) => element.propertyId == property.propertyId)
+        .toList();
     return ValueListenableBuilder(
       valueListenable: selectedWebPageNotifier,
       builder: (context, value, child) {
         return Container(
           width: Responsiveness.isDesktop(context)
-              ? getSizeFromContext(context).width * .50
+              ? getSizeFromContext(context).width * .60
               : double.infinity,
           height: 400,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           child: Card(
             elevation: 6,
             shape: RoundedRectangleBorder(
@@ -41,7 +41,7 @@ class _PropertyInformationCardWidgetState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Properties',
+                        'Units',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -52,7 +52,8 @@ class _PropertyInformationCardWidgetState
                           //View button
                           ColorButtonWidget(
                             onPressedCallBack: () {
-                              selectedWebPageNotifier.value = 1;
+                              //todo:Add unit logic
+                              // selectedWebPageNotifier.value = 1;
                             },
                             buttonTitle: 'View all',
                             fontSize: 11,
@@ -71,10 +72,11 @@ class _PropertyInformationCardWidgetState
                 SizedBox(height: 10.0),
                 //Insert table here
                 // Scrollable Table Section
+                // Scrollable Table Section
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: PropertiesTable(myProperties: properties),
+                    child: UnitsTable(units: propertyUnits),
                   ),
                 ),
               ],

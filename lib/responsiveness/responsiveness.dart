@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:test_app/data/constants/commons.dart';
 
 class Responsiveness extends StatelessWidget {
@@ -26,13 +25,13 @@ class Responsiveness extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = getSizeFromContext(context);
+    final Size size = getSizeFromContext(context);
     //If width > 1100, it's a desktop
-    if (_size.width >= 1100) {
+    if (size.width >= 1100) {
       return desktop;
     }
     //If width is less than 1100 and greater than 850, it's a tablet
-    else if (_size.width >= 850 && _size.width < 1100) {
+    else if (size.width >= 850 && size.width < 1100) {
       return tablet;
     }
     //If width is less than 850, it's a phone

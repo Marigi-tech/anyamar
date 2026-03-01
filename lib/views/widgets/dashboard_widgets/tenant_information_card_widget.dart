@@ -1,20 +1,20 @@
 import 'package:test_app/data/constants/commons.dart';
-
+import 'package:test_app/data/models/property_model.dart';
+import 'package:test_app/data/data_sets/properties.dart';
+import 'package:test_app/data/data_sets/tenants.dart';
 import 'package:test_app/views/widgets/buttons/button_widget.dart';
 
 class TenantInformationCardWidget extends StatelessWidget {
-  const TenantInformationCardWidget({super.key});
+  final bool isUnitTenant; // if not a unit tenant then it's a property tenant
+  final Property? property;
+  const TenantInformationCardWidget({
+    super.key,
+    this.isUnitTenant = false,
+    this.property,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Dummy tenants info
-    final List<Map<String, String>> tenants = [
-      {"name": "John Doe", "property": "Sunrise Apartments"},
-      {"name": "Mary Kim", "property": "Emerald Estate"},
-      {"name": "Alex Maina", "property": "Hillview Homes"},
-      {"name": "Grace Wairimu", "property": "Palm Villas"},
-      {"name": "Samuel Kip", "property": "BlueSky Towers"},
-    ];
     //TODO:list of alternating avatar colors
     final List<Color> avatarBackgroundColors = [
       AppColorsConstant.darkBlueColor,
@@ -79,11 +79,27 @@ class TenantInformationCardWidget extends StatelessWidget {
 
                 Expanded(
                   child: ListView.separated(
-                    itemCount: tenants.length,
+                    itemCount: isUnitTenant
+                        ? tenants
+                              .where(
+                                (p) => p.propertyId == property?.propertyId,
+                              )
+                              .length
+                        : tenants.length,
+
                     separatorBuilder: (_, __) =>
                         const Divider(height: 12, thickness: 0.15),
                     itemBuilder: (context, index) {
-                      final tenant = tenants[index];
+                      // final tenant = tenants[index];
+
+                      final tenant = isUnitTenant
+                          ? tenants
+                                .where(
+                                  (p) => p.propertyId == property?.propertyId,
+                                )
+                                .toList()[index]
+                          : tenants[index];
+
                       return ListTile(
                         leading: CircleAvatar(
                           radius: 18,
@@ -91,7 +107,7 @@ class TenantInformationCardWidget extends StatelessWidget {
                               avatarBackgroundColors[index %
                                   avatarBackgroundColors.length],
                           child: Text(
-                            tenant["name"]![0],
+                            tenant.tenantName[0],
                             style: const TextStyle(
                               fontWeight: FontWeight.w200,
                               color: AppColorsConstant.whiteColor,
@@ -99,11 +115,18 @@ class TenantInformationCardWidget extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          tenant["name"]!,
+                          tenant.tenantName,
                           style: const TextStyle(fontSize: 14),
                         ),
                         subtitle: Text(
-                          tenant["property"]!,
+                          isUnitTenant
+                              ? tenant.unitName ?? ''
+                              : properties
+                                    .firstWhere(
+                                      (p) => p.propertyId == tenant.propertyId,
+                                    )
+                                    .propertyName,
+
                           style: const TextStyle(
                             fontSize: 12,
                             color: AppColorsConstant.blueGreyColor,
