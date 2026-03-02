@@ -2,7 +2,9 @@ import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/data/data_sets/tenants.dart';
 import 'package:test_app/data/models/tenant_model.dart';
 import 'package:test_app/data/models/unit_model.dart';
+import 'package:test_app/views/widgets/cards/card_header_widget.dart';
 import 'package:test_app/views/widgets/information_badges/information_badge_widget.dart';
+import 'package:test_app/views/widgets/tables/table_widget.dart';
 import 'package:test_app/views/widgets/tables/view_chevron_card.dart';
 
 TableRow buildUnitHeaderRow() {
@@ -83,44 +85,46 @@ TableRow buildUnitDataRow(Unit unit, int index, BuildContext context) {
 
 class UnitsTable extends StatelessWidget {
   final List<Unit> units;
-  const UnitsTable({super.key, required this.units});
+  final bool hasCardHeader;
+  const UnitsTable({
+    super.key,
+    required this.units,
+    required this.hasCardHeader,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Table(
-        border: TableBorder.symmetric(
-          outside: BorderSide.none,
-          inside: BorderSide(
-            color: AppColorsConstant.blueGreyColor,
-            width: 0.09,
-          ),
-        ),
-        columnWidths: const {
-          0: IntrinsicColumnWidth(),
-          1: FlexColumnWidth(2),
-          2: FlexColumnWidth(2),
-          3: FlexColumnWidth(2),
-          4: FlexColumnWidth(1),
-          5: FlexColumnWidth(4),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: [
-          // Header Row
-          buildUnitHeaderRow(),
+    return TableWidget(
+      cardHeaderWidget: hasCardHeader
+          ? CardHeaderWidget(
+              cardTitle: 'Units',
+              buttonTitle: 'View all',
+              onPressedCallBack: () {},
+            )
+          : SizedBox(),
+      tableColumnWidths: const {
+        0: IntrinsicColumnWidth(),
+        1: FlexColumnWidth(2),
+        2: FlexColumnWidth(2),
+        3: FlexColumnWidth(2),
+        4: FlexColumnWidth(1),
+        5: FlexColumnWidth(4),
+      },
 
-          ...units.toList().asMap().entries.map((entry) {
-            int index = entry.key; // 0, 1, 2, ...
-            Unit unit = entry.value;
-            return buildUnitDataRow(
-              unit,
-              index + 1,
-              context,
-            ); // pass 1-based index
-          }),
-        ],
-      ),
+      tableChildren: [
+        // Header Row
+        buildUnitHeaderRow(),
+
+        ...units.toList().asMap().entries.map((entry) {
+          int index = entry.key; // 0, 1, 2, ...
+          Unit unit = entry.value;
+          return buildUnitDataRow(
+            unit,
+            index + 1,
+            context,
+          ); // pass 1-based index
+        }),
+      ],
     );
   }
 }

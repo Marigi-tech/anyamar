@@ -74,7 +74,10 @@ class _PropertiesPageState extends State<PropertiesPage> {
                     ),
 
                     SizedBox(height: 30),
-                    PropertiesTable(myProperties: filteredProperties),
+                    PropertiesTable(
+                      myProperties: filteredProperties,
+                      hasCardHeader: false,
+                    ),
                   ],
                 ),
               ),

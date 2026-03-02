@@ -50,7 +50,7 @@ class _PropertyUnitsState extends State<PropertyUnits> {
         ),
 
         SizedBox(height: 30),
-        UnitsTable(units: filteredUnits),
+        UnitsTable(units: filteredUnits, hasCardHeader: false),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:test_app/data/models/unit_model.dart';
+import 'package:test_app/data/models/unit_types_model.dart';
 
 final List<Unit> units = [
   Unit(
@@ -7,6 +8,7 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T001",
     isOccupied: true,
+    unitType: UnitType.airbnb,
   ),
   Unit(
     unitId: "U002",
@@ -14,6 +16,7 @@ final List<Unit> units = [
     propertyId: "P002",
     tenantId: "T002",
     isOccupied: true,
+    unitType: UnitType.studio,
   ),
   Unit(
     unitId: "U003",
@@ -21,6 +24,7 @@ final List<Unit> units = [
     propertyId: "P003",
     tenantId: "T003",
     isOccupied: true,
+    unitType: UnitType.oneBedroom,
   ),
   Unit(
     unitId: "U004",
@@ -28,6 +32,7 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T004",
     isOccupied: true,
+    unitType: UnitType.twoBedroom,
   ),
   Unit(
     unitId: "U005",
@@ -35,6 +40,7 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T005",
     isOccupied: true,
+    unitType: UnitType.oneBedroom,
   ),
   Unit(
     unitId: "U006",
@@ -42,17 +48,20 @@ final List<Unit> units = [
     propertyId: "P001",
 
     isOccupied: false,
+    unitType: UnitType.oneBedroom,
   ),
   Unit(
     unitId: "U007",
     unitName: "Sunset AD",
     propertyId: "P001",
     isOccupied: false,
+    unitType: UnitType.oneBedroom,
   ),
   Unit(
     unitId: "U008",
     unitName: "Sunset AF",
     propertyId: "P001",
     isOccupied: false,
+    unitType: UnitType.oneBedroom,
   ),
 ];

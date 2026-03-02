@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/data/constants.dart';
 import 'package:test_app/data/constants/constants.dart';
 import 'package:test_app/data/constants/gradients.dart';
 
@@ -70,10 +71,9 @@ class _ColorButtonWidgetState extends State<ColorButtonWidget> {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
             widget.buttonTitle,
-            style: TextStyle(
+            style: CustomTextStyles.cardExtraDescriptionStyle.copyWith(
+              fontStyle: FontStyle.normal,
               color: AppColorsConstant.whiteColor,
-              fontSize: widget.fontSize ?? 15,
-              letterSpacing: 1.0,
             ),
           ),
         ),

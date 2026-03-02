@@ -1,5 +1,7 @@
 import 'package:test_app/data/data_sets/properties.dart';
+import 'package:test_app/data/data_sets/units.dart';
 import 'package:test_app/data/models/property_model.dart';
+import 'package:test_app/data/models/unit_model.dart';
 
 class Tenant {
   final String tenantId;
@@ -23,6 +25,7 @@ class Tenant {
     final Property propertyDeets = properties
         .where((p) => p.propertyId == propertyId)
         .single;
+    final Unit unitDeets = units.where((u) => u.tenantId == tenantId).single;
 
     return tenantId.toLowerCase().contains(search.toLowerCase()) ||
         (tenantName).toLowerCase().contains(search.toLowerCase()) ||
@@ -30,6 +33,7 @@ class Tenant {
         (tenantPhoneNumber).toLowerCase().contains(search.toLowerCase()) ||
         (propertyId).toLowerCase().contains(search) ||
         (propertyDeets.propertyLocation).toLowerCase().contains(search) ||
-        (propertyDeets.propertyName).toLowerCase().contains(search);
+        (propertyDeets.propertyName).toLowerCase().contains(search) ||
+        (unitDeets.unitType.label).toLowerCase().contains(search);
   }
 }

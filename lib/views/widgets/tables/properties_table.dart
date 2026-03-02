@@ -2,6 +2,8 @@ import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/data/models/property_model.dart';
 import 'package:test_app/data/data_sets/units.dart';
 import 'package:test_app/views/pages/information_pages/single_property/single_property_page.dart';
+import 'package:test_app/views/widgets/cards/card_header_widget.dart';
+import 'package:test_app/views/widgets/tables/table_widget.dart';
 
 import 'package:test_app/views/widgets/tables/view_chevron_card.dart';
 
@@ -98,21 +100,26 @@ TableRow buildDataRow(Property property, int index, BuildContext context) {
 
 class PropertiesTable extends StatelessWidget {
   final List<Property> myProperties;
-  const PropertiesTable({super.key, required this.myProperties});
+  final bool hasCardHeader;
+  const PropertiesTable({
+    super.key,
+    required this.myProperties,
+    required this.hasCardHeader,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Table(
-        border: TableBorder.symmetric(
-          outside: BorderSide.none,
-          inside: BorderSide(
-            color: AppColorsConstant.blueGreyColor,
-            width: 0.09,
-          ),
-        ),
-        columnWidths: const {
+      child: TableWidget(
+        cardHeaderWidget: hasCardHeader
+            ? CardHeaderWidget(
+                cardTitle: 'Properties',
+                buttonTitle: 'View all',
+                onPressedCallBack: () => selectedWebPageNotifier.value = 1,
+              )
+            : SizedBox(),
+        tableColumnWidths: const {
           0: IntrinsicColumnWidth(),
           1: FlexColumnWidth(2),
           2: FlexColumnWidth(2),
@@ -120,8 +127,8 @@ class PropertiesTable extends StatelessWidget {
           4: FlexColumnWidth(1),
           5: FlexColumnWidth(1),
         },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: [
+
+        tableChildren: [
           // Header Row
           buildHeaderRow(),
 

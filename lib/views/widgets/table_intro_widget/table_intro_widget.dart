@@ -27,6 +27,7 @@ class TableIntroWidget extends StatelessWidget {
         SearchWidget(
           onSearch: onSearch,
           width: getSizeFromContext(context).width / 3,
+          placeholder: 'Search ${dataType.toLowerCase()}',
         ),
         SizedBox(width: 10.0),
         Row(

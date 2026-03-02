@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/data/constants.dart';
 
 class SearchWidget extends StatelessWidget {
   final ValueChanged<String>? onSearch;
   final double? width;
-  const SearchWidget({super.key, this.onSearch, this.width});
+  final String? placeholder;
+  const SearchWidget({super.key, this.onSearch, this.width, this.placeholder});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,8 @@ class SearchWidget extends StatelessWidget {
           textInputAction: TextInputAction.done,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            hintText: 'Search',
+            hintText: placeholder ?? 'Search',
+            hintStyle: CustomTextStyles.cardDescriptionStyle,
             prefixIcon: const Icon(CupertinoIcons.search),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),

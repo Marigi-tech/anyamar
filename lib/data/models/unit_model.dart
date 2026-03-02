@@ -1,5 +1,6 @@
 import 'package:test_app/data/data_sets/tenants.dart';
 import 'package:test_app/data/models/tenant_model.dart';
+import 'package:test_app/data/models/unit_types_model.dart';
 
 class Unit {
   final String unitId;
@@ -7,14 +8,15 @@ class Unit {
   final String propertyId;
   final String? tenantId;
   final bool? isOccupied;
+  final UnitType unitType;
 
   Unit({
     required this.unitId,
     required this.unitName,
     required this.propertyId,
     this.tenantId,
-
     this.isOccupied = false,
+    required this.unitType,
   });
   bool matchesUnitSearch(String query) {
     final search = query.toLowerCase();
@@ -32,7 +34,8 @@ class Unit {
         (tenantInformation?.tenantPhoneNumber ?? '').toLowerCase().contains(
           search,
         ) ||
-        statusText.contains(search);
+        statusText.contains(search) ||
+        (unitType.label).toLowerCase().contains(search);
   }
   // factory Unit.fromMap(Map<String, dynamic> map) {
   //   return Unit(

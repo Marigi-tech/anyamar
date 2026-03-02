@@ -1,6 +1,9 @@
 import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/data/data_sets/properties.dart';
+import 'package:test_app/data/data_sets/units.dart';
 import 'package:test_app/data/models/tenant_model.dart';
+import 'package:test_app/data/models/unit_model.dart';
+import 'package:test_app/views/widgets/tables/table_widget.dart';
 import 'package:test_app/views/widgets/tables/view_chevron_card.dart';
 
 TableRow buildTenantHeaderRow(bool isUnitTenant) {
@@ -26,15 +29,14 @@ TableRow buildTenantHeaderRow(bool isUnitTenant) {
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
         child: Text("Unit ", style: TextStyle(fontWeight: FontWeight.w200)),
       ),
-      !isUnitTenant
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-              child: Text(
-                'Property ',
-                style: TextStyle(fontWeight: FontWeight.w200),
-              ),
-            )
-          : SizedBox(),
+
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+        child: Text(
+          isUnitTenant ? 'Unit Type' : 'Property ',
+          style: TextStyle(fontWeight: FontWeight.w200),
+        ),
+      ),
 
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
@@ -48,7 +50,7 @@ TableRow buildTenantDataRow(
   int index,
   Tenant tenant,
   BuildContext context,
-  String? propertyName,
+  String? propertyNameOrUnitType,
 ) {
   return TableRow(
     children: [
@@ -81,15 +83,14 @@ TableRow buildTenantDataRow(
           style: TextStyle(color: AppColorsConstant.blueGreyColor),
         ),
       ),
-      propertyName != null
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-              child: Text(
-                propertyName,
-                style: TextStyle(color: AppColorsConstant.blueGreyColor),
-              ),
-            )
-          : SizedBox(),
+
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+        child: Text(
+          propertyNameOrUnitType ?? '',
+          style: TextStyle(color: AppColorsConstant.blueGreyColor),
+        ),
+      ),
 
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
@@ -111,58 +112,51 @@ class TenantsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Table(
-        border: TableBorder.symmetric(
-          outside: BorderSide.none,
-          inside: BorderSide(
-            color: AppColorsConstant.blueGreyColor,
-            width: 0.09,
-          ),
-        ),
-        columnWidths: const {
-          0: IntrinsicColumnWidth(),
-          1: FlexColumnWidth(2),
-          2: FlexColumnWidth(2),
-          3: FlexColumnWidth(2),
-          4: FlexColumnWidth(2),
-          5: FlexColumnWidth(1),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+    return TableWidget(
+      cardHeaderWidget: SizedBox(),
+      tableColumnWidths: const {
+        0: IntrinsicColumnWidth(),
+        1: FlexColumnWidth(2),
+        2: FlexColumnWidth(2),
+        3: FlexColumnWidth(2),
+        4: FlexColumnWidth(2),
+        5: FlexColumnWidth(1),
+      },
 
-        children: [
-          // Header Row
-          buildTenantHeaderRow(isUnitTenant),
+      tableChildren: [
+        // Header Row
+        buildTenantHeaderRow(isUnitTenant),
 
-          ...isUnitTenant
-              ? propertyTenants.toList().asMap().entries.map((entry) {
-                  int index = entry.key;
-                  Tenant tenant = entry.value;
-                  return buildTenantDataRow(
-                    index + 1,
-                    tenant,
-                    context,
-                    null,
-                  ); // pass 1-based index
-                })
-              : propertyTenants.toList().asMap().entries.map((entry) {
-                  int index = entry.key;
-                  Tenant tenant = entry.value;
-                  String propertyName = properties
-                      .firstWhere(
-                        (element) => element.propertyId == tenant.propertyId,
-                      )
-                      .propertyName;
-                  return buildTenantDataRow(
-                    index + 1,
-                    tenant,
-                    context,
-                    propertyName,
-                  );
-                }),
-        ],
-      ),
+        ...isUnitTenant
+            ? propertyTenants.toList().asMap().entries.map((entry) {
+                int index = entry.key;
+                Tenant tenant = entry.value;
+                Unit propertyUnit = units
+                    .where((u) => u.tenantId == tenant.tenantId)
+                    .single;
+                return buildTenantDataRow(
+                  index + 1,
+                  tenant,
+                  context,
+                  propertyUnit.unitType.label,
+                ); // pass 1-based index
+              })
+            : propertyTenants.toList().asMap().entries.map((entry) {
+                int index = entry.key;
+                Tenant tenant = entry.value;
+                String propertyName = properties
+                    .firstWhere(
+                      (element) => element.propertyId == tenant.propertyId,
+                    )
+                    .propertyName;
+                return buildTenantDataRow(
+                  index + 1,
+                  tenant,
+                  context,
+                  propertyName,
+                );
+              }),
+      ],
     );
   }
 }
