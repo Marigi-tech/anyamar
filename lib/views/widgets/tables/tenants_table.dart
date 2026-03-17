@@ -1,6 +1,7 @@
 import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/data/data_sets/properties.dart';
 import 'package:test_app/data/models/tenant_model.dart';
+import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_page.dart';
 import 'package:test_app/views/widgets/tables/view_chevron_card.dart';
 
 TableRow buildTenantHeaderRow(bool isUnitTenant) {
@@ -93,7 +94,15 @@ TableRow buildTenantDataRow(
 
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        child: ViewChevronCard(onPressedCallBack: () {}),
+        child: ViewChevronCard(
+          onPressedCallBack: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => SingleTenantPage(tenant: tenant),
+              ),
+            );
+          },
+        ),
       ),
     ],
   );

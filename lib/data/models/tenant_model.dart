@@ -8,6 +8,7 @@ class Tenant {
   final String tenantPhoneNumber;
   final String propertyId;
   final String? unitName;
+  final String? tenantEmail;
 
   Tenant({
     required this.unitId,
@@ -16,6 +17,7 @@ class Tenant {
     required this.tenantId,
     required this.tenantName,
     this.unitName,
+    this.tenantEmail,
   });
   bool matchesTenantSearch(String query) {
     final search = query.toLowerCase();
@@ -23,11 +25,13 @@ class Tenant {
     final Property propertyDeets = properties
         .where((p) => p.propertyId == propertyId)
         .single;
+    final String tEmail = tenantEmail ?? '';
 
     return tenantId.toLowerCase().contains(search.toLowerCase()) ||
         (tenantName).toLowerCase().contains(search.toLowerCase()) ||
         (unitN).toLowerCase().contains(search) ||
         (tenantPhoneNumber).toLowerCase().contains(search.toLowerCase()) ||
+        (tEmail).toLowerCase().contains(search.toLowerCase()) ||
         (propertyId).toLowerCase().contains(search) ||
         (propertyDeets.propertyLocation).toLowerCase().contains(search) ||
         (propertyDeets.propertyName).toLowerCase().contains(search);

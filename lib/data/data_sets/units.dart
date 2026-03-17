@@ -7,6 +7,8 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T001",
     isOccupied: true,
+    rentCurrency: 'Ksh',
+    unitRent: 30000,
   ),
   Unit(
     unitId: "U002",
@@ -14,6 +16,8 @@ final List<Unit> units = [
     propertyId: "P002",
     tenantId: "T002",
     isOccupied: true,
+    rentCurrency: 'Ksh',
+    unitRent: 20000,
   ),
   Unit(
     unitId: "U003",
@@ -21,6 +25,8 @@ final List<Unit> units = [
     propertyId: "P003",
     tenantId: "T003",
     isOccupied: true,
+    rentCurrency: 'Ksh',
+    unitRent: 25000,
   ),
   Unit(
     unitId: "U004",
@@ -28,6 +34,8 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T004",
     isOccupied: true,
+    rentCurrency: 'Ksh',
+    unitRent: 15000,
   ),
   Unit(
     unitId: "U005",
@@ -35,24 +43,31 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T005",
     isOccupied: true,
+    rentCurrency: 'Ksh',
+    unitRent: 50000,
   ),
   Unit(
     unitId: "U006",
     unitName: "Sunset AC",
     propertyId: "P001",
-
     isOccupied: false,
+    rentCurrency: 'Ksh',
+    unitRent: 30000,
   ),
   Unit(
     unitId: "U007",
     unitName: "Sunset AD",
     propertyId: "P001",
     isOccupied: false,
+    rentCurrency: 'Ksh',
+    unitRent: 27000,
   ),
   Unit(
     unitId: "U008",
     unitName: "Sunset AF",
     propertyId: "P001",
     isOccupied: false,
+    rentCurrency: 'Ksh',
+    unitRent: 30000,
   ),
 ];

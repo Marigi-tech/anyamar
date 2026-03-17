@@ -7,3 +7,11 @@ String formatPrettyDate(DateTime date) {
 
   return "$dayName , ${date.day} $month $year";
 }
+
+String formatStandardDate(DateTime date) {
+  final dayName = DateFormat('d').format(date); // DAY
+  final month = DateFormat('MM').format(date); // MONTH
+  final year = DateFormat('yy').format(date); // YEAR
+
+  return "$dayName , ${date.day} $month $year";
+}

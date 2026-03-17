@@ -97,25 +97,27 @@ class _IntroCardWidgetState extends State<IntroCardWidget> {
                         Text(
                           widget.cardTitle,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w200,
                             letterSpacing: 0.7,
-                            fontFamily: 'lato',
+                            fontFamily: 'Lato',
+                            fontStyle: FontStyle.italic,
                             color: isHovered
                                 ? AppColorsConstant.lightGreenColor
-                                : null,
+                                : AppColorsConstant.darkBlueColor,
                           ),
                         ),
-                        SizedBox(width: 40.0),
-                        //Wave
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Icon(
-                            CupertinoIcons.waveform,
-                            color: isHovered
-                                ? AppColorsConstant.lightGreenColor
-                                : null,
-                          ),
-                        ),
+                        // SizedBox(width: 40.0),
+                        // //Wave
+                        // Align(
+                        //   alignment: Alignment.topRight,
+                        //   child: Icon(
+                        //     CupertinoIcons.waveform,
+                        //     color: isHovered
+                        //         ? AppColorsConstant.lightGreenColor
+                        //         : null,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
