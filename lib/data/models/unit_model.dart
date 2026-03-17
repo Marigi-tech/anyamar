@@ -7,14 +7,17 @@ class Unit {
   final String propertyId;
   final String? tenantId;
   final bool? isOccupied;
+  final double? unitRent;
+  final String? rentCurrency; //todo: a rentCurrency model
 
   Unit({
     required this.unitId,
     required this.unitName,
     required this.propertyId,
     this.tenantId,
-
     this.isOccupied = false,
+    this.unitRent,
+    this.rentCurrency,
   });
   bool matchesUnitSearch(String query) {
     final search = query.toLowerCase();
