@@ -74,7 +74,22 @@ class _PropertiesPageState extends State<PropertiesPage> {
                     ),
 
                     SizedBox(height: 30),
-                    PropertiesTable(myProperties: filteredProperties),
+                    Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 30,
+                          horizontal: 30.0,
+                        ),
+                        child: PropertiesTable(
+                          myProperties: filteredProperties,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

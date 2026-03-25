@@ -70,8 +70,7 @@ class UnitInformationCardWidget extends StatelessWidget {
                   child: Divider(thickness: 0.18, height: 10.0),
                 ),
                 SizedBox(height: 10.0),
-                //Insert table here
-                // Scrollable Table Section
+
                 // Scrollable Table Section
                 Expanded(
                   child: SingleChildScrollView(

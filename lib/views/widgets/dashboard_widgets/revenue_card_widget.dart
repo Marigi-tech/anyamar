@@ -1,5 +1,8 @@
 import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/data/data_sets/rent_history.dart';
+import 'package:test_app/data/models/single_rental_entry_model.dart';
 import 'package:test_app/views/widgets/buttons/button_widget.dart';
+import 'package:test_app/views/widgets/tables/rent_history.dart';
 
 class RevenueCardWidget extends StatefulWidget {
   const RevenueCardWidget({super.key});
@@ -11,6 +14,12 @@ class RevenueCardWidget extends StatefulWidget {
 class _RevenueCardWidgetState extends State<RevenueCardWidget> {
   @override
   Widget build(BuildContext context) {
+    //todo: user specific rent entries
+    List<SingleRentEntry> allRentEntries = rentHistory
+        .expand<SingleRentEntry>(
+          (history) => history.rentEntries!.cast<SingleRentEntry>(),
+        )
+        .toList();
     return ValueListenableBuilder(
       valueListenable: selectedWebPageNotifier,
       builder: (context, value, child) {
@@ -37,7 +46,7 @@ class _RevenueCardWidgetState extends State<RevenueCardWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Revenue',
+                        'Financial Records',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -48,7 +57,7 @@ class _RevenueCardWidgetState extends State<RevenueCardWidget> {
                           //View button
                           ColorButtonWidget(
                             onPressedCallBack: () {
-                              selectedWebPageNotifier.value = 1;
+                              selectedWebPageNotifier.value = 2;
                             },
                             buttonTitle: 'View all',
                             fontSize: 11,
@@ -67,10 +76,11 @@ class _RevenueCardWidgetState extends State<RevenueCardWidget> {
                 SizedBox(height: 10.0),
 
                 // Scrollable Table Section
+                // RentHistoryTable(rentEntries: allRentEntries),
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    // child: //Enter chats here
+                    child: RentHistoryTable(rentEntries: allRentEntries),
                   ),
                 ),
               ],

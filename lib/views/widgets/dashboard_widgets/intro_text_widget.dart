@@ -1,11 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/data/providers/theme_provider.dart';
 
-class IntroTextWidget extends StatelessWidget {
+class IntroTextWidget extends ConsumerWidget {
   final String dashboardItem;
   const IntroTextWidget({super.key, required this.dashboardItem});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
       child: Align(
@@ -21,7 +23,7 @@ class IntroTextWidget extends StatelessWidget {
               TextSpan(
                 text: dashboardItem,
                 style: TextStyle(
-                  color: themeIsDarkNotifier.value
+                  color: ref.watch(themeIsDarkProvider)
                       ? AppColorsConstant.whiteColor
                       : AppColorsConstant.blueGreyColor,
                   letterSpacing: 0.5,

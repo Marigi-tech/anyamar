@@ -1,15 +1,16 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/views/pages/widget_tree/intro_row/intro_row_widget.dart';
 import 'package:test_app/views/pages/widget_tree/pages_list/pages_list.dart';
 
-class WidgetTree extends StatefulWidget {
+class WidgetTree extends ConsumerStatefulWidget {
   const WidgetTree({super.key});
 
   @override
-  State<WidgetTree> createState() => _WidgetTreeState();
+  ConsumerState<WidgetTree> createState() => _WidgetTreeState();
 }
 
-class _WidgetTreeState extends State<WidgetTree> {
+class _WidgetTreeState extends ConsumerState<WidgetTree> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

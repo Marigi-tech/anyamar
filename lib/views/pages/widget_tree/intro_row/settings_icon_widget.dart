@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/data/providers/theme_provider.dart';
 
-class SettingsIconWidget extends StatefulWidget {
+class SettingsIconWidget extends ConsumerWidget {
   const SettingsIconWidget({super.key});
 
   @override
-  State<SettingsIconWidget> createState() => _SettingsIconWidgetState();
-}
-
-class _SettingsIconWidgetState extends State<SettingsIconWidget> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeIsDark = ref.watch(themeIsDarkProvider);
     Color borderColor = Colors.transparent;
+
     return IconButton(
       icon: const Icon(CupertinoIcons.gear),
       style: ButtonStyle(
@@ -25,53 +24,63 @@ class _SettingsIconWidgetState extends State<SettingsIconWidget> {
         showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Settings', style: TextStyle(fontSize: 16)),
-                  CloseButton(),
-                ],
-              ),
-              content: Container(
-                height: 90,
-                padding: EdgeInsets.symmetric(horizontal: 05.0, vertical: 04),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            return Consumer(
+              builder: (context, ref, _) {
+                return AlertDialog(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      //App Brightness  Mode
-                      Card(
-                        elevation: 6.0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: borderColor, width: 0.09),
-                          borderRadius: BorderRadius.circular(05),
-                        ),
-
-                        child: ListTile(
-                          leading: Icon(
-                            themeIsDarkNotifier.value == true
-                                ? Icons.light_mode
-                                : Icons.dark_mode,
-
-                            size: 16,
-                            color: AppColorsConstant.blueGreyColor,
-                          ),
-                          title: Text(
-                            'System Mode : ${themeIsDarkNotifier.value ? 'Dark' : 'Light'}',
-                            style: TextStyle(fontSize: 13),
-                          ),
-                          onTap: () => themeIsDarkNotifier.value =
-                              !themeIsDarkNotifier.value,
-                        ),
-                      ),
+                      Text('Settings', style: TextStyle(fontSize: 16)),
+                      CloseButton(),
                     ],
                   ),
-                ),
-              ),
+                  content: Container(
+                    height: 90,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 05.0,
+                      vertical: 04,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          //App theme  Mode
+                          Card(
+                            elevation: 6.0,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: borderColor, width: 0.09),
+                              borderRadius: BorderRadius.circular(05),
+                            ),
+
+                            child: ListTile(
+                              leading: Icon(
+                                themeIsDark == true
+                                    ? Icons.light_mode
+                                    : Icons.dark_mode,
+
+                                size: 16,
+                                color: AppColorsConstant.blueGreyColor,
+                              ),
+                              title: Text(
+                                'System Mode : ${themeIsDark ? 'Dark' : 'Light'}',
+                                style: TextStyle(fontSize: 13),
+                              ),
+                              onTap: () => ref
+                                  .read(themeIsDarkProvider.notifier)
+                                  .toggleTheme(),
+                              // onTap: () => themeIsDarkNotifier.value =
+                              //     !themeIsDarkNotifier.value,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
           },
         );

@@ -51,7 +51,20 @@ class _PropertyTenantsState extends State<PropertyTenants> {
         ),
 
         SizedBox(height: 30),
-        TenantsTable(propertyTenants: filteredTenants, isUnitTenant: true),
+        Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30.0),
+            child: TenantsTable(
+              propertyTenants: filteredTenants,
+              isUnitTenant: true,
+            ),
+          ),
+        ),
       ],
     );
   }

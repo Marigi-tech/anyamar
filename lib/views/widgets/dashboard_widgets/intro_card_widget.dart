@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:test_app/data/constants/commons.dart';
 
 class IntroCardWidget extends StatefulWidget {
