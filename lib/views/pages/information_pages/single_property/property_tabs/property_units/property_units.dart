@@ -50,7 +50,17 @@ class _PropertyUnitsState extends State<PropertyUnits> {
         ),
 
         SizedBox(height: 30),
-        UnitsTable(units: filteredUnits),
+        Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30.0),
+            child: UnitsTable(units: filteredUnits),
+          ),
+        ),
       ],
     );
   }

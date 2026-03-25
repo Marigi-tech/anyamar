@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:test_app/data/constants.dart';
 import 'package:test_app/data/constants/commons.dart';
 
@@ -7,14 +6,16 @@ class InfoTile extends StatelessWidget {
   final String tileTitle;
   final String tileDescription;
   final Widget? tileDescriptionWidget;
-  final VoidCallback onTapCallBack;
+  final VoidCallback? onTapCallBack;
+  final double? fontSize;
 
   const InfoTile({
     super.key,
     required this.tileIcon,
     required this.tileTitle,
     required this.tileDescription,
-    required this.onTapCallBack,
+    this.onTapCallBack,
+    this.fontSize,
     this.tileDescriptionWidget,
   });
 
@@ -24,13 +25,15 @@ class InfoTile extends StatelessWidget {
       elevation: 8,
       child: ListTile(
         dense: true,
-        leading: Icon(tileIcon, size: 15),
+        leading: Icon(tileIcon, size: fontSize ?? 15),
+        onTap: onTapCallBack,
         title: Text(
           tileTitle,
           style: CustomTextStyles.cardDescriptionStyle.copyWith(
             inherit: true,
             fontStyle: FontStyle.normal,
-            fontSize: 11,
+            fontSize: fontSize ?? 14,
+            fontFamily: 'Lato',
           ),
         ),
         trailing:
@@ -40,7 +43,8 @@ class InfoTile extends StatelessWidget {
               style: CustomTextStyles.cardDescriptionStyle.copyWith(
                 inherit: true,
                 color: AppColorsConstant.darkBlueColor,
-                fontSize: 11,
+                fontSize: fontSize ?? 14,
+                fontFamily: 'Lato',
               ),
             ),
         shape: RoundedRectangleBorder(

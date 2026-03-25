@@ -1,31 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test_app/data/constants.dart';
-import 'package:test_app/data/notifiers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:test_app/data/providers/theme_provider.dart';
 
-class ThemeToggleWidget extends StatelessWidget {
+class ThemeToggleWidget extends ConsumerWidget {
   const ThemeToggleWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: themeIsDarkNotifier,
-      builder: (context, isDark, child) {
-        return IconButton(
-          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeIsDarkProvider);
+    return IconButton(
+      icon: Icon(themeMode ? Icons.light_mode : CupertinoIcons.moon, size: 20),
 
-          onPressed: () async {
-            themeIsDarkNotifier.value = !isDark;
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-
-            await prefs.setBool(
-              ThemeConstant.darkKey,
-              themeIsDarkNotifier.value,
-            );
-          },
-        );
-      },
+      onPressed: () => ref.read(themeIsDarkProvider.notifier).toggleTheme(),
     );
   }
 }

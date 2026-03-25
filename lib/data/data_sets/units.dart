@@ -43,8 +43,8 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T005",
     isOccupied: true,
-    rentCurrency: 'Ksh',
-    unitRent: 50000,
+    rentCurrency: 'USD',
+    unitRent: 900,
   ),
   Unit(
     unitId: "U006",

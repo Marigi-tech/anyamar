@@ -15,7 +15,7 @@ class ProfilePage extends StatelessWidget {
             title: Text('Log out'),
             onTap: () {
               selectedPageNotifier.value = 0;
-              themeIsDarkNotifier.value = true;
+              // themeIsDarkNotifier.value = true;
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => LandingPage()),

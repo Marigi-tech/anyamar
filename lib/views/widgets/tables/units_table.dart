@@ -2,6 +2,7 @@ import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/data/data_sets/tenants.dart';
 import 'package:test_app/data/models/tenant_model.dart';
 import 'package:test_app/data/models/unit_model.dart';
+import 'package:test_app/views/pages/information_pages/single_unit/single_unit_modal.dart';
 import 'package:test_app/views/widgets/information_badges/information_badge_widget.dart';
 import 'package:test_app/views/widgets/tables/view_chevron_card.dart';
 
@@ -72,9 +73,10 @@ TableRow buildUnitDataRow(Unit unit, int index, BuildContext context) {
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         child: ViewChevronCard(
-          onPressedCallBack: () {},
-
-          //todo: button logic
+          onPressedCallBack: () => showDialog(
+            context: context,
+            builder: (context) => SingleUnitModal(unit: unit),
+          ),
         ),
       ),
     ],

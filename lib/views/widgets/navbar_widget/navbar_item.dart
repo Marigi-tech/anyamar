@@ -1,6 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/data/providers/theme_provider.dart';
 
-class NavItem extends StatefulWidget {
+class NavItem extends ConsumerStatefulWidget {
   final IconData icon;
   final String label;
   final int index;
@@ -15,10 +17,10 @@ class NavItem extends StatefulWidget {
   });
 
   @override
-  State<NavItem> createState() => _NavItemState();
+  ConsumerState<NavItem> createState() => _NavItemState();
 }
 
-class _NavItemState extends State<NavItem> {
+class _NavItemState extends ConsumerState<NavItem> {
   late BoxDecoration backgroundColor;
   late bool isHovered;
 
@@ -98,7 +100,7 @@ class _NavItemState extends State<NavItem> {
                             widget.icon,
                             size: 18,
                             color:
-                                themeIsDarkNotifier.value ==
+                                ref.watch(themeIsDarkProvider) ==
                                     true //DarkTheme
                                 ? isSelected || isHovered
                                       ? AppColorsConstant.whiteColor

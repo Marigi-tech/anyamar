@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:test_app/data/constants.dart';
+import 'package:test_app/data/constants/commons.dart';
 import 'package:test_app/data/data_sets/properties.dart';
 import 'package:test_app/data/data_sets/rent_history.dart';
 import 'package:test_app/data/data_sets/units.dart';
@@ -34,18 +34,18 @@ class SingleTenantPage extends StatelessWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            maxWidth: 1000, // controls page width
+            maxWidth: 900,
             minHeight: double.infinity,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //?Tenant photo and rent information
+              // Tenant photo and rent information
               SingleTenantIntro(tenant: tenant, unit: tenantUnit),
               SizedBox(height: 30),
               SizedBox(
-                height: 500,
+                height: getSizeFromContext(context).height * .70,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -78,60 +78,69 @@ class SingleTenantPage extends StatelessWidget {
                                   property: tenantProperty,
                                   unit: tenantUnit,
                                 ),
-                                SizedBox(height: 40),
-                                Text(
-                                  'Lease details',
-                                  style: CustomTextStyles.cardDescriptionStyle
-                                      .copyWith(
-                                        fontStyle: FontStyle.normal,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                                SizedBox(height: 10),
-                                LeaseDetails(
-                                  tenant: tenant,
-                                  property: tenantProperty,
-                                  unit: tenantUnit,
-                                ),
                               ],
                             ),
                           ),
 
-                          //? Payment History
+                          //Lease details
                           Expanded(
-                            flex: 2,
+                            flex: 1,
                             child: Padding(
                               padding: EdgeInsets.only(left: 30),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Payment History',
+                                    'Lease details',
                                     style: CustomTextStyles.cardDescriptionStyle
                                         .copyWith(
                                           fontStyle: FontStyle.normal,
                                           fontWeight: FontWeight.normal,
                                         ),
                                   ),
-                                  SizedBox(height: 20),
-                                  RentHistoryTable(
-                                    rentEntries: tenantRentEntries,
+                                  SizedBox(height: 10),
+                                  LeaseDetails(
+                                    tenant: tenant,
+                                    property: tenantProperty,
+                                    unit: tenantUnit,
                                   ),
-                                  // UnitsTable(units: units),
-
-                                  // TenantDetails(
-                                  //   tenant: tenant,
-                                  //   property: tenantProperty,
-                                  //   unit: tenantUnit,
-                                  // ),
                                 ],
                               ),
                             ),
                           ),
                         ],
                       ),
-                      //L
+                      SizedBox(height: 40),
+                      Text(
+                        'Payment History',
+                        style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Card(
+                              elevation: 8,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 30,
+                                  horizontal: 30.0,
+                                ),
+                                child: RentHistoryTable(
+                                  rentEntries: tenantRentEntries,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

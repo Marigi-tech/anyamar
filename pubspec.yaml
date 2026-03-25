@@ -39,8 +39,14 @@ dependencies:
   flutter_svg: ^2.2.2
   clock: ^1.1.2
   intl: ^0.20.2
+  chat_bubbles: ^1.9.0
+  bubble: ^1.2.1
+  flutter_riverpod: ^3.0.3
+  riverpod_annotation: ^3.0.0
 
 dev_dependencies:
+  riverpod_generator: ^3.0.0
+  build_runner: ^2.7.1
   flutter_test:
     sdk: flutter
 

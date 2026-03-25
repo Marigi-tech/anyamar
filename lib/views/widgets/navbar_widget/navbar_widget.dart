@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:test_app/data/constants/constants.dart';
 import 'package:test_app/data/notifiers.dart';
+import 'package:test_app/data/providers/theme_provider.dart';
 import 'package:test_app/views/widgets/navbar_widget/navbar_item.dart';
 
-class NavbarWidget extends StatefulWidget {
+class NavbarWidget extends ConsumerStatefulWidget {
   const NavbarWidget({super.key});
 
   @override
-  State<NavbarWidget> createState() => _NavbarWidgetState();
+  ConsumerState<NavbarWidget> createState() => _NavbarWidgetState();
 }
 
-class _NavbarWidgetState extends State<NavbarWidget> {
+class _NavbarWidgetState extends ConsumerState<NavbarWidget> {
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeIsDarkProvider);
     return ValueListenableBuilder(
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
@@ -30,56 +33,49 @@ class _NavbarWidgetState extends State<NavbarWidget> {
 
             children: [
               ///------  Navigation bar ---------------------//
-              ValueListenableBuilder(
-                valueListenable: themeIsDarkNotifier,
-                builder: (context, mode, child) {
-                  return PhysicalModel(
-                    elevation: 20,
-                    color: Colors.transparent,
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(35),
-                      child: Material(
-                        color: mode
+              PhysicalModel(
+                elevation: 20,
+                color: Colors.transparent,
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(35),
+                  child: Material(
+                    color: themeMode
+                        ? AppColorsConstant.darkNavColor.withValues(alpha: 0.95)
+                        : AppColorsConstant.lightNavColor.withValues(
+                            alpha: 0.95,
+                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      child: NavigationBar(
+                        backgroundColor: themeMode
                             ? AppColorsConstant.darkNavColor.withValues(
                                 alpha: 0.95,
                               )
                             : AppColorsConstant.lightNavColor.withValues(
                                 alpha: 0.95,
                               ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          child: NavigationBar(
-                            backgroundColor: themeIsDarkNotifier.value
-                                ? AppColorsConstant.darkNavColor.withValues(
-                                    alpha: 0.95,
-                                  )
-                                : AppColorsConstant.lightNavColor.withValues(
-                                    alpha: 0.95,
-                                  ),
-                            selectedIndex: selectedPage,
-                            onDestinationSelected: (value) {
-                              selectedPageNotifier.value = value;
-                            },
-                            height: 45,
-                            destinations: const [
-                              SizedBox(width: 60),
-                              SizedBox(width: 60),
-                              SizedBox(width: 60),
-                              SizedBox(width: 60),
-                              SizedBox(width: 60),
-                              SizedBox(width: 60),
-                              SizedBox(width: 60),
-                            ],
-                          ),
-                        ),
+                        selectedIndex: selectedPage,
+                        onDestinationSelected: (value) {
+                          selectedPageNotifier.value = value;
+                        },
+                        height: 45,
+                        destinations: const [
+                          SizedBox(width: 60),
+                          SizedBox(width: 60),
+                          SizedBox(width: 60),
+                          SizedBox(width: 60),
+                          SizedBox(width: 60),
+                          SizedBox(width: 60),
+                          SizedBox(width: 60),
+                        ],
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
 
               ///------------ The navigation items --------------------------------//

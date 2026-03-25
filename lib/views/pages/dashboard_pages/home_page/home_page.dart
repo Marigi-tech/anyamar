@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                 )
               : Column(
                   children: [
-                    const ChatsCardWidget(),
+                    const ChatsCardWidget(isInChatPage: false),
                     const RevenueCardWidget(),
                   ],
                 ), // On mobile, maybe only show the chat or stack them
