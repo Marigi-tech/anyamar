@@ -1,6 +1,6 @@
 import 'package:test_app/data/models/property_model.dart';
 
-final List<Property> properties = [
+List<Property> properties = [
   Property(
     propertyId: "P001",
     propertyName: "Sunrise Apartments",

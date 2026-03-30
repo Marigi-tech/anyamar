@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:test_app/data/models/date_format_model.dart';
 import 'package:test_app/data/models/single_rental_entry_model.dart';
 import 'package:test_app/views/pages/information_pages/single_tenant/info_tile.dart';
-import 'package:test_app/views/widgets/information_badges/information_badge_widget.dart';
+import 'package:test_app/views/reusable_widgets/information_badges/information_badge_widget.dart';
 
 class RentEntryModal extends StatelessWidget {
   final SingleRentEntry rentEntry;

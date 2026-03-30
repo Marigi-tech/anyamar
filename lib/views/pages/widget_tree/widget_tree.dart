@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/views/pages/widget_tree/intro_row/intro_row_widget.dart';
 import 'package:test_app/views/pages/widget_tree/pages_list/pages_list.dart';
 

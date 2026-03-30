@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/constants/constants.dart';
 import 'package:test_app/data/providers/theme_provider.dart';
 
 class SettingsDialog extends ConsumerWidget {

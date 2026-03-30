@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/data/data_sets/properties.dart';
 import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
-import 'package:test_app/views/widgets/table_intro_widget/table_intro_widget.dart';
-import 'package:test_app/views/widgets/tables/properties_table.dart';
+import 'package:test_app/views/dashboard_widgets/intro_text_widget.dart';
+import 'package:test_app/views/forms/property_forms/add_property.dart';
+import 'package:test_app/views/reusable_widgets/table_intro_widget/table_intro_widget.dart';
+import 'package:test_app/views/tables/properties_table.dart';
 
 class PropertiesPage extends StatefulWidget {
   const PropertiesPage({super.key});
@@ -71,6 +72,10 @@ class _PropertiesPageState extends State<PropertiesPage> {
                       dataLength: '${filteredProperties.length}',
                       dataType: 'properties',
                       onSearch: filterSinglePropertyTableData,
+                      onPressedCallBack: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => AddProperty()),
+                      ),
                     ),
 
                     SizedBox(height: 30),

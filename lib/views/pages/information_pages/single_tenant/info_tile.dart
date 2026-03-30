@@ -1,5 +1,4 @@
-import 'package:test_app/data/constants.dart';
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 
 class InfoTile extends StatelessWidget {
   final IconData tileIcon;

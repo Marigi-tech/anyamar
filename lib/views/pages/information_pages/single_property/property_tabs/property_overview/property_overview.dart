@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/constants/constants.dart';
 import 'package:test_app/data/models/property_model.dart';
 import 'package:test_app/responsiveness/responsiveness.dart';
+import 'package:test_app/views/forms/property_forms/add_property.dart';
+import 'package:test_app/views/forms/tenant_forms/tenant_form.dart';
+import 'package:test_app/views/forms/unit_forms/unit_form.dart';
 import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/occupancy_card.dart';
 import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/property_management_info.dart';
-import 'package:test_app/views/widgets/buttons/card_button_widget.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/tenant_information_card_widget.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/unit_information_card_widget.dart';
+import 'package:test_app/views/reusable_widgets/buttons/card_button_widget.dart';
+import 'package:test_app/views/dashboard_widgets/tenant_information_card_widget.dart';
+import 'package:test_app/views/dashboard_widgets/unit_information_card_widget.dart';
 
 class PropertyOverview extends StatefulWidget {
   final Property property;
@@ -42,18 +45,29 @@ class _PropertyOverviewState extends State<PropertyOverview> {
                     buttonTitle: 'Add Property',
                     buttonIcon: CupertinoIcons.add,
                     backgroundColor: AppColorsConstant.darkYellowColor,
+                    onPressedCallBack: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => AddProperty()),
+                    ),
                   ),
                   SizedBox(height: 6),
                   CardButtonWidget(
                     buttonTitle: 'Add Tenant',
                     buttonIcon: CupertinoIcons.add,
                     backgroundColor: AppColorsConstant.lightGreenColor,
+                    onPressedCallBack: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => AddTenant()),
+                    ),
                   ),
                   SizedBox(height: 6),
                   CardButtonWidget(
                     buttonTitle: 'Add Unit',
                     buttonIcon: CupertinoIcons.add,
                     backgroundColor: AppColorsConstant.darkBlueColor,
+                    onPressedCallBack: () => Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (_) => AddUnit())),
                   ),
                 ],
               ),

@@ -1,4 +1,4 @@
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/data/models/date_format_model.dart';
 
 class ClockWidget extends StatefulWidget {

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/constants/constants.dart';
+import 'package:test_app/data/models/enums/user_type_enum.dart';
 import 'package:test_app/views/pages/initial_pages/form_pages.dart';
 import 'package:test_app/views/pages/initial_pages/login_page/login_page.dart';
 import 'package:test_app/views/pages/widget_tree/widget_tree.dart';
-import 'package:test_app/views/widgets/buttons/button_widget.dart';
-import 'package:test_app/views/widgets/form_elements/text_input_widget.dart';
-import 'package:test_app/views/widgets/social_icons_widget.dart';
+import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:test_app/views/reusable_widgets/form_elements/form_label.dart';
+import 'package:test_app/views/reusable_widgets/form_elements/input_decoration.dart';
+import 'package:test_app/views/reusable_widgets/social_icons_widget.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -20,11 +22,14 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   Color? textColor;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    nameController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -35,40 +40,118 @@ class _SignUpFormState extends State<SignUpForm> {
       isSignInOrSignUp: true,
 
       form: Form(
+        key: _formKey,
         child: Align(
           alignment: Alignment.topLeft,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 30.0),
-              //? ----- Name-----
-              TextInputWidget(
-                fieldController: nameController,
-                hintText: 'Enter your name',
+              //Name
+              FormLabel(label: 'Full name', isRequired: true),
+              SizedBox(height: 6),
+              TextFormField(
+                controller: nameController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: TextInputType.text,
+                decoration: CustomInputDecoration.textInputDecoration(
+                  hintText: 'Enter your full name',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter your name';
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(height: 15.0),
 
-              //? ----- Email Adress -----
-              TextInputWidget(
-                fieldController: emailController,
-                hintText: 'Enter Email adress',
+              //---- Email Adress -----
+              FormLabel(label: 'Email address', isRequired: true),
+              SizedBox(height: 6),
+              TextFormField(
+                controller: emailController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: TextInputType.emailAddress,
+                decoration: CustomInputDecoration.textInputDecoration(
+                  hintText: 'Enter email address',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter email address';
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(height: 15.0),
 
-              //? ----- Password -----
-              TextInputWidget(
-                fieldController: passwordController,
-                hintText: 'Enter password',
-                isPassword: true,
+              //User Type
+              FormLabel(label: 'User type', isRequired: true),
+              SizedBox(height: 6),
+              DropdownButtonFormField<UserType>(
+                hint: Text(
+                  'Select user type',
+                  style: CustomInputDecoration.textInputDecoration().hintStyle,
+                ),
+                decoration: CustomInputDecoration.textInputDecoration(),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                items: UserType.values.map((user) {
+                  return DropdownMenuItem(value: user, child: Text(user.label));
+                }).toList(),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Select an option';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  // ref.read(selectedPropertyProvider.notifier).state = value;
+                },
               ),
               SizedBox(height: 15.0),
-              //?-- Confirm password
-              TextInputWidget(
-                fieldController: confirmPasswordController,
-                hintText: 'Confirm password',
+
+              //Password -----
+              FormLabel(label: 'Password', isRequired: true),
+              SizedBox(height: 6),
+              TextFormField(
+                controller: passwordController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: TextInputType.text,
+                decoration: CustomInputDecoration.textInputDecoration(
+                  hintText: 'Enter password',
+                  isPassword: true,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter password';
+                  }
+                  return null;
+                },
               ),
+
+              SizedBox(height: 15.0),
+              //Confirm password
+              FormLabel(label: 'Confirm password', isRequired: true),
+              SizedBox(height: 6),
+              TextFormField(
+                controller: confirmPasswordController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: TextInputType.text,
+                decoration: CustomInputDecoration.textInputDecoration(
+                  hintText: 'Confirm password',
+                  isPassword: true,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter password';
+                  }
+                  return null;
+                },
+              ),
+
               SizedBox(height: 15.0),
               //? Sign in option
               Align(
@@ -111,10 +194,13 @@ class _SignUpFormState extends State<SignUpForm> {
               //? ------ Log in button ------
               ColorButtonWidget(
                 onPressedCallBack: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => WidgetTree()),
-                  );
+                  if (_formKey.currentState!.validate()) {
+                    //todo:Actual logic
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => WidgetTree()),
+                    );
+                  }
                 },
                 buttonTitle: 'Create account',
                 buttonColor: AppColorsConstant.greenColor,
