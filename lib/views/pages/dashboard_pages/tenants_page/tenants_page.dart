@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/data/data_sets/tenants.dart';
 import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
-import 'package:test_app/views/widgets/table_intro_widget/table_intro_widget.dart';
-import 'package:test_app/views/widgets/tables/tenants_table.dart';
+import 'package:test_app/views/dashboard_widgets/intro_text_widget.dart';
+import 'package:test_app/views/forms/tenant_forms/tenant_form.dart';
+import 'package:test_app/views/reusable_widgets/table_intro_widget/table_intro_widget.dart';
+import 'package:test_app/views/tables/tenants_table.dart';
 
 class TenantsPage extends StatefulWidget {
   const TenantsPage({super.key});
@@ -75,6 +76,9 @@ class _TenantsPageState extends State<TenantsPage> {
                       dataLength: '${filteredTenants.length}',
                       dataType: 'tenants',
                       onSearch: filterSingleTenantTableData,
+                      onPressedCallBack: () => Navigator.of(
+                        context,
+                      ).push(MaterialPageRoute(builder: (_) => AddTenant())),
                     ),
 
                     SizedBox(height: 30),

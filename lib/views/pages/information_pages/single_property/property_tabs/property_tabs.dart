@@ -1,4 +1,4 @@
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/data/models/property_model.dart';
 import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/property_overview.dart';
 import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_tenants/property_tenants.dart';

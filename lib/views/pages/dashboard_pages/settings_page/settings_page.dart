@@ -1,4 +1,4 @@
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

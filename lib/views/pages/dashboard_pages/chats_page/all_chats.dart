@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/constants/constants.dart';
 import 'package:test_app/data/models/chat_model.dart';
 import 'package:test_app/data/models/chat_user.dart';
 import 'package:test_app/data/providers/chat_provider.dart';
@@ -12,6 +12,7 @@ class AllChats extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chats = ref.watch(chatsProvider);
+    final currentChat = ref.watch(currentChatProvider);
     final List<Color> avatarBackgroundColors = [
       AppColorsConstant.darkYellowColor,
       AppColorsConstant.redColor,
@@ -49,6 +50,9 @@ class AllChats extends ConsumerWidget {
                     : firstMessage.sender;
 
                 return ListTile(
+                  tileColor: currentChat == chat
+                      ? AppColorsConstant.greenColor
+                      : null,
                   leading: CircleAvatar(
                     radius: 18,
                     backgroundColor:
@@ -58,7 +62,7 @@ class AllChats extends ConsumerWidget {
                       recipient.userName[0],
                       style: const TextStyle(
                         fontWeight: FontWeight.w200,
-                        color: Color.fromARGB(255, 175, 115, 115),
+                        color: AppColorsConstant.whiteColor,
                       ),
                     ),
                   ),

@@ -1,5 +1,4 @@
-import 'package:test_app/data/constants.dart';
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/data/data_sets/properties.dart';
 import 'package:test_app/data/data_sets/rent_history.dart';
 import 'package:test_app/data/data_sets/units.dart';
@@ -11,7 +10,7 @@ import 'package:test_app/data/models/unit_model.dart';
 import 'package:test_app/views/pages/information_pages/single_tenant/lease_details.dart';
 import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_intro.dart';
 import 'package:test_app/views/pages/information_pages/single_tenant/tenant_details.dart';
-import 'package:test_app/views/widgets/tables/rent_history.dart';
+import 'package:test_app/views/tables/rent_history.dart';
 
 class SingleTenantPage extends StatelessWidget {
   final Tenant tenant;

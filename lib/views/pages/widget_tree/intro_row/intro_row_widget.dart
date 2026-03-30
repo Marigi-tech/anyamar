@@ -1,9 +1,9 @@
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/views/pages/widget_tree/intro_row/ai_widget.dart';
 import 'package:test_app/views/pages/widget_tree/intro_row/clock_widget.dart';
 import 'package:test_app/views/pages/widget_tree/intro_row/notifications.dart';
 
-import 'package:test_app/views/widgets/search_widget/search_widget.dart';
+import 'package:test_app/views/reusable_widgets/search_widget/search_widget.dart';
 
 class IntroRowWidget extends StatelessWidget {
   const IntroRowWidget({super.key});

@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:test_app/data/constants.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/data/models/property_model.dart';
 
 class PropertyManagementInfo extends StatelessWidget {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/data/data_sets/rent_history.dart';
 import 'package:test_app/data/models/single_rental_entry_model.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
-import 'package:test_app/views/widgets/table_intro_widget/table_intro_widget.dart';
-import 'package:test_app/views/widgets/tables/rent_history.dart';
+import 'package:test_app/views/dashboard_widgets/intro_text_widget.dart';
+import 'package:test_app/views/forms/financial_records/general_financial_record.dart';
+import 'package:test_app/views/reusable_widgets/table_intro_widget/table_intro_widget.dart';
+import 'package:test_app/views/tables/rent_history.dart';
 
 class FinancesPage extends StatefulWidget {
   const FinancesPage({super.key});
@@ -75,6 +76,11 @@ class _FinancesPageState extends State<FinancesPage> {
                       dataLength: '${filteredRecords.length}',
                       dataType: 'Financial records',
                       onSearch: filterFinancialRecordsData,
+                      onPressedCallBack: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => AddGeneralFinancialRecord(),
+                        ),
+                      ),
                       // onSearch: filterSinglePropertyTableData,
                     ),
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/data/constants/constants.dart';
+import 'package:test_app/constants/constants.dart';
 import 'package:test_app/data/providers/theme_provider.dart';
 import 'package:test_app/views/pages/initial_pages/landing_page/landing_page.dart';
 
+//NB THIS  IS A FLUTTER WEB PROJECT
+//CUSTOMISATION FOR ANDROID AND IOS WILL BE DONE IN LATER ITERATIONS
 void main() {
   runApp(ProviderScope(child: const MyApp()));
 }

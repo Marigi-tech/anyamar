@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 
 class AiWidget extends StatefulWidget {
   const AiWidget({super.key});

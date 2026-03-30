@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/data/models/property_model.dart';
 import 'package:test_app/data/models/tenant_model.dart';
 import 'package:test_app/data/models/unit_model.dart';

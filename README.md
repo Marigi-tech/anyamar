@@ -2,6 +2,11 @@
 
 A new Flutter project.
 
+## NOTE
+
+This iteration of the app is coded solely for the web
+customisation for ios and android platforms will be done at later iterations (UI )
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

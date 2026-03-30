@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/data/constants.dart';
-import 'package:test_app/data/constants/commons.dart';
+
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/data/data_sets/rent_history.dart';
 import 'package:test_app/data/data_sets/tenants.dart';
 import 'package:test_app/data/models/rent_history_model.dart';
@@ -9,8 +9,8 @@ import 'package:test_app/data/models/unit_model.dart';
 import 'package:test_app/views/pages/information_pages/rent_history/rent_history.dart';
 import 'package:test_app/views/pages/information_pages/single_tenant/info_tile.dart';
 import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_page.dart';
-import 'package:test_app/views/widgets/buttons/card_button_widget.dart';
-import 'package:test_app/views/widgets/information_badges/information_badge_widget.dart';
+import 'package:test_app/views/reusable_widgets/buttons/card_button_widget.dart';
+import 'package:test_app/views/reusable_widgets/information_badges/information_badge_widget.dart';
 
 class SingleUnitModal extends StatelessWidget {
   final Unit unit;

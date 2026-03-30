@@ -1,10 +1,10 @@
-import 'package:test_app/data/constants/commons.dart';
+import 'package:test_app/constants/commons.dart';
 import 'package:test_app/views/pages/dashboard_pages/home_page/intro_card_list.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/chats_card_widget.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/property_information_card_widget.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/revenue_card_widget.dart';
-import 'package:test_app/views/widgets/dashboard_widgets/tenant_information_card_widget.dart';
+import 'package:test_app/views/dashboard_widgets/chats_card_widget.dart';
+import 'package:test_app/views/dashboard_widgets/property_information_card_widget.dart';
+import 'package:test_app/views/dashboard_widgets/intro_text_widget.dart';
+import 'package:test_app/views/dashboard_widgets/revenue_card_widget.dart';
+import 'package:test_app/views/dashboard_widgets/tenant_information_card_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 20.0),
 
           // 2. Horizontal Info Cards (Height must be fixed to work with horizontal scrolling)
-          // This section is fine as the height is fixed (150) and scrolling is horizontal.
           SizedBox(
             height: 150,
             width: double.infinity,
