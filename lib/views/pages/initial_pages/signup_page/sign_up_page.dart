@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/responsiveness/responsiveness.dart';
-import 'package:test_app/views/pages/initial_pages/signup_page/sign_up_page_mobile.dart';
-import 'package:test_app/views/pages/initial_pages/signup_page/sign_up_page_web.dart';
+import 'package:anyamar/responsiveness/responsiveness.dart';
+import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page_mobile.dart';
+import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page_web.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

@@ -1,9 +1,10 @@
+import 'package:anyamar/data/models/date_format_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/data/models/unit_model.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/info_tile.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
 
 class TenantDetails extends StatelessWidget {
   final Tenant tenant;
@@ -100,6 +101,114 @@ class TenantDetails extends StatelessWidget {
                     tileIcon: CupertinoIcons.phone,
                     tileTitle: 'Emergency contact',
                     tileDescription: tenant.tenantPhoneNumber,
+                    onTapCallBack: () {},
+                  ),
+                ),
+              ],
+            ),
+            //Rent
+            Row(
+              children: [
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.money_dollar,
+                    tileTitle:
+                        'Rent / ${unit.unitRent.paymentFrequency ?? 'Month'} ',
+                    tileDescription:
+                        ' ${unit.unitRent.rentCurrency}  ${unit.unitRent.rentAmount}',
+                    onTapCallBack: () {},
+                  ),
+                ),
+              ],
+            ),
+            //Rent Deposit
+            Row(
+              children: [
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.money_dollar,
+                    tileTitle: 'Rent Deposit ',
+                    tileDescription:
+                        ' ${unit.unitRent.rentCurrency}  ${unit.unitRent.rentDeposit}',
+                    onTapCallBack: () {},
+                  ),
+                ),
+              ],
+            ),
+
+            //List of utilities
+            // Padding(
+            //   padding: EdgeInsets.only(left: 20.0),
+            //   child: ListView.builder(
+            //     itemBuilder: (context, index) {
+            //       final UnitUtility? utility = unit.unitRent.utilities?[index];
+            //       return utility != null
+            //           ? Row(
+            //               children: [
+            //                 //Name
+            //                 Expanded(
+            //                   child: InfoTile(
+            //                     tileIcon: CupertinoIcons.calendar,
+            //                     tileTitle: utility.utilityName.label,
+            //                     tileDescription:
+            //                         '${unit.unitRent.rentCurrency} ${utility.amountPayable}',
+            //                     onTapCallBack: () {},
+            //                   ),
+            //                 ),
+            //               ],
+            //             )
+            //           : SizedBox();
+            //     },
+            //   ),
+            // ),
+            Row(
+              children: [
+                //Name
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.calendar,
+                    tileTitle: 'Start date',
+                    tileDescription: formatPrettyDate(DateTime.now()),
+                    onTapCallBack: () {},
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                //End date
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.calendar,
+                    tileTitle: 'End date',
+                    tileDescription: formatPrettyDate(DateTime.now()),
+                    onTapCallBack: () {},
+                  ),
+                ),
+              ],
+            ),
+            //Payment terms
+            Row(
+              children: [
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.money_dollar,
+                    tileTitle: 'Payment terms',
+                    tileDescription: 'Monthly ',
+                    onTapCallBack: () {},
+                  ),
+                ),
+              ],
+            ),
+            //Lease agreement
+            Row(
+              children: [
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.cloud_download,
+                    tileTitle: 'Lease agreement',
+                    tileDescription: 'lease.doc',
                     onTapCallBack: () {},
                   ),
                 ),

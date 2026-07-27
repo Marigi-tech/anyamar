@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/data/models/unit_model.dart';
-import 'package:test_app/data/data_sets/tenants.dart';
-import 'package:test_app/data/data_sets/units.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/occupancy_rate_view.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
+import 'package:anyamar/data/data_sets/tenants.dart';
+import 'package:anyamar/data/data_sets/units.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_overview/occupancy_rate_view.dart';
 
 class OccupancyCard extends StatelessWidget {
   final Property property;
@@ -16,7 +16,7 @@ class OccupancyCard extends StatelessWidget {
     List<Tenant> propertyTenants = tenants
         .where((element) => element.propertyId == property.propertyId)
         .toList();
-    List<Unit> propertyUnits = units
+    List<Unit> propertyUnits = tempunits
         .where((element) => element.propertyId == property.propertyId)
         .toList();
 

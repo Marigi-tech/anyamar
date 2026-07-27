@@ -1,8 +1,8 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/rent_history.dart';
-import 'package:test_app/data/models/single_rental_entry_model.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/tables/rent_history.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/financial_records.dart';
+import 'package:anyamar/data/models/financial_record_model.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/tables/financial_records_table.dart';
 
 class RevenueCardWidget extends StatefulWidget {
   const RevenueCardWidget({super.key});
@@ -15,11 +15,7 @@ class _RevenueCardWidgetState extends State<RevenueCardWidget> {
   @override
   Widget build(BuildContext context) {
     //todo: user specific rent entries
-    List<SingleRentEntry> allRentEntries = rentHistory
-        .expand<SingleRentEntry>(
-          (history) => history.rentEntries!.cast<SingleRentEntry>(),
-        )
-        .toList();
+    List<FinancialRecord> financialRecords = tempFinancialRecords.toList();
     return ValueListenableBuilder(
       valueListenable: selectedWebPageNotifier,
       builder: (context, value, child) {
@@ -76,11 +72,13 @@ class _RevenueCardWidgetState extends State<RevenueCardWidget> {
                 SizedBox(height: 10.0),
 
                 // Scrollable Table Section
-                // RentHistoryTable(rentEntries: allRentEntries),
+                // Financial Records
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: RentHistoryTable(rentEntries: allRentEntries),
+                    child: FinancialRecordsTable(
+                      financialRecords: financialRecords,
+                    ),
                   ),
                 ),
               ],

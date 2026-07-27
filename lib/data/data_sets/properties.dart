@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/property_model.dart';
+import 'package:anyamar/data/models/property_model.dart';
 
 List<Property> properties = [
   Property(

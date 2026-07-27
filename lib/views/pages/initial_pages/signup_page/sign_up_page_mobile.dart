@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/pages/initial_pages/signup_page/sign_up_form.dart';
+import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_form.dart';
 
 class SignUpPageMobile extends StatelessWidget {
   const SignUpPageMobile({super.key});

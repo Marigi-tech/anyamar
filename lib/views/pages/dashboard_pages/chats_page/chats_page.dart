@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/pages/dashboard_pages/chats_page/all_chats.dart';
-import 'package:test_app/views/pages/dashboard_pages/chats_page/single_chat.dart';
-import 'package:test_app/views/reusable_widgets/buttons/card_button_widget.dart';
-import 'package:test_app/views/dashboard_widgets/intro_text_widget.dart';
+import 'package:anyamar/views/pages/dashboard_pages/chats_page/all_chats.dart';
+import 'package:anyamar/views/pages/dashboard_pages/chats_page/single_chat.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/card_button_widget.dart';
+import 'package:anyamar/views/dashboard_widgets/intro_text_widget.dart';
 
 class ChatsPage extends StatelessWidget {
   const ChatsPage({super.key});

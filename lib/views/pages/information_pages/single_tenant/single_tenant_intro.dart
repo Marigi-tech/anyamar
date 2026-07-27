@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/data/models/unit_model.dart';
-import 'package:test_app/views/reusable_widgets/buttons/card_button_widget.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
 
 class SingleTenantIntro extends StatelessWidget {
   final Tenant tenant;
@@ -17,59 +15,83 @@ class SingleTenantIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        //Profile photo
+        //TODO: Get actual photo
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: AppColorsConstant.blueGreyColor,
+          backgroundImage: AssetImage('assets/images/login.png'),
+        ),
+        SizedBox(width: 17),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //Profile photo
-            //TODO: Get actual photo
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: AppColorsConstant.blueGreyColor,
-              backgroundImage: AssetImage('assets/images/login.png'),
-            ),
-            SizedBox(width: 17),
-            Column(
+            //Tenant Name
+            Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //Tenant Name
+                Text(
+                  'Tenant : ',
+                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
                 Text(
                   tenant.tenantName,
-                  style: CustomTextStyles.cardDescriptionStyle,
+                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                    fontStyle: FontStyle.normal,
+                    color: AppColorsConstant.lightGreenColor,
+                  ),
                 ),
-                SizedBox(height: 06),
+              ],
+            ),
+            SizedBox(height: 06),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Unit :  ',
+                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+
+                //Unit Type
+                Text(
+                  tenant.unitName ?? tenant.unitId,
+                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                    color: AppColorsConstant.lightGreenColor,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                SizedBox(width: 05),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Unit :  ',
-                      style: CustomTextStyles.cardDescriptionStyle,
-                    ),
-
-                    //Unit Type
-                    Text(
-                      tenant.unitName ?? tenant.unitId,
-                      style: CustomTextStyles.cardExtraDescriptionStyle
-                          .copyWith(color: AppColorsConstant.lightGreenColor),
+                      'Property : ',
+                      style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                        fontStyle: FontStyle.normal,
+                      ),
                     ),
                     Text(
-                      ' Property : ${unit.propertyId}', //todo: get property name
-                      style: CustomTextStyles.cardExtraDescriptionStyle
-                          .copyWith(color: AppColorsConstant.lightGreenColor),
+                      unit.propertyName ?? unit.propertyId,
+                      style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                        fontStyle: FontStyle.normal,
+                        color: AppColorsConstant.lightGreenColor,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ],
-        ),
-
-        //Rent details
-        Align(
-          alignment: Alignment.topRight,
-          child: CardButtonWidget(
-            buttonTitle:
-                'Rent :  ${unit.rentCurrency}  ${unit.unitRent} / month',
-          ),
         ),
       ],
     );

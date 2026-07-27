@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:test_app/data/models/social_icon_model.dart';
+import 'package:anyamar/data/models/social_icon_model.dart';
 
 Widget socialIconButton(SocialIconModel socialIcon) {
   return InkWell(

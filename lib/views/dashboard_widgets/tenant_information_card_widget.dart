@@ -1,9 +1,9 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/data/data_sets/properties.dart';
-import 'package:test_app/data/data_sets/tenants.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_page.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/data_sets/properties.dart';
+import 'package:anyamar/data/data_sets/tenants.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/single_tenant_page.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
 
 class TenantInformationCardWidget extends StatelessWidget {
   final bool isUnitTenant; // if not a unit tenant then it's a property tenant
@@ -31,7 +31,7 @@ class TenantInformationCardWidget extends StatelessWidget {
               ? getSizeFromContext(context).width * .50
               : double.infinity,
           height: 400,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           child: Card(
             elevation: 6,
             shape: RoundedRectangleBorder(
@@ -53,6 +53,7 @@ class TenantInformationCardWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
+                          
                         ),
                       ),
                       Row(

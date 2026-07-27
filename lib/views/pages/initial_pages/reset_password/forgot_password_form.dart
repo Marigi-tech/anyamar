@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/views/pages/initial_pages/form_pages.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/form_label.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/input_decoration.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/views/pages/initial_pages/form_pages.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/form_label.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/input_decoration.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});

@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/chat_messages.dart';
-import 'package:test_app/data/models/chat_message_model.dart';
-import 'package:test_app/data/models/date_format_model.dart';
-import 'package:test_app/data/providers/chat_messages_provider.dart';
-import 'package:test_app/data/providers/current_chat_notifier_provider.dart';
-import 'package:test_app/views/pages/dashboard_pages/chats_page/chat_page_widgets.dart';
-import 'package:test_app/views/reusable_widgets/image_widgets/whatsapp_background.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/chat_messages.dart';
+import 'package:anyamar/data/models/chat_message_model.dart';
+import 'package:anyamar/data/models/date_format_model.dart';
+import 'package:anyamar/data/providers/chat_messages_provider.dart';
+import 'package:anyamar/data/providers/current_chat_notifier_provider.dart';
+import 'package:anyamar/views/pages/dashboard_pages/chats_page/chat_page_widgets.dart';
+import 'package:anyamar/views/reusable_widgets/image_widgets/whatsapp_background.dart';
 
 class ChatsCardWidget extends ConsumerWidget {
   final bool? isInChatPage;

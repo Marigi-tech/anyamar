@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/constants/commons.dart';
+import 'package:anyamar/constants/commons.dart';
 
 class CustomInputDecoration {
   static InputDecoration textInputDecoration({
@@ -9,6 +9,7 @@ class CustomInputDecoration {
     Color? fillColor,
     Widget? prefixIcon,
     bool? isPassword,
+    Widget? prefix,
   }) => InputDecoration(
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
     fillColor: AppColorsConstant.kPrimaryColor,
@@ -26,7 +27,8 @@ class CustomInputDecoration {
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: AppColorsConstant.greenColor, width: 1.0),
     ),
-
+    prefixIcon: prefixIcon,
+    prefix: prefix,
     hintText: hintText,
     suffix: isPassword == true
         ? MouseRegion(

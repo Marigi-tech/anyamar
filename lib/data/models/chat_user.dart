@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/enums/user_type_enum.dart';
+import 'package:anyamar/data/models/enums/user_type_enum.dart';
 
 class ChatUser {
   final String userName;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:test_app/views/pages/initial_pages/login_page/login_page.dart';
-import 'package:test_app/views/pages/initial_pages/signup_page/sign_up_page.dart';
+import 'package:anyamar/views/pages/initial_pages/login_page/login_page.dart';
+import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});

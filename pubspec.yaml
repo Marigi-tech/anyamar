@@ -1,4 +1,4 @@
-name: test_app
+name: anyamar
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -96,6 +96,14 @@ flutter:
     - family: Montserrat
       fonts:
         - asset: assets/fonts/Montserrat/static/Montserrat-Black.ttf
+    - family: Bevan
+      fonts:
+        - asset: assets/fonts/Bevan/Bevan-Regular.ttf
+
+    # - family: AnticDidone
+    #   fonts:
+    #     - asset: assets/fonts/AnticDidone/AnticDidone-Regular.ttf
+
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #

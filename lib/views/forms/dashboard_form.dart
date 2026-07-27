@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/responsiveness/responsiveness.dart';
-import 'package:test_app/views/pages/initial_pages/form_shell_web.dart';
+import 'package:anyamar/responsiveness/responsiveness.dart';
+import 'package:anyamar/views/pages/initial_pages/form_shell_web.dart';
 
 class DashboardForm extends ConsumerWidget {
   final Widget form;

@@ -1,9 +1,9 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/units.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/data/models/unit_model.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/tables/units_table.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/units.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/tables/units_table.dart';
 
 class UnitInformationCardWidget extends StatelessWidget {
   final Property property;
@@ -11,7 +11,7 @@ class UnitInformationCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Unit> propertyUnits = units
+    List<Unit> propertyUnits = tempunits
         .where((element) => element.propertyId == property.propertyId)
         .toList();
     return ValueListenableBuilder(

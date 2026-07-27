@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/enums/payment_methods_enum.dart';
+import 'package:anyamar/data/models/enums/payment_methods_enum.dart';
 
 class SingleRentEntry {
   final DateTime paymentDate;

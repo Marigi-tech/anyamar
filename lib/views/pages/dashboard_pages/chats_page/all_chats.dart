@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/data/models/chat_model.dart';
-import 'package:test_app/data/models/chat_user.dart';
-import 'package:test_app/data/providers/chat_provider.dart';
-import 'package:test_app/data/providers/current_chat_notifier_provider.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/data/models/chat_model.dart';
+import 'package:anyamar/data/models/chat_user.dart';
+import 'package:anyamar/data/providers/chat_provider.dart';
+import 'package:anyamar/data/providers/current_chat_notifier_provider.dart';
 
 class AllChats extends ConsumerWidget {
   const AllChats({super.key});

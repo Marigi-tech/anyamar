@@ -1,4 +1,4 @@
-import 'package:test_app/constants/commons.dart';
+import 'package:anyamar/constants/commons.dart';
 
 class IntroCardWidget extends StatefulWidget {
   final IconData cardIcon;
@@ -64,92 +64,71 @@ class _IntroCardWidgetState extends State<IntroCardWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //Icon
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 6.0,
-
-                          shadowColor: isHovered
-                              ? AppColorsConstant.blueGreyColor
-                              : null,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.0,
-                              vertical: 10.0,
-                            ),
-                            child: Icon(
-                              widget.cardIcon,
-                              color: isHovered
-                                  ? AppColorsConstant.lightGreenColor
-                                  : null,
-                              size: 16,
-                              weight: 20.0,
-                            ),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      //Icon
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                        SizedBox(width: 06.0),
-                        //Title
-                        Text(
-                          widget.cardTitle,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w200,
-                            letterSpacing: 0.7,
-                            fontFamily: 'Lato',
-                            fontStyle: FontStyle.italic,
+                        elevation: 6.0,
+
+                        shadowColor: isHovered
+                            ? AppColorsConstant.blueGreyColor
+                            : null,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15.0,
+                            vertical: 15.0,
+                          ),
+                          child: Icon(
+                            widget.cardIcon,
                             color: isHovered
                                 ? AppColorsConstant.lightGreenColor
-                                : AppColorsConstant.darkBlueColor,
-                          ),
-                        ),
-                        // SizedBox(width: 40.0),
-                        // //Wave
-                        // Align(
-                        //   alignment: Alignment.topRight,
-                        //   child: Icon(
-                        //     CupertinoIcons.waveform,
-                        //     color: isHovered
-                        //         ? AppColorsConstant.lightGreenColor
-                        //         : null,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Wrap(
-                    alignment: WrapAlignment.start,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          widget.description,
-                          style: TextStyle(
-                            fontSize: 21,
-                            fontFamily: 'Montserrat',
+                                : null,
+                            size: 18,
+                            weight: 20.0,
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
-                      Text(
-                        widget.extraInfo ?? '',
-                        style: TextStyle(
-                          decorationStyle: TextDecorationStyle.wavy,
-                          fontSize: 12,
-                          color: AppColorsConstant.darkBlueColor,
-                          fontFamily: 'lato',
-                        ),
+                      Wrap(
+                        alignment: WrapAlignment.end,
+                        crossAxisAlignment: WrapCrossAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              widget.description,
+                              style: TextStyle(
+                                fontSize: 21,
+                                fontFamily: 'Montserrat',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  SizedBox(height: 02),
+                  //Title
+                  Padding(
+                    padding: EdgeInsetsGeometry.only(left: 10, top: 05),
+                    child: Text(
+                      widget.cardTitle.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 17,
+                        letterSpacing: 2,
+                        fontFamily: 'Montserrat',
+                        fontStyle: FontStyle.normal,
+                        color: isHovered
+                            ? AppColorsConstant.kOrange1
+                            : AppColorsConstant.greenColor,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),

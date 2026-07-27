@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/tenant_model.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
 
 final List<Tenant> tenants = [
   Tenant(

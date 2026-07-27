@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/data/providers/selected_file_notifier_provider.dart';
+import 'package:anyamar/data/providers/selected_file_notifier_provider.dart';
 
 class RemoveUploadedFile extends ConsumerWidget {
   final PlatformFile file;

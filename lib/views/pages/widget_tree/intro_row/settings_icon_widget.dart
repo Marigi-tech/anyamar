@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/providers/theme_provider.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/providers/theme_provider.dart';
 
 class SettingsIconWidget extends ConsumerWidget {
   const SettingsIconWidget({super.key});

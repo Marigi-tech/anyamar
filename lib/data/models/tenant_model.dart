@@ -1,5 +1,6 @@
-import 'package:test_app/data/data_sets/properties.dart';
-import 'package:test_app/data/models/property_model.dart';
+import 'package:anyamar/data/data_sets/properties.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/models/users/person.dart';
 
 class Tenant {
   final String tenantId;
@@ -9,6 +10,11 @@ class Tenant {
   final String propertyId;
   final String? unitName;
   final String? tenantEmail;
+  final String? tenantOccupation; // job
+  final String? tenantNationalId;
+  final Person?
+  nextOfKin; // Include name , phone number and email address of the tenant's next of kin
+  final String? nationalId;
 
   Tenant({
     required this.unitId,
@@ -18,6 +24,10 @@ class Tenant {
     required this.tenantName,
     this.unitName,
     this.tenantEmail,
+    this.nationalId,
+    this.nextOfKin,
+    this.tenantOccupation,
+    this.tenantNationalId
   });
   bool matchesTenantSearch(String query) {
     final search = query.toLowerCase();

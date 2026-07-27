@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/views/pages/initial_pages/landing_page/landing_page.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
 
 class SidebarWidget extends StatelessWidget {
   final List<dynamic> pages;
@@ -72,26 +72,31 @@ class SidebarWidget extends StatelessWidget {
                         return ValueListenableBuilder(
                           valueListenable: selectedWebPageNotifier,
                           builder: (context, pageIndex, child) {
-                            return item.index == 7
+                            return item.index == 6
                                 //---Log out button--//
-                                ? Padding(
-                                    padding: EdgeInsets.only(top: 30.0),
-                                    child: SideBarItemWidget(
-                                      icon: item.icon,
-                                      title: item.title,
-                                      isLogOutButton: true,
-                                      index: item.index,
-                                      onPressedCallBack: () {
-                                        selectedPageNotifier.value = 0;
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 30.0),
+                                        child: SideBarItemWidget(
+                                          icon: item.icon,
+                                          title: item.title,
+                                          isLogOutButton: true,
+                                          index: item.index,
+                                          onPressedCallBack: () {
+                                            selectedPageNotifier.value = 0;
 
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => LandingPage(),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => LandingPage(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   )
                                 : SideBarItemWidget(
                                     icon: item.icon,

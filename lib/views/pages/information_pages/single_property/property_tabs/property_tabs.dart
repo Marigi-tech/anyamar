@@ -1,8 +1,8 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/property_overview.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_tenants/property_tenants.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_units/property_units.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_overview/property_overview.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_tenants/property_tenants.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_units/property_units.dart';
 
 class PropertyTabs extends StatelessWidget {
   final Property property;

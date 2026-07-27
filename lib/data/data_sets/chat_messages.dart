@@ -1,6 +1,6 @@
-import 'package:test_app/data/models/chat_message_model.dart';
-import 'package:test_app/data/models/chat_user.dart';
-import 'package:test_app/data/models/enums/user_type_enum.dart';
+import 'package:anyamar/data/models/chat_message_model.dart';
+import 'package:anyamar/data/models/chat_user.dart';
+import 'package:anyamar/data/models/enums/user_type_enum.dart';
 
 List<ChatMessage> chatMessages = [
   ChatMessage(

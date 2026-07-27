@@ -1,32 +1,44 @@
+import 'package:anyamar/data/notifiers.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/views/dashboard_widgets/intro_card_widget.dart';
+import 'package:anyamar/views/dashboard_widgets/intro_card_widget.dart';
 
 List<Widget> introCardsList = [
   IntroCardWidget(
     cardIcon: CupertinoIcons.building_2_fill,
     cardTitle: 'Properties',
     description: '40',
-
-    onPressedCallBack: () {},
+    onPressedCallBack: () {
+      selectedWebPageNotifier.value = 1;
+      selectedSideItemNotifier.value = 1;
+    },
   ),
 
   IntroCardWidget(
     cardIcon: CupertinoIcons.person_2,
     cardTitle: 'Tenants',
     description: '140',
-    onPressedCallBack: () {},
+    onPressedCallBack: () {
+      selectedWebPageNotifier.value = 3;
+      selectedSideItemNotifier.value = 3;
+    },
   ),
   IntroCardWidget(
     cardIcon: CupertinoIcons.money_dollar,
     cardTitle: 'Revenue',
     description: 'ksh 12.5 M ',
-    onPressedCallBack: () {},
+    onPressedCallBack: () {
+      selectedWebPageNotifier.value = 2;
+      selectedSideItemNotifier.value = 2;
+    },
   ),
   IntroCardWidget(
-    cardIcon: CupertinoIcons.chat_bubble_2,
-    cardTitle: 'Chats',
-    description: '40',
+    cardIcon: CupertinoIcons.person,
+    cardTitle: 'My Account',
+    description: '',
     extraInfo: '',
-    onPressedCallBack: () {},
+    onPressedCallBack: () {
+      selectedWebPageNotifier.value = 5;
+      selectedSideItemNotifier.value = 5;
+    },
   ),
 ];

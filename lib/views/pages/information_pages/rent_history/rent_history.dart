@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/models/rent_history_model.dart';
-import 'package:test_app/data/models/single_rental_entry_model.dart';
-import 'package:test_app/views/tables/rent_history.dart';
+import 'package:anyamar/data/models/rent_history_model.dart';
+import 'package:anyamar/data/models/single_rental_entry_model.dart';
+import 'package:anyamar/views/tables/rent_history.dart';
 
 class RentHistoryPage extends StatelessWidget {
   final RentHistory rentHistory;

@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/responsiveness/responsiveness.dart';
-import 'package:test_app/views/forms/property_forms/add_property.dart';
-import 'package:test_app/views/forms/tenant_forms/tenant_form.dart';
-import 'package:test_app/views/forms/unit_forms/unit_form.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/occupancy_card.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_overview/property_management_info.dart';
-import 'package:test_app/views/reusable_widgets/buttons/card_button_widget.dart';
-import 'package:test_app/views/dashboard_widgets/tenant_information_card_widget.dart';
-import 'package:test_app/views/dashboard_widgets/unit_information_card_widget.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/responsiveness/responsiveness.dart';
+import 'package:anyamar/views/forms/property_forms/add_property.dart';
+import 'package:anyamar/views/forms/tenant_forms/tenant_form.dart';
+import 'package:anyamar/views/forms/unit_forms/unit_form.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_overview/occupancy_card.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_overview/property_management_info.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/card_button_widget.dart';
+import 'package:anyamar/views/dashboard_widgets/tenant_information_card_widget.dart';
+import 'package:anyamar/views/dashboard_widgets/unit_information_card_widget.dart';
 
 class PropertyOverview extends StatefulWidget {
   final Property property;
@@ -45,6 +45,8 @@ class _PropertyOverviewState extends State<PropertyOverview> {
                     buttonTitle: 'Add Property',
                     buttonIcon: CupertinoIcons.add,
                     backgroundColor: AppColorsConstant.darkYellowColor,
+                    fontColor: AppColorsConstant.whiteColor,
+
                     onPressedCallBack: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => AddProperty()),
@@ -55,6 +57,7 @@ class _PropertyOverviewState extends State<PropertyOverview> {
                     buttonTitle: 'Add Tenant',
                     buttonIcon: CupertinoIcons.add,
                     backgroundColor: AppColorsConstant.lightGreenColor,
+                    fontColor: AppColorsConstant.whiteColor,
                     onPressedCallBack: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => AddTenant()),
@@ -64,6 +67,7 @@ class _PropertyOverviewState extends State<PropertyOverview> {
                   CardButtonWidget(
                     buttonTitle: 'Add Unit',
                     buttonIcon: CupertinoIcons.add,
+                    fontColor: AppColorsConstant.whiteColor,
                     backgroundColor: AppColorsConstant.darkBlueColor,
                     onPressedCallBack: () => Navigator.of(
                       context,

@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/rent_history.dart';
-import 'package:test_app/data/data_sets/tenants.dart';
-import 'package:test_app/data/models/rent_history_model.dart';
-import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/data/models/unit_model.dart';
-import 'package:test_app/views/pages/information_pages/rent_history/rent_history.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/info_tile.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_page.dart';
-import 'package:test_app/views/reusable_widgets/buttons/card_button_widget.dart';
-import 'package:test_app/views/reusable_widgets/information_badges/information_badge_widget.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/rent_history.dart';
+import 'package:anyamar/data/data_sets/tenants.dart';
+import 'package:anyamar/data/models/rent_history_model.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
+import 'package:anyamar/views/pages/information_pages/rent_history/rent_history.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/single_tenant_page.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/card_button_widget.dart';
+import 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
 
 class SingleUnitModal extends StatelessWidget {
   final Unit unit;
@@ -28,10 +28,10 @@ class SingleUnitModal extends StatelessWidget {
         .single;
     return Dialog(
       elevation: 6,
-      constraints: BoxConstraints(
-        maxWidth: Responsiveness.isMobile(context) ? 400 : 300,
-      ),
 
+      constraints: BoxConstraints(
+        maxWidth: Responsiveness.isMobile(context) ? 400 : 400,
+      ),
       child: Column(
         children: [
           Row(
@@ -116,7 +116,7 @@ class SingleUnitModal extends StatelessWidget {
                         tileIcon: CupertinoIcons.calendar,
                         tileTitle: 'Rent ',
                         tileDescription:
-                            '${unit.rentCurrency} ${unit.unitRent}',
+                            '${unit.unitRent.rentCurrency} ${unit.unitRent}',
                       ),
                     ),
                   ],
