@@ -1,5 +1,4 @@
 import 'package:anyamar/data/models/date_format_model.dart';
-import 'package:anyamar/data/models/unit_utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:anyamar/constants/commons.dart';
 import 'package:anyamar/data/models/property_model.dart';
