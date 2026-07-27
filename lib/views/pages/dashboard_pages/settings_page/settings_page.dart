@@ -1,109 +1,44 @@
-import 'package:test_app/constants/commons.dart';
+import 'package:anyamar/data/providers/theme_provider.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
-  TextEditingController controller = TextEditingController();
-  bool? isChecked = false;
-  bool isSwitched = false;
-  double sliderValue = 0.0;
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: controller,
-            decoration: InputDecoration(border: OutlineInputBorder()),
-            onEditingComplete: () => setState(() {}),
-          ),
-          Text(controller.text),
-          SizedBox(height: 10),
-          CheckboxListTile(
-            tristate: true, //Three states,true false or null
-            title: Text('Select option'),
-            value: isChecked,
-            onChanged: (value) {
-              setState(() {
-                isChecked = value;
-              });
-            },
-          ),
-          SwitchListTile.adaptive(
-            title: Text('Switch'),
-            value: isSwitched,
-            onChanged: (value) => setState(() {
-              isSwitched = value;
-            }),
-          ),
-          Slider(
-            max: 10.0,
-            divisions: 10,
-            value: sliderValue,
-            onChanged: (value) {
-              setState(() {
-                sliderValue = value;
-              });
-            },
-          ),
-          ElevatedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  duration: Duration(seconds: 2),
-                  behavior: SnackBarBehavior.floating,
-                  content: Text('My snackbar'),
+    final isDark = ref.watch(themeIsDarkProvider);
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 600),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: InfoTile(
+                    tileIcon: CupertinoIcons.gear,
+                    tileTitle: 'Theme',
+                    tileDescription:
+                        'Current Theme : ${isDark == true ? 'Dark' : 'Light'} ',
+                    onTapCallBack: () {
+                      ref.read(themeIsDarkProvider.notifier).toggleTheme();
+                    },
+                  ),
                 ),
-              );
-            },
-            child: Text('Open snackbar'),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Divider(
-              thickness: 2.0,
-              color: Colors.teal,
-              radius: BorderRadius.circular(20.0),
+              ],
             ),
-          ),
-          FilledButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  content: Text('Alert content'),
-                  title: Text('Alert title'),
-                  actions: [
-                    OutlinedButton(onPressed: () {}, child: Text('Continue')),
-
-                    CloseButton(),
-                  ],
-                ),
-              );
-            },
-            child: Text('Open dialog'),
-          ),
-          //Change brightness
-          // IconButton(
-          //   onPressed: () {
-          //     themeIsDarkNotifier.value = !themeIsDarkNotifier.value;
-          //   },
-          //   icon: Icon(
-          //     themeIsDarkNotifier.value == true
-          //         ? Icons.light_mode
-          //         : Icons.dark_mode,
-          //     size: 14,
-          //   ),
-          // ),
-        ],
+          ],
+        ),
       ),
     );
   }

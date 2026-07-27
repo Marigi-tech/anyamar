@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/constants/constants.dart';
+import 'package:anyamar/constants/constants.dart';
 
 class CardButtonWidget extends StatefulWidget {
   final String buttonTitle;
@@ -8,6 +8,7 @@ class CardButtonWidget extends StatefulWidget {
   final double? titleFontSize;
   final EdgeInsets? padding;
   final Color? backgroundColor;
+  final Color? fontColor;
   const CardButtonWidget({
     super.key,
     required this.buttonTitle,
@@ -16,6 +17,7 @@ class CardButtonWidget extends StatefulWidget {
     this.padding,
     this.titleFontSize,
     this.backgroundColor,
+    this.fontColor,
   });
 
   @override
@@ -69,7 +71,7 @@ class _CardButtonWidgetState extends State<CardButtonWidget> {
                       fontSize: widget.titleFontSize ?? 14,
                       color: cardIsHovered == true
                           ? AppColorsConstant.greenColor
-                          : null,
+                          : widget.fontColor,
                     ),
                   ),
                 ],

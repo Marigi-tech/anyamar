@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/single_rental_entry_model.dart';
+import 'package:anyamar/data/models/single_rental_entry_model.dart';
 
 class RentHistory {
   final String tenantId;

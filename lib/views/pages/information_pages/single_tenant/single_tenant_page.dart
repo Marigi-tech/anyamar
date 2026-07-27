@@ -1,16 +1,15 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/properties.dart';
-import 'package:test_app/data/data_sets/rent_history.dart';
-import 'package:test_app/data/data_sets/units.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/data/models/rent_history_model.dart';
-import 'package:test_app/data/models/single_rental_entry_model.dart';
-import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/data/models/unit_model.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/lease_details.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_intro.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/tenant_details.dart';
-import 'package:test_app/views/tables/rent_history.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/properties.dart';
+import 'package:anyamar/data/data_sets/rent_history.dart';
+import 'package:anyamar/data/data_sets/units.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/models/rent_history_model.dart';
+import 'package:anyamar/data/models/single_rental_entry_model.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/rent_history_widget.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/single_tenant_intro.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/tenant_information_widget.dart';
 
 class SingleTenantPage extends StatelessWidget {
   final Tenant tenant;
@@ -19,7 +18,7 @@ class SingleTenantPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //todo : cater for tenants with multiple units eg air bnbs or big families
-    Unit tenantUnit = units.where((t) => t.unitId == tenant.unitId).single;
+    Unit tenantUnit = tempunits.where((t) => t.unitId == tenant.unitId).single;
     Property tenantProperty = properties
         .where((p) => p.propertyId == tenant.propertyId)
         .single;
@@ -28,124 +27,56 @@ class SingleTenantPage extends StatelessWidget {
         .single;
     List<SingleRentEntry> tenantRentEntries =
         tenantRentHistory.rentEntries ?? [];
+    final bool isMobile = Responsiveness.isMobile(context);
+
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 900,
-            minHeight: double.infinity,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Tenant photo and rent information
-              SingleTenantIntro(tenant: tenant, unit: tenantUnit),
-              SizedBox(height: 30),
-              SizedBox(
-                height: getSizeFromContext(context).height * .70,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Column(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 10.0 : 50.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            isMobile
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
                     children: [
-                      //todo: make responsive
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //? Personal details
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Personal details',
-                                  style: CustomTextStyles.cardDescriptionStyle
-                                      .copyWith(
-                                        fontStyle: FontStyle.normal,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                                SizedBox(height: 10),
-
-                                TenantDetails(
-                                  tenant: tenant,
-                                  property: tenantProperty,
-                                  unit: tenantUnit,
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          //Lease details
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Lease details',
-                                    style: CustomTextStyles.cardDescriptionStyle
-                                        .copyWith(
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  LeaseDetails(
-                                    tenant: tenant,
-                                    property: tenantProperty,
-                                    unit: tenantUnit,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 40),
-                      Text(
-                        'Payment History',
-                        style: CustomTextStyles.cardDescriptionStyle.copyWith(
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.normal,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40.0),
+                        child: SingleTenantIntro(
+                          tenant: tenant,
+                          unit: tenantUnit,
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Card(
-                              elevation: 8,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 30,
-                                  horizontal: 30.0,
-                                ),
-                                child: RentHistoryTable(
-                                  rentEntries: tenantRentEntries,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      TenantInformationWidget(
+                        tenant: tenant,
+                        tenantProperty: tenantProperty,
+                        tenantUnit: tenantUnit,
+                      ),
+                      RentHistoryWidget(tenantRentEntries: tenantRentEntries),
+                    ],
+                  )
+                : Row(
+                    // direction: isMobile ? Axis.vertical : Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TenantInformationWidget(
+                        tenant: tenant,
+                        tenantProperty: tenantProperty,
+                        tenantUnit: tenantUnit,
+                      ),
+                      RentHistoryWidget(
+                        tenantRentEntries: tenantRentEntries,
+                        tenant: tenant,
+                        tenantUnit: tenantUnit,
                       ),
                     ],
                   ),
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );

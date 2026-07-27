@@ -1,6 +1,6 @@
-import 'package:test_app/data/models/enums/payment_methods_enum.dart';
-import 'package:test_app/data/models/rent_history_model.dart';
-import 'package:test_app/data/models/single_rental_entry_model.dart';
+import 'package:anyamar/data/models/enums/payment_methods_enum.dart';
+import 'package:anyamar/data/models/rent_history_model.dart';
+import 'package:anyamar/data/models/single_rental_entry_model.dart';
 
 final List<RentHistory> rentHistory = [
   RentHistory(

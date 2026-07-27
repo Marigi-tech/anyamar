@@ -1,4 +1,4 @@
-import 'package:test_app/constants/commons.dart';
+import 'package:anyamar/constants/commons.dart';
 
 //Dictates the app's theme (dark or light)
 class AppThemeModeConstant {

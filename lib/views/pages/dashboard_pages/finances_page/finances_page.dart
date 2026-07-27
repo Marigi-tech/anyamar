@@ -1,10 +1,10 @@
+import 'package:anyamar/data/data_sets/financial_records.dart';
+import 'package:anyamar/data/models/financial_record_model.dart';
+import 'package:anyamar/views/pages/dashboard_pages/dashboard_page_shell.dart';
+import 'package:anyamar/views/tables/financial_records_table.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/data/data_sets/rent_history.dart';
-import 'package:test_app/data/models/single_rental_entry_model.dart';
-import 'package:test_app/views/dashboard_widgets/intro_text_widget.dart';
-import 'package:test_app/views/forms/financial_records/general_financial_record.dart';
-import 'package:test_app/views/reusable_widgets/table_intro_widget/table_intro_widget.dart';
-import 'package:test_app/views/tables/rent_history.dart';
+import 'package:anyamar/views/forms/financial_records/general_financial_record.dart';
+import 'package:anyamar/views/reusable_widgets/table_intro_widget/table_intro_widget.dart';
 
 class FinancesPage extends StatefulWidget {
   const FinancesPage({super.key});
@@ -14,98 +14,49 @@ class FinancesPage extends StatefulWidget {
 }
 
 class _FinancesPageState extends State<FinancesPage> {
-  List<SingleRentEntry> rentRecords = [];
-  List<SingleRentEntry> filteredRecords = [];
+  List<FinancialRecord> financialRecords = [];
+  List<FinancialRecord> filteredRecords = [];
 
   @override
   void initState() {
     super.initState();
-    rentRecords = rentHistory
-        .expand<SingleRentEntry>(
-          (history) => history.rentEntries!.cast<SingleRentEntry>(),
-        )
-        .toList();
-
-    filteredRecords = rentRecords;
+    financialRecords = tempFinancialRecords.toList();
+    filteredRecords = financialRecords;
   }
 
   void filterFinancialRecordsData(String query) {
-    // final search = query.toLowerCase();
+    final search = query.toLowerCase();
 
     setState(() {
-      filteredRecords = rentRecords;
-      // filteredFinances = myFinances
-      //     .where((t) => t.matchesPropertySearch(search))
-      //     .toList();
+      filteredRecords = financialRecords
+          .where((t) => t.matchesFinancialRecordsSearch(search))
+          .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // constraints.maxHeight is the full height available to TenantsPage.
-        final double totalHeight = constraints.maxHeight;
-        // The ratios are 1:8, totaling 9 parts (1 + 8).
-        const int totalFlex = 9;
-        final double unitHeight = totalHeight / totalFlex;
+    return DashboardPageShell(
+      introText: 'Financial Records',
+      stickyWidget: TableIntroWidget(
+        dataLength: '${filteredRecords.length}',
+        dataType: 'Financial records',
+        onSearch: filterFinancialRecordsData,
+        hasSearchBar: true,
+        onPressedCallBack: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => AddGeneralFinancialRecord())),
+      ),
+      dashboardWidgets: [
+        Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
 
-        final double headerHeight = unitHeight * 1; // 1/9th of the height
-        final double tableHeight = unitHeight * 8; // 8/9ths of the height
-
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: headerHeight,
-              child: IntroTextWidget(dashboardItem: 'Financial records'),
-            ),
-
-            SizedBox(
-              height: tableHeight,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 20.0,
-                ),
-
-                child: Column(
-                  children: [
-                    TableIntroWidget(
-                      dataLength: '${filteredRecords.length}',
-                      dataType: 'Financial records',
-                      onSearch: filterFinancialRecordsData,
-                      onPressedCallBack: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => AddGeneralFinancialRecord(),
-                        ),
-                      ),
-                      // onSearch: filterSinglePropertyTableData,
-                    ),
-
-                    SizedBox(height: 30),
-                    Card(
-                      elevation: 8,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 30,
-                          horizontal: 30.0,
-                        ),
-                        child: RentHistoryTable(rentEntries: filteredRecords),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+          child: FinancialRecordsTable(financialRecords: filteredRecords),
+        ),
+      ],
     );
   }
 }

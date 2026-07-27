@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_tabs/property_tabs.dart';
-import 'package:test_app/views/pages/information_pages/single_property/property_intro_card.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_tabs/property_tabs.dart';
+import 'package:anyamar/views/pages/information_pages/single_property/property_intro_card.dart';
 
 class SinglePropertyPage extends StatelessWidget {
   final Property property;
@@ -11,7 +11,6 @@ class SinglePropertyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true),
-
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(

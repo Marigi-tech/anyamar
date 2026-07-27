@@ -1,7 +1,7 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/properties.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/tables/properties_table.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/properties.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/tables/properties_table.dart';
 
 class PropertyInformationCardWidget extends StatefulWidget {
   const PropertyInformationCardWidget({super.key});
@@ -23,7 +23,8 @@ class _PropertyInformationCardWidgetState
               ? getSizeFromContext(context).width * .50
               : double.infinity,
           height: 400,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+          // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: Card(
             elevation: 6,
             shape: RoundedRectangleBorder(

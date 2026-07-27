@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/pages/initial_pages/reset_password/forgot_password_form.dart';
+import 'package:anyamar/views/pages/initial_pages/reset_password/forgot_password_form.dart';
 
 class ForgotPasswordMobile extends StatelessWidget {
   const ForgotPasswordMobile({super.key});

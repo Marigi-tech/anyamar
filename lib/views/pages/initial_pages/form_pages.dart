@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/views/reusable_widgets/text/text_widget.dart';
+import 'package:anyamar/views/reusable_widgets/text/text_widget.dart';
 
 class FormPages extends StatelessWidget {
   final String pageTitle;

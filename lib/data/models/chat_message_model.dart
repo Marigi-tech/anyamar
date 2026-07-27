@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/chat_user.dart';
+import 'package:anyamar/data/models/chat_user.dart';
 
 class ChatMessage {
   final ChatUser sender;

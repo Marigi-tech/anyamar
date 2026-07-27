@@ -1,4 +1,4 @@
-import 'package:test_app/constants/commons.dart';
+import 'package:anyamar/constants/commons.dart';
 
 class FormShellWeb extends StatelessWidget {
   final Widget webForm;
@@ -7,16 +7,15 @@ class FormShellWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        Expanded(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: webForm,
-              ),
-            ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: webForm,
           ),
         ),
       ],

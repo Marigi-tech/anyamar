@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/pages/initial_pages/login_page/login_page_form.dart';
+import 'package:anyamar/views/pages/initial_pages/login_page/login_page_form.dart';
 
 class LoginPageMobile extends StatefulWidget {
   const LoginPageMobile({super.key});

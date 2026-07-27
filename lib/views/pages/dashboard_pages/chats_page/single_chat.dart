@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/dashboard_widgets/chats_card_widget.dart';
+import 'package:anyamar/views/dashboard_widgets/chats_card_widget.dart';
 
 class SingleChat extends StatelessWidget {
   const SingleChat({super.key});

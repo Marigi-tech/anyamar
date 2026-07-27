@@ -1,3 +1,4 @@
+import 'package:anyamar/views/reusable_widgets/form_elements/input_decoration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +15,19 @@ class SearchWidget extends StatelessWidget {
         child: TextField(
           textInputAction: TextInputAction.done,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: CustomInputDecoration.textInputDecoration(
             hintText: 'Search',
-            prefixIcon: const Icon(CupertinoIcons.search),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+            prefixIcon: const Icon(CupertinoIcons.search)
           ),
+
+          
+          // decoration: InputDecoration(
+          //   hintText: 'Search',
+          //   prefixIcon: const Icon(CupertinoIcons.search),
+          //   border: OutlineInputBorder(
+          //     borderRadius: BorderRadius.circular(10.0),
+          //   ),
+          // ),
           onChanged: onSearch,
         ),
       ),

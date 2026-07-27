@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/properties.dart';
-import 'package:test_app/data/models/property_model.dart';
-import 'package:test_app/data/providers/selected_file_notifier_provider.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/properties.dart';
+import 'package:anyamar/data/models/property_model.dart';
+import 'package:anyamar/data/providers/selected_file_notifier_provider.dart';
 
-import 'package:test_app/views/pages/initial_pages/form_pages.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/reusable_widgets/file_picker/file_picked_widget.dart';
-import 'package:test_app/views/reusable_widgets/file_picker/file_picker_widget.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/form_label.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/input_decoration.dart';
+import 'package:anyamar/views/pages/initial_pages/form_pages.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/reusable_widgets/file_picker/file_picked_widget.dart';
+import 'package:anyamar/views/reusable_widgets/file_picker/file_picker_widget.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/form_label.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/input_decoration.dart';
 
 class AddPropertyForm extends ConsumerStatefulWidget {
   const AddPropertyForm({super.key});

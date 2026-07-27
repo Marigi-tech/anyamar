@@ -1,11 +1,10 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/views/reusable_widgets/sidebar_widget/collapsed_side_item.dart';
-import 'package:test_app/views/reusable_widgets/sidebar_widget/uncollapsed_side_item.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/views/reusable_widgets/sidebar_widget/collapsed_side_item.dart';
+import 'package:anyamar/views/reusable_widgets/sidebar_widget/uncollapsed_side_item.dart';
 
 class SideBarItemWidget extends StatelessWidget {
   final String title;
   final IconData icon;
-
   final VoidCallback? onPressedCallBack;
   final int? index;
   final BoxDecoration? backgroundColor;

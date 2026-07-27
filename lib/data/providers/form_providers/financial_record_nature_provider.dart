@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:test_app/data/models/enums/financial_record_nature.dart';
+import 'package:anyamar/data/models/enums/financial_record_nature.dart';
 
 part 'financial_record_nature_provider.g.dart';
 

@@ -1,6 +1,7 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/models/enums/payment_methods_enum.dart';
-import 'package:test_app/data/models/enums/payment_status_enum.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/models/enums/financial_record_nature.dart';
+import 'package:anyamar/data/models/enums/payment_methods_enum.dart';
+import 'package:anyamar/data/models/enums/payment_status_enum.dart';
 
 class InformationBadge extends StatelessWidget {
   final String text;
@@ -16,7 +17,7 @@ class InformationBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 30),
+      constraints: BoxConstraints(maxWidth: 20),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         alignment: Alignment.topCenter,
@@ -64,6 +65,28 @@ class InformationBadge extends StatelessWidget {
   return (textColor: textColor, badgeColor: backgroundColor);
 }
 
+//Payment type
+({Color textColor, Color badgeColor}) getPaymentType(
+  FinancialRecordNature paymentType,
+) {
+  Color? bColor;
+  Color? tColor;
+
+  if (paymentType == FinancialRecordNature.revenue) {
+    bColor = AppColorsConstant.lightGreenColor;
+    tColor = AppColorsConstant.darkGreenColor;
+  }
+  if (paymentType == FinancialRecordNature.expense) {
+    bColor = AppColorsConstant.redColor;
+    tColor = AppColorsConstant.darkRedColor;
+  }
+
+  return (
+    textColor: tColor ?? AppColorsConstant.kWhite1,
+    badgeColor: bColor ?? AppColorsConstant.bgColor,
+  );
+}
+
 //payment method
 ({Color textColor, Color badgeColor}) getPaymentMethodStatus(
   PaymentMethods paymentMethod,
@@ -89,24 +112,24 @@ class InformationBadge extends StatelessWidget {
 ({Color textColor, Color badgeColor}) getPaymentStatus(
   PaymentStatus paymentStatus,
 ) {
-  Color backgroundColor;
-  Color textColor;
+  Color? bColor;
+  Color? tColor;
 
   if (paymentStatus == PaymentStatus.complete) {
-    backgroundColor = AppColorsConstant.lightGreenColor;
-    textColor = AppColorsConstant.darkGreenColor;
+    bColor = AppColorsConstant.lightGreenColor;
+    tColor = AppColorsConstant.darkGreenColor;
   }
   if (paymentStatus == PaymentStatus.notPaid) {
-    backgroundColor = AppColorsConstant.redColor;
-    textColor = AppColorsConstant.darkRedColor;
+    bColor = AppColorsConstant.redColor;
+    tColor = AppColorsConstant.darkRedColor;
   }
   if (paymentStatus == PaymentStatus.partial) {
-    backgroundColor = AppColorsConstant.lightYellowColor;
-    textColor = AppColorsConstant.darkYellowColor;
-  } else {
-    textColor = AppColorsConstant.darkBlueColor;
-    backgroundColor = AppColorsConstant.lightBlueColor;
+    bColor = AppColorsConstant.kOrange1;
+    tColor = AppColorsConstant.darkYellowColor;
   }
 
-  return (textColor: textColor, badgeColor: backgroundColor);
+  return (
+    textColor: tColor ?? AppColorsConstant.kWhite1,
+    badgeColor: bColor ?? AppColorsConstant.bgColor,
+  );
 }

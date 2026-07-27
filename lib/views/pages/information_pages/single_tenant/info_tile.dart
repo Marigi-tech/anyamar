@@ -1,4 +1,4 @@
-import 'package:test_app/constants/commons.dart';
+import 'package:anyamar/constants/commons.dart';
 
 class InfoTile extends StatelessWidget {
   final IconData tileIcon;

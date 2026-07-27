@@ -1,14 +1,21 @@
-import 'package:test_app/data/data_sets/tenants.dart';
-import 'package:test_app/data/models/tenant_model.dart';
+import 'package:anyamar/data/data_sets/tenants.dart';
+import 'package:anyamar/data/models/rent_model.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
 
 class Unit {
   final String unitId;
   final String? unitName;
   final String propertyId;
+  final String? propertyName;
   final String? tenantId;
+  final Tenant? currentTenant;
+  final Rent unitRent;
+  final List<Tenant>? previousTenantsLog;
   final bool? isOccupied;
-  final double? unitRent;
-  final String? rentCurrency; //todo: a rentCurrency model
+  // final double? unitRent;
+  // final String? rentCurrency; //todo: a rentCurrency model  //TODO: A rent model
+  // final String? rentFrequency;
+  // final double? rentDeposit;
 
   Unit({
     required this.unitId,
@@ -16,8 +23,11 @@ class Unit {
     required this.propertyId,
     this.tenantId,
     this.isOccupied = false,
-    this.unitRent,
-    this.rentCurrency,
+    required this.unitRent,
+
+    this.currentTenant,
+    this.previousTenantsLog,
+    this.propertyName,
   });
   bool matchesUnitSearch(String query) {
     final search = query.toLowerCase();
@@ -37,25 +47,4 @@ class Unit {
         ) ||
         statusText.contains(search);
   }
-  // factory Unit.fromMap(Map<String, dynamic> map) {
-  //   return Unit(
-  //     unitId: map['unitId'] ?? '',
-  //     unitName: map['unitName'],
-  //     propertyId: map['propertyId'] ?? '',
-  //     tenantInformation: map['tenantInformation'] != null
-  //         ? Tenant.fromMap(map['tenantInformation'])
-  //         : null,
-  //     isOccupied: map['isOccupied'] ?? false,
-  //   );
-  // }
-
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'unitId': unitId,
-  //     'unitName': unitName,
-  //     'propertyId': propertyId,
-  //     'tenantInformation': tenantInformation.toMap(),
-  //     'isOccupied': isOccupied,
-  //   };
-  // }
 }

@@ -1,4 +1,4 @@
-import 'package:test_app/data/models/unit_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
 
 class Property {
   final String propertyId;

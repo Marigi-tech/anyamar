@@ -36,3 +36,7 @@ String formatDayName(DateTime date) {
 
   return "${date.day}/${date.month}/${date.year}";
 }
+
+String formatMonthName(DateTime date) {
+  return "${date.month}";
+}

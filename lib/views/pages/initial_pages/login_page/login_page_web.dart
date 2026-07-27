@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/views/pages/initial_pages/form_shell_web.dart';
-import 'package:test_app/views/pages/initial_pages/login_page/login_page_form.dart';
+import 'package:anyamar/views/pages/initial_pages/form_shell_web.dart';
+import 'package:anyamar/views/pages/initial_pages/login_page/login_page_form.dart';
 
 class LogInPageWeb extends StatefulWidget {
   const LogInPageWeb({super.key});

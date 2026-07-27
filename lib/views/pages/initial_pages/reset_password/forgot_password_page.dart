@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/responsiveness/responsiveness.dart';
-import 'package:test_app/views/pages/initial_pages/reset_password/forgot_password_mobile.dart';
-import 'package:test_app/views/pages/initial_pages/reset_password/forgot_password_web.dart';
+import 'package:anyamar/responsiveness/responsiveness.dart';
+import 'package:anyamar/views/pages/initial_pages/reset_password/forgot_password_mobile.dart';
+import 'package:anyamar/views/pages/initial_pages/reset_password/forgot_password_web.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});

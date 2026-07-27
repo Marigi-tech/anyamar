@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:test_app/views/reusable_widgets/sidebar_widget/sidebar_item.dart';
+import 'package:anyamar/views/reusable_widgets/sidebar_widget/sidebar_item.dart';
 
 List<SideBarItemWidget> dashboardItems = [
   //Dashboard
@@ -26,17 +26,12 @@ List<SideBarItemWidget> dashboardItems = [
     title: 'Tenants',
     icon: CupertinoIcons.person_3_fill,
   ),
-  //Chats
-  SideBarItemWidget(
-    index: 4,
-    title: 'Chats',
-    icon: CupertinoIcons.chat_bubble_2,
-  ),
+
   //Settings
-  SideBarItemWidget(index: 5, title: 'Settings', icon: CupertinoIcons.gear),
+  SideBarItemWidget(index: 4, title: 'Settings', icon: CupertinoIcons.gear),
 
   //Profile
-  SideBarItemWidget(index: 6, title: 'My account', icon: CupertinoIcons.person),
+  SideBarItemWidget(index: 5, title: 'My account', icon: CupertinoIcons.person),
   //Log Out
-  SideBarItemWidget(index: 7, title: 'Log Out', icon: CupertinoIcons.power),
+  SideBarItemWidget(index: 6, title: 'Log Out', icon: CupertinoIcons.power),
 ];

@@ -1,9 +1,9 @@
-// import 'package:test_app/data/constants/commons.dart';
-// import 'package:test_app/views/pages/dashboard_pages/home_page/intro_card_list.dart';
-// import 'package:test_app/views/widgets/dashboard_widgets/chats_card_widget.dart';
-// import 'package:test_app/views/widgets/dashboard_widgets/property_information_card_widget.dart';
-// import 'package:test_app/views/widgets/dashboard_widgets/intro_text_widget.dart';
-// import 'package:test_app/views/widgets/dashboard_widgets/tenant_information_card_widget.dart';
+// import 'package:anyamar/data/constants/commons.dart';
+// import 'package:anyamar/views/pages/dashboard_pages/home_page/intro_card_list.dart';
+// import 'package:anyamar/views/widgets/dashboard_widgets/chats_card_widget.dart';
+// import 'package:anyamar/views/widgets/dashboard_widgets/property_information_card_widget.dart';
+// import 'package:anyamar/views/widgets/dashboard_widgets/intro_text_widget.dart';
+// import 'package:anyamar/views/widgets/dashboard_widgets/tenant_information_card_widget.dart';
 
 // class WebHomePage extends StatefulWidget {
 //   const WebHomePage({super.key});

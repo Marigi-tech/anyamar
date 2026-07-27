@@ -1,21 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app/data/models/date_format_model.dart';
-import 'package:test_app/data/models/single_rental_entry_model.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/info_tile.dart';
-import 'package:test_app/views/reusable_widgets/information_badges/information_badge_widget.dart';
+import 'package:anyamar/data/models/date_format_model.dart';
+import 'package:anyamar/data/models/single_rental_entry_model.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
+import 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
 
 class RentEntryModal extends StatelessWidget {
   final SingleRentEntry rentEntry;
+  
   const RentEntryModal({super.key, required this.rentEntry});
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 06),
+    return Dialog(
+      elevation: 6,
+      constraints: BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      'Rent entry for ${rentEntry.rentalMonth}',
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 15,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                ),
+                CloseButton(),
+              ],
+            ),
+            SizedBox(height: 10.0),
             //? Date paid
             Row(
               children: [
@@ -111,20 +135,6 @@ class RentEntryModal extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Rent entry for ${rentEntry.rentalMonth}',
-            style: TextStyle(
-              fontFamily: 'Lato',
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          CloseButton(),
-        ],
       ),
     );
   }

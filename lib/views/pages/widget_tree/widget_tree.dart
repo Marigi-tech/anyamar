@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/views/pages/widget_tree/intro_row/intro_row_widget.dart';
-import 'package:test_app/views/pages/widget_tree/pages_list/pages_list.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/views/pages/widget_tree/intro_row/intro_row_widget.dart';
+import 'package:anyamar/views/pages/widget_tree/pages_list/pages_list.dart';
 
 class WidgetTree extends ConsumerStatefulWidget {
   const WidgetTree({super.key});
@@ -50,7 +50,8 @@ class _WidgetTreeState extends ConsumerState<WidgetTree> {
                       child: isMobile
                           ? ValueListenableBuilder<int>(
                               valueListenable: selectedPageNotifier,
-                              builder: (_, value, __) => pages.elementAt(value),
+                              builder: (_, value, __) =>
+                                  webPages.elementAt(value),
                             )
                           : ValueListenableBuilder<int>(
                               valueListenable: selectedWebPageNotifier,

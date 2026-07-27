@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/data/models/enums/financial_record_nature.dart';
-import 'package:test_app/data/models/enums/financial_record_types.dart';
-import 'package:test_app/data/providers/form_providers/financial_record_nature_provider.dart';
-import 'package:test_app/views/forms/dashboard_form.dart';
-import 'package:test_app/views/pages/initial_pages/form_pages.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/form_label.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/input_decoration.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/data/models/enums/financial_record_nature.dart';
+import 'package:anyamar/data/models/enums/financial_record_types.dart';
+import 'package:anyamar/data/providers/form_providers/financial_record_nature_provider.dart';
+import 'package:anyamar/views/forms/dashboard_form.dart';
+import 'package:anyamar/views/pages/initial_pages/form_pages.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/form_label.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/input_decoration.dart';
 import 'package:flutter/services.dart';
 
 class AddGeneralFinancialRecord extends StatelessWidget {
@@ -160,7 +160,7 @@ class _GeneralFinancialRecordFormState
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: CustomInputDecoration.textInputDecoration(
                         hintText: 'Enter Amount ',
-                        prefixIcon: Text(
+                        prefix: Text(
                           'Ksh ',
                           style: CustomTextStyles.cardDescriptionStyle,
                         ),

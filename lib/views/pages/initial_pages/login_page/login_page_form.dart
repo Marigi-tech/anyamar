@@ -1,12 +1,12 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/views/pages/initial_pages/reset_password/forgot_password_page.dart';
-import 'package:test_app/views/pages/initial_pages/form_pages.dart';
-import 'package:test_app/views/pages/widget_tree/widget_tree.dart';
-import 'package:test_app/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/form_label.dart';
-import 'package:test_app/views/reusable_widgets/form_elements/input_decoration.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/views/pages/initial_pages/reset_password/forgot_password_page.dart';
+import 'package:anyamar/views/pages/initial_pages/form_pages.dart';
+import 'package:anyamar/views/pages/widget_tree/widget_tree.dart';
+import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/form_label.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/input_decoration.dart';
 
-import 'package:test_app/views/reusable_widgets/social_icons_widget.dart';
+import 'package:anyamar/views/reusable_widgets/social_icons_widget.dart';
 
 class LogInPageForm extends StatefulWidget {
   const LogInPageForm({super.key});

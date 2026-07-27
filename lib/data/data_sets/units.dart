@@ -1,14 +1,21 @@
-import 'package:test_app/data/models/unit_model.dart';
+import 'package:anyamar/data/models/enums/property_utilities_enum.dart';
+import 'package:anyamar/data/models/rent_model.dart';
+import 'package:anyamar/data/models/unit_model.dart';
+import 'package:anyamar/data/models/unit_utilities.dart';
 
-final List<Unit> units = [
+final List<Unit> tempunits = [
   Unit(
     unitId: "U001",
     unitName: "U001",
     propertyId: "P001",
     tenantId: "T001",
+    unitRent: Rent(
+      rentAmount: 30000,
+      rentDeposit: 30300,
+      rentCurrency: 'Ksh',
+      paymentFrequency: 'Monthly',
+    ),
     isOccupied: true,
-    rentCurrency: 'Ksh',
-    unitRent: 30000,
   ),
   Unit(
     unitId: "U002",
@@ -16,8 +23,12 @@ final List<Unit> units = [
     propertyId: "P002",
     tenantId: "T002",
     isOccupied: true,
-    rentCurrency: 'Ksh',
-    unitRent: 20000,
+    unitRent: Rent(
+      rentAmount: 40000,
+      rentDeposit: 40300,
+      rentCurrency: 'Ush',
+      paymentFrequency: 'Monthly',
+    ),
   ),
   Unit(
     unitId: "U003",
@@ -25,8 +36,12 @@ final List<Unit> units = [
     propertyId: "P003",
     tenantId: "T003",
     isOccupied: true,
-    rentCurrency: 'Ksh',
-    unitRent: 25000,
+    unitRent: Rent(
+      rentAmount: 1000,
+      rentDeposit: 1000,
+      rentCurrency: 'Dollars',
+      paymentFrequency: 'Bi Monthly',
+    ),
   ),
   Unit(
     unitId: "U004",
@@ -34,8 +49,12 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T004",
     isOccupied: true,
-    rentCurrency: 'Ksh',
-    unitRent: 15000,
+    unitRent: Rent(
+      rentAmount: 30000,
+      rentDeposit: 30300,
+      rentCurrency: 'Ksh',
+      paymentFrequency: 'Monthly',
+    ),
   ),
   Unit(
     unitId: "U005",
@@ -43,31 +62,54 @@ final List<Unit> units = [
     propertyId: "P001",
     tenantId: "T005",
     isOccupied: true,
-    rentCurrency: 'USD',
-    unitRent: 900,
+    unitRent: Rent(
+      rentAmount: 30000,
+      rentDeposit: 30300,
+      rentCurrency: 'Ksh',
+      paymentFrequency: 'Monthly',
+    ),
   ),
   Unit(
     unitId: "U006",
     unitName: "Sunset AC",
     propertyId: "P001",
     isOccupied: false,
-    rentCurrency: 'Ksh',
-    unitRent: 30000,
+    unitRent: Rent(
+      rentAmount: 25000,
+      rentDeposit: 25300,
+      rentCurrency: 'Ksh',
+      paymentFrequency: 'Monthly',
+    ),
   ),
   Unit(
     unitId: "U007",
     unitName: "Sunset AD",
     propertyId: "P001",
     isOccupied: false,
-    rentCurrency: 'Ksh',
-    unitRent: 27000,
+    unitRent: Rent(
+      rentAmount: 30000,
+      rentDeposit: 30300,
+      rentCurrency: 'Ksh',
+      paymentFrequency: 'Monthly',
+    ),
   ),
   Unit(
     unitId: "U008",
     unitName: "Sunset AF",
     propertyId: "P001",
     isOccupied: false,
-    rentCurrency: 'Ksh',
-    unitRent: 30000,
+    unitRent: Rent(
+      rentAmount: 30000,
+      rentDeposit: 30300,
+      rentCurrency: 'Ksh',
+      paymentFrequency: 'Monthly',
+      utilities: [
+        UnitUtility(utilityName: PropertyUtility.garbage, amountPayable: 700),
+        UnitUtility(
+          utilityName: PropertyUtility.electricity,
+          amountPayable: 500,
+        ),
+      ],
+    ),
   ),
 ];

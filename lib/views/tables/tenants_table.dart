@@ -1,100 +1,69 @@
-import 'package:test_app/constants/commons.dart';
-import 'package:test_app/data/data_sets/properties.dart';
-import 'package:test_app/data/models/tenant_model.dart';
-import 'package:test_app/views/pages/information_pages/single_tenant/single_tenant_page.dart';
-import 'package:test_app/views/tables/view_chevron_card.dart';
+import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/data/data_sets/properties.dart';
+import 'package:anyamar/data/models/tenant_model.dart';
+import 'package:anyamar/views/pages/information_pages/single_tenant/single_tenant_page.dart';
+import 'package:anyamar/views/tables/custom_data_table.dart';
+import 'package:anyamar/views/tables/view_chevron_card.dart';
 
-TableRow buildTenantHeaderRow(bool isUnitTenant) {
-  return TableRow(
-    children: [
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        child: Text("", style: TextStyle(fontWeight: FontWeight.w200)),
+List<DataColumn> buildTenantHeaderRows(bool isUnitTenant) {
+  return [
+    const DataColumn(
+      label: Text("", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+    const DataColumn(
+      label: Text("Full Name", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+    const DataColumn(
+      label: Text(
+        "Phone Number",
+        style: TextStyle(fontWeight: FontWeight.w200),
       ),
-
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        child: Text("Full Name", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+    const DataColumn(
+      label: Text("Email", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+    const DataColumn(
+      label: Text("National ID", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+    const DataColumn(
+      label: Text("Unit ", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+    // Collection if cleanly removes the column entirely when isUnitTenant is true
+    if (!isUnitTenant)
+      const DataColumn(
+        label: Text('Property ', style: TextStyle(fontWeight: FontWeight.w200)),
       ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        child: Text(
-          "Phone Number",
-          style: TextStyle(fontWeight: FontWeight.w200),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        child: Text("Unit ", style: TextStyle(fontWeight: FontWeight.w200)),
-      ),
-      !isUnitTenant
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-              child: Text(
-                'Property ',
-                style: TextStyle(fontWeight: FontWeight.w200),
-              ),
-            )
-          : SizedBox(),
-
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
-        child: Text("View", style: TextStyle(fontWeight: FontWeight.w200)),
-      ),
-    ],
-  );
+    const DataColumn(
+      label: Text("View", style: TextStyle(fontWeight: FontWeight.w200)),
+    ),
+  ];
 }
 
-TableRow buildTenantDataRow(
+DataRow buildTenantDataRow(
   int index,
   Tenant tenant,
   BuildContext context,
   String? propertyName,
 ) {
-  return TableRow(
-    children: [
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Text(
-          '  $index  ',
-          style: TextStyle(color: AppColorsConstant.blueGreyColor),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        child: Text(
-          tenant.tenantName,
-          style: TextStyle(color: AppColorsConstant.blueGreyColor),
-        ),
-      ),
+  // Common text style definition to reduce repetition
+  final cellStyle = TextStyle(color: AppColorsConstant.blueGreyColor);
 
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        child: Text(
-          tenant.tenantPhoneNumber,
-          style: TextStyle(color: AppColorsConstant.blueGreyColor),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        child: Text(
-          tenant.unitName ?? tenant.unitId,
-          style: TextStyle(color: AppColorsConstant.blueGreyColor),
-        ),
-      ),
-      propertyName != null
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-              child: Text(
-                propertyName,
-                style: TextStyle(color: AppColorsConstant.blueGreyColor),
-              ),
-            )
-          : SizedBox(),
+  return DataRow(
+    onLongPress: () => Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => SingleTenantPage(tenant: tenant))),
+    cells: [
+      DataCell(Text('  $index  ', style: cellStyle)),
+      DataCell(Text(tenant.tenantName, style: cellStyle)),
+      DataCell(Text(tenant.tenantPhoneNumber, style: cellStyle)),
+      DataCell(Text(tenant.tenantEmail ?? 'N/A', style: cellStyle)),
+      DataCell(Text(tenant.tenantNationalId ?? 'N/A', style: cellStyle)),
+      DataCell(Text(tenant.unitName ?? tenant.unitId, style: cellStyle)),
 
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        child: ViewChevronCard(
+      // Clean conditional insertion matching the header count exactly
+      if (propertyName != null) DataCell(Text(propertyName, style: cellStyle)),
+      DataCell(
+        ViewChevronCard(
           onPressedCallBack: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -120,58 +89,36 @@ class TenantsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Table(
-        border: TableBorder.symmetric(
-          outside: BorderSide.none,
-          inside: BorderSide(
-            color: AppColorsConstant.blueGreyColor,
-            width: 0.09,
-          ),
-        ),
-        columnWidths: const {
-          0: IntrinsicColumnWidth(),
-          1: FlexColumnWidth(2),
-          2: FlexColumnWidth(2),
-          3: FlexColumnWidth(2),
-          4: FlexColumnWidth(2),
-          5: FlexColumnWidth(1),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-
-        children: [
-          // Header Row
-          buildTenantHeaderRow(isUnitTenant),
-
-          ...isUnitTenant
-              ? propertyTenants.toList().asMap().entries.map((entry) {
-                  int index = entry.key;
-                  Tenant tenant = entry.value;
-                  return buildTenantDataRow(
-                    index + 1,
-                    tenant,
-                    context,
-                    null,
-                  ); // pass 1-based index
-                })
-              : propertyTenants.toList().asMap().entries.map((entry) {
-                  int index = entry.key;
-                  Tenant tenant = entry.value;
-                  String propertyName = properties
-                      .firstWhere(
-                        (element) => element.propertyId == tenant.propertyId,
-                      )
-                      .propertyName;
-                  return buildTenantDataRow(
-                    index + 1,
-                    tenant,
-                    context,
-                    propertyName,
-                  );
-                }),
-        ],
-      ),
+    return CustomDataTable(
+      customDataColumns: [...buildTenantHeaderRows(isUnitTenant)],
+      customDataRows: [
+        ...isUnitTenant
+            ? propertyTenants.toList().asMap().entries.map((entry) {
+                int index = entry.key;
+                Tenant tenant = entry.value;
+                return buildTenantDataRow(
+                  index + 1,
+                  tenant,
+                  context,
+                  null,
+                ); // pass 1-based index
+              })
+            : propertyTenants.toList().asMap().entries.map((entry) {
+                int index = entry.key;
+                Tenant tenant = entry.value;
+                String propertyName = properties
+                    .firstWhere(
+                      (element) => element.propertyId == tenant.propertyId,
+                    )
+                    .propertyName;
+                return buildTenantDataRow(
+                  index + 1,
+                  tenant,
+                  context,
+                  propertyName,
+                );
+              }),
+      ],
     );
   }
 }

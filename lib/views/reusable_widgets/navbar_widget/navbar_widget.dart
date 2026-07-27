@@ -1,10 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_app/constants/constants.dart';
-import 'package:test_app/data/notifiers.dart';
-import 'package:test_app/data/providers/theme_provider.dart';
-import 'package:test_app/views/reusable_widgets/navbar_widget/navbar_item.dart';
+import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/data/notifiers.dart';
+import 'package:anyamar/data/providers/theme_provider.dart';
 
 class NavbarWidget extends ConsumerStatefulWidget {
   const NavbarWidget({super.key});
@@ -18,120 +18,173 @@ class _NavbarWidgetState extends ConsumerState<NavbarWidget> {
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeIsDarkProvider);
     return ValueListenableBuilder(
-      valueListenable: selectedPageNotifier,
-      builder: (context, selectedPage, child) {
+      valueListenable: selectedWebPageNotifier,
+      builder: (context, selectedWebPage, child) {
         return Padding(
           padding: const EdgeInsets.only(
-            left: 10,
-            right: 20,
-            top: 10,
-            bottom: 20,
+            left: 35,
+            right: 35,
+            top: 0.0,
+            bottom: 20.0,
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-
-            children: [
-              ///------  Navigation bar ---------------------//
-              PhysicalModel(
-                elevation: 20,
-                color: Colors.transparent,
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(35),
-                  child: Material(
-                    color: themeMode
-                        ? AppColorsConstant.darkNavColor.withValues(alpha: 0.95)
-                        : AppColorsConstant.lightNavColor.withValues(
-                            alpha: 0.95,
-                          ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      child: NavigationBar(
-                        backgroundColor: themeMode
-                            ? AppColorsConstant.darkNavColor.withValues(
-                                alpha: 0.95,
-                              )
-                            : AppColorsConstant.lightNavColor.withValues(
-                                alpha: 0.95,
-                              ),
-                        selectedIndex: selectedPage,
-                        onDestinationSelected: (value) {
-                          selectedPageNotifier.value = value;
-                        },
-                        height: 45,
-                        destinations: const [
-                          SizedBox(width: 60),
-                          SizedBox(width: 60),
-                          SizedBox(width: 60),
-                          SizedBox(width: 60),
-                          SizedBox(width: 60),
-                          SizedBox(width: 60),
-                          SizedBox(width: 60),
-                        ],
-                      ),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                height: 50,
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 05.0),
+                decoration: BoxDecoration(
+                  color: themeMode
+                      ? AppColorsConstant.darkNavColor.withValues(alpha: 0.95)
+                      : AppColorsConstant.kWhite7.withValues(alpha: 0.95),
+                  // : AppColorsConstant.lightNavColor.withValues(alpha: 0.95),
+                  // color: Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomNavigationItem(
+                      icon: CupertinoIcons.home,
+                      label: "Home",
+                      index: 0,
                     ),
-                  ),
+                    CustomNavigationItem(
+                      icon: CupertinoIcons.building_2_fill,
+                      label: 'Properties',
+                      index: 1,
+                    ),
+                    CustomNavigationItem(
+                      icon: CupertinoIcons.creditcard,
+                      label: 'Finances',
+                      index: 2,
+                    ),
+                    CustomNavigationItem(
+                      icon: CupertinoIcons.person_3,
+                      label: 'Tenants',
+                      index: 3,
+                    ),
+                    CustomNavigationItem(
+                      icon: CupertinoIcons.gear,
+                      label: 'Settings',
+                      index: 4,
+                    ),
+                    CustomNavigationItem(
+                      icon: CupertinoIcons.person,
+                      label: 'My Account',
+                      index: 5,
+                    ),
+                  ],
                 ),
               ),
-
-              ///------------ The navigation items --------------------------------//
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  NavItem(
-                    icon: CupertinoIcons.house,
-                    label: "Properties",
-                    index: 0,
-                  ),
-                  NavItem(
-                    icon: CupertinoIcons.money_dollar_circle,
-                    label: "Finances",
-                    index: 1,
-                  ),
-                  NavItem(
-                    icon: CupertinoIcons.person_2,
-                    label: "Tenants",
-                    index: 2,
-                  ),
-
-                  const SizedBox(width: 70),
-
-                  NavItem(
-                    icon: CupertinoIcons.chat_bubble_2,
-                    label: "Chats",
-                    index: 4,
-                  ),
-                  NavItem(
-                    icon: CupertinoIcons.gear,
-                    label: "Settings",
-                    index: 5,
-                  ),
-                  NavItem(
-                    icon: CupertinoIcons.person,
-                    label: "Profile",
-                    index: 6,
-                  ),
-                ],
-              ),
-
-              /// FLOATING HOME BUTTON
-              Positioned(
-                top: -20,
-                child: NavItem(
-                  icon: CupertinoIcons.home,
-                  label: "Home",
-                  index: 3,
-                  isHomeButton: true,
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },
+    );
+  }
+}
+
+class CustomNavigationItem extends ConsumerStatefulWidget {
+  final IconData icon;
+  final String label;
+  final int index;
+
+  const CustomNavigationItem({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.index,
+  });
+
+  @override
+  ConsumerState<CustomNavigationItem> createState() =>
+      _CustomNavigationItemState();
+}
+
+class _CustomNavigationItemState extends ConsumerState<CustomNavigationItem> {
+  bool isSelected = false;
+  bool isHovered = false;
+  @override
+  void initState() {
+    isSelected = selectedPageNotifier.value == widget.index ? true : false;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeIsDark = ref.watch(themeIsDarkProvider);
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onHover: (event) {
+        setState(() {
+          isHovered = true;
+        });
+      },
+      onExit: (event) {
+        setState(() {
+          isHovered = false;
+        });
+      },
+
+      child: GestureDetector(
+        onTap: () {
+          selectedWebPageNotifier.value = widget.index;
+          selectedSideItemNotifier.value = widget.index;
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+            gradient: isSelected || isHovered
+                ? LinearGradient(
+                    colors: isSelected
+                        ? [
+                            AppColorsConstant.greenColor,
+                            AppColorsConstant.darkGreenColor,
+                          ]
+                        : [
+                            AppColorsConstant.blueColor,
+                            AppColorsConstant.darkBlueColor,
+                          ],
+                  )
+                : null,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                widget.icon,
+                size: 20,
+                color: themeIsDark ? AppColorsConstant.background : null,
+              ),
+              AnimatedSize(
+                duration: const Duration(milliseconds: 250),
+                child: isHovered || isSelected
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(
+                          widget.label,
+                          style: TextStyle(
+                            color: isSelected || isHovered
+                                ? Colors.white
+                                : null,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
