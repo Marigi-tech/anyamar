@@ -1,18 +1,19 @@
-import 'package:flutter/cupertino.dart';
-import 'package:anyamar/constants/commons.dart';
 
+import 'package:anyamar/constants/commons.dart';
 class CustomInputDecoration {
   static InputDecoration textInputDecoration({
     String? hintText,
-    Widget? suffixIcon,
+    Widget? suffix,
     Color? labelColor,
     Color? fillColor,
     Widget? prefixIcon,
     bool? isPassword,
+    Widget? suffixIcon,
     Widget? prefix,
   }) => InputDecoration(
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
     fillColor: AppColorsConstant.kPrimaryColor,
+
     hintStyle: CustomTextStyles.cardDescriptionStyle.copyWith(
       fontSize: 14,
       letterSpacing: 1,
@@ -27,19 +28,13 @@ class CustomInputDecoration {
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: AppColorsConstant.greenColor, width: 1.0),
     ),
-    prefixIcon: prefixIcon,
-    prefix: prefix,
+
     hintText: hintText,
-    suffix: isPassword == true
-        ? MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                //TODO: Use Riverpod to change state
-              },
-              child: Icon(CupertinoIcons.eye, size: 13),
-            ),
-          )
-        : Text(''),
+    suffix: suffix,
+
+    prefixIcon: prefixIcon,
+    suffixIcon: suffixIcon,
+    prefix: prefix
   );
 }
+

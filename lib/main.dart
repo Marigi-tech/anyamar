@@ -3,10 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:anyamar/constants/constants.dart';
 import 'package:anyamar/data/providers/theme_provider.dart';
 import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 //NB THIS  IS A FLUTTER WEB PROJECT
 //CUSTOMISATION FOR ANDROID AND IOS WILL BE DONE IN LATER ITERATIONS
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const MyApp()));
 }
 

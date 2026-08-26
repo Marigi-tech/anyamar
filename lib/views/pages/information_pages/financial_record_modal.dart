@@ -1,9 +1,9 @@
 import 'package:anyamar/data/models/enums/financial_record_nature.dart';
-import 'package:anyamar/data/models/financial_record_model.dart';
+import 'package:anyamar/data/models/financial_records/financial_record_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:anyamar/data/models/date_format_model.dart';
-import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
+import 'package:anyamar/data/models/date_format/date_format_model.dart';
+import 'package:anyamar/views/pages/dashboard/tenants_page/single_tenant/info_tile.dart';
 import 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
 
 class FinancialRecordModal extends StatelessWidget {
@@ -120,12 +120,12 @@ class FinancialRecordModal extends StatelessWidget {
                       width: 70,
                       height: 30,
                       child: InformationBadge(
-                        text: financialRecord.paymentMethod.label,
+                        text: financialRecord.paymentMethod ?? '',
                         textColor: getPaymentMethodStatus(
-                          financialRecord.paymentMethod,
+                          financialRecord.paymentMethod
                         ).textColor,
                         badgeColor: getPaymentMethodStatus(
-                          financialRecord.paymentMethod,
+                          financialRecord.paymentMethod
                         ).badgeColor,
                       ),
                     ),
@@ -145,7 +145,7 @@ class FinancialRecordModal extends StatelessWidget {
                             FinancialRecordNature.expense
                         ? 'Paid to :'
                         : 'Payment from : ',
-                    tileDescription: financialRecord.paymentBy.userName,
+                    tileDescription: financialRecord.paymentBy['personName'],
                     onTapCallBack: () {},
                   ),
                 ),

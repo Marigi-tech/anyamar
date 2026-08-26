@@ -1,21 +1,22 @@
-import 'package:anyamar/data/models/enums/user_type_enum.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class AppUser {
-  final String userId;
-  final String userName;
-  final String email;
-  final String password;
-  final UserType userType;
-  final String? phoneNumber;
-  final String? nationalId;
+part 'app_user.freezed.dart';
+part 'app_user.g.dart';
 
-  AppUser({
-    required this.userId,
-    required this.userName,
-    required this.password,
-    required this.email,
-    required this.userType,
-    this.phoneNumber,
-    this.nationalId,
-  });
+@freezed
+abstract class AppUser with _$AppUser {
+  const factory AppUser({
+    String? userId,
+    required String userName,
+    required String userEmail,
+    required String userPassword,
+    required String userType,
+    String? userPhoneNumber,
+    String? userNationalId,
+    required DateTime registrationDate,
+    @Default(false) bool isAuthenticated,
+  }) = _AppUser;
+
+  factory AppUser.fromJson(Map<String, dynamic> json) =>
+      _$AppUserFromJson(json);
 }

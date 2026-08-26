@@ -26,7 +26,7 @@ class _WidgetTreeState extends ConsumerState<WidgetTree> {
               /// Desktop Sidebar with animation
               if (!isMobile)
                 AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
                   width: isCollapsed ? 90 : 200,
                   child: SidebarWidget(pages: pages),
@@ -37,7 +37,7 @@ class _WidgetTreeState extends ConsumerState<WidgetTree> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    //---------------------INTRO ROW------------------------//
+                    //Intro row
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20.0,
@@ -45,7 +45,7 @@ class _WidgetTreeState extends ConsumerState<WidgetTree> {
                       ),
                       child: IntroRowWidget(),
                     ),
-                    //-------------- ACTUAL PAGE CONTENTS ----------------//
+                    //Actual page content starts here
                     Expanded(
                       child: isMobile
                           ? ValueListenableBuilder<int>(

@@ -1,15 +1,23 @@
+import 'package:anyamar/data/models/rent/rent_history_model.dart';
+import 'package:anyamar/data/models/rent/single_rental_entry_model.dart';
+import 'package:anyamar/data/models/tenants/tenant_model.dart';
+import 'package:anyamar/data/providers/rent_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:anyamar/data/models/rent_history_model.dart';
-import 'package:anyamar/data/models/single_rental_entry_model.dart';
-import 'package:anyamar/views/tables/rent_history.dart';
+import 'package:anyamar/views/pages/dashboard/dashboard_tables/rent_history.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RentHistoryPage extends StatelessWidget {
+class RentHistoryPage extends ConsumerWidget {
   final RentHistory rentHistory;
-  const RentHistoryPage({super.key, required this.rentHistory});
+  final Tenant tenant;
+  const RentHistoryPage({
+    super.key,
+    required this.rentHistory,
+    required this.tenant,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    List<SingleRentEntry>? rentEntries = rentHistory.rentEntries;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rentHistoryAsync = ref.watch(rentProvider(tenant.tenantId!));
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -21,7 +29,25 @@ class RentHistoryPage extends StatelessWidget {
 
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30.0),
-            child: RentHistoryTable(rentEntries: rentEntries ?? []),
+            child: rentHistoryAsync.when(
+              loading: () => const CircularProgressIndicator(),
+
+              error: (error, stackTrace) {
+                return Text('Error loading rent history: $error');
+              },
+
+              data: (history) {
+                if (history == null) {
+                  return const Text('No rent history');
+                }
+
+                final List<SingleRentEntry> rentEntries = history.rentEntries
+                    .map((entry) => SingleRentEntry.fromJson(entry))
+                    .toList();
+
+                return RentHistoryTable(rentEntries: rentEntries);
+              },
+            ),
           ),
         ),
       ),

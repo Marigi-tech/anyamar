@@ -1,5 +1,5 @@
 import 'package:anyamar/data/data_sets/chat_messages.dart';
-import 'package:anyamar/data/models/chat_model.dart';
+import 'package:anyamar/data/models/chat/chat_model.dart';
 
 List<Chat> chats = [
   Chat(
