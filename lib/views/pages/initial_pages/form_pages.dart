@@ -34,13 +34,14 @@ class FormPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               PageTitleWidget(pageTitle: pageTitle),
-              const SizedBox(height: 20.0),
-
+              const SizedBox(height: 10.0),
               SingleChildScrollView(child: form),
             ],
           ),

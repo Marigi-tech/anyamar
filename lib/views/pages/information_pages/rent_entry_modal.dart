@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:anyamar/data/models/date_format_model.dart';
-import 'package:anyamar/data/models/single_rental_entry_model.dart';
-import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
+import 'package:anyamar/data/models/date_format/date_format_model.dart';
+import 'package:anyamar/data/models/rent/single_rental_entry_model.dart';
+import 'package:anyamar/views/pages/dashboard/tenants_page/single_tenant/info_tile.dart';
 import 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
 
 class RentEntryModal extends StatelessWidget {
   final SingleRentEntry rentEntry;
-  
+
   const RentEntryModal({super.key, required this.rentEntry});
 
   @override
@@ -108,10 +108,10 @@ class RentEntryModal extends StatelessWidget {
                       child: InformationBadge(
                         text: rentEntry.paymentMethod.label,
                         textColor: getPaymentMethodStatus(
-                          rentEntry.paymentMethod,
+                          rentEntry.paymentMethod.label,
                         ).textColor,
                         badgeColor: getPaymentMethodStatus(
-                          rentEntry.paymentMethod,
+                          rentEntry.paymentMethod.label,
                         ).badgeColor,
                       ),
                     ),

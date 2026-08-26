@@ -1,28 +1,37 @@
+import 'package:anyamar/data/models/users/app_user.dart';
+import 'package:anyamar/data/services/auth_service.dart';
+import 'package:anyamar/data/services/db_user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:anyamar/constants/constants.dart';
 import 'package:anyamar/data/models/enums/user_type_enum.dart';
 import 'package:anyamar/views/pages/initial_pages/form_pages.dart';
-import 'package:anyamar/views/pages/initial_pages/login_page/login_page.dart';
+import 'package:anyamar/views/pages/initial_pages/signin_page/login_page.dart';
 import 'package:anyamar/views/pages/widget_tree/widget_tree.dart';
 import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_label.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/input_decoration.dart';
 import 'package:anyamar/views/reusable_widgets/social_icons_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUpForm extends StatefulWidget {
+class SignUpForm extends ConsumerStatefulWidget {
   const SignUpForm({super.key});
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  ConsumerState<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignUpFormState extends ConsumerState<SignUpForm> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  String userTypeController = '';
   Color? textColor;
   final _formKey = GlobalKey<FormState>();
+  bool isSuccess = false;
+  String? errorMessage;
+  AppUser? createdUser;
 
   @override
   void dispose() {
@@ -30,7 +39,62 @@ class _SignUpFormState extends State<SignUpForm> {
     passwordController.dispose();
     nameController.dispose();
     confirmPasswordController.dispose();
+
     super.dispose();
+  }
+
+  Future<void> _registerUser() async {
+    try {
+      UserCredential authUser = await ref
+          .read(authServiceProvider)
+          .createUser(
+            email: emailController.text,
+            password: passwordController.text.trim(),
+          );
+
+      setState(() {
+        isSuccess = true;
+        createdUser = AppUser(
+          userId: authUser.user!.uid,
+          userName: nameController.text,
+          userEmail: emailController.text.trim(),
+          userPassword: passwordController.text.trim(),
+          userType: userTypeController,
+          registrationDate: DateTime.now(),
+        );
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.code;
+        isSuccess = false;
+      });
+    }
+  }
+
+  //Redirection to user dashboard
+  Future<void> _redirectToDashboard() async {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => WidgetTree()),
+    );
+  }
+
+  //Delete user from authentication
+  Future<void> _deleteFromAuthentication() async {
+    try {
+      await ref
+          .read(authServiceProvider)
+          .deleteAccount(
+            email: emailController.text,
+            password: passwordController.text.trim(),
+          );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.code;
+        isSuccess = false;
+      });
+      // errorMessageWidget(errorMessage = errorMessage, isSuccess = isSuccess);
+    }
   }
 
   @override
@@ -38,7 +102,6 @@ class _SignUpFormState extends State<SignUpForm> {
     return FormPages(
       pageTitle: 'Create account',
       isSignInOrSignUp: true,
-
       form: Form(
         key: _formKey,
         child: Align(
@@ -47,7 +110,7 @@ class _SignUpFormState extends State<SignUpForm> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 30.0),
-              //Name
+              //User Name
               FormLabel(label: 'Full name', isRequired: true),
               SizedBox(height: 6),
               TextFormField(
@@ -67,7 +130,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
               SizedBox(height: 15.0),
 
-              //---- Email Adress -----
+              // UserEmail Adress
               FormLabel(label: 'Email address', isRequired: true),
               SizedBox(height: 6),
               TextFormField(
@@ -108,6 +171,9 @@ class _SignUpFormState extends State<SignUpForm> {
                   return null;
                 },
                 onChanged: (value) {
+                  setState(() {
+                    userTypeController = value!.label;
+                  });
                   // ref.read(selectedPropertyProvider.notifier).state = value;
                 },
               ),
@@ -189,17 +255,47 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                 ),
               ),
-
+              Text(
+                errorMessage ?? '',
+                style: TextStyle(
+                  color: isSuccess
+                      ? AppColorsConstant.greenColor
+                      : AppColorsConstant.redColor,
+                ),
+              ),
               SizedBox(height: 50.0),
               //? ------ Log in button ------
               ColorButtonWidget(
-                onPressedCallBack: () {
+                onPressedCallBack: () async {
                   if (_formKey.currentState!.validate()) {
-                    //todo:Actual logic
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => WidgetTree()),
-                    );
+                    await _registerUser();
+                    //If user is succesfully authenticated
+                    final db = DbService(); //instance of db
+                    if (isSuccess && createdUser != null) {
+                      // add user to db
+                      try {
+                        await db.createUser(createdUser!).then((value) {
+                          if (value != null) {
+                            setState(() {
+                              isSuccess = true;
+                              errorMessage = 'User created succesfully';
+                            });
+                            //Redirect to user dashboard
+                            _redirectToDashboard();
+                          }
+                        });
+                      } catch (e) {
+                        // if adding user to db fails // remove user from authentication
+                        _deleteFromAuthentication();
+                        setState(() {
+                          errorMessage = e.toString();
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        errorMessage = 'Authentication failed';
+                      });
+                    }
                   }
                 },
                 buttonTitle: 'Create account',

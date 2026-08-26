@@ -2,6 +2,7 @@ import 'package:anyamar/constants/commons.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/ai_widget.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/clock_widget.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/notifications.dart';
+import 'package:anyamar/views/pages/widget_tree/intro_row/welcome_text.dart';
 
 import 'package:anyamar/views/reusable_widgets/search_widget/search_widget.dart';
 
@@ -20,7 +21,12 @@ class IntroRowWidget extends StatelessWidget {
           visible: !Responsiveness.isMobile(context) ? true : false,
           child: ClockWidget(),
         ),
-        // 2. Right-hand controls (AI Assistant + Icons)
+        //2 User Name
+        Visibility(
+          visible: !Responsiveness.isMobile(context) ? true : false,
+          child: UserNameText(),
+        ),
+        // 2 . Right-hand controls (AI Assistant + Icons)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(

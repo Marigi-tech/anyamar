@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:anyamar/data/models/social_icon_model.dart';
+import 'package:anyamar/data/models/social_icon/social_icon_model.dart';
 
 Widget socialIconButton(SocialIconModel socialIcon) {
   return InkWell(
-    onTap: () {}, // TODO: Add sign-in logic
+    onTap: () {}, // TO DO: Add sign-in logic
     borderRadius: BorderRadius.circular(12),
     child: Container(
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),

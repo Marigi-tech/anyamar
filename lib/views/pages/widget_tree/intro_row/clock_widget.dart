@@ -1,5 +1,5 @@
 import 'package:anyamar/constants/commons.dart';
-import 'package:anyamar/data/models/date_format_model.dart';
+import 'package:anyamar/data/models/date_format/date_format_model.dart';
 
 class ClockWidget extends StatefulWidget {
   const ClockWidget({super.key});

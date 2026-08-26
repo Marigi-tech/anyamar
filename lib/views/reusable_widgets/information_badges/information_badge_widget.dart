@@ -1,7 +1,8 @@
 import 'package:anyamar/constants/commons.dart';
 import 'package:anyamar/data/models/enums/financial_record_nature.dart';
-import 'package:anyamar/data/models/enums/payment_methods_enum.dart';
 import 'package:anyamar/data/models/enums/payment_status_enum.dart';
+import 'package:anyamar/data/models/enums/property_utilities_enum.dart';
+import 'package:flutter/cupertino.dart';
 
 class InformationBadge extends StatelessWidget {
   final String text;
@@ -89,15 +90,15 @@ class InformationBadge extends StatelessWidget {
 
 //payment method
 ({Color textColor, Color badgeColor}) getPaymentMethodStatus(
-  PaymentMethods paymentMethod,
+  String? paymentMethod,
 ) {
   Color backgroundColor;
   Color textColor;
 
-  if (paymentMethod == PaymentMethods.mpesa) {
+  if (paymentMethod == 'PaymentMethods.mpesa') {
     backgroundColor = AppColorsConstant.lightGreenColor;
     textColor = AppColorsConstant.darkGreenColor;
-  } else if (paymentMethod == PaymentMethods.cash) {
+  } else if (paymentMethod == 'PaymentMethods.cash') {
     backgroundColor = AppColorsConstant.lightBlueColor;
     textColor = AppColorsConstant.darkBlueColor;
   } else {
@@ -132,4 +133,23 @@ class InformationBadge extends StatelessWidget {
     textColor: tColor ?? AppColorsConstant.kWhite1,
     badgeColor: bColor ?? AppColorsConstant.bgColor,
   );
+}
+
+//Utilities
+getUtilityIcon(PropertyUtility utility) {
+  IconData? selectedIcon;
+  if (utility == PropertyUtility.electricity) {
+    selectedIcon = Icons.electrical_services;
+  }
+  if (utility == PropertyUtility.garbage) {
+    selectedIcon = CupertinoIcons.trash;
+  }
+  if (utility == PropertyUtility.security) {
+    selectedIcon = Icons.security;
+  }
+  if (utility == PropertyUtility.water) {
+    selectedIcon = Icons.water;
+  }
+
+  return selectedIcon ?? Icons.upcoming;
 }

@@ -1,14 +1,16 @@
+import 'package:anyamar/data/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:anyamar/constants/commons.dart';
 import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SidebarWidget extends StatelessWidget {
+class SidebarWidget extends ConsumerWidget {
   final List<dynamic> pages;
 
   const SidebarWidget({super.key, required this.pages});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ValueListenableBuilder<bool>(
       valueListenable: isSidebarCollapsedNotifier,
       builder: (context, isCollapsed, child) {
@@ -84,14 +86,23 @@ class SidebarWidget extends StatelessWidget {
                                           title: item.title,
                                           isLogOutButton: true,
                                           index: item.index,
-                                          onPressedCallBack: () {
+                                          onPressedCallBack: () async {
                                             selectedPageNotifier.value = 0;
+                                            //Log out
+                                            await ref
+                                                .read(authServiceProvider)
+                                                .signOutUser()
+                                            //todo: manage widget by authstate(no need for push back to Landing)
 
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => LandingPage(),
-                                              ),
+                                            .whenComplete(
+                                              () =>
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          LandingPage(),
+                                                    ),
+                                                  ),
                                             );
                                           },
                                         ),

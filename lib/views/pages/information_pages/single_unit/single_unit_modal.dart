@@ -1,31 +1,42 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
 
+import 'package:anyamar/data/models/properties/property_model.dart';
+import 'package:anyamar/data/models/units/utilities/unit_utilities.dart';
+import 'package:anyamar/data/providers/user_information_provider.dart';
+import 'package:anyamar/views/pages/dashboard/tenants_page/tenant_forms/tenant_form.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:anyamar/constants/commons.dart';
-import 'package:anyamar/data/data_sets/rent_history.dart';
-import 'package:anyamar/data/data_sets/tenants.dart';
-import 'package:anyamar/data/models/rent_history_model.dart';
-import 'package:anyamar/data/models/tenant_model.dart';
-import 'package:anyamar/data/models/unit_model.dart';
-import 'package:anyamar/views/pages/information_pages/rent_history/rent_history.dart';
-import 'package:anyamar/views/pages/information_pages/single_tenant/info_tile.dart';
-import 'package:anyamar/views/pages/information_pages/single_tenant/single_tenant_page.dart';
+import 'package:anyamar/data/models/tenants/tenant_model.dart';
+import 'package:anyamar/data/models/units/unit_model.dart';
+import 'package:anyamar/views/pages/dashboard/tenants_page/single_tenant/info_tile.dart';
+import 'package:anyamar/views/pages/dashboard/tenants_page/single_tenant/single_tenant_page.dart';
 import 'package:anyamar/views/reusable_widgets/buttons/card_button_widget.dart';
 import 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SingleUnitModal extends StatelessWidget {
+class SingleUnitModal extends ConsumerWidget {
   final Unit unit;
 
   const SingleUnitModal({super.key, required this.unit});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //Get tenant in unit
-    Tenant? unitTenant = tenants
+    Tenant? unitTenant = ref
+        .watch(userInformationProvider.select((state) => state.tenants))
         .where((t) => t.tenantId == unit.tenantId)
-        .firstOrNull;
-    RentHistory rentHisto = rentHistory
-        .where((r) => r.unitId == unit.unitId)
-        .single;
+        .singleOrNull;
+    Property? unitProperty = ref
+        .watch(userInformationProvider.select((state) => state.properties))
+        .where((p) => p.propertyId == unit.propertyId)
+        .singleOrNull;
+    List<UnitUtility> utilities = unit.unitRent?.utilities ?? [];
+    log('Tenant :${unitTenant?.tenantName}');
+      log('Proerty :${unitProperty?.propertyName}');
+        log('Utilities :${unit.unitRent?.utilities}');
+    // RentHistory? rentHisto = rentHistory
+    //     .where((r) => r.unitId == unit.unitId)
+    //     .singleOrNull;
     return Dialog(
       elevation: 6,
 
@@ -54,8 +65,7 @@ class SingleUnitModal extends StatelessWidget {
                       child: InfoTile(
                         tileIcon: CupertinoIcons.app_badge,
                         tileTitle: 'Unit: ',
-                        tileDescription: unit.unitName ?? unit.unitId,
-                        onTapCallBack: () {},
+                        tileDescription: unit.unitName,
                       ),
                     ),
                   ],
@@ -103,7 +113,15 @@ class SingleUnitModal extends StatelessWidget {
                                   ).badgeColor,
                                 ),
                               ),
-                              onTapCallBack: () {},
+                              //Add tenant for this unit
+                              onTapCallBack: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AddTenant(
+                                    currentUnit: unit,
+                                    currentProperty: unitProperty,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -116,14 +134,14 @@ class SingleUnitModal extends StatelessWidget {
                         tileIcon: CupertinoIcons.calendar,
                         tileTitle: 'Rent ',
                         tileDescription:
-                            '${unit.unitRent.rentCurrency} ${unit.unitRent}',
+                            '${unit.unitRent?.rentCurrency ?? 'Ksh'} ${unit.unitRent?.rentAmount}',
                       ),
                     ),
                   ],
                 ),
 
                 SizedBox(height: 20),
-                //todo:read from list of utilities
+                //read from list of utilities
                 Padding(
                   padding: EdgeInsets.only(left: 30),
                   child: Column(
@@ -138,42 +156,21 @@ class SingleUnitModal extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InfoTile(
-                              tileIcon: CupertinoIcons.trash,
-                              tileTitle: 'Trash ',
-                              tileDescription: 'Ksh 500',
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InfoTile(
-                              tileIcon: CupertinoIcons.lock,
-                              tileTitle: 'Security ',
-                              tileDescription: 'Ksh 300',
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InfoTile(
-                              tileIcon: CupertinoIcons.creditcard,
-                              tileTitle: 'Service charge ',
-                              tileDescription: 'Ksh 500',
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
+                      if (utilities.isNotEmpty)
+                        ...utilities.map((item) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: InfoTile(
+                                  tileIcon: getUtilityIcon(item.utilityName),
+                                  tileTitle: item.utilityName.label,
+                                  tileDescription: 'Ksh ${item.amountPayable}',
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
                     ],
                   ),
                 ),
@@ -200,15 +197,15 @@ class SingleUnitModal extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CardButtonWidget(
-                              onPressedCallBack: () =>
-                                  //TODO: FIX BAD STATE TOO MANY ELEMENTS ISSUE
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => RentHistoryPage(
-                                        rentHistory: rentHisto,
-                                      ),
-                                    ),
-                                  ),
+                              onPressedCallBack: () {},
+                              //TO DO: FIX BAD STATE TOO MANY ELEMENTS ISSUE
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (_) => RentHistoryPage(
+                              //       rentHistory: rentHisto,
+                              //     ),
+                              //   ),
+                              // ),
                               buttonTitle: 'view rent history',
                             ),
                           ),
