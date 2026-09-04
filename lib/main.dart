@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/commons/constants.dart';
 import 'package:anyamar/data/providers/theme_provider.dart';
 import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
 import 'package:firebase_core/firebase_core.dart';

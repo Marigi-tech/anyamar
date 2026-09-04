@@ -1,9 +1,8 @@
 enum UserType {
   landlord('Property owner'),
-  tenant('Tenant'),
-  agent('Agent'),
-  caretaker('Caretaker'),
-  otherEmployee('Other');
+  agent('Agency'),
+  caretaker('Care taker'),
+  otherUser('Other');
 
   final String label;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/commons/constants.dart';
 import 'package:anyamar/views/pages/initial_pages/signin_page/login_page.dart';
 import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page.dart';
 import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';

@@ -50,7 +50,7 @@ final class RentNotifierProvider
   }
 }
 
-String _$rentNotifierHash() => r'6e043ae2ad17ce4cc2c6b06b31500f5b43855259';
+String _$rentNotifierHash() => r'66a2e4c9fdc2021f8d255ec5daa3f28651d5ac72';
 
 final class RentNotifierFamily extends $Family
     with

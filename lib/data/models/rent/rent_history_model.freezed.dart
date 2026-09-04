@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RentHistory {
 
- String? get historyId; String get tenantId; String get unitId; String? get propertyId; String get userId; List<Map<String, dynamic>> get rentEntries; String? get tenantName;
+ String? get historyId; String get tenantId; String get unitId; String? get propertyId; String get userId; List<RentalMonth> get rentalMonths;// // @Default([) List<String>
+// @Default([]) List<SingleRentEntry> rentEntries,
+ String? get tenantName;
 /// Create a copy of RentHistory
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +30,16 @@ $RentHistoryCopyWith<RentHistory> get copyWith => _$RentHistoryCopyWithImpl<Rent
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RentHistory&&(identical(other.historyId, historyId) || other.historyId == historyId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other.rentEntries, rentEntries)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RentHistory&&(identical(other.historyId, historyId) || other.historyId == historyId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other.rentalMonths, rentalMonths)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,historyId,tenantId,unitId,propertyId,userId,const DeepCollectionEquality().hash(rentEntries),tenantName);
+int get hashCode => Object.hash(runtimeType,historyId,tenantId,unitId,propertyId,userId,const DeepCollectionEquality().hash(rentalMonths),tenantName);
 
 @override
 String toString() {
-  return 'RentHistory(historyId: $historyId, tenantId: $tenantId, unitId: $unitId, propertyId: $propertyId, userId: $userId, rentEntries: $rentEntries, tenantName: $tenantName)';
+  return 'RentHistory(historyId: $historyId, tenantId: $tenantId, unitId: $unitId, propertyId: $propertyId, userId: $userId, rentalMonths: $rentalMonths, tenantName: $tenantName)';
 }
 
 
@@ -48,7 +50,7 @@ abstract mixin class $RentHistoryCopyWith<$Res>  {
   factory $RentHistoryCopyWith(RentHistory value, $Res Function(RentHistory) _then) = _$RentHistoryCopyWithImpl;
 @useResult
 $Res call({
- String? historyId, String tenantId, String unitId, String? propertyId, String userId, List<Map<String, dynamic>> rentEntries, String? tenantName
+ String? historyId, String tenantId, String unitId, String? propertyId, String userId, List<RentalMonth> rentalMonths, String? tenantName
 });
 
 
@@ -65,15 +67,15 @@ class _$RentHistoryCopyWithImpl<$Res>
 
 /// Create a copy of RentHistory
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? historyId = freezed,Object? tenantId = null,Object? unitId = null,Object? propertyId = freezed,Object? userId = null,Object? rentEntries = null,Object? tenantName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? historyId = freezed,Object? tenantId = null,Object? unitId = null,Object? propertyId = freezed,Object? userId = null,Object? rentalMonths = null,Object? tenantName = freezed,}) {
   return _then(_self.copyWith(
 historyId: freezed == historyId ? _self.historyId : historyId // ignore: cast_nullable_to_non_nullable
 as String?,tenantId: null == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String,unitId: null == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String,propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String?,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,rentEntries: null == rentEntries ? _self.rentEntries : rentEntries // ignore: cast_nullable_to_non_nullable
-as List<Map<String, dynamic>>,tenantName: freezed == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
+as String,rentalMonths: null == rentalMonths ? _self.rentalMonths : rentalMonths // ignore: cast_nullable_to_non_nullable
+as List<RentalMonth>,tenantName: freezed == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -159,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? historyId,  String tenantId,  String unitId,  String? propertyId,  String userId,  List<Map<String, dynamic>> rentEntries,  String? tenantName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? historyId,  String tenantId,  String unitId,  String? propertyId,  String userId,  List<RentalMonth> rentalMonths,  String? tenantName)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RentHistory() when $default != null:
-return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_that.userId,_that.rentEntries,_that.tenantName);case _:
+return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_that.userId,_that.rentalMonths,_that.tenantName);case _:
   return orElse();
 
 }
@@ -180,10 +182,10 @@ return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? historyId,  String tenantId,  String unitId,  String? propertyId,  String userId,  List<Map<String, dynamic>> rentEntries,  String? tenantName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? historyId,  String tenantId,  String unitId,  String? propertyId,  String userId,  List<RentalMonth> rentalMonths,  String? tenantName)  $default,) {final _that = this;
 switch (_that) {
 case _RentHistory():
-return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_that.userId,_that.rentEntries,_that.tenantName);case _:
+return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_that.userId,_that.rentalMonths,_that.tenantName);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +202,10 @@ return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? historyId,  String tenantId,  String unitId,  String? propertyId,  String userId,  List<Map<String, dynamic>> rentEntries,  String? tenantName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? historyId,  String tenantId,  String unitId,  String? propertyId,  String userId,  List<RentalMonth> rentalMonths,  String? tenantName)?  $default,) {final _that = this;
 switch (_that) {
 case _RentHistory() when $default != null:
-return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_that.userId,_that.rentEntries,_that.tenantName);case _:
+return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_that.userId,_that.rentalMonths,_that.tenantName);case _:
   return null;
 
 }
@@ -215,7 +217,7 @@ return $default(_that.historyId,_that.tenantId,_that.unitId,_that.propertyId,_th
 @JsonSerializable()
 
 class _RentHistory implements RentHistory {
-  const _RentHistory({this.historyId, required this.tenantId, required this.unitId, this.propertyId, required this.userId, final  List<Map<String, dynamic>> rentEntries = const [], this.tenantName}): _rentEntries = rentEntries;
+  const _RentHistory({this.historyId, required this.tenantId, required this.unitId, this.propertyId, required this.userId, final  List<RentalMonth> rentalMonths = const [], this.tenantName}): _rentalMonths = rentalMonths;
   factory _RentHistory.fromJson(Map<String, dynamic> json) => _$RentHistoryFromJson(json);
 
 @override final  String? historyId;
@@ -223,13 +225,15 @@ class _RentHistory implements RentHistory {
 @override final  String unitId;
 @override final  String? propertyId;
 @override final  String userId;
- final  List<Map<String, dynamic>> _rentEntries;
-@override@JsonKey() List<Map<String, dynamic>> get rentEntries {
-  if (_rentEntries is EqualUnmodifiableListView) return _rentEntries;
+ final  List<RentalMonth> _rentalMonths;
+@override@JsonKey() List<RentalMonth> get rentalMonths {
+  if (_rentalMonths is EqualUnmodifiableListView) return _rentalMonths;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_rentEntries);
+  return EqualUnmodifiableListView(_rentalMonths);
 }
 
+// // @Default([) List<String>
+// @Default([]) List<SingleRentEntry> rentEntries,
 @override final  String? tenantName;
 
 /// Create a copy of RentHistory
@@ -245,16 +249,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RentHistory&&(identical(other.historyId, historyId) || other.historyId == historyId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other._rentEntries, _rentEntries)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RentHistory&&(identical(other.historyId, historyId) || other.historyId == historyId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other._rentalMonths, _rentalMonths)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,historyId,tenantId,unitId,propertyId,userId,const DeepCollectionEquality().hash(_rentEntries),tenantName);
+int get hashCode => Object.hash(runtimeType,historyId,tenantId,unitId,propertyId,userId,const DeepCollectionEquality().hash(_rentalMonths),tenantName);
 
 @override
 String toString() {
-  return 'RentHistory(historyId: $historyId, tenantId: $tenantId, unitId: $unitId, propertyId: $propertyId, userId: $userId, rentEntries: $rentEntries, tenantName: $tenantName)';
+  return 'RentHistory(historyId: $historyId, tenantId: $tenantId, unitId: $unitId, propertyId: $propertyId, userId: $userId, rentalMonths: $rentalMonths, tenantName: $tenantName)';
 }
 
 
@@ -265,7 +269,7 @@ abstract mixin class _$RentHistoryCopyWith<$Res> implements $RentHistoryCopyWith
   factory _$RentHistoryCopyWith(_RentHistory value, $Res Function(_RentHistory) _then) = __$RentHistoryCopyWithImpl;
 @override @useResult
 $Res call({
- String? historyId, String tenantId, String unitId, String? propertyId, String userId, List<Map<String, dynamic>> rentEntries, String? tenantName
+ String? historyId, String tenantId, String unitId, String? propertyId, String userId, List<RentalMonth> rentalMonths, String? tenantName
 });
 
 
@@ -282,15 +286,15 @@ class __$RentHistoryCopyWithImpl<$Res>
 
 /// Create a copy of RentHistory
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? historyId = freezed,Object? tenantId = null,Object? unitId = null,Object? propertyId = freezed,Object? userId = null,Object? rentEntries = null,Object? tenantName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? historyId = freezed,Object? tenantId = null,Object? unitId = null,Object? propertyId = freezed,Object? userId = null,Object? rentalMonths = null,Object? tenantName = freezed,}) {
   return _then(_RentHistory(
 historyId: freezed == historyId ? _self.historyId : historyId // ignore: cast_nullable_to_non_nullable
 as String?,tenantId: null == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String,unitId: null == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String,propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String?,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,rentEntries: null == rentEntries ? _self._rentEntries : rentEntries // ignore: cast_nullable_to_non_nullable
-as List<Map<String, dynamic>>,tenantName: freezed == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
+as String,rentalMonths: null == rentalMonths ? _self._rentalMonths : rentalMonths // ignore: cast_nullable_to_non_nullable
+as List<RentalMonth>,tenantName: freezed == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

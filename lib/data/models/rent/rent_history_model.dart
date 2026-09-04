@@ -1,3 +1,4 @@
+import 'package:anyamar/data/models/rent/rental_month/rental_month_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'rent_history_model.freezed.dart';
@@ -11,7 +12,9 @@ abstract class RentHistory with _$RentHistory {
     required String unitId,
     String? propertyId,
     required String userId,
-    @Default([]) List<Map<String, dynamic>> rentEntries,
+    @Default([]) List<RentalMonth> rentalMonths,
+    // // @Default([) List<String>
+    // @Default([]) List<SingleRentEntry> rentEntries,
     String? tenantName,
   }) = _RentHistory;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/commons/constants.dart';
 
 class CardButtonWidget extends StatefulWidget {
   final String buttonTitle;
@@ -70,7 +70,7 @@ class _CardButtonWidgetState extends State<CardButtonWidget> {
                     style: TextStyle(
                       fontSize: widget.titleFontSize ?? 14,
                       color: cardIsHovered == true
-                          ? AppColorsConstant.greenColor
+                          ? AppColorsConstant.darkBlueColor
                           : widget.fontColor,
                     ),
                   ),

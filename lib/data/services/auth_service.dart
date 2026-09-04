@@ -125,4 +125,17 @@ class AuthService {
     await currentUser!.reauthenticateWithCredential(authCredential);
     await currentUser!.updatePassword(newPassword);
   }
+
+  Future<bool> sendPasswordResetEmail({required String email}) async {
+    bool isSuccess = false;
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      isSuccess = true;
+    } catch (e) {
+      log('Error sending password reset link ; $e');
+      isSuccess = false;
+      rethrow;
+    }
+    return isSuccess;
+  }
 }

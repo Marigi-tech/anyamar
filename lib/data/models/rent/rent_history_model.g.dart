@@ -12,9 +12,9 @@ _RentHistory _$RentHistoryFromJson(Map<String, dynamic> json) => _RentHistory(
   unitId: json['unitId'] as String,
   propertyId: json['propertyId'] as String?,
   userId: json['userId'] as String,
-  rentEntries:
-      (json['rentEntries'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
+  rentalMonths:
+      (json['rentalMonths'] as List<dynamic>?)
+          ?.map((e) => RentalMonth.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
   tenantName: json['tenantName'] as String?,
@@ -27,6 +27,6 @@ Map<String, dynamic> _$RentHistoryToJson(_RentHistory instance) =>
       'unitId': instance.unitId,
       'propertyId': instance.propertyId,
       'userId': instance.userId,
-      'rentEntries': instance.rentEntries,
+      'rentalMonths': instance.rentalMonths.map((e) => e.toJson()).toList(),
       'tenantName': instance.tenantName,
     };

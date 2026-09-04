@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:anyamar/views/pages/initial_pages/form_shell_web.dart';
-import 'package:anyamar/views/pages/initial_pages/reset_password/forgot_password_form.dart';
+import 'package:anyamar/forms/forgot_password_form.dart';
 
 class ForgotPasswordWeb extends StatelessWidget {
   const ForgotPasswordWeb({super.key});

@@ -1,4 +1,5 @@
 import 'package:anyamar/data/models/units/unit_model.dart';
+import 'package:anyamar/data/models/users/person/person.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'property_model.freezed.dart';
 part 'property_model.g.dart';
@@ -9,7 +10,7 @@ abstract class Property with _$Property {
     String? propertyId,
     required String propertyName,
     required String propertyLocation,
-    Map<String, dynamic>? propertyManager,
+    Person? propertyManager,
     String? propertyImage,
     required String userId,
     @Default([]) List<Unit> propertyUnits,
@@ -27,8 +28,9 @@ extension PropertySearch on Property {
 
     return (propertyName).toLowerCase().contains(search.toLowerCase()) ||
         (propertyLocation).toLowerCase().contains(search) ||
-        (propertyManager?['personName'] ?? '').toLowerCase().contains(
+        (propertyManager?.personName ?? '').toLowerCase().contains(
           search.toLowerCase(),
-        );
+        ) ||
+        (propertyFloors.toString().contains(search));
   }
 }

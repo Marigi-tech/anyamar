@@ -19,7 +19,7 @@ class DbService {
   // AppUser? get currentAppUser =>;
 
   Future<AppUser?> createUser(AppUser user) async {
-    DocumentReference doc = _usersRef.doc();
+    DocumentReference doc = _usersRef.doc(user.userId);
     final AppUser newUser = user;
     await doc.set(newUser.toJson());
 
@@ -27,31 +27,49 @@ class DbService {
   }
 
   //update user
-  Future<void> updateUser(
-    String userId,
-    Map<String, dynamic> dataToUpdate,
-  ) async {
-    try {
-      await _usersRef.doc(userId).update(dataToUpdate);
-    } catch (e) {
-      rethrow;
+  Future<AppUser> updateUser(AppUser appUser) async {
+    //todo: when testing is complete use this method
+
+    final snapshot = await _usersRef
+        .where('userId', isEqualTo: appUser.userId)
+        .limit(1)
+        .get();
+    if (snapshot.docs.isEmpty) {
+      throw Exception('No user document found for userId: ${appUser.userId}');
     }
+
+    final doc = snapshot.docs.first.reference;
+
+    await doc.update(appUser.toJson());
+
+    return appUser;
   }
 
   //fetch user
-  Future<AppUser> getUserByUserId(String userId) async {
-    AppUser? user;
-
+  Future<AppUser?> getUserByUserId(String userId) async {
     try {
-      DocumentSnapshot userRef = await _usersRef.doc(userId).get();
-      user = AppUser.fromJson(userRef.data() as Map<String, dynamic>);
-    } catch (e) {
-      log('error in get by user id: $e');
+      final doc = await _usersRef.doc(userId).get();
+
+      if (!doc.exists || doc.data() == null) {
+        return null;
+      }
+
+      final currentUser = AppUser.fromJson(doc.data() as Map<String, dynamic>);
+
+      log(
+        'current user id: ${currentUser.userId}, '
+        'current user name: ${currentUser.userName}',
+      );
+
+      return currentUser;
+    } catch (e, stackTrace) {
+      log(
+        'Error getting user by ID: $userId',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
-    log('returning esom user from db: $userId, ${user.toJson()}');
-
-    return user;
   }
 
   // Get user by email and password

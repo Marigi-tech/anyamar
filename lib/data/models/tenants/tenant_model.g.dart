@@ -10,6 +10,9 @@ _Tenant _$TenantFromJson(Map<String, dynamic> json) => _Tenant(
   userId: json['userId'] as String,
   tenantName: json['tenantName'] as String,
   unitId: json['unitId'] as String,
+  unitRent: json['unitRent'] == null
+      ? null
+      : Rent.fromJson(json['unitRent'] as Map<String, dynamic>),
   tenantId: json['tenantId'] as String?,
   tenantPhoneNumber: json['tenantPhoneNumber'] as String?,
   propertyId: json['propertyId'] as String,
@@ -34,6 +37,7 @@ Map<String, dynamic> _$TenantToJson(_Tenant instance) => <String, dynamic>{
   'userId': instance.userId,
   'tenantName': instance.tenantName,
   'unitId': instance.unitId,
+  'unitRent': instance.unitRent?.toJson(),
   'tenantId': instance.tenantId,
   'tenantPhoneNumber': instance.tenantPhoneNumber,
   'propertyId': instance.propertyId,

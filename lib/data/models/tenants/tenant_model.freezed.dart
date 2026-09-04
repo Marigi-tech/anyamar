@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Tenant {
 
- String get userId; String get tenantName; String get unitId; String? get tenantId; String? get tenantPhoneNumber; String get propertyId; String? get unitName; String? get tenantEmail; String? get tenantOccupation;// job
+ String get userId; String get tenantName; String get unitId; Rent? get unitRent; String? get tenantId; String? get tenantPhoneNumber; String get propertyId; String? get unitName; String? get tenantEmail; String? get tenantOccupation;// job
  String? get tenantNationalId; DateTime get startOfLease; DateTime? get endOfLease; Person? get nextOfKin;// Include name , phone number and email address of the tenant's next of kin
  String? get nationalId; DateTime? get lastUpdateDate;
 /// Create a copy of Tenant
@@ -30,16 +30,16 @@ $TenantCopyWith<Tenant> get copyWith => _$TenantCopyWithImpl<Tenant>(this as Ten
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Tenant&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantPhoneNumber, tenantPhoneNumber) || other.tenantPhoneNumber == tenantPhoneNumber)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.tenantEmail, tenantEmail) || other.tenantEmail == tenantEmail)&&(identical(other.tenantOccupation, tenantOccupation) || other.tenantOccupation == tenantOccupation)&&(identical(other.tenantNationalId, tenantNationalId) || other.tenantNationalId == tenantNationalId)&&(identical(other.startOfLease, startOfLease) || other.startOfLease == startOfLease)&&(identical(other.endOfLease, endOfLease) || other.endOfLease == endOfLease)&&(identical(other.nextOfKin, nextOfKin) || other.nextOfKin == nextOfKin)&&(identical(other.nationalId, nationalId) || other.nationalId == nationalId)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Tenant&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.unitRent, unitRent) || other.unitRent == unitRent)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantPhoneNumber, tenantPhoneNumber) || other.tenantPhoneNumber == tenantPhoneNumber)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.tenantEmail, tenantEmail) || other.tenantEmail == tenantEmail)&&(identical(other.tenantOccupation, tenantOccupation) || other.tenantOccupation == tenantOccupation)&&(identical(other.tenantNationalId, tenantNationalId) || other.tenantNationalId == tenantNationalId)&&(identical(other.startOfLease, startOfLease) || other.startOfLease == startOfLease)&&(identical(other.endOfLease, endOfLease) || other.endOfLease == endOfLease)&&(identical(other.nextOfKin, nextOfKin) || other.nextOfKin == nextOfKin)&&(identical(other.nationalId, nationalId) || other.nationalId == nationalId)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,tenantName,unitId,tenantId,tenantPhoneNumber,propertyId,unitName,tenantEmail,tenantOccupation,tenantNationalId,startOfLease,endOfLease,nextOfKin,nationalId,lastUpdateDate);
+int get hashCode => Object.hash(runtimeType,userId,tenantName,unitId,unitRent,tenantId,tenantPhoneNumber,propertyId,unitName,tenantEmail,tenantOccupation,tenantNationalId,startOfLease,endOfLease,nextOfKin,nationalId,lastUpdateDate);
 
 @override
 String toString() {
-  return 'Tenant(userId: $userId, tenantName: $tenantName, unitId: $unitId, tenantId: $tenantId, tenantPhoneNumber: $tenantPhoneNumber, propertyId: $propertyId, unitName: $unitName, tenantEmail: $tenantEmail, tenantOccupation: $tenantOccupation, tenantNationalId: $tenantNationalId, startOfLease: $startOfLease, endOfLease: $endOfLease, nextOfKin: $nextOfKin, nationalId: $nationalId, lastUpdateDate: $lastUpdateDate)';
+  return 'Tenant(userId: $userId, tenantName: $tenantName, unitId: $unitId, unitRent: $unitRent, tenantId: $tenantId, tenantPhoneNumber: $tenantPhoneNumber, propertyId: $propertyId, unitName: $unitName, tenantEmail: $tenantEmail, tenantOccupation: $tenantOccupation, tenantNationalId: $tenantNationalId, startOfLease: $startOfLease, endOfLease: $endOfLease, nextOfKin: $nextOfKin, nationalId: $nationalId, lastUpdateDate: $lastUpdateDate)';
 }
 
 
@@ -50,11 +50,11 @@ abstract mixin class $TenantCopyWith<$Res>  {
   factory $TenantCopyWith(Tenant value, $Res Function(Tenant) _then) = _$TenantCopyWithImpl;
 @useResult
 $Res call({
- String userId, String tenantName, String unitId, String? tenantId, String? tenantPhoneNumber, String propertyId, String? unitName, String? tenantEmail, String? tenantOccupation, String? tenantNationalId, DateTime startOfLease, DateTime? endOfLease, Person? nextOfKin, String? nationalId, DateTime? lastUpdateDate
+ String userId, String tenantName, String unitId, Rent? unitRent, String? tenantId, String? tenantPhoneNumber, String propertyId, String? unitName, String? tenantEmail, String? tenantOccupation, String? tenantNationalId, DateTime startOfLease, DateTime? endOfLease, Person? nextOfKin, String? nationalId, DateTime? lastUpdateDate
 });
 
 
-$PersonCopyWith<$Res>? get nextOfKin;
+$RentCopyWith<$Res>? get unitRent;$PersonCopyWith<$Res>? get nextOfKin;
 
 }
 /// @nodoc
@@ -67,12 +67,13 @@ class _$TenantCopyWithImpl<$Res>
 
 /// Create a copy of Tenant
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? tenantName = null,Object? unitId = null,Object? tenantId = freezed,Object? tenantPhoneNumber = freezed,Object? propertyId = null,Object? unitName = freezed,Object? tenantEmail = freezed,Object? tenantOccupation = freezed,Object? tenantNationalId = freezed,Object? startOfLease = null,Object? endOfLease = freezed,Object? nextOfKin = freezed,Object? nationalId = freezed,Object? lastUpdateDate = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? tenantName = null,Object? unitId = null,Object? unitRent = freezed,Object? tenantId = freezed,Object? tenantPhoneNumber = freezed,Object? propertyId = null,Object? unitName = freezed,Object? tenantEmail = freezed,Object? tenantOccupation = freezed,Object? tenantNationalId = freezed,Object? startOfLease = null,Object? endOfLease = freezed,Object? nextOfKin = freezed,Object? nationalId = freezed,Object? lastUpdateDate = freezed,}) {
   return _then(_self.copyWith(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,tenantName: null == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
 as String,unitId: null == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
-as String,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
+as String,unitRent: freezed == unitRent ? _self.unitRent : unitRent // ignore: cast_nullable_to_non_nullable
+as Rent?,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String?,tenantPhoneNumber: freezed == tenantPhoneNumber ? _self.tenantPhoneNumber : tenantPhoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String,unitName: freezed == unitName ? _self.unitName : unitName // ignore: cast_nullable_to_non_nullable
@@ -88,6 +89,18 @@ as DateTime?,
   ));
 }
 /// Create a copy of Tenant
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RentCopyWith<$Res>? get unitRent {
+    if (_self.unitRent == null) {
+    return null;
+  }
+
+  return $RentCopyWith<$Res>(_self.unitRent!, (value) {
+    return _then(_self.copyWith(unitRent: value));
+  });
+}/// Create a copy of Tenant
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -181,10 +194,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  String tenantName,  String unitId,  String? tenantId,  String? tenantPhoneNumber,  String propertyId,  String? unitName,  String? tenantEmail,  String? tenantOccupation,  String? tenantNationalId,  DateTime startOfLease,  DateTime? endOfLease,  Person? nextOfKin,  String? nationalId,  DateTime? lastUpdateDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  String tenantName,  String unitId,  Rent? unitRent,  String? tenantId,  String? tenantPhoneNumber,  String propertyId,  String? unitName,  String? tenantEmail,  String? tenantOccupation,  String? tenantNationalId,  DateTime startOfLease,  DateTime? endOfLease,  Person? nextOfKin,  String? nationalId,  DateTime? lastUpdateDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Tenant() when $default != null:
-return $default(_that.userId,_that.tenantName,_that.unitId,_that.tenantId,_that.tenantPhoneNumber,_that.propertyId,_that.unitName,_that.tenantEmail,_that.tenantOccupation,_that.tenantNationalId,_that.startOfLease,_that.endOfLease,_that.nextOfKin,_that.nationalId,_that.lastUpdateDate);case _:
+return $default(_that.userId,_that.tenantName,_that.unitId,_that.unitRent,_that.tenantId,_that.tenantPhoneNumber,_that.propertyId,_that.unitName,_that.tenantEmail,_that.tenantOccupation,_that.tenantNationalId,_that.startOfLease,_that.endOfLease,_that.nextOfKin,_that.nationalId,_that.lastUpdateDate);case _:
   return orElse();
 
 }
@@ -202,10 +215,10 @@ return $default(_that.userId,_that.tenantName,_that.unitId,_that.tenantId,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  String tenantName,  String unitId,  String? tenantId,  String? tenantPhoneNumber,  String propertyId,  String? unitName,  String? tenantEmail,  String? tenantOccupation,  String? tenantNationalId,  DateTime startOfLease,  DateTime? endOfLease,  Person? nextOfKin,  String? nationalId,  DateTime? lastUpdateDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  String tenantName,  String unitId,  Rent? unitRent,  String? tenantId,  String? tenantPhoneNumber,  String propertyId,  String? unitName,  String? tenantEmail,  String? tenantOccupation,  String? tenantNationalId,  DateTime startOfLease,  DateTime? endOfLease,  Person? nextOfKin,  String? nationalId,  DateTime? lastUpdateDate)  $default,) {final _that = this;
 switch (_that) {
 case _Tenant():
-return $default(_that.userId,_that.tenantName,_that.unitId,_that.tenantId,_that.tenantPhoneNumber,_that.propertyId,_that.unitName,_that.tenantEmail,_that.tenantOccupation,_that.tenantNationalId,_that.startOfLease,_that.endOfLease,_that.nextOfKin,_that.nationalId,_that.lastUpdateDate);case _:
+return $default(_that.userId,_that.tenantName,_that.unitId,_that.unitRent,_that.tenantId,_that.tenantPhoneNumber,_that.propertyId,_that.unitName,_that.tenantEmail,_that.tenantOccupation,_that.tenantNationalId,_that.startOfLease,_that.endOfLease,_that.nextOfKin,_that.nationalId,_that.lastUpdateDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -222,10 +235,10 @@ return $default(_that.userId,_that.tenantName,_that.unitId,_that.tenantId,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  String tenantName,  String unitId,  String? tenantId,  String? tenantPhoneNumber,  String propertyId,  String? unitName,  String? tenantEmail,  String? tenantOccupation,  String? tenantNationalId,  DateTime startOfLease,  DateTime? endOfLease,  Person? nextOfKin,  String? nationalId,  DateTime? lastUpdateDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  String tenantName,  String unitId,  Rent? unitRent,  String? tenantId,  String? tenantPhoneNumber,  String propertyId,  String? unitName,  String? tenantEmail,  String? tenantOccupation,  String? tenantNationalId,  DateTime startOfLease,  DateTime? endOfLease,  Person? nextOfKin,  String? nationalId,  DateTime? lastUpdateDate)?  $default,) {final _that = this;
 switch (_that) {
 case _Tenant() when $default != null:
-return $default(_that.userId,_that.tenantName,_that.unitId,_that.tenantId,_that.tenantPhoneNumber,_that.propertyId,_that.unitName,_that.tenantEmail,_that.tenantOccupation,_that.tenantNationalId,_that.startOfLease,_that.endOfLease,_that.nextOfKin,_that.nationalId,_that.lastUpdateDate);case _:
+return $default(_that.userId,_that.tenantName,_that.unitId,_that.unitRent,_that.tenantId,_that.tenantPhoneNumber,_that.propertyId,_that.unitName,_that.tenantEmail,_that.tenantOccupation,_that.tenantNationalId,_that.startOfLease,_that.endOfLease,_that.nextOfKin,_that.nationalId,_that.lastUpdateDate);case _:
   return null;
 
 }
@@ -237,12 +250,13 @@ return $default(_that.userId,_that.tenantName,_that.unitId,_that.tenantId,_that.
 @JsonSerializable()
 
 class _Tenant implements Tenant {
-  const _Tenant({required this.userId, required this.tenantName, required this.unitId, this.tenantId, this.tenantPhoneNumber, required this.propertyId, this.unitName, this.tenantEmail, this.tenantOccupation, this.tenantNationalId, required this.startOfLease, this.endOfLease, this.nextOfKin, this.nationalId, this.lastUpdateDate});
+  const _Tenant({required this.userId, required this.tenantName, required this.unitId, this.unitRent, this.tenantId, this.tenantPhoneNumber, required this.propertyId, this.unitName, this.tenantEmail, this.tenantOccupation, this.tenantNationalId, required this.startOfLease, this.endOfLease, this.nextOfKin, this.nationalId, this.lastUpdateDate});
   factory _Tenant.fromJson(Map<String, dynamic> json) => _$TenantFromJson(json);
 
 @override final  String userId;
 @override final  String tenantName;
 @override final  String unitId;
+@override final  Rent? unitRent;
 @override final  String? tenantId;
 @override final  String? tenantPhoneNumber;
 @override final  String propertyId;
@@ -271,16 +285,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Tenant&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantPhoneNumber, tenantPhoneNumber) || other.tenantPhoneNumber == tenantPhoneNumber)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.tenantEmail, tenantEmail) || other.tenantEmail == tenantEmail)&&(identical(other.tenantOccupation, tenantOccupation) || other.tenantOccupation == tenantOccupation)&&(identical(other.tenantNationalId, tenantNationalId) || other.tenantNationalId == tenantNationalId)&&(identical(other.startOfLease, startOfLease) || other.startOfLease == startOfLease)&&(identical(other.endOfLease, endOfLease) || other.endOfLease == endOfLease)&&(identical(other.nextOfKin, nextOfKin) || other.nextOfKin == nextOfKin)&&(identical(other.nationalId, nationalId) || other.nationalId == nationalId)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Tenant&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.unitRent, unitRent) || other.unitRent == unitRent)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantPhoneNumber, tenantPhoneNumber) || other.tenantPhoneNumber == tenantPhoneNumber)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.tenantEmail, tenantEmail) || other.tenantEmail == tenantEmail)&&(identical(other.tenantOccupation, tenantOccupation) || other.tenantOccupation == tenantOccupation)&&(identical(other.tenantNationalId, tenantNationalId) || other.tenantNationalId == tenantNationalId)&&(identical(other.startOfLease, startOfLease) || other.startOfLease == startOfLease)&&(identical(other.endOfLease, endOfLease) || other.endOfLease == endOfLease)&&(identical(other.nextOfKin, nextOfKin) || other.nextOfKin == nextOfKin)&&(identical(other.nationalId, nationalId) || other.nationalId == nationalId)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,tenantName,unitId,tenantId,tenantPhoneNumber,propertyId,unitName,tenantEmail,tenantOccupation,tenantNationalId,startOfLease,endOfLease,nextOfKin,nationalId,lastUpdateDate);
+int get hashCode => Object.hash(runtimeType,userId,tenantName,unitId,unitRent,tenantId,tenantPhoneNumber,propertyId,unitName,tenantEmail,tenantOccupation,tenantNationalId,startOfLease,endOfLease,nextOfKin,nationalId,lastUpdateDate);
 
 @override
 String toString() {
-  return 'Tenant(userId: $userId, tenantName: $tenantName, unitId: $unitId, tenantId: $tenantId, tenantPhoneNumber: $tenantPhoneNumber, propertyId: $propertyId, unitName: $unitName, tenantEmail: $tenantEmail, tenantOccupation: $tenantOccupation, tenantNationalId: $tenantNationalId, startOfLease: $startOfLease, endOfLease: $endOfLease, nextOfKin: $nextOfKin, nationalId: $nationalId, lastUpdateDate: $lastUpdateDate)';
+  return 'Tenant(userId: $userId, tenantName: $tenantName, unitId: $unitId, unitRent: $unitRent, tenantId: $tenantId, tenantPhoneNumber: $tenantPhoneNumber, propertyId: $propertyId, unitName: $unitName, tenantEmail: $tenantEmail, tenantOccupation: $tenantOccupation, tenantNationalId: $tenantNationalId, startOfLease: $startOfLease, endOfLease: $endOfLease, nextOfKin: $nextOfKin, nationalId: $nationalId, lastUpdateDate: $lastUpdateDate)';
 }
 
 
@@ -291,11 +305,11 @@ abstract mixin class _$TenantCopyWith<$Res> implements $TenantCopyWith<$Res> {
   factory _$TenantCopyWith(_Tenant value, $Res Function(_Tenant) _then) = __$TenantCopyWithImpl;
 @override @useResult
 $Res call({
- String userId, String tenantName, String unitId, String? tenantId, String? tenantPhoneNumber, String propertyId, String? unitName, String? tenantEmail, String? tenantOccupation, String? tenantNationalId, DateTime startOfLease, DateTime? endOfLease, Person? nextOfKin, String? nationalId, DateTime? lastUpdateDate
+ String userId, String tenantName, String unitId, Rent? unitRent, String? tenantId, String? tenantPhoneNumber, String propertyId, String? unitName, String? tenantEmail, String? tenantOccupation, String? tenantNationalId, DateTime startOfLease, DateTime? endOfLease, Person? nextOfKin, String? nationalId, DateTime? lastUpdateDate
 });
 
 
-@override $PersonCopyWith<$Res>? get nextOfKin;
+@override $RentCopyWith<$Res>? get unitRent;@override $PersonCopyWith<$Res>? get nextOfKin;
 
 }
 /// @nodoc
@@ -308,12 +322,13 @@ class __$TenantCopyWithImpl<$Res>
 
 /// Create a copy of Tenant
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? tenantName = null,Object? unitId = null,Object? tenantId = freezed,Object? tenantPhoneNumber = freezed,Object? propertyId = null,Object? unitName = freezed,Object? tenantEmail = freezed,Object? tenantOccupation = freezed,Object? tenantNationalId = freezed,Object? startOfLease = null,Object? endOfLease = freezed,Object? nextOfKin = freezed,Object? nationalId = freezed,Object? lastUpdateDate = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? tenantName = null,Object? unitId = null,Object? unitRent = freezed,Object? tenantId = freezed,Object? tenantPhoneNumber = freezed,Object? propertyId = null,Object? unitName = freezed,Object? tenantEmail = freezed,Object? tenantOccupation = freezed,Object? tenantNationalId = freezed,Object? startOfLease = null,Object? endOfLease = freezed,Object? nextOfKin = freezed,Object? nationalId = freezed,Object? lastUpdateDate = freezed,}) {
   return _then(_Tenant(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,tenantName: null == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
 as String,unitId: null == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
-as String,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
+as String,unitRent: freezed == unitRent ? _self.unitRent : unitRent // ignore: cast_nullable_to_non_nullable
+as Rent?,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String?,tenantPhoneNumber: freezed == tenantPhoneNumber ? _self.tenantPhoneNumber : tenantPhoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String,unitName: freezed == unitName ? _self.unitName : unitName // ignore: cast_nullable_to_non_nullable
@@ -330,6 +345,18 @@ as DateTime?,
 }
 
 /// Create a copy of Tenant
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RentCopyWith<$Res>? get unitRent {
+    if (_self.unitRent == null) {
+    return null;
+  }
+
+  return $RentCopyWith<$Res>(_self.unitRent!, (value) {
+    return _then(_self.copyWith(unitRent: value));
+  });
+}/// Create a copy of Tenant
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

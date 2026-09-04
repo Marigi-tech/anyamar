@@ -1,6 +1,6 @@
 import 'package:anyamar/data/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/commons/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FormLabel extends ConsumerWidget {
