@@ -14,7 +14,7 @@ _FinancialRecord _$FinancialRecordFromJson(Map<String, dynamic> json) =>
         _$FinancialRecordTypesEnumMap,
         json['recordType'],
       ),
-      paymentBy: json['paymentBy'] as Map<String, dynamic>,
+      paymentBy: Person.fromJson(json['paymentBy'] as Map<String, dynamic>),
       lastUpdatedDate: json['lastUpdatedDate'] == null
           ? null
           : DateTime.parse(json['lastUpdatedDate'] as String),
@@ -23,7 +23,10 @@ _FinancialRecord _$FinancialRecordFromJson(Map<String, dynamic> json) =>
         json['recordNature'],
       ),
       recordId: json['recordId'] as String?,
-      paymentMethod: json['paymentMethod'] as String?,
+      paymentMethod: $enumDecodeNullable(
+        _$PaymentMethodsEnumMap,
+        json['paymentMethod'],
+      ),
       userId: json['userId'] as String?,
       propertyId: json['propertyId'] as String?,
     );
@@ -33,11 +36,11 @@ Map<String, dynamic> _$FinancialRecordToJson(_FinancialRecord instance) =>
       'datePaid': instance.datePaid.toIso8601String(),
       'amountPaid': instance.amountPaid,
       'recordType': _$FinancialRecordTypesEnumMap[instance.recordType]!,
-      'paymentBy': instance.paymentBy,
+      'paymentBy': instance.paymentBy.toJson(),
       'lastUpdatedDate': instance.lastUpdatedDate?.toIso8601String(),
       'recordNature': _$FinancialRecordNatureEnumMap[instance.recordNature]!,
       'recordId': instance.recordId,
-      'paymentMethod': instance.paymentMethod,
+      'paymentMethod': _$PaymentMethodsEnumMap[instance.paymentMethod],
       'userId': instance.userId,
       'propertyId': instance.propertyId,
     };
@@ -55,4 +58,11 @@ const _$FinancialRecordTypesEnumMap = {
 const _$FinancialRecordNatureEnumMap = {
   FinancialRecordNature.expense: 'expense',
   FinancialRecordNature.revenue: 'revenue',
+};
+
+const _$PaymentMethodsEnumMap = {
+  PaymentMethods.cash: 'cash',
+  PaymentMethods.mpesa: 'mpesa',
+  PaymentMethods.bank: 'bank',
+  PaymentMethods.paypal: 'paypal',
 };

@@ -3,7 +3,7 @@ import 'package:anyamar/data/models/enums/financial_record_nature.dart';
 import 'package:anyamar/data/models/enums/financial_record_types.dart';
 import 'package:anyamar/data/models/financial_records/financial_record_model.dart';
 import 'package:anyamar/data/models/rent/rent_history_model.dart';
-import 'package:anyamar/data/models/rent/single_rental_entry_model.dart';
+import 'package:anyamar/data/models/users/person/person.dart';
 import 'package:anyamar/data/services/db_rental_records.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,24 +72,42 @@ class DbFinancesService {
       // 3. Convert every rent entry into a FinancialRecord
       // --------------------------------------------------
       for (final history in rentHistories) {
-        for (final entryMap in history.rentEntries) {
-          final SingleRentEntry entry = SingleRentEntry.fromJson(entryMap);
+        for (final rentalMonth in history.rentalMonths) {
+          for (final entry in rentalMonth.rentEntries) {
+            final financialRecord = FinancialRecord(
+              recordId: entry.rentEntryId,
+              datePaid: entry.paymentDate,
+              amountPaid: entry.amountPaid,
+              recordType: FinancialRecordTypes.rent,
+              recordNature: FinancialRecordNature.revenue,
+              paymentMethod: entry.paymentMethod,
+              lastUpdatedDate: entry.lastUpdatedDate ?? DateTime.now(),
+              paymentBy: Person(personName: history.tenantName ?? ''),
+            );
 
-          final FinancialRecord financialRecord = FinancialRecord(
-            recordId: entry.rentEntryId,
-            datePaid: entry.paymentDate,
-            amountPaid: entry.amountPaid,
-            recordType: FinancialRecordTypes.rent,
-            recordNature: FinancialRecordNature.revenue,
-            paymentMethod: entry.paymentMethod.label,
-            lastUpdatedDate: entry.lastUpdatedDate ?? DateTime.now(),
-            paymentBy: {'personName': history.tenantName},
-          );
-          log(financialRecord.toString());
-
-          financialRecords.add(financialRecord);
+            financialRecords.add(financialRecord);
+          }
         }
       }
+      // for (final history in rentHistories) {
+      //   for (final entryMap in history.rentalMonths.rentEntries) {
+      //     final SingleRentEntry entry = entryMap;
+
+      //     final FinancialRecord financialRecord = FinancialRecord(
+      //       recordId: entry.rentEntryId,
+      //       datePaid: entry.paymentDate,
+      //       amountPaid: entry.amountPaid,
+      //       recordType: FinancialRecordTypes.rent,
+      //       recordNature: FinancialRecordNature.revenue,
+      //       paymentMethod: entry.paymentMethod,
+      //       lastUpdatedDate: entry.lastUpdatedDate ?? DateTime.now(),
+      //       paymentBy: Person(personName: history.tenantName ?? ''),
+      //     );
+      //     log(financialRecord.toString());
+
+      //     financialRecords.add(financialRecord);
+      //   }
+      // }
 
       // --------------------------------------------------
       // 4. Return everything together
@@ -104,6 +122,20 @@ class DbFinancesService {
 
       rethrow;
     }
+  }
+
+  //Delete Financial record
+  Future<bool> deleteFinancialRecord(FinancialRecord record) async {
+    bool isSuccess = false;
+    try {
+      await _financesRef.doc(record.recordId).delete();
+      log("Document successfully deleted!");
+      isSuccess = true;
+    } catch (e) {
+      log("Error deleting document: $e");
+      isSuccess = false;
+    }
+    return isSuccess;
   }
 
   //

@@ -58,5 +58,17 @@ class DbUnitsService {
     }
   }
 
-  //todo: delete Unit
+  //Delete Unit
+  Future<bool> deleteUnitRecord(Unit record) async {
+    bool isSuccess = false;
+    try {
+      await _unitsRef.doc(record.unitId).delete();
+      log("Document successfully deleted!");
+      isSuccess = true;
+    } catch (e) {
+      log("Error deleting document: $e");
+      isSuccess = false;
+    }
+    return isSuccess;
+  }
 }

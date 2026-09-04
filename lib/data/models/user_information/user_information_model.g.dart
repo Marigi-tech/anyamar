@@ -28,6 +28,9 @@ _UserInformation _$UserInformationFromJson(Map<String, dynamic> json) =>
               ?.map((e) => FinancialRecord.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      appUser: json['appUser'] == null
+          ? null
+          : AppUser.fromJson(json['appUser'] as Map<String, dynamic>),
       isLoading: json['isLoading'] as bool? ?? false,
     );
 
@@ -37,5 +40,6 @@ Map<String, dynamic> _$UserInformationToJson(_UserInformation instance) =>
       'tenants': instance.tenants.map((e) => e.toJson()).toList(),
       'units': instance.units.map((e) => e.toJson()).toList(),
       'finances': instance.finances.map((e) => e.toJson()).toList(),
+      'appUser': instance.appUser?.toJson(),
       'isLoading': instance.isLoading,
     };

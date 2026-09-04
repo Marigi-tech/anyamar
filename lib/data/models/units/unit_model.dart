@@ -7,7 +7,6 @@ part 'unit_model.freezed.dart';
 part 'unit_model.g.dart';
 
 @freezed
-
 abstract class Unit with _$Unit {
   const factory Unit({
     String? unitId,
@@ -30,23 +29,20 @@ abstract class Unit with _$Unit {
 }
 
 extension UnitSearch on Unit {
-  bool matchesUnitSearch(String query) {
+  bool matchesUnitSearch(String query, List<Tenant> tenants) {
     if (query.isEmpty) return true;
     final search = query.toLowerCase();
 
-    // final Tenant? tenantInformation = tenantId != null
-    //     ? tenants.firstWhere((element) => element.tenantId == tenantId)
-    //     : null;
+    final Tenant? tenantInformation = tenantId != null
+        ? tenants.firstWhere((element) => element.tenantId == tenantId)
+        : null;
 
     final statusText = (isOccupied) ? 'occupied' : 'vacant';
 
     return unitId!.toLowerCase().contains(search) ||
         (unitName).toLowerCase().contains(search) ||
         propertyName.toLowerCase().contains(search) ||
-        // (tenantInformation?.tenantName ?? '').toLowerCase().contains(search) ||
-        // (tenantInformation?.tenantPhoneNumber ?? '').toLowerCase().contains(
-        //   search,
-        // ) ||
+        (tenantInformation?.tenantName ?? '').toLowerCase().contains(search) ||
         statusText.contains(search);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:anyamar/constants/constants.dart';
-import 'package:anyamar/constants/gradients.dart';
+import 'package:anyamar/commons/constants.dart';
+import 'package:anyamar/commons/gradients.dart';
 
 class ColorButtonWidget extends StatefulWidget {
   final VoidCallback onPressedCallBack;
@@ -34,6 +34,8 @@ class _ColorButtonWidgetState extends State<ColorButtonWidget> {
         ? AppGradient.gradientYellow
         : widget.buttonColor == AppColorsConstant.blueColor
         ? AppGradient.gradientBlue
+        : widget.buttonColor == AppColorsConstant.orangeColor
+        ? AppGradient.gradientOrange
         : AppGradient.gradientGreen;
   }
 
@@ -42,6 +44,8 @@ class _ColorButtonWidgetState extends State<ColorButtonWidget> {
         ? AppGradient.gradientLightYellow
         : widget.buttonColor == AppColorsConstant.blueColor
         ? AppGradient.gradientLightBlue
+        : widget.buttonColor == AppColorsConstant.orangeColor
+        ? AppGradient.gradientLightOrange
         : AppGradient.gradientLightGreen;
   }
 

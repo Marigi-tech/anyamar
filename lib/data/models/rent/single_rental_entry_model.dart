@@ -15,11 +15,11 @@ abstract class SingleRentEntry with _$SingleRentEntry {
     required String rentalMonth,
     DateTime? lastUpdatedDate,
     String? rentEntryId,
+    String? transactionCode,
   }) = _SingleRentalEntry;
 
   factory SingleRentEntry.fromJson(Map<String, dynamic> json) =>
       _$SingleRentEntryFromJson(json);
-
 
   // factory SingleRentEntry.toJson(Map<String, dynamic> json) =>
   //     _$SingleRentEntryFromJson(json);

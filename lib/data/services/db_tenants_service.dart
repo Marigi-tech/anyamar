@@ -59,5 +59,18 @@ class DbTenantService {
     }
   }
 
-  //todo: delete Tenant
+
+   //Delete Tenant
+  Future<bool> deleteTenantRecord(Tenant record) async {
+    bool isSuccess = false;
+    try {
+      await _tenantsRef.doc(record.tenantId).delete();
+      log("Document successfully deleted!");
+      isSuccess = true;
+    } catch (e) {
+      log("Error deleting document: $e");
+      isSuccess = false;
+    }
+    return isSuccess;
+  }
 }

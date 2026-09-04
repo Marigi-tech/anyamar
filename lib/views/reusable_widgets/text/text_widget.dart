@@ -1,4 +1,4 @@
-import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class PageTitleWidget extends StatelessWidget {
   final String pageTitle;
@@ -8,13 +8,13 @@ class PageTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topLeft,
-      child: Padding(
-        padding: EdgeInsets.only(left: 10.0),
-        child: Text(
-          pageTitle,
-          style: CustomTextStyles.cardTitleStyle.copyWith(fontSize: 25),
-          textAlign: TextAlign.left,
+      child: Text(
+        pageTitle,
+        style: CustomTextStyles.cardTitleStyle.copyWith(
+          fontSize: 22,
+          // color: AppColorsConstant.darkBlueColor,
         ),
+        textAlign: TextAlign.left,
       ),
     );
   }

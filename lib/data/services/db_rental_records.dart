@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:anyamar/data/models/rent/rent_history_model.dart';
+import 'package:anyamar/data/models/rent/rental_month/rental_month_model.dart';
 import 'package:anyamar/data/models/rent/single_rental_entry_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,10 +9,6 @@ final dbRentalServiceProvider = Provider<DbRentalService>((ref) {
   return DbRentalService();
 });
 
-// final currentTenantProvider = StreamProvider<DbRentalService?>((ref) {
-//   final tenantRentHistory =  ref.watch(dbRentalServiceProvider);
-//   return tenantRentHistory;
-// });
 class DbRentalService {
   //Provider
   final CollectionReference _rentHistoryRef = FirebaseFirestore.instance
@@ -45,6 +42,28 @@ class DbRentalService {
     }
   }
 
+  Future<List<SingleRentEntry>> getAllRentEntriesForUser(String userId) async {
+    final rentHistories = await getUserRentHistory(userId);
+
+    return rentHistories
+        .expand((history) => history.rentalMonths)
+        .expand((rentalMonth) => rentalMonth.rentEntries)
+        .toList();
+  }
+  // Future<List<SingleRentEntry>?> getAllRentEntriesForUser(String userId) async {
+  //   final rentHistories = await getUserRentHistory(userId);
+
+  //   final List<SingleRentEntry> allRentEntries = [];
+
+  //   for (final history in rentHistories) {
+  //     for (final entryMap in history.rentEntries) {
+  //       allRentEntries.add(entryMap);
+  //     }
+  //   }
+
+  //   return allRentEntries;
+  // }
+
   //Get a tenants Rent History
   Future<RentHistory?> getRentHistory(String tenantId) async {
     try {
@@ -68,35 +87,204 @@ class DbRentalService {
   //Add rental entry (updating a rent history)
   Future<RentHistory?> addRentEntry(
     SingleRentEntry rentEntry,
+    RentalMonth rentalMonth,
     RentHistory currentRentHistory,
   ) async {
-   
-    final rentalEntry = rentEntry.toJson();
-    final updatedHistory = currentRentHistory.copyWith(
-      rentEntries: [...currentRentHistory.rentEntries, rentalEntry],
-    );
-    final DocumentReference doc = _rentHistoryRef.doc(
-      currentRentHistory.historyId,
-    );
     try {
+      // Make a copy of the existing months
+      final updatedRentalMonths = List<RentalMonth>.from(
+        currentRentHistory.rentalMonths,
+      );
+
+      // Find the index of the month we want
+      final monthIndex = updatedRentalMonths.indexWhere(
+        (month) => month.rentalMonth == rentalMonth.rentalMonth,
+      );
+
+      if (monthIndex != -1) {
+        // ---------------------------------------------
+        // Month already exists
+        // ---------------------------------------------
+
+        final existingMonth = updatedRentalMonths[monthIndex];
+
+        final updatedMonth = existingMonth.copyWith(
+          rentEntries: [...existingMonth.rentEntries, rentEntry],
+        );
+
+        updatedRentalMonths[monthIndex] = updatedMonth;
+      } else {
+        // ---------------------------------------------
+        // Month doesn't exist
+        // ---------------------------------------------
+
+        final newMonth = rentalMonth.copyWith(rentEntries: [rentEntry]);
+
+        updatedRentalMonths.add(newMonth);
+      }
+
+      // ---------------------------------------------
+      // Create updated RentHistory
+      // ---------------------------------------------
+
+      final updatedHistory = currentRentHistory.copyWith(
+        rentalMonths: updatedRentalMonths,
+      );
+
+      // ---------------------------------------------
+      // Save to Firestore
+      // ---------------------------------------------
+
+      final DocumentReference doc = _rentHistoryRef.doc(
+        currentRentHistory.historyId,
+      );
+
       await doc.set(updatedHistory.toJson());
+
       log(
         'Rent entry added successfully for tenant: '
         '${currentRentHistory.tenantId}',
       );
+
       return updatedHistory;
     } on FirebaseException catch (e, stackTrace) {
       log('Error adding rent entry: ${e.message}', stackTrace: stackTrace);
+
       rethrow;
     }
   }
-  //
-  //todo: get all rental records belonging to a specific tenant
-  //todo: get all expenses belonging to a specific property
-  //todo: get all user expenses
-  //todo: get all generated income
-  //todo: get all deposits
-  //todo: update Tenant
+  // Future<RentHistory?> addRentEntry(
+  //   SingleRentEntry rentEntry,
+  //   RentalMonth rentalMonth,
+  //   RentHistory currentRentHistory,
+  // ) async {
+  //   final rentalEntry = rentEntry;
+  //   //find specific month
 
-  //todo: delete Tenant
+  //   final updatedHistory = currentRentHistory.copyWith(
+
+  //     rentalMonths: [...currentRentHistory.rentEntries, rentalEntry],
+  //   );
+  //   final DocumentReference doc = _rentHistoryRef.doc(
+  //     currentRentHistory.historyId,
+  //   );
+  //   try {
+  //     await doc.set(updatedHistory.toJson());
+  //     log(
+  //       'Rent entry added successfully for tenant: '
+  //       '${currentRentHistory.tenantId}',
+  //     );
+  //     return updatedHistory;
+  //   } on FirebaseException catch (e, stackTrace) {
+  //     log('Error adding rent entry: ${e.message}', stackTrace: stackTrace);
+  //     rethrow;
+  //   }
+  // }
+
+  //Delete a Single Rent Record
+  Future<bool> deleteRentEntry(
+    SingleRentEntry rentEntry,
+    RentalMonth rentalMonth,
+    RentHistory currentRentHistory,
+  ) async {
+    try {
+      // Copy the existing rental months
+      final updatedRentalMonths = List<RentalMonth>.from(
+        currentRentHistory.rentalMonths,
+      );
+
+      // Find the month containing this rent entry
+      final monthIndex = updatedRentalMonths.indexWhere(
+        (month) => month.rentalMonth == rentalMonth.rentalMonth,
+      );
+
+      if (monthIndex == -1) {
+        log(
+          'Rental month ${rentalMonth.rentalMonth} '
+          'not found for tenant ${currentRentHistory.tenantId}',
+        );
+        return false;
+      }
+
+      // Get the existing month
+      final existingMonth = updatedRentalMonths[monthIndex];
+
+      // Remove the specific rent entry
+      final updatedEntries = existingMonth.rentEntries
+          .where((entry) => entry.rentEntryId != rentEntry.rentEntryId)
+          .toList();
+
+      // Update the month
+      final updatedMonth = existingMonth.copyWith(rentEntries: updatedEntries);
+
+      // Replace the old month with the updated month
+      updatedRentalMonths[monthIndex] = updatedMonth;
+
+      // Update the entire history
+      final updatedHistory = currentRentHistory.copyWith(
+        rentalMonths: updatedRentalMonths,
+      );
+
+      // Save to Firestore
+      final doc = _rentHistoryRef.doc(currentRentHistory.historyId);
+
+      await doc.set(updatedHistory.toJson());
+
+      log(
+        'Rent entry ${rentEntry.rentEntryId} deleted successfully '
+        'from ${rentalMonth.rentalMonth}',
+      );
+
+      return true;
+    } on FirebaseException catch (e, stackTrace) {
+      log('Error deleting rent entry: ${e.message}', stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  Future<RentHistory> updateRentHistory(RentHistory rentHistory) async {
+    final doc = _rentHistoryRef.doc(rentHistory.historyId);
+
+    try {
+      await doc.set(rentHistory.toJson());
+
+      log(
+        'Rent history updated successfully for '
+        '${rentHistory.tenantId}',
+      );
+
+      return rentHistory;
+    } on FirebaseException catch (e, stackTrace) {
+      log('Error updating rent history: ${e.message}', stackTrace: stackTrace);
+
+      rethrow;
+    }
+  }
 }
+//   Future<bool> deleteRentEntry(
+//     SingleRentEntry rentEntry,
+//     RentHistory currentRentHistory,
+
+//   ) async {
+//     bool isSuccessful = false;
+
+//     final updatedEntries = currentRentHistory.rentEntries
+//         .where((entry) => entry.rentEntryId != rentEntry.rentEntryId)
+//         .toList();
+//     final updatedHistory = currentRentHistory.copyWith(
+//       rentEntries: updatedEntries,
+//     );
+
+//     final doc = _rentHistoryRef.doc(currentRentHistory.historyId);
+
+//     try {
+//       await doc.set(updatedHistory.toJson());
+//       log('Rent entry deleted ');
+//       isSuccessful = true;
+//       return isSuccessful;
+//     } on FirebaseException catch (e, stackTrace) {
+//       log('Error deleting rent entry: ${e.message}', stackTrace: stackTrace);
+//       rethrow;
+//     }
+//   }
+// }

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FinancialRecord {
 
- DateTime get datePaid; double get amountPaid; FinancialRecordTypes get recordType; Map<String, dynamic> get paymentBy; DateTime? get lastUpdatedDate; FinancialRecordNature get recordNature; String? get recordId; String? get paymentMethod; String? get userId; String? get propertyId;
+ DateTime get datePaid; double get amountPaid; FinancialRecordTypes get recordType; Person get paymentBy; DateTime? get lastUpdatedDate; FinancialRecordNature get recordNature; String? get recordId; PaymentMethods? get paymentMethod; String? get userId; String? get propertyId;
 /// Create a copy of FinancialRecord
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $FinancialRecordCopyWith<FinancialRecord> get copyWith => _$FinancialRecordCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FinancialRecord&&(identical(other.datePaid, datePaid) || other.datePaid == datePaid)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.recordType, recordType) || other.recordType == recordType)&&const DeepCollectionEquality().equals(other.paymentBy, paymentBy)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.recordNature, recordNature) || other.recordNature == recordNature)&&(identical(other.recordId, recordId) || other.recordId == recordId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FinancialRecord&&(identical(other.datePaid, datePaid) || other.datePaid == datePaid)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.recordType, recordType) || other.recordType == recordType)&&(identical(other.paymentBy, paymentBy) || other.paymentBy == paymentBy)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.recordNature, recordNature) || other.recordNature == recordNature)&&(identical(other.recordId, recordId) || other.recordId == recordId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,datePaid,amountPaid,recordType,const DeepCollectionEquality().hash(paymentBy),lastUpdatedDate,recordNature,recordId,paymentMethod,userId,propertyId);
+int get hashCode => Object.hash(runtimeType,datePaid,amountPaid,recordType,paymentBy,lastUpdatedDate,recordNature,recordId,paymentMethod,userId,propertyId);
 
 @override
 String toString() {
@@ -48,11 +48,11 @@ abstract mixin class $FinancialRecordCopyWith<$Res>  {
   factory $FinancialRecordCopyWith(FinancialRecord value, $Res Function(FinancialRecord) _then) = _$FinancialRecordCopyWithImpl;
 @useResult
 $Res call({
- DateTime datePaid, double amountPaid, FinancialRecordTypes recordType, Map<String, dynamic> paymentBy, DateTime? lastUpdatedDate, FinancialRecordNature recordNature, String? recordId, String? paymentMethod, String? userId, String? propertyId
+ DateTime datePaid, double amountPaid, FinancialRecordTypes recordType, Person paymentBy, DateTime? lastUpdatedDate, FinancialRecordNature recordNature, String? recordId, PaymentMethods? paymentMethod, String? userId, String? propertyId
 });
 
 
-
+$PersonCopyWith<$Res> get paymentBy;
 
 }
 /// @nodoc
@@ -71,16 +71,25 @@ datePaid: null == datePaid ? _self.datePaid : datePaid // ignore: cast_nullable_
 as DateTime,amountPaid: null == amountPaid ? _self.amountPaid : amountPaid // ignore: cast_nullable_to_non_nullable
 as double,recordType: null == recordType ? _self.recordType : recordType // ignore: cast_nullable_to_non_nullable
 as FinancialRecordTypes,paymentBy: null == paymentBy ? _self.paymentBy : paymentBy // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>,lastUpdatedDate: freezed == lastUpdatedDate ? _self.lastUpdatedDate : lastUpdatedDate // ignore: cast_nullable_to_non_nullable
+as Person,lastUpdatedDate: freezed == lastUpdatedDate ? _self.lastUpdatedDate : lastUpdatedDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,recordNature: null == recordNature ? _self.recordNature : recordNature // ignore: cast_nullable_to_non_nullable
 as FinancialRecordNature,recordId: freezed == recordId ? _self.recordId : recordId // ignore: cast_nullable_to_non_nullable
 as String?,paymentMethod: freezed == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as PaymentMethods?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
-
+/// Create a copy of FinancialRecord
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonCopyWith<$Res> get paymentBy {
+  
+  return $PersonCopyWith<$Res>(_self.paymentBy, (value) {
+    return _then(_self.copyWith(paymentBy: value));
+  });
+}
 }
 
 
@@ -162,7 +171,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime datePaid,  double amountPaid,  FinancialRecordTypes recordType,  Map<String, dynamic> paymentBy,  DateTime? lastUpdatedDate,  FinancialRecordNature recordNature,  String? recordId,  String? paymentMethod,  String? userId,  String? propertyId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime datePaid,  double amountPaid,  FinancialRecordTypes recordType,  Person paymentBy,  DateTime? lastUpdatedDate,  FinancialRecordNature recordNature,  String? recordId,  PaymentMethods? paymentMethod,  String? userId,  String? propertyId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FinancialRecord() when $default != null:
 return $default(_that.datePaid,_that.amountPaid,_that.recordType,_that.paymentBy,_that.lastUpdatedDate,_that.recordNature,_that.recordId,_that.paymentMethod,_that.userId,_that.propertyId);case _:
@@ -183,7 +192,7 @@ return $default(_that.datePaid,_that.amountPaid,_that.recordType,_that.paymentBy
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime datePaid,  double amountPaid,  FinancialRecordTypes recordType,  Map<String, dynamic> paymentBy,  DateTime? lastUpdatedDate,  FinancialRecordNature recordNature,  String? recordId,  String? paymentMethod,  String? userId,  String? propertyId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime datePaid,  double amountPaid,  FinancialRecordTypes recordType,  Person paymentBy,  DateTime? lastUpdatedDate,  FinancialRecordNature recordNature,  String? recordId,  PaymentMethods? paymentMethod,  String? userId,  String? propertyId)  $default,) {final _that = this;
 switch (_that) {
 case _FinancialRecord():
 return $default(_that.datePaid,_that.amountPaid,_that.recordType,_that.paymentBy,_that.lastUpdatedDate,_that.recordNature,_that.recordId,_that.paymentMethod,_that.userId,_that.propertyId);case _:
@@ -203,7 +212,7 @@ return $default(_that.datePaid,_that.amountPaid,_that.recordType,_that.paymentBy
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime datePaid,  double amountPaid,  FinancialRecordTypes recordType,  Map<String, dynamic> paymentBy,  DateTime? lastUpdatedDate,  FinancialRecordNature recordNature,  String? recordId,  String? paymentMethod,  String? userId,  String? propertyId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime datePaid,  double amountPaid,  FinancialRecordTypes recordType,  Person paymentBy,  DateTime? lastUpdatedDate,  FinancialRecordNature recordNature,  String? recordId,  PaymentMethods? paymentMethod,  String? userId,  String? propertyId)?  $default,) {final _that = this;
 switch (_that) {
 case _FinancialRecord() when $default != null:
 return $default(_that.datePaid,_that.amountPaid,_that.recordType,_that.paymentBy,_that.lastUpdatedDate,_that.recordNature,_that.recordId,_that.paymentMethod,_that.userId,_that.propertyId);case _:
@@ -218,23 +227,17 @@ return $default(_that.datePaid,_that.amountPaid,_that.recordType,_that.paymentBy
 @JsonSerializable()
 
 class _FinancialRecord implements FinancialRecord {
-  const _FinancialRecord({required this.datePaid, required this.amountPaid, required this.recordType, required final  Map<String, dynamic> paymentBy, this.lastUpdatedDate, required this.recordNature, this.recordId, this.paymentMethod, this.userId, this.propertyId}): _paymentBy = paymentBy;
+  const _FinancialRecord({required this.datePaid, required this.amountPaid, required this.recordType, required this.paymentBy, this.lastUpdatedDate, required this.recordNature, this.recordId, this.paymentMethod, this.userId, this.propertyId});
   factory _FinancialRecord.fromJson(Map<String, dynamic> json) => _$FinancialRecordFromJson(json);
 
 @override final  DateTime datePaid;
 @override final  double amountPaid;
 @override final  FinancialRecordTypes recordType;
- final  Map<String, dynamic> _paymentBy;
-@override Map<String, dynamic> get paymentBy {
-  if (_paymentBy is EqualUnmodifiableMapView) return _paymentBy;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_paymentBy);
-}
-
+@override final  Person paymentBy;
 @override final  DateTime? lastUpdatedDate;
 @override final  FinancialRecordNature recordNature;
 @override final  String? recordId;
-@override final  String? paymentMethod;
+@override final  PaymentMethods? paymentMethod;
 @override final  String? userId;
 @override final  String? propertyId;
 
@@ -251,12 +254,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FinancialRecord&&(identical(other.datePaid, datePaid) || other.datePaid == datePaid)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.recordType, recordType) || other.recordType == recordType)&&const DeepCollectionEquality().equals(other._paymentBy, _paymentBy)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.recordNature, recordNature) || other.recordNature == recordNature)&&(identical(other.recordId, recordId) || other.recordId == recordId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FinancialRecord&&(identical(other.datePaid, datePaid) || other.datePaid == datePaid)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.recordType, recordType) || other.recordType == recordType)&&(identical(other.paymentBy, paymentBy) || other.paymentBy == paymentBy)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.recordNature, recordNature) || other.recordNature == recordNature)&&(identical(other.recordId, recordId) || other.recordId == recordId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,datePaid,amountPaid,recordType,const DeepCollectionEquality().hash(_paymentBy),lastUpdatedDate,recordNature,recordId,paymentMethod,userId,propertyId);
+int get hashCode => Object.hash(runtimeType,datePaid,amountPaid,recordType,paymentBy,lastUpdatedDate,recordNature,recordId,paymentMethod,userId,propertyId);
 
 @override
 String toString() {
@@ -271,11 +274,11 @@ abstract mixin class _$FinancialRecordCopyWith<$Res> implements $FinancialRecord
   factory _$FinancialRecordCopyWith(_FinancialRecord value, $Res Function(_FinancialRecord) _then) = __$FinancialRecordCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime datePaid, double amountPaid, FinancialRecordTypes recordType, Map<String, dynamic> paymentBy, DateTime? lastUpdatedDate, FinancialRecordNature recordNature, String? recordId, String? paymentMethod, String? userId, String? propertyId
+ DateTime datePaid, double amountPaid, FinancialRecordTypes recordType, Person paymentBy, DateTime? lastUpdatedDate, FinancialRecordNature recordNature, String? recordId, PaymentMethods? paymentMethod, String? userId, String? propertyId
 });
 
 
-
+@override $PersonCopyWith<$Res> get paymentBy;
 
 }
 /// @nodoc
@@ -293,18 +296,27 @@ class __$FinancialRecordCopyWithImpl<$Res>
 datePaid: null == datePaid ? _self.datePaid : datePaid // ignore: cast_nullable_to_non_nullable
 as DateTime,amountPaid: null == amountPaid ? _self.amountPaid : amountPaid // ignore: cast_nullable_to_non_nullable
 as double,recordType: null == recordType ? _self.recordType : recordType // ignore: cast_nullable_to_non_nullable
-as FinancialRecordTypes,paymentBy: null == paymentBy ? _self._paymentBy : paymentBy // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>,lastUpdatedDate: freezed == lastUpdatedDate ? _self.lastUpdatedDate : lastUpdatedDate // ignore: cast_nullable_to_non_nullable
+as FinancialRecordTypes,paymentBy: null == paymentBy ? _self.paymentBy : paymentBy // ignore: cast_nullable_to_non_nullable
+as Person,lastUpdatedDate: freezed == lastUpdatedDate ? _self.lastUpdatedDate : lastUpdatedDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,recordNature: null == recordNature ? _self.recordNature : recordNature // ignore: cast_nullable_to_non_nullable
 as FinancialRecordNature,recordId: freezed == recordId ? _self.recordId : recordId // ignore: cast_nullable_to_non_nullable
 as String?,paymentMethod: freezed == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
-as String?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as PaymentMethods?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String?,propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
 
-
+/// Create a copy of FinancialRecord
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonCopyWith<$Res> get paymentBy {
+  
+  return $PersonCopyWith<$Res>(_self.paymentBy, (value) {
+    return _then(_self.copyWith(paymentBy: value));
+  });
+}
 }
 
 // dart format on

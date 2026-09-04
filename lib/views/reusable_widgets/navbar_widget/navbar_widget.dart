@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/commons/constants.dart';
 import 'package:anyamar/data/notifiers.dart';
 import 'package:anyamar/data/providers/theme_provider.dart';
 

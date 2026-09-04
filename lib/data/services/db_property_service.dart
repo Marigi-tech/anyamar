@@ -21,7 +21,7 @@ class DbPropertyService {
     try {
       log('Property JSON: $data');
       log(
-        'propertyManager type: ${newProperty.propertyManager?['personName']},',
+        'propertyManager type: ${newProperty.propertyManager?.personName},',
       );
       await doc.set(data);
 
@@ -48,7 +48,32 @@ class DbPropertyService {
       rethrow;
     }
   }
-  //todo: update property
 
-  //todo: delete property
+  // Update property
+  Future<Property?> updateProperty(Property property) async {
+    final DocumentReference doc = _propertiesRef.doc(property.propertyId);
+    try {
+      await doc.update(property.toJson());
+      log('Property updated successfully: ${property.propertyId}');
+      return property;
+    } on FirebaseException catch (e, stackTrace) {
+      log('Error updating property: $e', stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+//Delete Property
+
+  Future<bool> deletePropertyRecord(Property record) async {
+    bool isSuccess = false;
+    try {
+      await _propertiesRef.doc(record.propertyId).delete();
+      log("Document successfully deleted!");
+      isSuccess = true;
+    } catch (e) {
+      log("Error deleting document: $e");
+      isSuccess = false;
+    }
+    return isSuccess;
+  }
 }

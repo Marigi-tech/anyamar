@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:anyamar/constants/constants.dart';
+import 'package:anyamar/commons/constants.dart';
 import 'package:anyamar/views/reusable_widgets/buttons/social_icons_widget.dart';
 
 class SocialIconsWidget extends StatelessWidget {
@@ -31,8 +31,6 @@ class SocialIconsWidget extends StatelessWidget {
             Expanded(child: socialIconButton(AppSocialIconConstant.googleIcon)),
             SizedBox(width: 10),
             Expanded(child: socialIconButton(AppSocialIconConstant.appleIcon)),
-            SizedBox(width: 10),
-            Expanded(child: socialIconButton(AppSocialIconConstant.metaIcon)),
           ],
         ),
       ],

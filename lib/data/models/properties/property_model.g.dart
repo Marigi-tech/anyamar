@@ -10,7 +10,9 @@ _Property _$PropertyFromJson(Map<String, dynamic> json) => _Property(
   propertyId: json['propertyId'] as String?,
   propertyName: json['propertyName'] as String,
   propertyLocation: json['propertyLocation'] as String,
-  propertyManager: json['propertyManager'] as Map<String, dynamic>?,
+  propertyManager: json['propertyManager'] == null
+      ? null
+      : Person.fromJson(json['propertyManager'] as Map<String, dynamic>),
   propertyImage: json['propertyImage'] as String?,
   userId: json['userId'] as String,
   propertyUnits:
@@ -28,7 +30,7 @@ Map<String, dynamic> _$PropertyToJson(_Property instance) => <String, dynamic>{
   'propertyId': instance.propertyId,
   'propertyName': instance.propertyName,
   'propertyLocation': instance.propertyLocation,
-  'propertyManager': instance.propertyManager,
+  'propertyManager': instance.propertyManager?.toJson(),
   'propertyImage': instance.propertyImage,
   'userId': instance.userId,
   'propertyUnits': instance.propertyUnits.map((e) => e.toJson()).toList(),

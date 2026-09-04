@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Property {
 
- String? get propertyId; String get propertyName; String get propertyLocation; Map<String, dynamic>? get propertyManager; String? get propertyImage; String get userId; List<Unit> get propertyUnits; int get propertyFloors; DateTime? get lastUpdatedDate;
+ String? get propertyId; String get propertyName; String get propertyLocation; Person? get propertyManager; String? get propertyImage; String get userId; List<Unit> get propertyUnits; int get propertyFloors; DateTime? get lastUpdatedDate;
 /// Create a copy of Property
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $PropertyCopyWith<Property> get copyWith => _$PropertyCopyWithImpl<Property>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Property&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&const DeepCollectionEquality().equals(other.propertyManager, propertyManager)&&(identical(other.propertyImage, propertyImage) || other.propertyImage == propertyImage)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other.propertyUnits, propertyUnits)&&(identical(other.propertyFloors, propertyFloors) || other.propertyFloors == propertyFloors)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Property&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&(identical(other.propertyManager, propertyManager) || other.propertyManager == propertyManager)&&(identical(other.propertyImage, propertyImage) || other.propertyImage == propertyImage)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other.propertyUnits, propertyUnits)&&(identical(other.propertyFloors, propertyFloors) || other.propertyFloors == propertyFloors)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,propertyId,propertyName,propertyLocation,const DeepCollectionEquality().hash(propertyManager),propertyImage,userId,const DeepCollectionEquality().hash(propertyUnits),propertyFloors,lastUpdatedDate);
+int get hashCode => Object.hash(runtimeType,propertyId,propertyName,propertyLocation,propertyManager,propertyImage,userId,const DeepCollectionEquality().hash(propertyUnits),propertyFloors,lastUpdatedDate);
 
 @override
 String toString() {
@@ -48,11 +48,11 @@ abstract mixin class $PropertyCopyWith<$Res>  {
   factory $PropertyCopyWith(Property value, $Res Function(Property) _then) = _$PropertyCopyWithImpl;
 @useResult
 $Res call({
- String? propertyId, String propertyName, String propertyLocation, Map<String, dynamic>? propertyManager, String? propertyImage, String userId, List<Unit> propertyUnits, int propertyFloors, DateTime? lastUpdatedDate
+ String? propertyId, String propertyName, String propertyLocation, Person? propertyManager, String? propertyImage, String userId, List<Unit> propertyUnits, int propertyFloors, DateTime? lastUpdatedDate
 });
 
 
-
+$PersonCopyWith<$Res>? get propertyManager;
 
 }
 /// @nodoc
@@ -71,7 +71,7 @@ propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cas
 as String?,propertyName: null == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
 as String,propertyLocation: null == propertyLocation ? _self.propertyLocation : propertyLocation // ignore: cast_nullable_to_non_nullable
 as String,propertyManager: freezed == propertyManager ? _self.propertyManager : propertyManager // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>?,propertyImage: freezed == propertyImage ? _self.propertyImage : propertyImage // ignore: cast_nullable_to_non_nullable
+as Person?,propertyImage: freezed == propertyImage ? _self.propertyImage : propertyImage // ignore: cast_nullable_to_non_nullable
 as String?,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,propertyUnits: null == propertyUnits ? _self.propertyUnits : propertyUnits // ignore: cast_nullable_to_non_nullable
 as List<Unit>,propertyFloors: null == propertyFloors ? _self.propertyFloors : propertyFloors // ignore: cast_nullable_to_non_nullable
@@ -79,7 +79,19 @@ as int,lastUpdatedDate: freezed == lastUpdatedDate ? _self.lastUpdatedDate : las
 as DateTime?,
   ));
 }
+/// Create a copy of Property
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonCopyWith<$Res>? get propertyManager {
+    if (_self.propertyManager == null) {
+    return null;
+  }
 
+  return $PersonCopyWith<$Res>(_self.propertyManager!, (value) {
+    return _then(_self.copyWith(propertyManager: value));
+  });
+}
 }
 
 
@@ -161,7 +173,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? propertyId,  String propertyName,  String propertyLocation,  Map<String, dynamic>? propertyManager,  String? propertyImage,  String userId,  List<Unit> propertyUnits,  int propertyFloors,  DateTime? lastUpdatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? propertyId,  String propertyName,  String propertyLocation,  Person? propertyManager,  String? propertyImage,  String userId,  List<Unit> propertyUnits,  int propertyFloors,  DateTime? lastUpdatedDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Property() when $default != null:
 return $default(_that.propertyId,_that.propertyName,_that.propertyLocation,_that.propertyManager,_that.propertyImage,_that.userId,_that.propertyUnits,_that.propertyFloors,_that.lastUpdatedDate);case _:
@@ -182,7 +194,7 @@ return $default(_that.propertyId,_that.propertyName,_that.propertyLocation,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? propertyId,  String propertyName,  String propertyLocation,  Map<String, dynamic>? propertyManager,  String? propertyImage,  String userId,  List<Unit> propertyUnits,  int propertyFloors,  DateTime? lastUpdatedDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? propertyId,  String propertyName,  String propertyLocation,  Person? propertyManager,  String? propertyImage,  String userId,  List<Unit> propertyUnits,  int propertyFloors,  DateTime? lastUpdatedDate)  $default,) {final _that = this;
 switch (_that) {
 case _Property():
 return $default(_that.propertyId,_that.propertyName,_that.propertyLocation,_that.propertyManager,_that.propertyImage,_that.userId,_that.propertyUnits,_that.propertyFloors,_that.lastUpdatedDate);case _:
@@ -202,7 +214,7 @@ return $default(_that.propertyId,_that.propertyName,_that.propertyLocation,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? propertyId,  String propertyName,  String propertyLocation,  Map<String, dynamic>? propertyManager,  String? propertyImage,  String userId,  List<Unit> propertyUnits,  int propertyFloors,  DateTime? lastUpdatedDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? propertyId,  String propertyName,  String propertyLocation,  Person? propertyManager,  String? propertyImage,  String userId,  List<Unit> propertyUnits,  int propertyFloors,  DateTime? lastUpdatedDate)?  $default,) {final _that = this;
 switch (_that) {
 case _Property() when $default != null:
 return $default(_that.propertyId,_that.propertyName,_that.propertyLocation,_that.propertyManager,_that.propertyImage,_that.userId,_that.propertyUnits,_that.propertyFloors,_that.lastUpdatedDate);case _:
@@ -217,21 +229,13 @@ return $default(_that.propertyId,_that.propertyName,_that.propertyLocation,_that
 @JsonSerializable()
 
 class _Property implements Property {
-  const _Property({this.propertyId, required this.propertyName, required this.propertyLocation, final  Map<String, dynamic>? propertyManager, this.propertyImage, required this.userId, final  List<Unit> propertyUnits = const [], this.propertyFloors = 0, this.lastUpdatedDate}): _propertyManager = propertyManager,_propertyUnits = propertyUnits;
+  const _Property({this.propertyId, required this.propertyName, required this.propertyLocation, this.propertyManager, this.propertyImage, required this.userId, final  List<Unit> propertyUnits = const [], this.propertyFloors = 0, this.lastUpdatedDate}): _propertyUnits = propertyUnits;
   factory _Property.fromJson(Map<String, dynamic> json) => _$PropertyFromJson(json);
 
 @override final  String? propertyId;
 @override final  String propertyName;
 @override final  String propertyLocation;
- final  Map<String, dynamic>? _propertyManager;
-@override Map<String, dynamic>? get propertyManager {
-  final value = _propertyManager;
-  if (value == null) return null;
-  if (_propertyManager is EqualUnmodifiableMapView) return _propertyManager;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(value);
-}
-
+@override final  Person? propertyManager;
 @override final  String? propertyImage;
 @override final  String userId;
  final  List<Unit> _propertyUnits;
@@ -257,12 +261,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Property&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&const DeepCollectionEquality().equals(other._propertyManager, _propertyManager)&&(identical(other.propertyImage, propertyImage) || other.propertyImage == propertyImage)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other._propertyUnits, _propertyUnits)&&(identical(other.propertyFloors, propertyFloors) || other.propertyFloors == propertyFloors)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Property&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.propertyLocation, propertyLocation) || other.propertyLocation == propertyLocation)&&(identical(other.propertyManager, propertyManager) || other.propertyManager == propertyManager)&&(identical(other.propertyImage, propertyImage) || other.propertyImage == propertyImage)&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other._propertyUnits, _propertyUnits)&&(identical(other.propertyFloors, propertyFloors) || other.propertyFloors == propertyFloors)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,propertyId,propertyName,propertyLocation,const DeepCollectionEquality().hash(_propertyManager),propertyImage,userId,const DeepCollectionEquality().hash(_propertyUnits),propertyFloors,lastUpdatedDate);
+int get hashCode => Object.hash(runtimeType,propertyId,propertyName,propertyLocation,propertyManager,propertyImage,userId,const DeepCollectionEquality().hash(_propertyUnits),propertyFloors,lastUpdatedDate);
 
 @override
 String toString() {
@@ -277,11 +281,11 @@ abstract mixin class _$PropertyCopyWith<$Res> implements $PropertyCopyWith<$Res>
   factory _$PropertyCopyWith(_Property value, $Res Function(_Property) _then) = __$PropertyCopyWithImpl;
 @override @useResult
 $Res call({
- String? propertyId, String propertyName, String propertyLocation, Map<String, dynamic>? propertyManager, String? propertyImage, String userId, List<Unit> propertyUnits, int propertyFloors, DateTime? lastUpdatedDate
+ String? propertyId, String propertyName, String propertyLocation, Person? propertyManager, String? propertyImage, String userId, List<Unit> propertyUnits, int propertyFloors, DateTime? lastUpdatedDate
 });
 
 
-
+@override $PersonCopyWith<$Res>? get propertyManager;
 
 }
 /// @nodoc
@@ -299,8 +303,8 @@ class __$PropertyCopyWithImpl<$Res>
 propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
 as String?,propertyName: null == propertyName ? _self.propertyName : propertyName // ignore: cast_nullable_to_non_nullable
 as String,propertyLocation: null == propertyLocation ? _self.propertyLocation : propertyLocation // ignore: cast_nullable_to_non_nullable
-as String,propertyManager: freezed == propertyManager ? _self._propertyManager : propertyManager // ignore: cast_nullable_to_non_nullable
-as Map<String, dynamic>?,propertyImage: freezed == propertyImage ? _self.propertyImage : propertyImage // ignore: cast_nullable_to_non_nullable
+as String,propertyManager: freezed == propertyManager ? _self.propertyManager : propertyManager // ignore: cast_nullable_to_non_nullable
+as Person?,propertyImage: freezed == propertyImage ? _self.propertyImage : propertyImage // ignore: cast_nullable_to_non_nullable
 as String?,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,propertyUnits: null == propertyUnits ? _self._propertyUnits : propertyUnits // ignore: cast_nullable_to_non_nullable
 as List<Unit>,propertyFloors: null == propertyFloors ? _self.propertyFloors : propertyFloors // ignore: cast_nullable_to_non_nullable
@@ -309,7 +313,19 @@ as DateTime?,
   ));
 }
 
+/// Create a copy of Property
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonCopyWith<$Res>? get propertyManager {
+    if (_self.propertyManager == null) {
+    return null;
+  }
 
+  return $PersonCopyWith<$Res>(_self.propertyManager!, (value) {
+    return _then(_self.copyWith(propertyManager: value));
+  });
+}
 }
 
 // dart format on

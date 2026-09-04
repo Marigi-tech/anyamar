@@ -12,7 +12,7 @@ List<ChatMessage> chatMessages = [
     receipient: ChatUser(
       userName: 'Luigi',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Hello',
     chatTime: DateTime(2026, 3, 20),
@@ -26,7 +26,7 @@ List<ChatMessage> chatMessages = [
     sender: ChatUser(
       userName: 'Luigi',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'I\'m fine thankyou',
     chatTime: DateTime(2026, 3, 21),
@@ -40,7 +40,7 @@ List<ChatMessage> chatMessages = [
     receipient: ChatUser(
       userName: 'Luigi',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Kindly pay your rent in time',
     chatTime: DateTime(2026, 3, 21),
@@ -54,7 +54,7 @@ List<ChatMessage> chatMessages = [
     sender: ChatUser(
       userName: 'Luigi',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Noted thanks',
     chatTime: DateTime.now(),
@@ -68,7 +68,7 @@ List<ChatMessage> chatMessages = [
     receipient: ChatUser(
       userName: 'Luigi',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage:
         'A very long text here to test responsiveness of the chat bubble widget, bare with me this is a very very extremely long and redudant paragraph, with no breaks just constant rumbling.',
@@ -85,7 +85,7 @@ List<ChatMessage> chatMessages2 = [
     receipient: ChatUser(
       userName: 'Sephile',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Hello',
     chatTime: DateTime(2026, 3, 20),
@@ -99,7 +99,7 @@ List<ChatMessage> chatMessages2 = [
     sender: ChatUser(
       userName: 'Sadio',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'I\'m fine thankyou',
     chatTime: DateTime(2026, 3, 21),
@@ -113,7 +113,7 @@ List<ChatMessage> chatMessages2 = [
     receipient: ChatUser(
       userName: 'Mane',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Kindly pay your rent in time',
     chatTime: DateTime(2026, 3, 21),
@@ -130,7 +130,7 @@ List<ChatMessage> chatMessages3 = [
     receipient: ChatUser(
       userName: 'Mandla',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Hello',
     chatTime: DateTime(2026, 3, 20),
@@ -144,7 +144,7 @@ List<ChatMessage> chatMessages3 = [
     sender: ChatUser(
       userName: 'Mandla',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'I\'m fine thankyou',
     chatTime: DateTime(2026, 3, 21),
@@ -160,7 +160,7 @@ List<ChatMessage> chatMessages4 = [
     receipient: ChatUser(
       userName: 'Sarafina',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Hello',
     chatTime: DateTime(2026, 3, 20),
@@ -174,7 +174,7 @@ List<ChatMessage> chatMessages4 = [
     sender: ChatUser(
       userName: 'Sadio',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'I\'m fine thankyou',
     chatTime: DateTime(2026, 3, 21),
@@ -190,7 +190,7 @@ List<ChatMessage> chatMessages5 = [
     receipient: ChatUser(
       userName: 'AJ',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'Hello',
     chatTime: DateTime(2026, 3, 20),
@@ -204,7 +204,7 @@ List<ChatMessage> chatMessages5 = [
     sender: ChatUser(
       userName: 'Sadio',
       userId: '002',
-      userType: UserType.tenant,
+      userType: UserType.agent,
     ),
     chatMessage: 'I\'m fine thankyou',
     chatTime: DateTime(2026, 3, 21),

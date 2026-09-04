@@ -1,5 +1,6 @@
-import 'package:anyamar/constants/commons.dart';
+import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/enums/financial_record_nature.dart';
+import 'package:anyamar/data/models/enums/payment_methods_enum.dart';
 import 'package:anyamar/data/models/enums/payment_status_enum.dart';
 import 'package:anyamar/data/models/enums/property_utilities_enum.dart';
 import 'package:flutter/cupertino.dart';
@@ -90,20 +91,20 @@ class InformationBadge extends StatelessWidget {
 
 //payment method
 ({Color textColor, Color badgeColor}) getPaymentMethodStatus(
-  String? paymentMethod,
+  PaymentMethods? paymentMethod,
 ) {
   Color backgroundColor;
   Color textColor;
 
-  if (paymentMethod == 'PaymentMethods.mpesa') {
+  if (paymentMethod == PaymentMethods.mpesa) {
     backgroundColor = AppColorsConstant.lightGreenColor;
-    textColor = AppColorsConstant.darkGreenColor;
-  } else if (paymentMethod == 'PaymentMethods.cash') {
+    textColor = AppColorsConstant.whiteColor;
+  } else if (paymentMethod == PaymentMethods.cash) {
     backgroundColor = AppColorsConstant.lightBlueColor;
-    textColor = AppColorsConstant.darkBlueColor;
+    textColor = AppColorsConstant.whiteColor;
   } else {
-    textColor = AppColorsConstant.darkYellowColor;
-    backgroundColor = AppColorsConstant.lightYellowColor;
+    textColor = AppColorsConstant.whiteColor;
+    backgroundColor = AppColorsConstant.kOrange1;
   }
 
   return (textColor: textColor, badgeColor: backgroundColor);
@@ -121,12 +122,16 @@ class InformationBadge extends StatelessWidget {
     tColor = AppColorsConstant.darkGreenColor;
   }
   if (paymentStatus == PaymentStatus.notPaid) {
-    bColor = AppColorsConstant.redColor;
+    bColor = const Color.fromARGB(255, 240, 20, 5);
     tColor = AppColorsConstant.darkRedColor;
   }
   if (paymentStatus == PaymentStatus.partial) {
     bColor = AppColorsConstant.kOrange1;
-    tColor = AppColorsConstant.darkYellowColor;
+    tColor = AppColorsConstant.kOrange2;
+  }
+  if (paymentStatus == PaymentStatus.excess) {
+    bColor = AppColorsConstant.kBlue1;
+    tColor = AppColorsConstant.whiteColor;
   }
 
   return (

@@ -35,8 +35,7 @@ Map<String, dynamic> _$PersonToJson(_Person instance) => <String, dynamic>{
 
 const _$UserTypeEnumMap = {
   UserType.landlord: 'landlord',
-  UserType.tenant: 'tenant',
   UserType.agent: 'agent',
   UserType.caretaker: 'caretaker',
-  UserType.otherEmployee: 'otherEmployee',
+  UserType.otherUser: 'otherUser',
 };
