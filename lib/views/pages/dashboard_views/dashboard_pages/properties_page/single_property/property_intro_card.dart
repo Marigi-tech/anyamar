@@ -1,11 +1,4 @@
-import 'package:anyamar/data/models/date_format/date_format_model.dart';
-import 'package:anyamar/forms/unit_form.dart';
-import 'package:anyamar/forms/tenant_form.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/card_button_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PropertyIntroCard extends ConsumerStatefulWidget {
   final Property property;

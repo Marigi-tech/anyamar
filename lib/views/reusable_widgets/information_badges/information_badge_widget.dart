@@ -1,9 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/enums/financial_record_nature.dart';
-import 'package:anyamar/data/models/enums/payment_methods_enum.dart';
-import 'package:anyamar/data/models/enums/payment_status_enum.dart';
-import 'package:anyamar/data/models/enums/property_utilities_enum.dart';
-import 'package:flutter/cupertino.dart';
 
 class InformationBadge extends StatelessWidget {
   final String text;

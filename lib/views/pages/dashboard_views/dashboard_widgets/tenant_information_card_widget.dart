@@ -1,12 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/data_sets/avatar_colors.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/single_tenant/single_tenant_page.dart';
-import 'package:anyamar/forms/tenant_form.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/data/providers/user_information_provider.dart';
+
 
 class TenantInformationCardWidget extends ConsumerWidget {
   final bool isUnitTenant; // if not a unit tenant then it's a property tenant

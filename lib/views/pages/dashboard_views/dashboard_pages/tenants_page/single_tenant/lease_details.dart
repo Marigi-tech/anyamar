@@ -1,7 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
+
 
 class LeaseDetails extends StatelessWidget {
   final Tenant tenant;

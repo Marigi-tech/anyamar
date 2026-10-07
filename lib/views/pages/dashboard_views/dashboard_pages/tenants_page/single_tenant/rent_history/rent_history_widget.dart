@@ -1,14 +1,6 @@
 
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/rent/rental_month/rental_month_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/data/providers/rent_provider.dart';
-import 'package:anyamar/forms/add_rent_record_form.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/custom_data_table.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/rental_months_table.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RentHistoryWidget extends ConsumerStatefulWidget {
   final Tenant tenant;

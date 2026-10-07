@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:anyamar/commons/exports.dart';
 
 class IntroTextWidget extends ConsumerWidget {

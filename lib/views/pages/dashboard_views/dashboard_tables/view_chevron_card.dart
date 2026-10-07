@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:anyamar/commons/exports.dart';
 
 class ViewChevronCard extends StatefulWidget {

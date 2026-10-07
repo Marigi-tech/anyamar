@@ -1,14 +1,7 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/data/providers/rent_provider.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/single_tenant/rent_history/rent_history_widget.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/single_tenant/single_tenant_intro.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/single_tenant/tenant_information_widget.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/custom_back_button.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/data/providers/user_information_provider.dart';
 
 class SingleTenantPage extends ConsumerStatefulWidget {
   final Tenant tenant;

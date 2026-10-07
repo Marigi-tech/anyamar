@@ -1,12 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/add_property.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/custom_data_table.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/properties_table.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/data/providers/user_information_provider.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
 
 class PropertyInformationCardWidget extends ConsumerStatefulWidget {
   const PropertyInformationCardWidget({super.key});
