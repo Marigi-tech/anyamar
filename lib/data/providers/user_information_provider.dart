@@ -1,19 +1,4 @@
-import 'dart:developer';
-import 'package:anyamar/data/models/financial_records/financial_record_model.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/rent/rent_history_model.dart';
-import 'package:anyamar/data/models/rent/rental_month/rental_month_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/data/models/user_information/user_information_model.dart';
-import 'package:anyamar/data/models/users/app_user.dart';
-import 'package:anyamar/data/services/auth_service.dart';
-import 'package:anyamar/data/services/db_finances_service.dart';
-import 'package:anyamar/data/services/db_property_service.dart';
-import 'package:anyamar/data/services/db_rental_records.dart';
-import 'package:anyamar/data/services/db_tenants_service.dart';
-import 'package:anyamar/data/services/db_units_service.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:anyamar/commons/exports.dart';
 
 final userInformationProvider =
     NotifierProvider<UserInformationNotifier, UserInformation>(() {
@@ -23,9 +8,14 @@ final userInformationProvider =
 class UserInformationNotifier extends Notifier<UserInformation> {
   int _requestId = 0;
 
+  // ============================================================
+  // BUILD
+  // ============================================================
+
   @override
   UserInformation build() {
     final authState = ref.watch(authStateProvider);
+
     return authState.when(
       loading: () {
         return UserInformation(
@@ -33,21 +23,25 @@ class UserInformationNotifier extends Notifier<UserInformation> {
           tenants: [],
           units: [],
           finances: [],
-
+          rentalRecords: [],
+          appUser: null,
           isLoading: true,
+          appData: null,
         );
       },
 
       error: (error, stackTrace) {
-        log('Auth state error: $error');
+        log('Auth state error: $error', stackTrace: stackTrace);
 
         return UserInformation(
           properties: [],
           tenants: [],
           units: [],
           finances: [],
-
+          rentalRecords: [],
+          appUser: null,
           isLoading: false,
+          appData: null,
         );
       },
 
@@ -58,13 +52,17 @@ class UserInformationNotifier extends Notifier<UserInformation> {
             tenants: [],
             units: [],
             finances: [],
-
+            rentalRecords: [],
+            appUser: null,
             isLoading: false,
+            appData: null,
           );
         }
 
         final requestId = ++_requestId;
 
+        // IMPORTANT:
+        // Do not perform async work directly inside build().
         Future.microtask(() => _fetchAllUserData(currentUser.uid, requestId));
 
         return UserInformation(
@@ -72,6 +70,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
           tenants: [],
           units: [],
           finances: [],
+          rentalRecords: [],
           appUser: null,
           isLoading: true,
         );
@@ -79,197 +78,314 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     );
   }
 
+  // ============================================================
+  // FETCH ALL USER DATA
+  // ============================================================
+
   Future<void> _fetchAllUserData(String userId, int requestId) async {
     try {
       final dbPropertyService = ref.read(dbPropertyServiceProvider);
+
       final dbTenantService = ref.read(dbTenantServiceProvider);
+
       final dbUnitService = ref.read(dbUnitServiceProvider);
+
       final dbFinancesService = ref.read(dbFinancesServiceProvider);
 
-      // 1. Fetch properties, tenants and units
+      final dbAppUserService = ref.read(dbServiceProvider);
+
+      // --------------------------------------------------------
+      // 1. Fetch basic user data
+      // --------------------------------------------------------
+
       final results = await Future.wait([
         dbPropertyService.getUserProperties(userId),
         dbTenantService.getUserTenants(userId),
         dbUnitService.getUserUnits(userId),
+        dbAppUserService.getUserFromCurrentUserId(userId),
       ]);
 
       final properties = results[0] as List<Property>;
+
       final tenants = results[1] as List<Tenant>;
+
       final units = results[2] as List<Unit>;
 
-      // 2. Prepare rental histories/months
+      final appUser = results[3] as AppUser?;
+
+      log('Properties fetched: ${properties.length}');
+
+      log('Tenants fetched: ${tenants.length}');
+
+      log('Units fetched: ${units.length}');
+
+      log('App user: ${appUser?.userEmail}');
+
+      // --------------------------------------------------------
+      // 2. Synchronize every tenant's rental history
+      // --------------------------------------------------------
+
+      final List<RentHistory> rentalHistories = [];
+
       for (final tenant in tenants) {
-        await _synchronizeTenantRentalMonths(tenant);
+        if (tenant.tenantId == null) {
+          log(
+            'Skipping tenant without tenantId: '
+            '${tenant.tenantName}',
+          );
+
+          continue;
+        }
+
+        final history = await _synchronizeTenantRentalMonths(tenant);
+
+        if (history != null) {
+          rentalHistories.add(history);
+
+          log(
+            'History loaded for ${tenant.tenantName}: '
+            '${history.rentalMonths.length} months',
+          );
+
+          // Debug every month's entries
+          for (final month in history.rentalMonths) {
+            log(
+              '  ${month.rentalMonth}: '
+              '${month.rentEntries.length} entries',
+            );
+          }
+        }
       }
 
-      // 3. NOW get finances
+      log(
+        'All rent histories: '
+        '${rentalHistories.length}',
+      );
+
+      // --------------------------------------------------------
+      // 3. Flatten all rent entries
+      // --------------------------------------------------------
+
+      final List<RentalRecord> rentalRecords = rentalHistories
+          .expand(
+            (history) => history.rentalMonths.expand(
+              (rentalMonth) => rentalMonth.rentEntries.map((rentEntry) {
+                log(
+                  'Creating RentalRecord: '
+                  '${rentEntry.rentEntryId} '
+                  '| ${rentalMonth.rentalMonth}',
+                );
+
+                return RentalRecord(
+                  rentEntry: rentEntry,
+                  rentHistory: history,
+                  rentalMonth: rentalMonth,
+                  tenantId: history.tenantId,
+                  unitId: history.unitId,
+                );
+              }),
+            ),
+          )
+          .toList();
+
+      log(
+        'All rental records: '
+        '${rentalRecords.length}',
+      );
+
+      // --------------------------------------------------------
+      // 4. Fetch finances
       //
-      // getFinancialRecords() reads rent histories,
-      // so synchronization must happen first.
+      // Do this AFTER rental history synchronization.
+      // --------------------------------------------------------
+
       final finances = await dbFinancesService.getFinancialRecords(userId);
 
-      // 4. Make sure this request is still valid
-      if (!ref.mounted || requestId != _requestId) {
+      log(
+        'Financial records: '
+        '${finances.length}',
+      );
+
+      // --------------------------------------------------------
+      // 5. Check that this request is still valid
+      // --------------------------------------------------------
+
+      if (!ref.mounted) {
+        log('UserInformationNotifier is no longer mounted.');
+
         return;
       }
 
-      // 5. Publish everything at once
+      if (requestId != _requestId) {
+        log('Ignoring stale user data request.');
+
+        return;
+      }
+
+      /// --------------------------------------------------------
+      /// 6. Instance of AppData
+      /// -------------------------------------------------------
+      AppData appData = AppData(
+        properties: properties,
+        tenants: tenants,
+        finances: finances,
+        units: units,
+        appUser: appUser,
+        rentRecords: rentalRecords,
+      );
+
+      // --------------------------------------------------------
+      // 7. Publish EVERYTHING at once
+      // --------------------------------------------------------
+
       state = UserInformation(
         properties: properties,
         tenants: tenants,
         units: units,
         finances: finances,
+        rentalRecords: rentalRecords,
+        appUser: appUser,
+        appData: appData,
         isLoading: false,
       );
-    } catch (e, stackTrace) {
-      log('Error bundling userInformation data: $e', stackTrace: stackTrace);
 
-      if (!ref.mounted || requestId != _requestId) {
+      log('UserInformation successfully initialized.');
+    } catch (e, stackTrace) {
+      log('Error bundling user information: $e', stackTrace: stackTrace);
+
+      if (!ref.mounted) {
+        return;
+      }
+
+      if (requestId != _requestId) {
         return;
       }
 
       state = state.copyWith(isLoading: false);
     }
   }
-  // Future<void> _fetchAllUserData(String userId, int requestId) async {
-  //   try {
-  //     final dbPropertyService = ref.read(dbPropertyServiceProvider);
-  //     final dbTenantService = ref.read(dbTenantServiceProvider);
-  //     final dbUnitService = ref.read(dbUnitServiceProvider);
-  //     final dbFinancesService = ref.read(dbFinancesServiceProvider);
 
-  //     final results = await Future.wait([
-  //       dbPropertyService.getUserProperties(userId),
-  //       dbTenantService.getUserTenants(userId),
-  //       dbUnitService.getUserUnits(userId),
-  //       dbFinancesService.getFinancialRecords(userId),
-  //     ]);
-
-  //     if (!ref.mounted || requestId != _requestId) {
-  //       return;
-  //     }
-
-  //     state = UserInformation(
-  //       properties: results[0] as List<Property>,
-  //       tenants: results[1] as List<Tenant>,
-  //       units: results[2] as List<Unit>,
-  //       finances: results[3] as List<FinancialRecord>,
-  //       isLoading: false,
-  //     );
-  //   } catch (e) {
-  //     log('Error bundling userInformation data: $e');
-  //     if (!ref.mounted || requestId != _requestId) {
-  //       return;
-  //     }
-  //     state = state.copyWith(isLoading: false);
-  //   }
-  // }
-  // ==========================================================
-  // RENTAL MONTH SYNCHRONIZATION
-  // ==========================================================
+  // ============================================================
+  // RENTAL HISTORY SYNCHRONIZATION
+  // ============================================================
 
   Future<RentHistory?> _synchronizeTenantRentalMonths(Tenant tenant) async {
     final tenantId = tenant.tenantId;
-    final rentalDb = DbRentalService();
 
     if (tenantId == null) {
       return null;
     }
 
-    // --------------------------------------------------
-    // 1. Get existing rent history
-    // --------------------------------------------------
+    final rentalDb = DbRentalService();
+
+    // ----------------------------------------------------------
+    // 1. Get existing history
+    // ----------------------------------------------------------
 
     RentHistory? history = await rentalDb.getRentHistory(tenantId);
 
-    // --------------------------------------------------
-    // 2. If there is no history, create one
-    // --------------------------------------------------
+    // ----------------------------------------------------------
+    // 2. Create history if it doesn't exist
+    // ----------------------------------------------------------
 
     if (history == null) {
       log(
-        'No rent history found for ${tenant.tenantName}. '
-        'Creating one...',
+        'No rent history found for '
+        '${tenant.tenantName}. Creating one...',
       );
 
       history = RentHistory(
         tenantId: tenantId,
         unitId: tenant.unitId,
         userId: tenant.userId,
-        
+        tenantName: tenant.tenantName,
+        rentalMonths: [],
       );
 
       history = await rentalDb.addRentHistory(history);
 
       if (history == null) {
+        log(
+          'Failed to create rent history for '
+          '${tenant.tenantName}',
+        );
+
         return null;
       }
     }
 
-    // --------------------------------------------------
-    // 3. Generate every required month
-    // --------------------------------------------------
+    // ----------------------------------------------------------
+    // 3. Generate required months
+    // ----------------------------------------------------------
 
     final requiredMonths = _generateRequiredMonths(
       tenant.startOfLease,
       DateTime.now(),
     );
 
-    // --------------------------------------------------
-    // 4. Find existing months
-    // --------------------------------------------------
+    // ----------------------------------------------------------
+    // 4. Get existing month names
+    // ----------------------------------------------------------
 
     final existingMonthNames = history.rentalMonths
         .map((month) => month.rentalMonth)
         .toSet();
 
-    // --------------------------------------------------
-    // 5. Add missing months
-    // --------------------------------------------------
+    // ----------------------------------------------------------
+    // 5. Copy existing months
+    // ----------------------------------------------------------
 
     final updatedMonths = [...history.rentalMonths];
 
     bool changed = false;
 
+    // ----------------------------------------------------------
+    // 6. Add missing months
+    // ----------------------------------------------------------
+
     for (final monthName in requiredMonths) {
       if (!existingMonthNames.contains(monthName)) {
         updatedMonths.add(
-          RentalMonth(rentalMonth: monthName, 
-          unitRent: tenant.unitRent,
-          rentEntries: const []),
+          RentalMonth(
+            rentalMonth: monthName,
+            unitRent: tenant.unitRent,
+            rentEntries: const [],
+          ),
         );
 
         changed = true;
 
         log(
-          'Added $monthName to tenant '
-          '${tenant.tenantName}',
+          'Added rental month $monthName '
+          'for ${tenant.tenantName}',
         );
       }
     }
 
-    // --------------------------------------------------
-    // 6. Nothing changed
-    // --------------------------------------------------
+    // ----------------------------------------------------------
+    // 7. Persist only if something changed
+    // ----------------------------------------------------------
 
-    if (!changed) {
-      return history;
+    if (changed) {
+      final updatedHistory = history.copyWith(rentalMonths: updatedMonths);
+
+      await rentalDb.updateRentHistory(updatedHistory);
+
+      // IMPORTANT:
+      // Return the updated object.
+      //
+      // The existing rentEntries are still present because
+      // updatedMonths was copied from history.rentalMonths.
+
+      history = updatedHistory;
     }
 
-    // --------------------------------------------------
-    // 7. Save updated history
-    // --------------------------------------------------
-
-    final updatedHistory = history.copyWith(rentalMonths: updatedMonths);
-
-    await rentalDb.updateRentHistory(updatedHistory);
-
-    return updatedHistory;
+    return history;
   }
 
-  // ==========================================================
-  // GENERATE MONTHS
-  // ==========================================================
+  // ============================================================
+  // GENERATE REQUIRED MONTHS
+  // ============================================================
 
   List<String> _generateRequiredMonths(DateTime leaseStart, DateTime now) {
     final List<String> months = [];
@@ -286,6 +402,10 @@ class UserInformationNotifier extends Notifier<UserInformation> {
 
     return months;
   }
+
+  // ============================================================
+  // FORMAT RENTAL MONTH
+  // ============================================================
 
   String _formatRentalMonth(DateTime date) {
     const monthNames = [
@@ -306,9 +426,10 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     return '${monthNames[date.month - 1]}/${date.year}';
   }
 
-  // ==========================================================
-  // LOCAL METHODS
-  // ==========================================================
+  // ============================================================
+  // LOCAL MUTATIONS
+  // ============================================================
+
   void appendProperty(Property newProperty) {
     state = state.copyWith(properties: [...state.properties, newProperty]);
   }
@@ -336,11 +457,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   void updateUnit(Unit updatedUnit) {
     state = state.copyWith(
       units: state.units.map((unit) {
-        if (unit.unitId == updatedUnit.unitId) {
-          return updatedUnit;
-        }
-
-        return unit;
+        return unit.unitId == updatedUnit.unitId ? updatedUnit : unit;
       }).toList(),
     );
   }
@@ -348,11 +465,9 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   void updateTenant(Tenant updatedTenant) {
     state = state.copyWith(
       tenants: state.tenants.map((tenant) {
-        if (tenant.tenantId == updatedTenant.tenantId) {
-          return updatedTenant;
-        }
-
-        return tenant;
+        return tenant.tenantId == updatedTenant.tenantId
+            ? updatedTenant
+            : tenant;
       }).toList(),
     );
   }
@@ -360,11 +475,9 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   void updateProperty(Property updatedProperty) {
     state = state.copyWith(
       properties: state.properties.map((property) {
-        if (property.propertyId == updatedProperty.propertyId) {
-          return updatedProperty;
-        }
-
-        return property;
+        return property.propertyId == updatedProperty.propertyId
+            ? updatedProperty
+            : property;
       }).toList(),
     );
   }
@@ -384,7 +497,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   Future<void> removeTenant(String? tenantId) async {
     state = state.copyWith(
       tenants: state.tenants
-          .where((record) => record.tenantId != tenantId)
+          .where((tenant) => tenant.tenantId != tenantId)
           .toList(),
     );
   }

@@ -1,7 +1,6 @@
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/dashboard_init/dashboard_widget.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/dashboard_init/dashboard_page.dart';
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/initial_pages/email_verification.dart';
-import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
 import 'package:anyamar/views/reusable_widgets/loading_widget/loading_widget.dart';
 
 class WidgetTree extends ConsumerStatefulWidget {
@@ -25,14 +24,16 @@ class _WidgetTreeState extends ConsumerState<WidgetTree> {
             authService.currentUser == null) {
           return LoadingScreen();
         }
-        // if (snapshot.hasData && authService.currentUser != null) {
-        //   widget = DashboardWidget();
-        // }
-        else if (snapshot.hasData && snapshot.data?.emailVerified == true) {
+        //todo: uncomment this
+        if (snapshot.hasData && authService.currentUser != null) {
           widget = DashboardWidget();
-        } else if (snapshot.hasData && snapshot.data?.emailVerified != true) {
-          widget = EmailVerifiationScreen();
-        } else {
+        }
+        // else if (snapshot.hasData && snapshot.data?.emailVerified == true) {
+        //   widget = DashboardWidget();
+        // } else if (snapshot.hasData && snapshot.data?.emailVerified != true) {
+        //   widget = EmailVerifiationScreen();
+        // }
+        else {
           widget = LandingPage();
         }
         return widget;

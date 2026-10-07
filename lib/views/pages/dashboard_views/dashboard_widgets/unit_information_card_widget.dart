@@ -1,13 +1,6 @@
-import 'dart:developer';
 
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/data/providers/user_information_provider.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/custom_data_table.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/units_table.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UnitInformationCardWidget extends ConsumerWidget {
   final Property property;

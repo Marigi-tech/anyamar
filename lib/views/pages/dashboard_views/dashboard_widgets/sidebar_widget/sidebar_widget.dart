@@ -1,4 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/logo_widget/logo_widget.dart';
+import 'package:anyamar/views/pages/widget_tree/intro_row/welcome_text.dart';
 
 class SidebarWidget extends ConsumerWidget {
   final List<dynamic> pages;
@@ -7,106 +9,126 @@ class SidebarWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: isSidebarCollapsedNotifier,
-      builder: (context, isCollapsed, child) {
-        // --- CONTAINER SETUP ---
-        return Card(
-          elevation: 6.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(5),
-              bottomRight: Radius.circular(5),
+    final appUser = ref.watch(
+      userInformationProvider.select((state) => state.appUser),
+    );
+    final themeIsDark = ref.watch(themeIsDarkProvider);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: themeIsDark
+            ? AppColors.darkElevatedCard
+            : AppColors.sideBarColor,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(5),
+          bottomRight: Radius.circular(5),
+        ),
+      ),
+      margin: EdgeInsets.zero,
+
+      // padding: const EdgeInsets.fromLTRB(15, 28, 10, 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+
+        children: [
+          SizedBox(height: 20),
+          LogoWidget(),
+
+          const SizedBox(height: 20.0),
+          const Divider(thickness: 2.0),
+          const SizedBox(height: 20.0),
+          // --- DASHBOARD LINKS ---
+          Expanded(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 180),
+
+              child: ListView.builder(
+                itemCount: dashboardItems.length,
+                itemBuilder: (context, index) {
+                  final item = dashboardItems[index];
+
+                  return ValueListenableBuilder(
+                    valueListenable: selectedWebPageNotifier,
+                    builder: (context, pageIndex, child) {
+                      return SideBarItemWidget(
+                        icon: item.icon,
+                        title: item.title,
+                        index: item.index,
+                        onPressedCallBack: () async {
+                          selectedWebPageNotifier.value = item.index!;
+                          selectedSideItemNotifier.value = item.index!;
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
-          margin: EdgeInsets.zero,
 
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // --- TOGGLE BUTTON ROW ---
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      isSidebarCollapsedNotifier.value = !isCollapsed;
+          // User
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: Color(0xff18365F))),
+            ),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Color(0xffDDE7FF),
+                  child: UserNameText(isInitials: true),
+                ),
+
+                const SizedBox(width: 25),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      UserNameText(),
+
+                      SizedBox(height: 3),
+                      Text(
+                        appUser?.userType ?? '',
+                        style: TextStyle(
+                          color: Color(0xffAFC2DF),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                IconButton(
+                  onPressed: () => showDialog<bool>(
+                    context: context,
+                    builder: (dialogContext) {
+                      return AlertModal(
+                        dialogTitle: 'Log Out',
+                        isDeleteModal: false,
+                        dialogInformation:
+                            ' Hello  ${appUser?.userName} \n Are you sure you want to log out of your account ?',
+                        buttonTitle: 'Log out',
+                        onButtonPressedCallBack: () async {
+                          selectedPageNotifier.value = 0;
+                          //       //todo: Dispose all providers
+
+                          //Log out
+                          await ref.read(authServiceProvider).signOutUser();
+                          Navigator.pop(context);
+                        },
+                      );
                     },
-                    icon: Icon(
-                      isCollapsed
-                          ? Icons.expand_more_rounded
-                          : CupertinoIcons.minus_circled,
-                    ),
                   ),
-                ],
-              ),
-
-              Text(
-                isCollapsed ? 'A' : 'Anyamar',
-                style: TextStyle(
-                  color: AppColorsConstant.darkBlueColor,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 6.0,
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  color: Colors.white,
                 ),
-              ),
-
-              const SizedBox(height: 20.0),
-              const Divider(thickness: 2.0),
-              const SizedBox(height: 20.0),
-              // --- DASHBOARD LINKS ---
-              Expanded(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 180),
-
-                    child: ListView.builder(
-                      itemCount: dashboardItems.length,
-                      itemBuilder: (context, index) {
-                        final item = dashboardItems[index];
-
-                        return ValueListenableBuilder(
-                          valueListenable: selectedWebPageNotifier,
-                          builder: (context, pageIndex, child) {
-                            return SideBarItemWidget(
-                              icon: item.icon,
-                              title: item.title,
-                              index: item.index,
-                              onPressedCallBack: () async {
-                                selectedWebPageNotifier.value = item.index!;
-                                selectedSideItemNotifier.value = item.index!;
-                              },
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-
-              // log out button
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 180),
-                child: SideBarItemWidget(
-                  index: 7,
-                  title: 'Log Out',
-                  isLogOutButton: true,
-                  icon: CupertinoIcons.power,
-
-                  onPressedCallBack: () async {
-                    selectedPageNotifier.value = 0;
-                    //todo: Dispose all providers
-
-                    //Log out
-                    await ref.read(authServiceProvider).signOutUser();
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

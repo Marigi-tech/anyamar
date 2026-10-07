@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/data/providers/theme_provider.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class ThemeToggleWidget extends ConsumerWidget {
   const ThemeToggleWidget({super.key});
@@ -10,7 +7,7 @@ class ThemeToggleWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeIsDarkProvider);
     return IconButton(
-      icon: Icon(themeMode ? Icons.light_mode : CupertinoIcons.moon, size: 20),
+      icon: Icon(themeMode ? Icons.light_mode : Icons.dark_mode_outlined),
 
       onPressed: () => ref.read(themeIsDarkProvider.notifier).toggleTheme(),
     );

@@ -1,11 +1,4 @@
-import 'package:anyamar/data/models/date_format/date_format_model.dart';
-import 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/single_tenant/info_tile.dart';
 
 class TenantDetails extends StatefulWidget {
   final Tenant tenant;

@@ -1,5 +1,3 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/providers/selected_file_notifier_provider.dart';
 import 'package:anyamar/views/reusable_widgets/icons/base_icon.dart';

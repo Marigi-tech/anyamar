@@ -60,7 +60,7 @@ class RentNotifier extends _$RentNotifier {
     //
     // If the rent entry exists inside that month,
     // remove it.
-    //
+
     // Other months remain unchanged.
     final updatedMonths = currentHistory.rentalMonths.map((month) {
       final updatedEntries = month.rentEntries

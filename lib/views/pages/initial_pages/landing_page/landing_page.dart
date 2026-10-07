@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/views/pages/initial_pages/signin_page/login_page.dart';
-import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/text_button_widget.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});

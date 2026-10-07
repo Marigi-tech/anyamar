@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/data/providers/theme_provider.dart';
-import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:anyamar/commons/app_theme.dart';
+import 'package:anyamar/commons/exports.dart';
+
 import 'firebase_options.dart';
 
 //NB THIS  IS A FLUTTER WEB PROJECT
@@ -25,33 +22,36 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
 
-      theme: ThemeData(
-        fontFamily: 'Lato',
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontFamily: 'Montserrat'),
-          headlineMedium: TextStyle(fontFamily: 'Montserrat'),
-          titleLarge: TextStyle(fontFamily: 'Montserrat'),
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColorsConstant.greenColor,
-          brightness: Brightness.light,
-        ),
-      ),
+      // themeMode: ThemeMode.system,
 
-      darkTheme: ThemeData(
-        fontFamily: 'Lato',
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontFamily: 'Montserrat'),
-          headlineMedium: TextStyle(fontFamily: 'Montserrat'),
-          titleLarge: TextStyle(fontFamily: 'Montserrat'),
-        ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColorsConstant.greenColor,
-          brightness: Brightness.dark,
-        ),
-      ),
+      // theme: ThemeData(
+      //   fontFamily: 'Lato',
+      //   textTheme: const TextTheme(
+      //     headlineLarge: TextStyle(fontFamily: 'Montserrat'),
+      //     headlineMedium: TextStyle(fontFamily: 'Montserrat'),
+      //     titleLarge: TextStyle(fontFamily: 'Montserrat'),
+      //   ),
+      //   colorScheme: ColorScheme.fromSeed(
+      //     seedColor: AppColorsConstant.greenColor,
+      //     brightness: Brightness.light,
+      //   ),
+      // ),
 
+      // darkTheme: ThemeData(
+      //   fontFamily: 'Lato',
+      //   textTheme: const TextTheme(
+      //     headlineLarge: TextStyle(fontFamily: 'Montserrat'),
+      //     headlineMedium: TextStyle(fontFamily: 'Montserrat'),
+      //     titleLarge: TextStyle(fontFamily: 'Montserrat'),
+      //   ),
+      //   colorScheme: ColorScheme.fromSeed(
+      //     seedColor: AppColorsConstant.greenColor,
+      //     brightness: Brightness.dark,
+      //   ),
+      // ),
       home: const LandingPage(),
     );
   }
