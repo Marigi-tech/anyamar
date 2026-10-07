@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 Widget buildUnitSummaryCards(Unit unit, int gridCount, String? tenantName) {
   return GridView.builder(

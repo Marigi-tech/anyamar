@@ -1,4 +1,4 @@
-import 'package:anyamar/data/models/enums/payment_frequency.dart';
+
 import 'package:anyamar/data/models/units/utilities/unit_utilities.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

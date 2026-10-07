@@ -1,5 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/properties_table.dart';
+
 
 class PropertyInformationCardWidget extends ConsumerStatefulWidget {
   const PropertyInformationCardWidget({super.key});

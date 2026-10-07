@@ -343,21 +343,21 @@ class _ReusableDataTableWidgetState<T>
     );
   }
 
-  Widget _buildFilterButton() {
-    return OutlinedButton.icon(
-      onPressed: widget.onFilterPressed,
-      icon: const Icon(Icons.filter_alt_outlined, size: 18),
-      label: const Text('Filter', style: CustomTextStyles.cardDescriptionStyle),
-    );
-  }
+  // Widget _buildFilterButton() {
+  //   return OutlinedButton.icon(
+  //     onPressed: widget.onFilterPressed,
+  //     icon: const Icon(Icons.filter_alt_outlined, size: 18),
+  //     label: const Text('Filter', style: CustomTextStyles.cardDescriptionStyle),
+  //   );
+  // }
 
-  Widget _buildExportButton() {
-    return OutlinedButton.icon(
-      onPressed: widget.onExportPressed,
-      icon: const Icon(Icons.download_outlined, size: 18),
-      label: const Text('Export', style: CustomTextStyles.cardDescriptionStyle),
-    );
-  }
+  // Widget _buildExportButton() {
+  //   return OutlinedButton.icon(
+  //     onPressed: widget.onExportPressed,
+  //     icon: const Icon(Icons.download_outlined, size: 18),
+  //     label: const Text('Export', style: CustomTextStyles.cardDescriptionStyle),
+  //   );
+  // }
 
   Widget _buildPagination() {
     final totalItems = filteredItems.length;

@@ -331,7 +331,7 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
 }
 
 Future<void> _deleteProperty(BuildContext context, WidgetRef ref, Property property) async {
-  final unitDb = DbUnitsService();
+  // final propertyDb = DbUnitsService();
 
   // await unitDb.deleteUnitRecord(unit);
 

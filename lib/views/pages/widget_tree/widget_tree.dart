@@ -1,6 +1,5 @@
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/dashboard_init/dashboard_page.dart';
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/views/pages/initial_pages/email_verification.dart';
 import 'package:anyamar/views/reusable_widgets/loading_widget/loading_widget.dart';
 
 class WidgetTree extends ConsumerStatefulWidget {
