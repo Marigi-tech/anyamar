@@ -31,6 +31,7 @@ _Unit _$UnitFromJson(Map<String, dynamic> json) => _Unit(
       ? null
       : DateTime.parse(json['lastUpdateDate'] as String),
   numberFloors: (json['numberFloors'] as num?)?.toDouble(),
+  floorNumber: (json['floorNumber'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$UnitToJson(_Unit instance) => <String, dynamic>{
@@ -48,6 +49,7 @@ Map<String, dynamic> _$UnitToJson(_Unit instance) => <String, dynamic>{
   'isOccupied': instance.isOccupied,
   'lastUpdateDate': instance.lastUpdateDate?.toIso8601String(),
   'numberFloors': instance.numberFloors,
+  'floorNumber': instance.floorNumber,
 };
 
 const _$UnitTypeEnumMap = {

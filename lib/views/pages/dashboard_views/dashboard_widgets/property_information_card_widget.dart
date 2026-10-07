@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/properties_table.dart';
 
 class PropertyInformationCardWidget extends ConsumerStatefulWidget {
   const PropertyInformationCardWidget({super.key});
@@ -96,20 +95,7 @@ class _PropertyInformationCardWidgetState
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: CustomDataTable(
-                      customDataColumns: buildHeaderColumns(),
-                      customDataRows: myProperties.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        Property property = entry.value;
-                        return buildDataRow(
-                          property,
-                          index + 1,
-                          context,
-                          myUnits,
-                          ref,
-                        );
-                      }).toList(),
-                    ),
+                    child: PropertiesPage()
                   ),
                 ),
               ],

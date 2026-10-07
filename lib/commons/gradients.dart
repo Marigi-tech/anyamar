@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:anyamar/commons/constants.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class AppGradient {
   //Green color

@@ -54,49 +54,85 @@ class _UncollapsedSidebarItemState extends State<UncollapsedSideItem> {
                 isHovered = false;
               });
             },
-
-            child: Card(
-              elevation: isHovered || isSelected ? 6.0 : 0,
-              shape: RoundedRectangleBorder(
-                side: isHovered || isSelected
-                    ? BorderSide(
-                        color: AppColorsConstant.blueGreyColor,
-                        width: 0.09,
-                      )
-                    : BorderSide.none,
-                borderRadius: isHovered || isSelected
-                    ? BorderRadius.circular(05)
-                    : BorderRadius.zero,
-              ),
-
-              // ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+              child: Container(
+                height: 35,
+                decoration: BoxDecoration(
+                  color: isHovered
+                      ? const Color.fromARGB(255, 8, 57, 141)
+                      : isSelected
+                      ? const Color(0xff1456C7)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(7),
+                ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(width: 18),
+
                     Icon(
                       widget.icon,
-                      size: 18,
+                      size: 19,
                       color: widget.isLogOutButton == true
-                          ? AppColorsConstant.redColor
-                          : isHovered || isSelected
-                          ? AppColorsConstant.lightGreenColor
-                          : AppColorsConstant.blueGreyColor,
+                          ? AppColors.error
+                          : Colors.white,
                     ),
-                    const SizedBox(width: 10),
 
-                    Expanded(
-                      child: Text(
-                        widget.title,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 14.5),
+                    const SizedBox(width: 7),
+
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+            // child: Card(
+            //   elevation: isHovered || isSelected ? 6.0 : 0,
+            //   shape: RoundedRectangleBorder(
+            //     side: isHovered || isSelected
+            //         ? BorderSide(
+            //             color: AppColorsConstant.blueGreyColor,
+            //             width: 0.09,
+            //           )
+            //         : BorderSide.none,
+            //     borderRadius: isHovered || isSelected
+            //         ? BorderRadius.circular(05)
+            //         : BorderRadius.zero,
+            //   ),
+
+            //   // ),
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //     child: Row(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         Icon(
+            //           widget.icon,
+            //           size: 18,
+            //           color: widget.isLogOutButton == true
+            //               ? AppColorsConstant.redColor
+            //               : isHovered || isSelected
+            //               ? AppColorsConstant.lightGreenColor
+            //               : AppColorsConstant.blueGreyColor,
+            //         ),
+            //         const SizedBox(width: 10),
+
+            //         Expanded(
+            //           child: Text(
+            //             widget.title,
+            //             overflow: TextOverflow.ellipsis,
+            //             style: TextStyle(fontSize: 14.5),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ),
         );
       },

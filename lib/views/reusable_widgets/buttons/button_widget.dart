@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/commons/gradients.dart';
+
+import 'package:anyamar/commons/exports.dart';
 
 class ColorButtonWidget extends StatefulWidget {
   final VoidCallback onPressedCallBack;

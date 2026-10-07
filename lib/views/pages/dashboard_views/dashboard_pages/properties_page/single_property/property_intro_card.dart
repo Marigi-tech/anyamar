@@ -105,12 +105,12 @@ class _PropertyIntroCardState extends ConsumerState<PropertyIntroCard> {
                       buttonIcon: CupertinoIcons.add,
                       fontColor: AppColorsConstant.whiteColor,
                       backgroundColor: AppColorsConstant.darkBlueColor,
-                      onPressedCallBack: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              AddUnit(currentProperty: widget.property),
-                        ),
-                      ),
+                      // onPressedCallBack: () => Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (_) =>
+                      //         AddUnit(currentProperty: widget.property),
+                      //   ),
+                      // ),
                     ),
                   ),
                   SizedBox(width: 10),

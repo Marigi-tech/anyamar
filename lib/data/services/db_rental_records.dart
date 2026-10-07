@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/rent/rent_history_model.dart';
 import 'package:anyamar/data/models/rent/rental_month/rental_month_model.dart';
 import 'package:anyamar/data/models/rent/single_rental_entry_model.dart';
@@ -13,6 +14,35 @@ class DbRentalService {
   //Provider
   final CollectionReference _rentHistoryRef = FirebaseFirestore.instance
       .collection('rent_history');
+  String generateRentEntryId({
+    required String tenantName,
+    required List<RentalMonth> rentalMonths,
+  }) {
+    final initials = getInitials(tenantName);
+
+    final existingIds = rentalMonths
+        .expand((month) => month.rentEntries)
+        .map((entry) => entry.rentEntryId)
+        .whereType<String>();
+
+    int highestNumber = 0;
+
+    for (final id in existingIds) {
+      if (!id.startsWith(initials)) continue;
+
+      final numberPart = id.substring(initials.length);
+
+      final number = int.tryParse(numberPart);
+
+      if (number != null && number > highestNumber) {
+        highestNumber = number;
+      }
+    }
+
+    final nextNumber = highestNumber + 1;
+
+    return '$initials${nextNumber.toString().padLeft(4, '0')}';
+  }
 
   // Add rent History
   Future<RentHistory?> addRentHistory(RentHistory record) async {

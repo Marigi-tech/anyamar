@@ -35,3 +35,10 @@ String formatMoney(num amount) {
       .toStringAsFixed(amount % 1 == 0 ? 0 : 2)
       .replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
 }
+
+String formatMoneyWithCurrency(num amount, String? currency) {
+  String am = amount
+      .toStringAsFixed(amount % 1 == 0 ? 0 : 2)
+      .replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
+  return '${currency ?? 'Ksh'} $am';
+}

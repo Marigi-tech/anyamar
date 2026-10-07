@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
 
-
 class RentEntryModal extends StatelessWidget {
   final SingleRentEntry rentEntry;
 

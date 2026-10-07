@@ -1,4 +1,5 @@
 enum PaymentStatus {
+  pending('Pending'),
   complete('Paid'),
   partial('Incomplete'),
   notPaid('Not Paid'),

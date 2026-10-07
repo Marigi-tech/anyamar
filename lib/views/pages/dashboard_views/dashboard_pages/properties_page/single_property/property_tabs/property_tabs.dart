@@ -1,89 +1,92 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_overview/property_overview.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_records/property_records.dart';
+
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_tenants/property_tenants.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_units/property_units.dart';
 
 class PropertyTabs extends ConsumerWidget {
   final Property property;
-  const PropertyTabs({super.key, required this.property});
+  final double expectedMonthlyIncome;
+
+  const PropertyTabs({super.key, required this.property, required this.expectedMonthlyIncome});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Tenant> propertyTenants = ref
-        .watch(userInformationProvider.select((state) => state.tenants))
-        .where((element) => element.propertyId == property.propertyId)
+    final appData = ref.watch(appDataProvider);
+
+    final propertyUnits = appData.units
+        .where((unit) => unit.propertyId == property.propertyId)
         .toList();
-    List<Unit> propertyUnits = ref
-        .watch(userInformationProvider.select((state) => state.units))
-        .where((element) => element.propertyId == property.propertyId)
+
+    final propertyTenants = appData.tenants
+        .where(
+          (tenant) => propertyUnits.any((unit) => unit.unitId == tenant.unitId),
+        )
         .toList();
-    List<FinancialRecord> propertyRecords = ref
-        .watch(userInformationProvider.select((state) => state.finances))
-        .where((element) => element.propertyId == property.propertyId)
-        .toList();
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TabBar(
-            indicatorColor: AppColorsConstant.lightGreenColor,
-            indicatorWeight: 2,
-            unselectedLabelColor: AppColorsConstant.blueGreyColor,
-            dividerColor: AppColorsConstant.transparentColor,
-            overlayColor: null,
-            labelPadding: EdgeInsets.symmetric(vertical: 3),
-            indicatorSize: TabBarIndicatorSize.label,
-            dividerHeight: 1,
-            indicatorPadding: EdgeInsets.symmetric(
-              vertical: 4.0,
-              horizontal: 6,
+          // ==========================================================
+          // TAB BAR
+          // ==========================================================
+          Container(
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             ),
-            tabs: [
-              Tab(text: 'Overview'),
-              Tab(text: 'Units [${propertyUnits.length}]'),
-              Tab(text: 'Tenants [${propertyTenants.length}]'),
-              Tab(text: 'Financial Records [${propertyRecords.length}]'),
-            ],
+            child: TabBar(
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              indicatorSize: TabBarIndicatorSize.label,
+              dividerColor: AppColorsConstant.transparentColor,
+              indicatorColor: AppColors.primaryBlue,
+              labelStyle: CustomTextStyles.cardDescriptionStyle.copyWith(
+                fontStyle: FontStyle.normal,
+              ),
+              unselectedLabelStyle: CustomTextStyles.cardDescriptionStyle
+                  .copyWith(fontStyle: FontStyle.normal),
+              indicatorWeight: 1 / pixelRatio,
+              labelPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+
+              tabs: [
+                Tab(text: 'Overview'),
+                Tab(text: 'Units'),
+                Tab(text: 'Tenants'),
+                Tab(text: 'Finances'),
+                Tab(text: 'Reports'),
+              ],
+            ),
           ),
 
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: TabBarView(
-                children: [
-                  SizedBox(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: PropertyOverview(property: property),
-                    ),
-                  ),
-                  // Center(child: Text('Overview')),
-                  SizedBox(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: PropertyUnits(property: property),
-                    ),
-                  ),
+          const SizedBox(height: 20),
 
-                  SizedBox(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: PropertyTenants(property: property),
-                    ),
-                  ),
-                  SizedBox(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: PropertyRecords(property: property),
-                    ),
-                  ),
-                ],
-              ),
+          // ==========================================================
+          // TAB CONTENT
+          // ==========================================================
+          SizedBox(
+            height: MediaQuery.of(context).size.height * .70,
+            child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                //Property Overview
+                PropertyOverview(
+                  property: property,
+                  propertyUnits: propertyUnits,
+                  propertyTenants: propertyTenants,
+                  expectedMonthlyIncome: expectedMonthlyIncome,
+                ),
+                //Property Units
+                PropertyUnits(property: property),
+                //Property Tenants
+                PropertyTenants(property: property),
+                //Finances
+                PropertyRecords(property: property),
+                //Reports
+                Text('Reports'),
+              ],
             ),
           ),
         ],

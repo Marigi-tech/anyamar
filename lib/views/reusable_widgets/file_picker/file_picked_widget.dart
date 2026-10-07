@@ -1,6 +1,4 @@
-
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/theme_provider.dart';
 import 'package:anyamar/views/reusable_widgets/file_picker/file_extension_type.dart';
 import 'package:anyamar/views/reusable_widgets/file_picker/remove_uploaded_file.dart';
 import 'package:anyamar/views/reusable_widgets/file_picker/view_file_button.dart';

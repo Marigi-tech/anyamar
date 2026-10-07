@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Unit {
 
- String? get unitId; String get unitName; String get propertyId; String get propertyName; String get userId; String? get tenantId; Tenant? get currentTenant; UnitType? get unitType; double get rentPerMonth; Rent? get unitRent; List<String> get previousTenantsLog; bool get isOccupied; DateTime? get lastUpdateDate; double? get numberFloors;
+ String? get unitId; String get unitName; String get propertyId; String get propertyName; String get userId; String? get tenantId; Tenant? get currentTenant; UnitType? get unitType; double get rentPerMonth; Rent? get unitRent; List<String> get previousTenantsLog; bool get isOccupied; DateTime? get lastUpdateDate; double? get numberFloors; double? get floorNumber;
 /// Create a copy of Unit
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UnitCopyWith<Unit> get copyWith => _$UnitCopyWithImpl<Unit>(this as Unit, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Unit&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.currentTenant, currentTenant) || other.currentTenant == currentTenant)&&(identical(other.unitType, unitType) || other.unitType == unitType)&&(identical(other.rentPerMonth, rentPerMonth) || other.rentPerMonth == rentPerMonth)&&(identical(other.unitRent, unitRent) || other.unitRent == unitRent)&&const DeepCollectionEquality().equals(other.previousTenantsLog, previousTenantsLog)&&(identical(other.isOccupied, isOccupied) || other.isOccupied == isOccupied)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate)&&(identical(other.numberFloors, numberFloors) || other.numberFloors == numberFloors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Unit&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.currentTenant, currentTenant) || other.currentTenant == currentTenant)&&(identical(other.unitType, unitType) || other.unitType == unitType)&&(identical(other.rentPerMonth, rentPerMonth) || other.rentPerMonth == rentPerMonth)&&(identical(other.unitRent, unitRent) || other.unitRent == unitRent)&&const DeepCollectionEquality().equals(other.previousTenantsLog, previousTenantsLog)&&(identical(other.isOccupied, isOccupied) || other.isOccupied == isOccupied)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate)&&(identical(other.numberFloors, numberFloors) || other.numberFloors == numberFloors)&&(identical(other.floorNumber, floorNumber) || other.floorNumber == floorNumber));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,unitId,unitName,propertyId,propertyName,userId,tenantId,currentTenant,unitType,rentPerMonth,unitRent,const DeepCollectionEquality().hash(previousTenantsLog),isOccupied,lastUpdateDate,numberFloors);
+int get hashCode => Object.hash(runtimeType,unitId,unitName,propertyId,propertyName,userId,tenantId,currentTenant,unitType,rentPerMonth,unitRent,const DeepCollectionEquality().hash(previousTenantsLog),isOccupied,lastUpdateDate,numberFloors,floorNumber);
 
 @override
 String toString() {
-  return 'Unit(unitId: $unitId, unitName: $unitName, propertyId: $propertyId, propertyName: $propertyName, userId: $userId, tenantId: $tenantId, currentTenant: $currentTenant, unitType: $unitType, rentPerMonth: $rentPerMonth, unitRent: $unitRent, previousTenantsLog: $previousTenantsLog, isOccupied: $isOccupied, lastUpdateDate: $lastUpdateDate, numberFloors: $numberFloors)';
+  return 'Unit(unitId: $unitId, unitName: $unitName, propertyId: $propertyId, propertyName: $propertyName, userId: $userId, tenantId: $tenantId, currentTenant: $currentTenant, unitType: $unitType, rentPerMonth: $rentPerMonth, unitRent: $unitRent, previousTenantsLog: $previousTenantsLog, isOccupied: $isOccupied, lastUpdateDate: $lastUpdateDate, numberFloors: $numberFloors, floorNumber: $floorNumber)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UnitCopyWith<$Res>  {
   factory $UnitCopyWith(Unit value, $Res Function(Unit) _then) = _$UnitCopyWithImpl;
 @useResult
 $Res call({
- String? unitId, String unitName, String propertyId, String propertyName, String userId, String? tenantId, Tenant? currentTenant, UnitType? unitType, double rentPerMonth, Rent? unitRent, List<String> previousTenantsLog, bool isOccupied, DateTime? lastUpdateDate, double? numberFloors
+ String? unitId, String unitName, String propertyId, String propertyName, String userId, String? tenantId, Tenant? currentTenant, UnitType? unitType, double rentPerMonth, Rent? unitRent, List<String> previousTenantsLog, bool isOccupied, DateTime? lastUpdateDate, double? numberFloors, double? floorNumber
 });
 
 
@@ -65,7 +65,7 @@ class _$UnitCopyWithImpl<$Res>
 
 /// Create a copy of Unit
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? unitId = freezed,Object? unitName = null,Object? propertyId = null,Object? propertyName = null,Object? userId = null,Object? tenantId = freezed,Object? currentTenant = freezed,Object? unitType = freezed,Object? rentPerMonth = null,Object? unitRent = freezed,Object? previousTenantsLog = null,Object? isOccupied = null,Object? lastUpdateDate = freezed,Object? numberFloors = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? unitId = freezed,Object? unitName = null,Object? propertyId = null,Object? propertyName = null,Object? userId = null,Object? tenantId = freezed,Object? currentTenant = freezed,Object? unitType = freezed,Object? rentPerMonth = null,Object? unitRent = freezed,Object? previousTenantsLog = null,Object? isOccupied = null,Object? lastUpdateDate = freezed,Object? numberFloors = freezed,Object? floorNumber = freezed,}) {
   return _then(_self.copyWith(
 unitId: freezed == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String?,unitName: null == unitName ? _self.unitName : unitName // ignore: cast_nullable_to_non_nullable
@@ -81,6 +81,7 @@ as Rent?,previousTenantsLog: null == previousTenantsLog ? _self.previousTenantsL
 as List<String>,isOccupied: null == isOccupied ? _self.isOccupied : isOccupied // ignore: cast_nullable_to_non_nullable
 as bool,lastUpdateDate: freezed == lastUpdateDate ? _self.lastUpdateDate : lastUpdateDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,numberFloors: freezed == numberFloors ? _self.numberFloors : numberFloors // ignore: cast_nullable_to_non_nullable
+as double?,floorNumber: freezed == floorNumber ? _self.floorNumber : floorNumber // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
 }
@@ -190,10 +191,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? unitId,  String unitName,  String propertyId,  String propertyName,  String userId,  String? tenantId,  Tenant? currentTenant,  UnitType? unitType,  double rentPerMonth,  Rent? unitRent,  List<String> previousTenantsLog,  bool isOccupied,  DateTime? lastUpdateDate,  double? numberFloors)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? unitId,  String unitName,  String propertyId,  String propertyName,  String userId,  String? tenantId,  Tenant? currentTenant,  UnitType? unitType,  double rentPerMonth,  Rent? unitRent,  List<String> previousTenantsLog,  bool isOccupied,  DateTime? lastUpdateDate,  double? numberFloors,  double? floorNumber)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Unit() when $default != null:
-return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,_that.userId,_that.tenantId,_that.currentTenant,_that.unitType,_that.rentPerMonth,_that.unitRent,_that.previousTenantsLog,_that.isOccupied,_that.lastUpdateDate,_that.numberFloors);case _:
+return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,_that.userId,_that.tenantId,_that.currentTenant,_that.unitType,_that.rentPerMonth,_that.unitRent,_that.previousTenantsLog,_that.isOccupied,_that.lastUpdateDate,_that.numberFloors,_that.floorNumber);case _:
   return orElse();
 
 }
@@ -211,10 +212,10 @@ return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? unitId,  String unitName,  String propertyId,  String propertyName,  String userId,  String? tenantId,  Tenant? currentTenant,  UnitType? unitType,  double rentPerMonth,  Rent? unitRent,  List<String> previousTenantsLog,  bool isOccupied,  DateTime? lastUpdateDate,  double? numberFloors)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? unitId,  String unitName,  String propertyId,  String propertyName,  String userId,  String? tenantId,  Tenant? currentTenant,  UnitType? unitType,  double rentPerMonth,  Rent? unitRent,  List<String> previousTenantsLog,  bool isOccupied,  DateTime? lastUpdateDate,  double? numberFloors,  double? floorNumber)  $default,) {final _that = this;
 switch (_that) {
 case _Unit():
-return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,_that.userId,_that.tenantId,_that.currentTenant,_that.unitType,_that.rentPerMonth,_that.unitRent,_that.previousTenantsLog,_that.isOccupied,_that.lastUpdateDate,_that.numberFloors);case _:
+return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,_that.userId,_that.tenantId,_that.currentTenant,_that.unitType,_that.rentPerMonth,_that.unitRent,_that.previousTenantsLog,_that.isOccupied,_that.lastUpdateDate,_that.numberFloors,_that.floorNumber);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -231,10 +232,10 @@ return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? unitId,  String unitName,  String propertyId,  String propertyName,  String userId,  String? tenantId,  Tenant? currentTenant,  UnitType? unitType,  double rentPerMonth,  Rent? unitRent,  List<String> previousTenantsLog,  bool isOccupied,  DateTime? lastUpdateDate,  double? numberFloors)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? unitId,  String unitName,  String propertyId,  String propertyName,  String userId,  String? tenantId,  Tenant? currentTenant,  UnitType? unitType,  double rentPerMonth,  Rent? unitRent,  List<String> previousTenantsLog,  bool isOccupied,  DateTime? lastUpdateDate,  double? numberFloors,  double? floorNumber)?  $default,) {final _that = this;
 switch (_that) {
 case _Unit() when $default != null:
-return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,_that.userId,_that.tenantId,_that.currentTenant,_that.unitType,_that.rentPerMonth,_that.unitRent,_that.previousTenantsLog,_that.isOccupied,_that.lastUpdateDate,_that.numberFloors);case _:
+return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,_that.userId,_that.tenantId,_that.currentTenant,_that.unitType,_that.rentPerMonth,_that.unitRent,_that.previousTenantsLog,_that.isOccupied,_that.lastUpdateDate,_that.numberFloors,_that.floorNumber);case _:
   return null;
 
 }
@@ -246,7 +247,7 @@ return $default(_that.unitId,_that.unitName,_that.propertyId,_that.propertyName,
 @JsonSerializable()
 
 class _Unit implements Unit {
-  const _Unit({this.unitId, required this.unitName, required this.propertyId, required this.propertyName, required this.userId, this.tenantId, this.currentTenant, this.unitType, required this.rentPerMonth, this.unitRent, final  List<String> previousTenantsLog = const [], this.isOccupied = false, this.lastUpdateDate, this.numberFloors}): _previousTenantsLog = previousTenantsLog;
+  const _Unit({this.unitId, required this.unitName, required this.propertyId, required this.propertyName, required this.userId, this.tenantId, this.currentTenant, this.unitType, required this.rentPerMonth, this.unitRent, final  List<String> previousTenantsLog = const [], this.isOccupied = false, this.lastUpdateDate, this.numberFloors, this.floorNumber}): _previousTenantsLog = previousTenantsLog;
   factory _Unit.fromJson(Map<String, dynamic> json) => _$UnitFromJson(json);
 
 @override final  String? unitId;
@@ -269,6 +270,7 @@ class _Unit implements Unit {
 @override@JsonKey() final  bool isOccupied;
 @override final  DateTime? lastUpdateDate;
 @override final  double? numberFloors;
+@override final  double? floorNumber;
 
 /// Create a copy of Unit
 /// with the given fields replaced by the non-null parameter values.
@@ -283,16 +285,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Unit&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.currentTenant, currentTenant) || other.currentTenant == currentTenant)&&(identical(other.unitType, unitType) || other.unitType == unitType)&&(identical(other.rentPerMonth, rentPerMonth) || other.rentPerMonth == rentPerMonth)&&(identical(other.unitRent, unitRent) || other.unitRent == unitRent)&&const DeepCollectionEquality().equals(other._previousTenantsLog, _previousTenantsLog)&&(identical(other.isOccupied, isOccupied) || other.isOccupied == isOccupied)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate)&&(identical(other.numberFloors, numberFloors) || other.numberFloors == numberFloors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Unit&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.unitName, unitName) || other.unitName == unitName)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.propertyName, propertyName) || other.propertyName == propertyName)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.currentTenant, currentTenant) || other.currentTenant == currentTenant)&&(identical(other.unitType, unitType) || other.unitType == unitType)&&(identical(other.rentPerMonth, rentPerMonth) || other.rentPerMonth == rentPerMonth)&&(identical(other.unitRent, unitRent) || other.unitRent == unitRent)&&const DeepCollectionEquality().equals(other._previousTenantsLog, _previousTenantsLog)&&(identical(other.isOccupied, isOccupied) || other.isOccupied == isOccupied)&&(identical(other.lastUpdateDate, lastUpdateDate) || other.lastUpdateDate == lastUpdateDate)&&(identical(other.numberFloors, numberFloors) || other.numberFloors == numberFloors)&&(identical(other.floorNumber, floorNumber) || other.floorNumber == floorNumber));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,unitId,unitName,propertyId,propertyName,userId,tenantId,currentTenant,unitType,rentPerMonth,unitRent,const DeepCollectionEquality().hash(_previousTenantsLog),isOccupied,lastUpdateDate,numberFloors);
+int get hashCode => Object.hash(runtimeType,unitId,unitName,propertyId,propertyName,userId,tenantId,currentTenant,unitType,rentPerMonth,unitRent,const DeepCollectionEquality().hash(_previousTenantsLog),isOccupied,lastUpdateDate,numberFloors,floorNumber);
 
 @override
 String toString() {
-  return 'Unit(unitId: $unitId, unitName: $unitName, propertyId: $propertyId, propertyName: $propertyName, userId: $userId, tenantId: $tenantId, currentTenant: $currentTenant, unitType: $unitType, rentPerMonth: $rentPerMonth, unitRent: $unitRent, previousTenantsLog: $previousTenantsLog, isOccupied: $isOccupied, lastUpdateDate: $lastUpdateDate, numberFloors: $numberFloors)';
+  return 'Unit(unitId: $unitId, unitName: $unitName, propertyId: $propertyId, propertyName: $propertyName, userId: $userId, tenantId: $tenantId, currentTenant: $currentTenant, unitType: $unitType, rentPerMonth: $rentPerMonth, unitRent: $unitRent, previousTenantsLog: $previousTenantsLog, isOccupied: $isOccupied, lastUpdateDate: $lastUpdateDate, numberFloors: $numberFloors, floorNumber: $floorNumber)';
 }
 
 
@@ -303,7 +305,7 @@ abstract mixin class _$UnitCopyWith<$Res> implements $UnitCopyWith<$Res> {
   factory _$UnitCopyWith(_Unit value, $Res Function(_Unit) _then) = __$UnitCopyWithImpl;
 @override @useResult
 $Res call({
- String? unitId, String unitName, String propertyId, String propertyName, String userId, String? tenantId, Tenant? currentTenant, UnitType? unitType, double rentPerMonth, Rent? unitRent, List<String> previousTenantsLog, bool isOccupied, DateTime? lastUpdateDate, double? numberFloors
+ String? unitId, String unitName, String propertyId, String propertyName, String userId, String? tenantId, Tenant? currentTenant, UnitType? unitType, double rentPerMonth, Rent? unitRent, List<String> previousTenantsLog, bool isOccupied, DateTime? lastUpdateDate, double? numberFloors, double? floorNumber
 });
 
 
@@ -320,7 +322,7 @@ class __$UnitCopyWithImpl<$Res>
 
 /// Create a copy of Unit
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? unitId = freezed,Object? unitName = null,Object? propertyId = null,Object? propertyName = null,Object? userId = null,Object? tenantId = freezed,Object? currentTenant = freezed,Object? unitType = freezed,Object? rentPerMonth = null,Object? unitRent = freezed,Object? previousTenantsLog = null,Object? isOccupied = null,Object? lastUpdateDate = freezed,Object? numberFloors = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? unitId = freezed,Object? unitName = null,Object? propertyId = null,Object? propertyName = null,Object? userId = null,Object? tenantId = freezed,Object? currentTenant = freezed,Object? unitType = freezed,Object? rentPerMonth = null,Object? unitRent = freezed,Object? previousTenantsLog = null,Object? isOccupied = null,Object? lastUpdateDate = freezed,Object? numberFloors = freezed,Object? floorNumber = freezed,}) {
   return _then(_Unit(
 unitId: freezed == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String?,unitName: null == unitName ? _self.unitName : unitName // ignore: cast_nullable_to_non_nullable
@@ -336,6 +338,7 @@ as Rent?,previousTenantsLog: null == previousTenantsLog ? _self._previousTenants
 as List<String>,isOccupied: null == isOccupied ? _self.isOccupied : isOccupied // ignore: cast_nullable_to_non_nullable
 as bool,lastUpdateDate: freezed == lastUpdateDate ? _self.lastUpdateDate : lastUpdateDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,numberFloors: freezed == numberFloors ? _self.numberFloors : numberFloors // ignore: cast_nullable_to_non_nullable
+as double?,floorNumber: freezed == floorNumber ? _self.floorNumber : floorNumber // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
 }

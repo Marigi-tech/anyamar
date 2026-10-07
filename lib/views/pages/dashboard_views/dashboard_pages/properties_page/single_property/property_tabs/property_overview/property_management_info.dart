@@ -1,6 +1,4 @@
-
 import 'package:anyamar/commons/exports.dart';
-
 
 class PropertyManagementInfo extends StatelessWidget {
   final Property property;

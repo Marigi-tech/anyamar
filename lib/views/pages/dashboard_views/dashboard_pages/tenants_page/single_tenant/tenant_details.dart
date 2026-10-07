@@ -1,6 +1,4 @@
-
 import 'package:anyamar/commons/exports.dart';
-
 
 class TenantDetails extends StatefulWidget {
   final Tenant tenant;

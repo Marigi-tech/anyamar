@@ -1,8 +1,6 @@
-
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/data_sets/chat_messages.dart';
 import 'package:anyamar/data/models/chat/chat_message_model.dart';
-
 import 'package:anyamar/data/providers/chat_messages_provider.dart';
 import 'package:anyamar/data/providers/current_chat_notifier_provider.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/chats_page/chat_page_widgets.dart';

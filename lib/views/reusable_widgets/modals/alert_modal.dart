@@ -5,6 +5,9 @@ class AlertModal extends StatelessWidget {
   final bool isDeleteModal;
   final String? dialogInformation;
   final String? recordId;
+  final VoidCallback? onButtonPressedCallBack;
+  final String? buttonTitle;
+  final Color? buttonColor;
 
   const AlertModal({
     super.key,
@@ -12,6 +15,9 @@ class AlertModal extends StatelessWidget {
     required this.isDeleteModal,
     this.dialogInformation,
     this.recordId,
+    this.onButtonPressedCallBack,
+    this.buttonTitle,
+    this.buttonColor,
   });
 
   @override
@@ -60,7 +66,12 @@ class AlertModal extends StatelessWidget {
                             fontSize: 16.0,
                           ),
                         )
-                      : Text(dialogInformation ?? ''),
+                      : Text(
+                          dialogInformation ?? '',
+                          style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                            fontSize: 16.0,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -78,15 +89,18 @@ class AlertModal extends StatelessWidget {
                   child: const Text('Cancel'),
                 ),
                 SizedBox(width: 15.0),
+
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColorsConstant.redColor,
+                    backgroundColor: buttonColor ?? AppColorsConstant.redColor,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text(
-                    'Delete',
+                  onPressed:
+                      onButtonPressedCallBack ??
+                      () {
+                        Navigator.of(context).pop(true);
+                      },
+                  child: Text(
+                    buttonTitle ?? 'Delete',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

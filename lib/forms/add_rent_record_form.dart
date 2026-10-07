@@ -1,4 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/providers/page_providers/finances_page/finances_notifier.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/responsive_form_widget.dart';
 
 class AddRentalRecord extends StatelessWidget {
   final Unit? unit;
@@ -22,7 +24,14 @@ class RentalRecordForm extends ConsumerStatefulWidget {
   final Unit? unit;
   final Tenant? tenant;
   final RentalMonth? rentalMonth;
-  const RentalRecordForm({super.key, this.unit, this.tenant, this.rentalMonth});
+  final VoidCallback? onButtonPressedCallBack;
+  const RentalRecordForm({
+    super.key,
+    this.unit,
+    this.tenant,
+    this.rentalMonth,
+    this.onButtonPressedCallBack,
+  });
 
   @override
   ConsumerState<RentalRecordForm> createState() => _RentalRecordFormState();
@@ -207,300 +216,376 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
         myUnits
             .where((unit) => unit.unitId == selectedTenant?.unitId)
             .singleOrNull;
-
-    return FormPages(
-      pageTitle: 'Add Rental Record',
-
-      form: Form(
-        key: _formKey,
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ResponsiveFormWidget(
             children: [
-              Text(
-                'Rent for the month of : ',
-                style: TextStyle(
-                  color: AppColorsConstant.darkBlueColor,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              SizedBox(height: 10),
-              // ========================================================
+              // ============================================================
               // TENANT
-              // ========================================================
+              // ============================================================
               if (widget.tenant == null)
-                FormLabel(label: 'Select Tenant', isRequired: true),
-              const SizedBox(height: 6),
-              if (widget.tenant == null)
-                DropdownButtonFormField<Tenant>(
-                  initialValue: selectedTenant,
-                  hint: Text(
-                    'Select tenant',
-                    style:
-                        CustomInputDecoration.textInputDecoration().hintStyle,
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: CustomInputDecoration.textInputDecoration(),
-                  items: myTenants.map((tenant) {
-                    return DropdownMenuItem<Tenant>(
-                      value: tenant,
-                      child: Text(tenant.tenantName),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        selectedTenant = value;
-                        selectedUnit = myUnits
-                            .where((unit) => unit.unitId == value.unitId)
-                            .single;
-                        totalAmountPayable = selectedTenant != null
-                            ? selectedTenant!.unitRent!.rentAmount +
-                                  (selectedTenant!.unitRent?.utilities ?? [])
-                                      .fold<double>(
-                                        0,
-                                        (sum, utility) =>
-                                            sum + utility.amountPayable,
-                                      )
-                            : 0.0;
-                      });
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select a tenant';
-                    }
-                    return null;
-                  },
-                ),
-              if (widget.tenant == null) SizedBox(height: 15),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FormLabel(label: 'Select Tenant', isRequired: true),
+                    const SizedBox(height: 6),
+                    DropdownButtonFormField<Tenant>(
+                      initialValue: selectedTenant,
+                      hint: Text(
+                        'Select tenant',
+                        style: CustomInputDecoration.textInputDecoration()
+                            .hintStyle,
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      items: myTenants.map((tenant) {
+                        return DropdownMenuItem<Tenant>(
+                          value: tenant,
+                          child: Text(tenant.tenantName),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedTenant = value;
 
-              // ========================================================
-              // RENTAL MONTH
-              // ========================================================
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                            selectedUnit = myUnits
+                                .where((unit) => unit.unitId == value.unitId)
+                                .single;
+
+                            totalAmountPayable = selectedTenant != null
+                                ? selectedTenant!.unitRent!.rentAmount +
+                                      (selectedTenant!.unitRent?.utilities ??
+                                              [])
+                                          .fold<double>(
+                                            0,
+                                            (sum, utility) =>
+                                                sum + utility.amountPayable,
+                                          )
+                                : 0.0;
+                          });
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select a tenant';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              Text(''),
+
+              // ============================================================
+              // TOTAL OWED
+              // ============================================================
+              if (selectedTenant != null)
+                Text(
+                  'Total Owed / Month : Ksh : '
+                  '${formatMoney(totalAmountPayable ?? 0.0)}',
+                  style: TextStyle(
+                    color: AppColorsConstant.darkBlueColor,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              Text(''),
+
+              if (selectedTenant != null)
+                // ============================================================
+                // RENTAL MONTH
+                // ============================================================
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        FormLabel(label: 'Month', isRequired: true),
-                        SizedBox(height: 6),
-                        DropdownButtonFormField<RentalMonth>(
-                          initialValue: initialMonth,
-                          hint: Text(
-                            'Select',
-                            style: CustomInputDecoration.textInputDecoration()
-                                .hintStyle,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              FormLabel(
+                                label: ' Rent for the month of :',
+                                isRequired: true,
+                              ),
+                              const SizedBox(height: 6),
+                              DropdownButtonFormField<RentalMonth>(
+                                initialValue: initialMonth,
+                                hint: Text(
+                                  'Select',
+                                  style:
+                                      CustomInputDecoration.textInputDecoration()
+                                          .hintStyle,
+                                ),
+                                decoration:
+                                    CustomInputDecoration.textInputDecoration(),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                items: viableRentalMonths.map((type) {
+                                  return DropdownMenuItem<RentalMonth>(
+                                    value: type,
+                                    child: Text(type.rentalMonth),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    final parts = value.rentalMonth.split('/');
+
+                                    final monthName = parts[0];
+
+                                    setState(() {
+                                      selectedMonth = MonthModel(
+                                        monthName: monthName,
+                                        monthNumber: getMonthNumber(monthName),
+                                      );
+
+                                      yearController.text = parts[1];
+                                    });
+                                  }
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Select an option';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                            ],
                           ),
-                          decoration:
-                              CustomInputDecoration.textInputDecoration(),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          items: viableRentalMonths.map((type) {
-                            return DropdownMenuItem(
-                              value: type,
-                              child: Text(type.rentalMonth),
-                            );
-                          }).toList(),
-
-                          onChanged: (value) {
-                            if (value != null) {
-                              final parts = value.rentalMonth.split('/');
-                              final monthName = parts[0];
-
-                              setState(() {
-                                selectedMonth = MonthModel(
-                                  monthName: monthName,
-                                  monthNumber: getMonthNumber(monthName),
-                                );
-                                yearController.text = parts[1];
-                              });
-                            }
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return ' Select an option';
-                            }
-                            return null;
-                          },
+                        ),
+                        SizedBox(width: 10),
+                        // ============================================================
+                        // YEAR
+                        // ============================================================
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FormLabel(label: 'Year', isRequired: true),
+                              const SizedBox(height: 6),
+                              FormFieldWidget(
+                                controller: yearController,
+                                hintText: 'Enter year',
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(4),
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FormLabel(label: 'Year', isRequired: true),
-                        SizedBox(height: 6),
-                        FormFieldWidget(
-                          controller: yearController,
-                          hintText: 'Enter year',
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(4),
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 15),
-              Text(
-                'Total Owed / Month : Ksh : ${formatMoney(totalAmountPayable ?? 0.0)}',
-                style: TextStyle(
-                  color: AppColorsConstant.darkBlueColor,
-                  fontStyle: FontStyle.italic,
+                  ],
                 ),
-              ),
-              SizedBox(height: 10),
+
               // ============================================================
               // AMOUNT PAID
               // ============================================================
-              FormLabel(label: 'Amount paid', isRequired: true),
-              SizedBox(height: 6),
-              FormFieldWidget(
-                controller: amountController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [MoneyInputFormatter()],
-                hintText: 'Enter Amount ',
-                prefix: Text(
-                  'Ksh ',
-                  style: CustomTextStyles.cardDescriptionStyle,
+              if (selectedTenant != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FormLabel(label: 'Amount paid', isRequired: true),
+                    const SizedBox(height: 6),
+                    FormFieldWidget(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [MoneyInputFormatter()],
+                      hintText: 'Enter Amount',
+                      prefix: Text(
+                        'Ksh ',
+                        style: CustomTextStyles.cardDescriptionStyle,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 15.0),
+
               // ============================================================
               // PAYMENT DATE
               // ============================================================
-              FormLabel(label: 'Date of payment', isRequired: true),
-              SizedBox(height: 6),
-              FormFieldWidget(
-                controller: paymentDateController,
-                keyboardType: TextInputType.datetime,
-                hintText: 'Enter date (date / month / year)',
-                inputFormatters: [DateInputFormatter()],
-                customValidator: validateDate,
-                onChangedCallBack: (value) {
-                  _updateDatePaid(value);
-                },
-              ),
-              SizedBox(height: 15),
+              if (selectedTenant != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FormLabel(label: 'Date of payment', isRequired: true),
+                    const SizedBox(height: 6),
+                    FormFieldWidget(
+                      controller: paymentDateController,
+                      keyboardType: TextInputType.datetime,
+                      hintText: 'Enter date (date / month / year)',
+                      inputFormatters: [DateInputFormatter()],
+                      customValidator: validateDate,
+                      onChangedCallBack: (value) {
+                        _updateDatePaid(value);
+                      },
+                    ),
+                  ],
+                ),
+
               // ============================================================
               // PAYMENT METHOD
               // ============================================================
-              FormLabel(label: 'Payment method', isRequired: true),
-              SizedBox(height: 6),
-              DropdownButtonFormField<PaymentMethods>(
-                hint: Text(
-                  'Select',
-                  style: CustomInputDecoration.textInputDecoration().hintStyle,
+              if (selectedTenant != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FormLabel(label: 'Payment method', isRequired: true),
+                    const SizedBox(height: 6),
+                    DropdownButtonFormField<PaymentMethods>(
+                      hint: Text(
+                        'Select',
+                        style: CustomInputDecoration.textInputDecoration()
+                            .hintStyle,
+                      ),
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      items: PaymentMethods.values.map((type) {
+                        return DropdownMenuItem<PaymentMethods>(
+                          value: type,
+                          child: Text(type.label),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          paymentMethod = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Select an option';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ],
                 ),
-                decoration: CustomInputDecoration.textInputDecoration(),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
 
-                items: PaymentMethods.values.map((type) {
-                  return DropdownMenuItem(value: type, child: Text(type.label));
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    paymentMethod = value;
-                  });
-                },
+              // ============================================================
+              // SUBMIT BUTTON
+              // ============================================================
+              if (selectedTenant != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ColorButtonWidget(
+                      onPressedCallBack: () async {
+                        LazyLoader lazyLoader = LazyLoader(context: context);
 
-                validator: (value) {
-                  if (value == null) {
-                    return ' Select an option';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 30.0),
-              //? ============================================================
-              //? SUBMIT BUTTON
-              //? ============================================================
-              ColorButtonWidget(
-                onPressedCallBack: () async {
-                  LazyLoader lazyLoader = LazyLoader(context: context);
+                        final db = DbRentalService();
 
-                  final db = DbRentalService();
-                  if (_formKey.currentState!.validate() &&
-                      datePaid != null &&
-                      paymentMethod != null &&
-                      selectedMonth != null &&
-                      selectedTenant != null &&
-                      selectedUnit != null) {
-                    lazyLoader.showLoader();
-                    //Instance of rent history
-                    RentHistory newRentHistory = RentHistory(
-                      tenantId: selectedTenant?.tenantId ?? '',
-                      unitId: selectedUnit?.unitId ?? '',
-                      userId: rentalUser!.uid,
-                      tenantName: selectedTenant?.tenantName,
-                    );
-                    //Instance of rental entry
-                    SingleRentEntry rentEntry = SingleRentEntry(
-                      paymentDate: datePaid!,
-                      amountPayable: selectedUnit?.rentPerMonth ?? 0.0,
-                      amountPaid: double.parse(
-                        amountController.text.replaceAll(',', ''),
-                      ),
-                      paymentMethod: paymentMethod!,
-                      rentalMonth:
-                          widget.rentalMonth?.rentalMonth ??
-                          ' ${selectedMonth?.monthName}/${yearController.text.trim()}',
-                      rentEntryId:
-                          '${selectedMonth?.monthName}/${yearController.text.trim()} $datePaid',
-                      lastUpdatedDate: DateTime.now(),
-                    );
+                        if (_formKey.currentState!.validate() &&
+                            datePaid != null &&
+                            paymentMethod != null &&
+                            selectedMonth != null &&
+                            selectedTenant != null &&
+                            selectedUnit != null) {
+                          lazyLoader.showLoader();
 
-                    //  Read from db to see if a rent history for this tenant already exists
-                    final tenantRentHistory = await db.getRentHistory(
-                      selectedTenant!.tenantId!,
-                    );
-                    if (tenantRentHistory == null) {
-                      log('tenant History does not rentally exist');
-                      //If this tenant has no history .. add a rental history
-                      await rentEntryForNewHistory(
-                        newRentHistory,
-                        rentEntry,
-                        context,
-                        lazyLoader,
-                      );
-                    } else {
-                      //Update existing rental history
-                      await rentEntryForExistingHistory(
-                        rentEntry,
-                        tenantRentHistory,
-                        context,
-                        lazyLoader,
-                      );
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Enter required fields  \n date paid $datePaid \n payment method : $paymentMethod \n selected month : ${selectedMonth?.monthName}\n tenant name : ${selectedTenant?.tenantName}, \n unit name : ${selectedUnit?.unitName}',
-                        ),
-                      ),
-                    );
-                  }
-                },
-                buttonTitle: 'Submit',
-                buttonColor: AppColorsConstant.greenColor,
-              ),
+                          // ========================================================
+                          // RENT HISTORY
+                          // ========================================================
+                          RentHistory newRentHistory = RentHistory(
+                            tenantId: selectedTenant?.tenantId ?? '',
+                            unitId: selectedUnit?.unitId ?? '',
+                            userId: rentalUser!.uid,
+                            tenantName: selectedTenant?.tenantName,
+                          );
+
+                          // ========================================================
+                          // RENT ENTRY
+                          // ========================================================
+                          //Generate rentalId
+
+                          // ========================================================
+                          // CHECK EXISTING RENT HISTORY
+                          // ========================================================
+                          final tenantRentHistory = await db.getRentHistory(
+                            selectedTenant!.tenantId!,
+                          );
+                          //==========================================================
+                          // INSTANCE OF SINGLE ENTRY
+                          //==========================================================
+                          //? ==============================
+                          //? GeneratIng rentEntry Id (YK0001)
+                          //?================================
+
+                          final rentEntryId = db.generateRentEntryId(
+                            tenantName: selectedTenant!.tenantName,
+                            rentalMonths: tenantRentHistory != null
+                                ? tenantRentHistory.rentalMonths
+                                : newRentHistory.rentalMonths,
+                          );
+                          SingleRentEntry rentEntry = SingleRentEntry(
+                            paymentDate: datePaid!,
+                            amountPayable: selectedUnit?.rentPerMonth ?? 0.0,
+                            amountPaid: double.parse(
+                              amountController.text.replaceAll(',', ''),
+                            ),
+                            unitId: selectedUnit!.unitId,
+                            tenantId: selectedTenant!.tenantId,
+                            tenantName: selectedTenant!.tenantName,
+                            paymentMethod: paymentMethod!,
+                            rentalMonth:
+                                widget.rentalMonth?.rentalMonth ??
+                                '${selectedMonth?.monthName}/${yearController.text.trim()}',
+                            rentEntryId: rentEntryId,
+                            lastUpdatedDate: DateTime.now(),
+                          );
+
+                          if (tenantRentHistory == null) {
+                            log('Tenant history does not currently exist');
+
+                            await rentEntryForNewHistory(
+                              newRentHistory,
+                              rentEntry,
+                              context,
+                              lazyLoader,
+                            );
+                          } else {
+                            await rentEntryForExistingHistory(
+                              rentEntry,
+                              tenantRentHistory,
+                              context,
+                              lazyLoader,
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Enter required fields\n'
+                                'date paid: $datePaid\n'
+                                'payment method: $paymentMethod\n'
+                                'selected month: '
+                                '${selectedMonth?.monthName}\n'
+                                'tenant name: '
+                                '${selectedTenant?.tenantName}\n'
+                                'unit name: '
+                                '${selectedUnit?.unitName}',
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      buttonTitle: 'Submit',
+                      buttonColor: AppColorsConstant.greenColor,
+                    ),
+                  ],
+                ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -561,6 +646,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
           'Rental record added successfully',
           AppColorsConstant.greenColor,
         );
+        ref.read(financesPageProvider.notifier).viewRentEntryRecord(rentEntry);
       }
     } catch (e) {
       log('Error adding rent entry for existing rent history: $e');
@@ -572,9 +658,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
       );
     } finally {
       lazyLoader.hideLoader();
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
+      if (context.mounted) {}
     }
   }
 
@@ -623,6 +707,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
         'Rental record added successfully',
         AppColorsConstant.greenColor,
       );
+      ref.read(financesPageProvider.notifier).viewRentEntryRecord(rentEntry);
     } catch (e) {
       log('Error adding rent history: $e');
     } finally {

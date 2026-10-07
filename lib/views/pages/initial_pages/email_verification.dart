@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/views/pages/initial_pages/landing_page/landing_page.dart';
 
 class EmailVerifiationScreen extends StatelessWidget {
   const EmailVerifiationScreen({super.key});

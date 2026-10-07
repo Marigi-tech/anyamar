@@ -15,6 +15,7 @@ class FormFieldWidget extends StatefulWidget {
   final bool isReadOnly;
   final String? Function(String?)? customValidator;
   final bool? isMoneyField;
+  final String? moneyCurrency;
 
   const FormFieldWidget({
     super.key,
@@ -32,6 +33,7 @@ class FormFieldWidget extends StatefulWidget {
     this.isReadOnly = false,
     this.customValidator,
     this.isMoneyField,
+    this.moneyCurrency,
   });
 
   @override
@@ -56,12 +58,12 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
 
       decoration: CustomInputDecoration.textInputDecoration(
         hintText: widget.hintText,
-        prefix: widget.prefix,
-
-        prefixIcon: widget.isMoneyField == true
-            ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                child: Text(' Ksh'),
+        prefixIcon: widget.prefixIcon,
+        prefix: widget.isMoneyField == true
+            ? Text(
+                widget.moneyCurrency != null
+                    ? '${widget.moneyCurrency} '
+                    : 'Ksh ',
               )
             : widget.prefix,
         suffix: widget.isPassword

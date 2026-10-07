@@ -22,6 +22,10 @@ _SingleRentalEntry _$SingleRentalEntryFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['lastUpdatedDate'] as String),
       rentEntryId: json['rentEntryId'] as String?,
       transactionCode: json['transactionCode'] as String?,
+      tenantId: json['tenantId'] as String?,
+      tenantName: json['tenantName'] as String?,
+      unitId: json['unitId'] as String?,
+      propertyId: json['propertyId'] as String?,
     );
 
 Map<String, dynamic> _$SingleRentalEntryToJson(_SingleRentalEntry instance) =>
@@ -35,6 +39,10 @@ Map<String, dynamic> _$SingleRentalEntryToJson(_SingleRentalEntry instance) =>
       'lastUpdatedDate': instance.lastUpdatedDate?.toIso8601String(),
       'rentEntryId': instance.rentEntryId,
       'transactionCode': instance.transactionCode,
+      'tenantId': instance.tenantId,
+      'tenantName': instance.tenantName,
+      'unitId': instance.unitId,
+      'propertyId': instance.propertyId,
     };
 
 const _$PaymentMethodsEnumMap = {

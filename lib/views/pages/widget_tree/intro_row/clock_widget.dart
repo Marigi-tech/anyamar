@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
 
-
 class ClockWidget extends StatefulWidget {
   const ClockWidget({super.key});
 

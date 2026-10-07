@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/data/providers/theme_provider.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class WhatsAppBackgroundImageWidget extends ConsumerWidget {
   const WhatsAppBackgroundImageWidget({super.key});

@@ -1,5 +1,4 @@
-import 'package:anyamar/commons/constants.dart';
-import 'package:flutter/material.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class CustomDataTable extends StatelessWidget {
   final List<DataColumn> customDataColumns;
@@ -16,27 +15,22 @@ class CustomDataTable extends StatelessWidget {
       builder: (context, constraints) {
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
+
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-             
-              minWidth: constraints.maxWidth,
-            ),
-            child:
-             
-                DataTable(
-                  horizontalMargin: 12.0,
-                  columnSpacing: 56.0,
-                  border: TableBorder.symmetric(
-                    outside: BorderSide.none,
-                    inside: BorderSide(
-                      color: AppColorsConstant.blueGreyColor,
-                      width: 0.09,
-                    ),
-                  ),
-                  columns: customDataColumns,
-                  rows: customDataRows,
+            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            child: DataTable(
+              horizontalMargin: 12.0,
+              columnSpacing: 56.0,
+              border: TableBorder.symmetric(
+                outside: BorderSide.none,
+                inside: BorderSide(
+                  color: AppColorsConstant.blueGreyColor,
+                  width: 0.09,
                 ),
+              ),
+              columns: customDataColumns,
+              rows: customDataRows,
+            ),
           ),
         );
       },

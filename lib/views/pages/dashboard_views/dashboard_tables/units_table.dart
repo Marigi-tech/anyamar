@@ -40,10 +40,7 @@ DataRow buildDataRow(
   WidgetRef ref,
 ) {
   log('The unit name : ${unit.unitName}');
-    Future<bool?> showDeleteConfirmationDialog(
-    BuildContext context,
-   
-  ) {
+  Future<bool?> showDeleteConfirmationDialog(BuildContext context) {
     return showDialog<bool>(
       context: context,
       builder: (dialogContext) {
@@ -126,23 +123,21 @@ DataRow buildDataRow(
       DataCell(
         ViewChevronCard(
           iconData: CupertinoIcons.pencil,
-          onPressedCallBack: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) =>
-                  AddUnit(currentProperty: currentProperty, currentUnit: unit),
-            ),
-          ),
+          onPressedCallBack: () {},
+          // onPressedCallBack: () => Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (_) =>
+          //         AddUnit(currentProperty: currentProperty, currentUnit: unit),
+          //   ),
+          // ),
         ),
       ),
-       DataCell(
+      DataCell(
         ViewChevronCard(
           iconData: CupertinoIcons.trash,
           iconColor: AppColorsConstant.redColor,
           onPressedCallBack: () async {
-            final shouldDelete = await showDeleteConfirmationDialog(
-              context,
-              
-            );
+            final shouldDelete = await showDeleteConfirmationDialog(context);
             // User pressed Cancel or dismissed the dialog
             if (shouldDelete != true) {
               return;
@@ -179,4 +174,3 @@ DataRow buildDataRow(
     ],
   );
 }
-

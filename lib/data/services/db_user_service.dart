@@ -45,6 +45,20 @@ class DbService {
     return appUser;
   }
 
+  //fetch user from currentUser userId
+  Future<AppUser?> getUserFromCurrentUserId(String userId) async {
+    final snapshot = await _usersRef
+        .where('userId', isEqualTo: userId)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
+
+    return AppUser.fromJson(snapshot.docs.first.data() as Map<String, dynamic>);
+  }
+
   //fetch user
   Future<AppUser?> getUserByUserId(String userId) async {
     try {

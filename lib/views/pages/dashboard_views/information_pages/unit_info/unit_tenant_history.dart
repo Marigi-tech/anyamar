@@ -34,30 +34,31 @@ class _UnitTenantHistoryState extends ConsumerState<UnitTenantHistory> {
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 children: [
-                  CustomDataTable(
-                    customDataColumns: [...buildTenantHeaderRows(false, false)],
-                    customDataRows: [
-                      ...myTenants.toList().asMap().entries.map((entry) {
-                        int index = entry.key;
-                        Tenant tenant = entry.value;
-                        Property? property = myProperties
-                            .where(
-                              (prop) =>
-                                  prop.propertyId == widget.unit.propertyId,
-                            )
-                            .singleOrNull;
+                  TenantsTable(),
+                  // CustomDataTable(
+                  //   customDataColumns: [...buildTenantHeaderRows(false, false)],
+                  //   customDataRows: [
+                  //     ...myTenants.toList().asMap().entries.map((entry) {
+                  //       int index = entry.key;
+                  //       Tenant tenant = entry.value;
+                  //       Property? property = myProperties
+                  //           .where(
+                  //             (prop) =>
+                  //                 prop.propertyId == widget.unit.propertyId,
+                  //           )
+                  //           .singleOrNull;
 
-                        return buildTenantDataRow(
-                          index + 1,
-                          tenant,
-                          context,
-                          property?.propertyName ?? '',
-                          ref,
-                          null,
-                        );
-                      }),
-                    ],
-                  ),
+                  //       return buildTenantDataRow(
+                  //         index + 1,
+                  //         tenant,
+                  //         context,
+                  //         property?.propertyName ?? '',
+                  //         ref,
+                  //         null,
+                  //       );
+                  //     }),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

@@ -23,6 +23,7 @@ abstract class Unit with _$Unit {
     @Default(false) bool isOccupied,
     DateTime? lastUpdateDate,
     double? numberFloors,
+    double? floorNumber,
   }) = _Unit;
 
   factory Unit.fromJson(Map<String, dynamic> json) => _$UnitFromJson(json);

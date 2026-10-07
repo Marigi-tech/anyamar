@@ -1,4 +1,3 @@
-
 import 'package:anyamar/commons/exports.dart';
 
 class NotificationIconWidget extends StatelessWidget {

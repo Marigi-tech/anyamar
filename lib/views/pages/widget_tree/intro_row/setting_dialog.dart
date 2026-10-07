@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/data/providers/theme_provider.dart';
+
+
+import 'package:anyamar/commons/exports.dart';
+
 
 class SettingsDialog extends ConsumerWidget {
   const SettingsDialog({super.key});

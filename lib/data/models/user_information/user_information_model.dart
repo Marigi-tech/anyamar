@@ -1,8 +1,5 @@
-import 'package:anyamar/data/models/financial_records/financial_record_model.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
-import 'package:anyamar/data/models/users/app_user.dart';
+import 'package:anyamar/commons/exports.dart';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_information_model.freezed.dart';
@@ -16,7 +13,9 @@ abstract class UserInformation with _$UserInformation {
     @Default([]) List<Unit> units,
     @Default([]) List<FinancialRecord> finances,
     AppUser? appUser,
+    @Default([]) List<RentalRecord> rentalRecords,
     @Default(false) bool isLoading,
+    AppData? appData,
   }) = _UserInformation;
 
   factory UserInformation.fromJson(Map<String, dynamic> json) =>

@@ -16,10 +16,10 @@ import 'package:flutter/material.dart';
 //   return '${noOfTenants / noOfUnits * 100}';
 // }
 ({String text, Color color}) getOccupancyInfo(
-  double noOfTenants,
+  double noOfOccupiedunits,
   double noOfUnits,
 ) {
-  final percentage = (noOfUnits == 0) ? 0 : (noOfTenants / noOfUnits) * 100;
+  final percentage = (noOfUnits == 0) ? 0 : (noOfOccupiedunits / noOfUnits) * 100;
 
   Color color;
   if (percentage < 20) {
