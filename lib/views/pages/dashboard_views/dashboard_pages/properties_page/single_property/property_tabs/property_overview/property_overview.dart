@@ -1,24 +1,68 @@
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_overview/overview_mobile.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_overview/overview_web.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/responsiveness/responsiveness.dart';
+import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_tenants/property_tenants.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_units/property_units.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/widgets/property_overview_widget.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/widgets/quick_property_summary_widget.dart';
 
-class PropertyOverview extends StatefulWidget {
+class PropertyOverview extends StatelessWidget {
   final Property property;
-  const PropertyOverview({super.key, required this.property});
+  final List<Unit> propertyUnits;
+  final List<Tenant> propertyTenants;
+  final double expectedMonthlyIncome;
+  const PropertyOverview({
+    super.key,
+    required this.property,
+    required this.propertyUnits,
+    required this.propertyTenants,
+    required this.expectedMonthlyIncome,
+  });
 
-  @override
-  State<PropertyOverview> createState() => _PropertyOverviewState();
-}
-
-class _PropertyOverviewState extends State<PropertyOverview> {
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = Responsiveness.isMobile(context);
-    return isMobile
-        ? OverviewMobile(property: widget.property)
-        : OverviewWeb(property: widget.property);
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: PropertyOverviewWidget(property: property)),
+              SizedBox(width: 20.0),
+              Expanded(
+                child: QuickPropertySummaryWidget(
+                  property: property,
+                  propertyUnits: propertyUnits,
+                  propertyTenants: propertyTenants,
+                  expectedMonthlyIncome: expectedMonthlyIncome,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.0),
+          DashboardCardWidget(
+            cardTitle: 'Units',
+
+            buttonWidget1: AppTextButton(
+              buttonTitle: 'View all',
+
+              onPressedCallBack: () {},
+            ),
+            child: PropertyUnits(property: property),
+          ),
+          SizedBox(height: 20.0),
+          DashboardCardWidget(
+            cardTitle: 'Tenants',
+            buttonWidget1: AppTextButton(
+              buttonTitle: 'View all',
+
+              onPressedCallBack: () {},
+            ),
+            child: PropertyTenants(property: property),
+          ),
+        ],
+      ),
+    );
   }
 }

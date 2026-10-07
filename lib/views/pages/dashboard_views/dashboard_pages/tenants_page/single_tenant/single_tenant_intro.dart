@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/data/models/units/unit_model.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class SingleTenantIntro extends StatelessWidget {
   final Tenant tenant;

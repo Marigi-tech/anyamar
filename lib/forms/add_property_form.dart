@@ -1,5 +1,8 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/providers/page_providers/property_pages/property_page_notifier.dart';
 import 'package:anyamar/utils/text_input_formatters/phone_number_formatter.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
+import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
 
 class AddPropertyForm extends ConsumerStatefulWidget {
   final Property? currentProperty;
@@ -60,6 +63,27 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
         property.propertyManager?.personPhone ?? '';
     isAgency = property.propertyManager?.isAgency;
   }
+  // ============================================================
+  // RESET
+  // ============================================================
+
+  void _resetForm() {
+    // Reset all form fields
+    _formKey.currentState?.reset();
+
+    // Clear controllers
+    nameController.clear();
+    locationController.clear();
+    floorsController.clear();
+    propertyManagerNameController.clear();
+    propertyManagerEmailController.clear();
+    propertyManagerPhoneController.clear();
+
+    // Reset selected values
+    setState(() {
+      isAgency = null;
+    });
+  }
 
   // ==========================================================
   // DISPOSE MODE
@@ -78,152 +102,194 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(authServiceProvider).currentUser;
-    return FormPages(
-      pageTitle: isUpdateMode ? 'Update Property' : 'Add Property',
-      form: Form(
-        key: _formKey,
-        child: Align(
-          alignment: Alignment.topLeft,
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 980),
+        child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 10.0),
-              // ========================================================
-              // PROPERTY NAME
-              // ========================================================
-              FormLabel(label: 'Property name', isRequired: true),
-              SizedBox(height: 6),
-              FormFieldWidget(
-                controller: nameController,
-                hintText: 'Enter property name',
-              ),
-              SizedBox(height: 15.0),
-              // ========================================================
-              // PROPERTY LOCATION
-              // ========================================================
-              FormLabel(label: 'Location', isRequired: true),
-              SizedBox(height: 6),
-              FormFieldWidget(
-                controller: locationController,
-                hintText: 'Enter location',
-              ),
-              SizedBox(height: 15.0),
-              // ========================================================
-              // NUMBER OF FLOORS
-              // ========================================================
-              FormLabel(label: 'Number of floors', isRequired: false),
-              SizedBox(height: 6),
-              FormFieldWidget(
-                controller: floorsController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                hintText: 'Enter number of floors',
-                required: false,
-              ),
-              SizedBox(height: 15.0),
-              // ========================================================
-              // PROPERTY MANAGER / AGENCY
-              // ========================================================
-              FormLabel(label: 'Property manager', isRequired: true),
-              SizedBox(height: 6),
-              DropdownButtonFormField<bool>(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                hint: Text(
-                  'Select',
-                  style: CustomInputDecoration.textInputDecoration().hintStyle,
-                ),
-                initialValue: isAgency,
-                decoration: CustomInputDecoration.textInputDecoration(),
-                items: [
-                  DropdownMenuItem(value: true, child: const Text('Agency')),
-                  DropdownMenuItem(
-                    value: false,
-                    child: const Text('Individual'),
+              // SizedBox(height: 10.0),
+              FormCardWidget(
+                noOfColumnsPerRow: 3,
+                formCardTitle: 'Property Information',
+                formTitleIcon: Icons.apartment,
+                formInputs: [
+                  // ========================================================
+                  // PROPERTY NAME
+                  // ========================================================
+                  FormItemWidget(
+                    label: 'Property name',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: nameController,
+                      hintText: 'Enter property name',
+                    ),
+                  ),
+                  // ========================================================
+                  // PROPERTY LOCATION
+                  // ========================================================
+                  FormItemWidget(
+                    label: 'Location',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: locationController,
+                      hintText: 'Enter location',
+                    ),
+                  ),
+                  // ========================================================
+                  // NUMBER OF FLOORS
+                  // ========================================================
+                  FormItemWidget(
+                    required: false,
+                    label: 'Number of floors',
+                    child: FormFieldWidget(
+                      controller: floorsController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      hintText: 'Enter number of floors',
+                      required: false,
+                    ),
                   ),
                 ],
-                onChanged: (value) {
-                  setState(() {
-                    isAgency = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return ' Select an option (if you have no manager, enter your own information)';
-                  }
-                  return null;
-                },
               ),
-              SizedBox(height: 15.0),
-              // ============================================================
-              // PROPERTY MANAGER INFORMATION
-              // ============================================================
-              if (isAgency != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
 
-                  children: [
-                    FormLabel(
-                      label: isAgency == true
-                          ? 'Agency Information'
-                          : 'Manager Information',
+              SizedBox(height: 35.0),
+
+              // ========================================================
+              // PROPERTY MANAGEMENT INFORMATION
+              // ========================================================
+              FormCardWidget(
+                noOfColumnsPerRow: 2,
+                formCardTitle: 'Property manager Information',
+                formTitleIcon: Icons.person,
+                formInputs: [
+                  FormItemWidget(
+                    required: true,
+                    label: ' Property management',
+                    child: DropdownButtonFormField<bool>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      hint: Text(
+                        'Select',
+                        style: CustomInputDecoration.textInputDecoration()
+                            .hintStyle,
+                      ),
+                      initialValue: isAgency,
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      items: [
+                        DropdownMenuItem(
+                          value: true,
+                          child: const Text('Agency'),
+                        ),
+                        DropdownMenuItem(
+                          value: false,
+                          child: const Text('Individual'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          isAgency = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return ' Select an option (if you have no manager, enter your own information)';
+                        }
+                        return null;
+                      },
                     ),
-                    SizedBox(height: 6),
+                  ),
+                  if (isAgency != null)
                     Padding(
-                      padding: EdgeInsets.only(left: 70, bottom: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //Property manager name
-                          FormLabel(label: 'Name', isRequired: true),
-                          SizedBox(height: 8),
-                          FormFieldWidget(
-                            hintText: 'Enter full name',
-                            controller: propertyManagerNameController,
-                            customValidator: validateUserName,
-                          ),
-                          SizedBox(height: 10),
-                          //Property manager Phone
-                          FormLabel(label: 'Phone number', isRequired: false),
-                          SizedBox(height: 8),
-                          FormFieldWidget(
-                            hintText: 'Enter phone number',
-                            controller: propertyManagerPhoneController,
-                            required: false,
-                            customValidator: validatePhoneNumber,
-                          ),
-                          SizedBox(height: 10),
-                          //Property manager Email
-                          FormLabel(label: 'Email address', isRequired: false),
-                          SizedBox(height: 8),
-                          FormFieldWidget(
-                            hintText: 'Enter email address',
-                            controller: propertyManagerEmailController,
-                            required: false,
-                            customValidator: validateEmail,
-                          ),
-                        ],
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: FormItemWidget(
+                        required: true,
+                        label: isAgency == true
+                            ? 'Agency Information'
+                            : 'Manager Information',
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FormItemWidget(
+                              required: true,
+                              label: 'Name',
+                              child: FormFieldWidget(
+                                hintText: 'Enter full name',
+                                controller: propertyManagerNameController,
+                                customValidator: validateUserName,
+                              ),
+                            ),
+                            SizedBox(height: 15),
+
+                            FormItemWidget(
+                              required: false,
+                              label: ' Phone number',
+                              child: FormFieldWidget(
+                                hintText: 'Enter phone number',
+                                controller: propertyManagerPhoneController,
+                                required: false,
+                                customValidator: validatePhoneNumber,
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            //Property manager Email
+                            FormItemWidget(
+                              required: false,
+                              label: ' Email Address',
+                              child: FormFieldWidget(
+                                hintText: 'Enter email address',
+                                controller: propertyManagerEmailController,
+                                required: false,
+                                customValidator: validateEmail,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                ],
+              ),
 
               SizedBox(height: 35.0),
               // ========================================================
               // SUBMIT BUTTON
               // ========================================================
-              ColorButtonWidget(
-                onPressedCallBack: () async {
-                  isUpdateMode
-                      ? await updateProperty(context, currentUser)
-                      : await addProperty(context, currentUser);
-                },
-                buttonTitle: isUpdateMode ? 'Update Property' : 'Add Property',
-                buttonColor: AppColorsConstant.greenColor,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //Clear Button
+                  if (!isUpdateMode)
+                    ElevatedButtonWidget(
+                      buttonTitle: 'Reset',
+                      isClear: true,
+                      onButtonPressedCallBack: () async {
+                        _resetForm();
+                      },
+                    ),
+                  SizedBox(width: 10),
+                  //Submit button
+                  ElevatedButtonWidget(
+                    buttonTitle: isUpdateMode
+                        ? 'Update Property'
+                        : 'Add Property',
+                    buttonIcon: isUpdateMode
+                        ? Icon(CupertinoIcons.pen)
+                        : Icon(Icons.add),
+                    onButtonPressedCallBack: () async {
+                      if (isUpdateMode) {
+                        await updateProperty(context, currentUser);
+                      } else {
+                        await addProperty(context, currentUser);
+                      }
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -295,15 +361,16 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
           displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
         } finally {
           lazyLoader.hideLoader();
-          widget.isFromUnitPage == true
-              ? Navigator.pop(context)
-              : Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SinglePropertyPage(property: property),
-                  ),
-                );
+          ref.read(propertyPageProvider.notifier).showProperty(property);
+          // widget.isFromUnitPage == true
+          //     ? Navigator.pop(context)
+          //     : Navigator.pushReplacement(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) =>
+          //               SinglePropertyPage(property: property),
+          //         ),
+          //       );
         }
       }
     }
@@ -350,15 +417,16 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
             'Property Updated succesfully',
             AppColorsConstant.greenColor,
           );
-          widget.isFromUnitPage == true
-              ? Navigator.pop(context)
-              : Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SinglePropertyPage(property: updatedProperty),
-                  ),
-                );
+          ref.read(propertyPageProvider.notifier).showProperty(updatedProperty);
+          // widget.isFromUnitPage == true
+          //     ? Navigator.pop(context)
+          //     : Navigator.pushReplacement(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) =>
+          //               SinglePropertyPage(property: updatedProperty),
+          //         ),
+          //       );
         }
       } catch (e, stackTrace) {
         log('Error adding property: $e', stackTrace: stackTrace);

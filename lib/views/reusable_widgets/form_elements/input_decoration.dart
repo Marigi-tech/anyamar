@@ -1,5 +1,5 @@
-
 import 'package:anyamar/commons/exports.dart';
+
 class CustomInputDecoration {
   static InputDecoration textInputDecoration({
     String? hintText,
@@ -10,10 +10,11 @@ class CustomInputDecoration {
     bool? isPassword,
     Widget? suffixIcon,
     Widget? prefix,
+    
   }) => InputDecoration(
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-    fillColor: AppColorsConstant.kPrimaryColor,
 
+    fillColor: fillColor,
     hintStyle: CustomTextStyles.cardDescriptionStyle.copyWith(
       fontSize: 14,
       letterSpacing: 1,
@@ -26,7 +27,7 @@ class CustomInputDecoration {
 
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(color: AppColorsConstant.greenColor, width: 1.0),
+      borderSide: BorderSide(color: AppColors.primaryBlue, width: 1.0),
     ),
 
     hintText: hintText,
@@ -34,7 +35,6 @@ class CustomInputDecoration {
 
     prefixIcon: prefixIcon,
     suffixIcon: suffixIcon,
-    prefix: prefix
+    prefix: prefix,
   );
 }
-

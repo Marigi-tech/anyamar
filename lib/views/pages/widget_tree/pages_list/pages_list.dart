@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
 
-
 final List<Widget> pages = [
   PropertiesPage(),
   FinancesPage(),
@@ -14,10 +13,11 @@ final List<Widget> pages = [
 final List<Widget> webPages = [
   HomePage(),
   PropertiesPage(),
+
   UnitsPage(),
   TenantsPage(),
   FinancesPage(),
-  RentalIcomePage(),
+  // RentalIcomePage(),
   SettingsPage(),
   ProfilePage(),
 ];

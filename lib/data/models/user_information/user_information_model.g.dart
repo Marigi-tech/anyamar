@@ -31,7 +31,15 @@ _UserInformation _$UserInformationFromJson(Map<String, dynamic> json) =>
       appUser: json['appUser'] == null
           ? null
           : AppUser.fromJson(json['appUser'] as Map<String, dynamic>),
+      rentalRecords:
+          (json['rentalRecords'] as List<dynamic>?)
+              ?.map((e) => RentalRecord.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       isLoading: json['isLoading'] as bool? ?? false,
+      appData: json['appData'] == null
+          ? null
+          : AppData.fromJson(json['appData'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserInformationToJson(_UserInformation instance) =>
@@ -41,5 +49,7 @@ Map<String, dynamic> _$UserInformationToJson(_UserInformation instance) =>
       'units': instance.units.map((e) => e.toJson()).toList(),
       'finances': instance.finances.map((e) => e.toJson()).toList(),
       'appUser': instance.appUser?.toJson(),
+      'rentalRecords': instance.rentalRecords.map((e) => e.toJson()).toList(),
       'isLoading': instance.isLoading,
+      'appData': instance.appData?.toJson(),
     };

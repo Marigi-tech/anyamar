@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:flutter/cupertino.dart';
 
 class RentEntryModal extends StatelessWidget {
   final SingleRentEntry rentEntry;

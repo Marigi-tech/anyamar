@@ -1,174 +1,225 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/providers/page_providers/tenant_page/tenant_page_notifier.dart';
 
-List<DataColumn> buildTenantHeaderRows(bool isUnitTenant, bool isPropertyNull) {
-  return [
-    const DataColumn(
-      label: Text("", style: TextStyle(fontWeight: FontWeight.w200)),
-    ),
-    const DataColumn(
-      label: Text("Full Name", style: TextStyle(fontWeight: FontWeight.w200)),
-    ),
-    const DataColumn(
-      label: Text(
-        "Phone Number",
-        style: TextStyle(fontWeight: FontWeight.w200),
-      ),
-    ),
-    // const DataColumn(
-    //   label: Text("Email", style: TextStyle(fontWeight: FontWeight.w200)),
-    // ),
-    // const DataColumn(
-    //   label: Text("National ID", style: TextStyle(fontWeight: FontWeight.w200)),
-    if (!isUnitTenant)
-      const DataColumn(
-        label: Text("Unit ", style: TextStyle(fontWeight: FontWeight.w200)),
-      ),
+class TenantsTable extends ConsumerStatefulWidget {
+  const TenantsTable({super.key});
 
-    // Collection if cleanly removes the column entirely when isUnitTenant is true
-    if (!isPropertyNull )
-      const DataColumn(
-        label: Text('Property ', style: TextStyle(fontWeight: FontWeight.w200)),
-      ),
-    const DataColumn(
-      label: Text("View", style: TextStyle(fontWeight: FontWeight.w200)),
-    ),
-    const DataColumn(
-      label: Text("Update", style: TextStyle(fontWeight: FontWeight.w200)),
-    ),
-    DataColumn(
-      label: Text("Delete", style: TextStyle(fontWeight: FontWeight.w200)),
-    ),
-  ];
+  @override
+  ConsumerState<TenantsTable> createState() => _TenantsTableState();
 }
 
-DataRow buildTenantDataRow(
-  int index,
-  Tenant tenant,
-  BuildContext context,
-  String? propertyName,
-  WidgetRef ref,
-  bool? isUnitTenant,
-) {
-  // Common text style definition to reduce repetition
-  final cellStyle = TextStyle(color: AppColorsConstant.blueGreyColor);
-  Future<bool?> showDeleteConfirmationDialog(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (dialogContext) {
-        return AlertModal(
-          dialogTitle: 'Tenants',
-          isDeleteModal: true,
-          recordId: tenant.tenantName,
+class _TenantsTableState extends ConsumerState<TenantsTable> {
+  String searchQuery = '';
+  String propertyName = '';
+  String unitName = '';
+  @override
+  Widget build(BuildContext context) {
+    final themeIsDark = ref.watch(themeIsDarkProvider);
+    final appData = ref.watch(appDataProvider);
+    final tenants = appData.tenants;
+    final properties = appData.properties;
+    final units = appData.units;
+    final TextStyle headerStyle = CustomTextStyles.cardDescriptionStyle
+        .copyWith(
+          color: themeIsDark == true
+              ? AppColors.whiteColor
+              : AppColors.blueGreyColor,
+          fontStyle: FontStyle.normal,
+          fontWeight: FontWeight.w200,
+          letterSpacing: 0.6,
+        );
+    final TextStyle labelStyle = CustomTextStyles.cardDescriptionStyle.copyWith(
+      color: themeIsDark == true ? AppColors.whiteColor : AppColors.lightText,
+      fontStyle: FontStyle.normal,
+      fontSize: 13,
+      letterSpacing: 0.3,
+    );
+
+    return ReusableDataTableWidget<Tenant>(
+      items: tenants,
+
+      searchHint: 'Search ',
+
+      columns: [
+        DataColumn(label: SizedBox(width: 8, child: Text("#"))),
+        DataColumn(label: Text("Full Name", style: headerStyle)),
+        DataColumn(label: Text("Phone Number", style: headerStyle)),
+        DataColumn(label: Text("Unit ", style: headerStyle)),
+        DataColumn(label: Text('Property ', style: headerStyle)),
+        DataColumn(label: Text("Actions", style: headerStyle)),
+      ],
+
+      // --------------------------------------------
+      // SEARCH
+      // --------------------------------------------
+      searchMatcher: (tenant, query) {
+        return tenant.tenantName.toLowerCase().contains(query) ||
+            propertyName.toLowerCase().contains(query) ||
+            unitName.toLowerCase().contains(query) ||
+            tenant.tenantPhoneNumber.toString().toLowerCase().contains(query);
+      },
+
+      // --------------------------------------------
+      // FILTER
+      // --------------------------------------------
+      onFilterPressed: () {
+        // Show your property filter dialog
+      },
+
+      // --------------------------------------------
+      // EXPORT
+      // --------------------------------------------
+      onExportPressed: () {
+        // Export properties
+      },
+
+      // --------------------------------------------
+      // ROW
+      // --------------------------------------------
+      rowBuilder: (tenant, index) {
+        //Instance of Unit
+        final unit = units.where((u) => u.unitId == tenant.unitId).singleOrNull;
+        //Instance of property
+        final property = properties
+            .where((p) => p.propertyId == unit?.propertyId)
+            .singleOrNull;
+
+        propertyName = property?.propertyName ?? '';
+        unitName = unit?.unitName ?? '';
+        var number = index + 1;
+
+        return DataRow(
+          cells: [
+            DataCell(SizedBox(width: 8, child: Text('${number++}'))),
+            DataCell(
+              SizedBox(
+                width: 150,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color:
+                            avatarBackgroundColors[index %
+                                avatarBackgroundColors.length],
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Center(
+                        child: Text(
+                          getInitials(tenant.tenantName),
+                          style: CustomTextStyles.cardExtraDescriptionStyle
+                              .copyWith(
+                                fontStyle: FontStyle.normal,
+                                color: AppColors.whiteColor,
+                              ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        tenant.tenantName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: themeIsDark == true
+                              ? AppColors.whiteColor
+                              : Color(0xff172554),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            DataCell(Text('${tenant.tenantPhoneNumber}', style: labelStyle)),
+            DataCell(Text(unitName, style: labelStyle)),
+            DataCell(Text(propertyName, style: labelStyle)),
+            DataCell(
+              Row(
+                children: [
+                  IconButton(
+                    tooltip: 'View',
+                    onPressed: () {
+                      ref
+                          .read(tenantPageProvider.notifier)
+                          .viewTenantInformation(tenant);
+                      // ref
+                      //     .read(unitPageProvider.notifier)
+                      //     .showUnit(unit, property: property);
+                    },
+                    icon: const Icon(
+                      Icons.visibility_outlined,
+                      size: 15,
+                      color: Color(0xff1769F5),
+                    ),
+                  ),
+
+                  PopupMenuButton<String>(
+                    tooltip: 'More',
+                    icon: const Icon(Icons.more_vert, size: 18),
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'view':
+                          ref
+                              .read(tenantPageProvider.notifier)
+                              .viewTenantInformation(tenant);
+                          break;
+
+                        case 'edit':
+                          ref
+                              .read(tenantPageProvider.notifier)
+                              .updateTenant(tenant);
+                          break;
+
+                        case 'delete':
+                          // _deleteUnit(context, ref, unit);
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'view',
+                        child: Row(
+                          children: [
+                            Icon(CupertinoIcons.eye, size: 18),
+                            SizedBox(width: 10),
+                            Text('View'),
+                          ],
+                        ),
+                      ),
+
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit, size: 18),
+                            SizedBox(width: 10),
+                            Text('Update'),
+                          ],
+                        ),
+                      ),
+
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete_outline, size: 18),
+                            SizedBox(width: 10),
+                            Text('Delete'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
   }
-
-  List<Unit> myUnits = ref.watch(
-    userInformationProvider.select((state) => state.units),
-  );
-  //Fetch Unit
-  Unit fetchUnit = myUnits.where((unit) => unit.unitId == tenant.unitId).single;
-
-  //Fetch Property
-  List<Property> myProperties = ref.watch(
-    userInformationProvider.select((state) => state.properties),
-  );
-  //Fetch Unit
-  Property fetchProperty = myProperties
-      .where((property) => property.propertyId == tenant.propertyId)
-      .single;
-
-  return DataRow(
-    onLongPress: () => Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => SingleTenantPage(tenant: tenant))),
-    cells: [
-      DataCell(Text('  $index  ', style: cellStyle)),
-      DataCell(Text(tenant.tenantName, style: cellStyle)),
-      DataCell(Text(tenant.tenantPhoneNumber ?? '', style: cellStyle)),
-      // DataCell(Text(tenant.tenantEmail ?? 'N/A', style: cellStyle)),
-      // DataCell(Text(tenant.tenantNationalId ?? 'N/A', style: cellStyle)),
-      if (isUnitTenant != true)
-        DataCell(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => SingleUnitPage(unit: fetchUnit)),
-          ),
-          Text(tenant.unitName ?? tenant.unitId, style: cellStyle),
-        ),
-
-      // Clean conditional insertion matching the header count exactly
-      if (propertyName != null)
-        DataCell(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => SinglePropertyPage(property: fetchProperty),
-            ),
-          ),
-          Text(propertyName, style: cellStyle),
-        ),
-      DataCell(
-        ViewChevronCard(
-          onPressedCallBack: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => SingleTenantPage(tenant: tenant),
-              ),
-            );
-          },
-        ),
-      ),
-      DataCell(
-        ViewChevronCard(
-          iconData: CupertinoIcons.pencil,
-          onPressedCallBack: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AddTenant(currentTenant: tenant),
-              ),
-            );
-          },
-        ),
-      ),
-      DataCell(
-        ViewChevronCard(
-          iconData: CupertinoIcons.trash,
-          iconColor: AppColorsConstant.redColor,
-          onPressedCallBack: () async {
-            final shouldDelete = await showDeleteConfirmationDialog(context);
-            // User pressed Cancel or dismissed the dialog
-            if (shouldDelete != true) {
-              return;
-            }
-
-            LazyLoader lazyLoader = LazyLoader(context: context);
-            lazyLoader.showLoader();
-            final db = DbTenantService();
-            try {
-              final isSuccessful = await db.deleteTenantRecord(tenant);
-              if (isSuccessful) {
-                await ref
-                    .read(userInformationProvider.notifier)
-                    .removeTenant(tenant.tenantId);
-                displaySnackBar(
-                  context,
-                  'Tenant deleted succesfully',
-                  AppColorsConstant.greenColor,
-                );
-              }
-              //
-            } catch (e) {
-              displaySnackBar(
-                context,
-                'Error $e occured when deleting the property',
-                AppColorsConstant.redColor,
-              );
-            } finally {
-              lazyLoader.hideLoader();
-            }
-          },
-        ),
-      ),
-    ],
-  );
 }

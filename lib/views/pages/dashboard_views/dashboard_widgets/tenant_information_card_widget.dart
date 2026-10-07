@@ -1,20 +1,14 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/data_sets/avatar_colors.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
-import 'package:anyamar/data/models/tenants/tenant_model.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/single_tenant/single_tenant_page.dart';
-import 'package:anyamar/forms/tenant_form.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/data/providers/user_information_provider.dart';
 
 class TenantInformationCardWidget extends ConsumerWidget {
   final bool isUnitTenant; // if not a unit tenant then it's a property tenant
   final Property? property;
+  final List<Tenant>? tenants;
   const TenantInformationCardWidget({
     super.key,
     this.isUnitTenant = false,
     this.property,
+    this.tenants,
   });
 
   @override
@@ -22,154 +16,93 @@ class TenantInformationCardWidget extends ConsumerWidget {
     List<Property> myProperties = ref.watch(
       userInformationProvider.select((state) => state.properties),
     );
-    final List<Tenant> myTenants = ref.watch(
-      userInformationProvider.select((state) => state.tenants),
-    );
+    final List<Tenant> myTenants =
+        tenants ??
+        ref.watch(userInformationProvider.select((state) => state.tenants));
 
     return ValueListenableBuilder(
       valueListenable: selectedWebPageNotifier,
       builder: (context, value, child) {
-        return Container(
-          width: Responsiveness.isDesktop(context)
-              ? getSizeFromContext(context).width * .50
-              : double.infinity,
-          height: 400,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-          child: Card(
-            elevation: 6,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Column(
-              children: [
-                //Enter card title here
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 10.0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Tenants',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      if (isUnitTenant != true)
-                        Row(
-                          children: [
-                            //Update Button
-                            ColorButtonWidget(
-                              onPressedCallBack: () =>
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => AddTenant(),
-                                    ),
-                                  ),
-                              buttonTitle: 'Add Tenant',
-                              fontSize: 11,
-                              buttonColor: AppColorsConstant.greenColor,
-                            ),
-                            SizedBox(width: 15),
-                            //View button
-                            ColorButtonWidget(
-                              onPressedCallBack: () {
-                                selectedWebPageNotifier.value = 3;
-                              },
-                              buttonTitle: 'View all',
-                              fontSize: 11,
-                              buttonColor: AppColorsConstant.blueColor,
-                            ),
-                          ],
-                        ),
-                    ],
+        return DashboardCardWidget(
+          cardTitle: 'Tenants ',
+          buttonWidget1: AppTextButton(
+            onPressedCallBack: () {
+              selectedWebPageNotifier.value = 3;
+              selectedSideItemNotifier.value = 3;
+            },
+            buttonTitle: 'View all',
+            buttonColor: AppColors.buttonBlueColor,
+          ),
+
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: isUnitTenant
+                ? myTenants
+                      .where(
+                        (tenant) => tenant.propertyId == property?.propertyId,
+                      )
+                      .length
+                : myTenants.length,
+
+            separatorBuilder: (_, __) =>
+                const Divider(height: 12, thickness: 0.15),
+            itemBuilder: (context, index) {
+              // final tenant = mytenants[index];
+
+              final Tenant tenant = isUnitTenant
+                  ? myTenants
+                        .where(
+                          (tenant) => tenant.propertyId == property?.propertyId,
+                        )
+                        .toList()[index]
+                  : myTenants[index];
+
+              return ListTile(
+                leading: CircleAvatar(
+                  radius: 18,
+                  backgroundColor:
+                      avatarBackgroundColors[index %
+                          avatarBackgroundColors.length],
+                  child: Text(
+                    tenant.tenantName[0],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w200,
+                      color: AppColorsConstant.whiteColor,
+                    ),
                   ),
                 ),
-                //Divider
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Divider(thickness: 0.18, height: 10.0),
+                title: Text(
+                  tenant.tenantName,
+                  style: const TextStyle(fontSize: 14),
                 ),
-                SizedBox(height: 10.0),
+                subtitle: Text(
+                  isUnitTenant
+                      ? tenant.unitName ?? ''
+                      : myProperties
+                            .where(
+                              (property) =>
+                                  property.propertyId == tenant.propertyId,
+                            )
+                            .single
+                            .propertyName,
 
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: isUnitTenant
-                        ? myTenants
-                              .where(
-                                (tenant) =>
-                                    tenant.propertyId == property?.propertyId,
-                              )
-                              .length
-                        : myTenants.length,
-
-                    separatorBuilder: (_, __) =>
-                        const Divider(height: 12, thickness: 0.15),
-                    itemBuilder: (context, index) {
-                      // final tenant = mytenants[index];
-
-                      final Tenant tenant = isUnitTenant
-                          ? myTenants
-                                .where(
-                                  (tenant) =>
-                                      tenant.propertyId == property?.propertyId,
-                                )
-                                .toList()[index]
-                          : myTenants[index];
-
-                      return ListTile(
-                        leading: CircleAvatar(
-                          radius: 18,
-                          backgroundColor:
-                              avatarBackgroundColors[index %
-                                  avatarBackgroundColors.length],
-                          child: Text(
-                            tenant.tenantName[0],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w200,
-                              color: AppColorsConstant.whiteColor,
-                            ),
-                          ),
-                        ),
-                        title: Text(
-                          tenant.tenantName,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        subtitle: Text(
-                          isUnitTenant
-                              ? tenant.unitName ?? ''
-                              : myProperties
-                                    .where(
-                                      (property) =>
-                                          property.propertyId ==
-                                          tenant.propertyId,
-                                    )
-                                    .single
-                                    .propertyName,
-
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColorsConstant.blueGreyColor,
-                          ),
-                        ),
-                        onTap: () {
-                          //This is the tenant
-                          // log('This is the tenant: ${tenant.tenantName}');
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => SingleTenantPage(tenant: tenant),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColorsConstant.blueGreyColor,
                   ),
                 ),
-              ],
-            ),
+                onTap: () {
+                  //This is the tenant
+                  // log('This is the tenant: ${tenant.tenantName}');
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => SingleTenantPage(tenant: tenant),
+                    ),
+                  );
+                },
+              );
+            },
           ),
         );
       },

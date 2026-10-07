@@ -12,7 +12,7 @@ abstract class Tenant with _$Tenant {
     required String userId,
     required String tenantName,
     required String unitId,
-   Rent? unitRent,
+    Rent? unitRent,
     String? tenantId,
     String? tenantPhoneNumber,
     required String propertyId,

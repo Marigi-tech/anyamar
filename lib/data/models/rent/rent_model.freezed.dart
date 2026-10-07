@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Rent {
 
- double get rentAmount; double? get rentDeposit; String? get rentCurrency; List<UnitUtility>? get utilities; String? get paymentFrequency;
+ double get rentAmount; double? get rentDeposit; String? get rentCurrency; List<UnitUtility>? get utilities;// PaymentFrequency? paymentFrequency, todo:
+ String? get paymentFrequency;
 /// Create a copy of Rent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -228,6 +229,7 @@ class _Rent implements Rent {
   return EqualUnmodifiableListView(value);
 }
 
+// PaymentFrequency? paymentFrequency, todo:
 @override final  String? paymentFrequency;
 
 /// Create a copy of Rent

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/models/properties/property_model.dart';
 
 class PropertyManagementInfo extends StatelessWidget {
   final Property property;

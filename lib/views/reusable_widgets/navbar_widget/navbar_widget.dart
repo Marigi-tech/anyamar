@@ -1,10 +1,5 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/data/notifiers.dart';
-import 'package:anyamar/data/providers/theme_provider.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class NavbarWidget extends ConsumerStatefulWidget {
   const NavbarWidget({super.key});

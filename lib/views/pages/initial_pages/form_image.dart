@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:anyamar/commons/constants.dart';
-import 'package:anyamar/responsiveness/screen_size.dart';
-import 'package:anyamar/views/reusable_widgets/buttons/button_widget.dart';
+import 'package:anyamar/commons/exports.dart';
 
 class FormImage extends StatelessWidget {
   final String imagePath;
