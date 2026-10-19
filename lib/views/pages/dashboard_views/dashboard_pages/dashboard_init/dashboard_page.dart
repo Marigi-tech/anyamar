@@ -1,16 +1,37 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/providers/sidebar_notifier_provider.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/dashboard_init/data_loading_overlay.dart';
+
 import 'package:anyamar/views/pages/widget_tree/intro_row/intro_row_widget.dart';
 import 'package:anyamar/views/pages/widget_tree/pages_list/pages_list.dart';
 
-class DashboardWidget extends ConsumerWidget {
+class DashboardWidget extends ConsumerStatefulWidget {
   const DashboardWidget({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _DashboardWidgetState();
+}
+
+class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
     final isSidebarVisible = ref.watch(sideBarProvider);
     final themeIsDarkMode = ref.watch(themeIsDarkProvider);
+    final appData = ref.watch(userInformationProvider);
+
+    // final baseColor = themeIsDarkMode
+    //     ? AppColors.darkElevatedCard
+    //     : AppColors.lightCard;
+
+    // final highlightColor = themeIsDarkMode
+    //     ? const Color(0xFF3A4658)
+    //     : const Color(0xFFEAF1FA);
+
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: themeIsDarkMode == true
           ? AppColors.darkBackground
           : AppColors.lightBackground,
@@ -36,22 +57,48 @@ class DashboardWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 //Intro row
-                IntroRowWidget(),
+                IntroRowWidget(scaffoldKey: _scaffoldKey),
+
                 //Actual page content starts here
+                // Expanded(child: MainWorkspace()),
                 Expanded(
-                  child: ValueListenableBuilder<int>(
-                    valueListenable: selectedWebPageNotifier,
-                    builder: (_, value, __) => webPages.elementAt(value),
+                  child: DataLoadingOverlay(
+                    isLoading: appData.isLoading,
+                    isDarkMode: themeIsDarkMode,
+                    child: Skeletonizer(
+                      enabled: appData.isLoading,
+                      enableSwitchAnimation: true,
+                      effect: ShimmerEffect(
+                        baseColor: themeIsDarkMode
+                            ? AppColors.darkElevatedCard
+                            : AppColors.lightCard,
+                        highlightColor: themeIsDarkMode
+                            ? const Color(0xFF3A4658)
+                            : const Color(0xFFEAF1FA),
+                        duration: const Duration(milliseconds: 1500),
+                      ),
+                      child: MainWorkspace(),
+                    ),
                   ),
                 ),
+
+                // Expanded(
+                //   child: Skeletonizer(
+                //     effect: ShimmerEffect(
+                //       baseColor: baseColor,
+                //       highlightColor: highlightColor,
+                //       duration: const Duration(milliseconds: 100),
+                //     ),
+                //     enabled: appData.isLoading,
+                //     enableSwitchAnimation: true,
+                //     child: MainWorkspace(),
+                //   ),
+                // ),
               ],
             ),
           ),
         ],
       ),
-
-      // Only mobile bottom nav
-      // bottomNavigationBar: isMobile ? const NavbarWidget() : null,
     );
   }
 }

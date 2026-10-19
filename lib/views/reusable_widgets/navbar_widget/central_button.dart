@@ -1,6 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 
-class CentralButton extends StatefulWidget {
+class CentralButton extends ConsumerStatefulWidget {
   final int index;
   final BoxDecoration backgroundColor;
   const CentralButton({
@@ -10,10 +10,10 @@ class CentralButton extends StatefulWidget {
   });
 
   @override
-  State<CentralButton> createState() => _CentralButtonState();
+  ConsumerState<CentralButton> createState() => _CentralButtonState();
 }
 
-class _CentralButtonState extends State<CentralButton> {
+class _CentralButtonState extends ConsumerState<CentralButton> {
   late BoxDecoration backgroundColor;
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _CentralButtonState extends State<CentralButton> {
       },
       child: GestureDetector(
         onTap: () {
-          selectedPageNotifier.value = widget.index;
+          ref.read(selectedPageProvider.notifier).selectPage(widget.index);
         },
 
         child: Container(

@@ -1,6 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/rent_per_tenant_summary_cards.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/rent_per_tenant_table.dart';
+import 'package:anyamar/tables/rent_per_tenant_table.dart';
 
 class RentPerTenant extends ConsumerStatefulWidget {
   const RentPerTenant({super.key});
@@ -12,8 +12,8 @@ class RentPerTenant extends ConsumerStatefulWidget {
 class _RentPerTenantState extends ConsumerState<RentPerTenant> {
   @override
   Widget build(BuildContext context) {
-    final appData = ref.watch(appDataProvider);
-    final rentRecords = appData.rentRecords;
+    final appData = ref.watch(userInformationProvider);
+    final rentRecords = appData.rentalRecords;
     //tenants in rent records
     final tenants = appData.tenants
         .where(

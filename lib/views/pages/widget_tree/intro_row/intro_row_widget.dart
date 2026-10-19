@@ -3,7 +3,8 @@ import 'package:anyamar/data/providers/sidebar_notifier_provider.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/welcome_text.dart';
 
 class IntroRowWidget extends ConsumerWidget {
-  const IntroRowWidget({super.key});
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  const IntroRowWidget({super.key, required this.scaffoldKey});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +28,9 @@ class IntroRowWidget extends ConsumerWidget {
         children: [
           IconButton(
             onPressed: () {
-              ref.read(sideBarProvider.notifier).toggleSidebar();
+              Responsiveness.isMobile(context)
+                  ? scaffoldKey.currentState?.openDrawer()
+                  : ref.read(sideBarProvider.notifier).toggleSidebar();
             },
             icon: Icon(Icons.menu),
           ),

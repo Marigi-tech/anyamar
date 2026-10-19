@@ -93,16 +93,19 @@ double occupancyRate(List<Unit> units, List<Unit> occupiedUnits) {
 }
 
 List<SummaryCard> getUnitIntroCards(List<Unit> units) {
-  final totalPayable = units.fold<double>(0.0, (total, unit) {
-    final rent = unit.unitRent?.rentAmount ?? 0.0;
+  final totalPayable = units.where((unit) => unit.isOccupied).fold<double>(
+    0.0,
+    (total, unit) {
+      final rent = unit.unitRent?.rentAmount ?? 0.0;
 
-    final utilities = (unit.unitRent?.utilities ?? []).fold<double>(
-      0.0,
-      (sumTotal, utility) => sumTotal + utility.amountPayable,
-    );
+      final utilities = (unit.unitRent?.utilities ?? []).fold<double>(
+        0.0,
+        (sumTotal, utility) => sumTotal + utility.amountPayable,
+      );
 
-    return total + rent + utilities;
-  });
+      return total + rent + utilities;
+    },
+  );
   final occupiedUnits = units.where((unit) => unit.isOccupied).toList();
   final vacantUnits = units.where((unit) => !unit.isOccupied).toList();
 

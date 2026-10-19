@@ -833,7 +833,7 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
           'Unit added successfully',
           AppColorsConstant.greenColor,
         );
-        ref.read(unitPageProvider.notifier).showUnit(addedUnit);
+        // ref.read(unitPageProvider.notifier).showUnit(addedUnit);
 
         // Navigator.pop(context);
       } catch (e, stackTrace) {
@@ -946,7 +946,7 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
         'Unit updated successfully',
         AppColorsConstant.greenColor,
       );
-      ref.read(unitPageProvider.notifier).showUnit(result);
+      // ref.read(unitPageProvider.notifier).showUnit(result);
       // if (widget.isInUnitPage != true) {
       //   Navigator.pop(context);
       // }

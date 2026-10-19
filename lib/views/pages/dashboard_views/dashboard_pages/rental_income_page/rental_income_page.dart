@@ -16,10 +16,10 @@ class _RentalIcomePageState extends ConsumerState<RentalIcomePage> {
   @override
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     final tenants = appData.tenants;
     final units = appData.units;
-    final rentRecords = appData.rentRecords;
+    final rentRecords = appData.rentalRecords;
     for (var record in rentRecords) {
       rentEntries.add(record.rentEntry);
     }
@@ -228,7 +228,7 @@ class _RentalIcomePageState extends ConsumerState<RentalIcomePage> {
                               // );
                             },
                             icon: const Icon(
-                              Icons.visibility_outlined,
+                              CupertinoIcons.chevron_right,
                               size: 18,
                               color: Color(0xff1769F5),
                             ),

@@ -8,22 +8,12 @@ class IntroTextWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Align(
       alignment: Alignment.topLeft,
-      child: RichText(
-        text: TextSpan(
-          text: 'Anyamar / ',
-          style: TextStyle(color: AppColorsConstant.kBlue2, letterSpacing: 0.5),
-          children: [
-            TextSpan(
-              text: dashboardItem,
-              style: TextStyle(
-                color: AppColorsConstant.kBlue2,
-                // color: ref.watch(themeIsDarkProvider)
-                //     ? AppColorsConstant.whiteColor
-                //     : AppColorsConstant.blueGreyColor,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
+      child: Text(
+        'Anyamar / $dashboardItem',
+        style: CustomTextStyles.cardDescriptionStyle.copyWith(
+          color: AppColors.primaryBlue,
+          letterSpacing: -0.2,
+          fontSize: 16,
         ),
       ),
     );

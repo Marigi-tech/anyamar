@@ -1,7 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/enums/currencies.dart';
 import 'package:anyamar/data/models/enums/payment_frequency.dart';
-import 'package:anyamar/data/providers/page_providers/tenant_page/tenant_page_notifier.dart';
 import 'package:anyamar/utils/text_input_formatters/id_or_passport_formatter.dart';
 import 'package:anyamar/utils/text_input_formatters/phone_number_formatter.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
@@ -58,6 +57,7 @@ class _TenantFormState extends ConsumerState<TenantForm> {
   String? selectedCurrency;
   List<UnitUtility> unitUtilities = [];
   Tenant? currentTenant;
+  Property? selectedProperty;
 
   // ============================================================
   // INIT
@@ -65,6 +65,7 @@ class _TenantFormState extends ConsumerState<TenantForm> {
   @override
   void initState() {
     super.initState();
+    selectedProperty = widget.currentProperty;
     _initializeForm();
   }
 
@@ -207,20 +208,28 @@ class _TenantFormState extends ConsumerState<TenantForm> {
     }
   }
 
-  popPage() {
-    if (currentTenant != null) {
-      ref
-          .read(tenantPageProvider.notifier)
-          .viewTenantInformation(currentTenant!);
-    }
-  }
+  // popPage() {
+  //   if (currentTenant != null) {
+  //     ref
+  //         .read(tenantPageProvider.notifier)
+  //         .viewTenantInformation(currentTenant!);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(authServiceProvider).currentUser;
-    final appData = ref.watch(appDataProvider);
-    myProperties = appData.properties;
-    allUnits = appData.units;
+    final userInfo = ref.watch(userInformationProvider);
+
+    myProperties = userInfo.properties;
+    allUnits = selectedProperty != null
+        ? userInfo.units
+              .where((unit) => unit.propertyId == selectedProperty?.propertyId)
+              .toList()
+        : userInfo.units.toList();
+    log(
+      'All units : ${allUnits.length} \n  selected property : ${selectedProperty?.propertyName}',
+    );
     myVacantUnits = allUnits.where((unit) => unit.isOccupied != true).toList();
 
     // ==========================================================
@@ -232,54 +241,54 @@ class _TenantFormState extends ConsumerState<TenantForm> {
     if (widget.currentTenant != null) {
       selectedUnit = allUnits
           .where((unit) => unit.unitId == widget.currentTenant?.unitId)
-          .single;
+          .singleOrNull;
     }
     log('selectedUnit: $selectedUnit');
-    return allUnits.isEmpty
-        ? InfoUnavailableLottie(
-            text:
-                'There are no units at the moment, add a unit to the system for better management',
-            ctaButtonWidget: CardButtonWidget(
-              buttonTitle: 'Click here to add a unit',
-              // onPressedCallBack: () => Navigator.of(context).push(
-              //   // MaterialPageRoute(
-              //   //   builder: (_) => AddUnit(
-              //   //     currentProperty: widget.currentProperty,
-              //   //     isFromTenantPage: true,
-              //   //   ),
-              //   // ),
-              // ),
-            ),
-          )
-        : myVacantUnits.isEmpty
-        ? InfoUnavailableLottie(
-            text: 'There are currently no vacant units',
-            ctaButtonWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CardButtonWidget(
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 980),
+        child: allUnits.isEmpty
+            ? InfoUnavailableLottie(
+                text:
+                    'There are no units at the moment, add a unit to the system for better management',
+                ctaButtonWidget: CardButtonWidget(
                   buttonTitle: 'Click here to add a unit',
-                  backgroundColor: AppColorsConstant.lightGreenColor,
                   // onPressedCallBack: () => Navigator.of(context).push(
                   //   // MaterialPageRoute(
-                  //   //   builder: (_) =>
-                  //   //       AddUnit(currentProperty: widget.currentProperty),
+                  //   //   builder: (_) => AddUnit(
+                  //   //     currentProperty: widget.currentProperty,
+                  //   //     isFromTenantPage: true,
+                  //   //   ),
                   //   // ),
+                  // ),
                 ),
-                // ),
-                SizedBox(height: 06),
-                CardButtonWidget(
-                  buttonTitle: 'Go back',
-                  onPressedCallBack: () => Navigator.pop(context),
+              )
+            : myVacantUnits.isEmpty
+            ? InfoUnavailableLottie(
+                text: 'There are currently no vacant units',
+                ctaButtonWidget: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CardButtonWidget(
+                      buttonTitle: 'Click here to add a unit',
+                      backgroundColor: AppColorsConstant.lightGreenColor,
+                      // onPressedCallBack: () => Navigator.of(context).push(
+                      //   // MaterialPageRoute(
+                      //   //   builder: (_) =>
+                      //   //       AddUnit(currentProperty: widget.currentProperty),
+                      //   // ),
+                    ),
+                    // ),
+                    SizedBox(height: 06),
+                    CardButtonWidget(
+                      buttonTitle: 'Go back',
+                      onPressedCallBack: () => Navigator.pop(context),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        : Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 980),
-              child: Form(
+              )
+            : Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -751,8 +760,8 @@ class _TenantFormState extends ConsumerState<TenantForm> {
                   ],
                 ),
               ),
-            ),
-          );
+      ),
+    );
   }
 
   // ==========================================================
@@ -779,6 +788,7 @@ class _TenantFormState extends ConsumerState<TenantForm> {
           unitRent: selectedUnit!.unitRent,
           startOfLease: leaseStart!,
           lastUpdateDate: DateTime.now(),
+       
           nextOfKin: Person(
             personName: emergencyContactNameController.text.trim(),
             personEmail: emergencyContactEmailController.text.trim(),
@@ -830,7 +840,7 @@ class _TenantFormState extends ConsumerState<TenantForm> {
             displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
           } finally {
             lazyLoader.hideLoader();
-            popPage();
+            // popPage();
           }
         }
         log('Select a unit , or start date');
@@ -915,7 +925,7 @@ class _TenantFormState extends ConsumerState<TenantForm> {
           displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
         } finally {
           lazyLoader.hideLoader();
-          popPage();
+          // popPage();
         }
       }
       log('Select a unit , or start date');

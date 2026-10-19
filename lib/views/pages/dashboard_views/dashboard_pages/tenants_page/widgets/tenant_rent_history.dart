@@ -1,10 +1,16 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/page_providers/tenant_page/tenant_page_notifier.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/rental_month_widget.dart';
 import 'package:anyamar/views/reusable_widgets/badges/payment_status_badge.dart';
 
 class TenantRentHistory extends ConsumerStatefulWidget {
   final Tenant tenant;
-  const TenantRentHistory({super.key, required this.tenant});
+  final String introText;
+  const TenantRentHistory({
+    super.key,
+    required this.tenant,
+    required this.introText,
+  });
 
   @override
   ConsumerState<TenantRentHistory> createState() => _TenantRentHistoryState();
@@ -16,13 +22,14 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
   @override
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
-    final appData = ref.watch(appDataProvider);
-    final rentRecords = appData.rentRecords.where(
+    final appData = ref.watch(userInformationProvider);
+    final rentRecords = appData.rentalRecords.where(
       (r) => r.tenantId == widget.tenant.tenantId,
     );
     for (var record in rentRecords) {
       rentalMonths.add(record.rentalMonth);
     }
+    String introText = widget.introText;
     final TextStyle headerStyle = CustomTextStyles.cardDescriptionStyle
         .copyWith(
           color: themeIsDark == true
@@ -104,6 +111,10 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
         final unit = appData.units
             .where((u) => u.unitId == widget.tenant.unitId)
             .singleOrNull;
+        //Instance of property
+        final property = appData.properties
+            .where((p) => p.propertyId == unit?.propertyId)
+            .singleOrNull;
 
         // unitName = unit?.unitName ?? '';
         var number = index + 1;
@@ -173,26 +184,26 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
               Row(
                 children: [
                   IconButton(
-                    tooltip: 'View',
-                    onPressed: () {
-                      ref
-                          .read(tenantPageProvider.notifier)
-                          .viewRentalMonth(rentalMonth, tenant);
-                    },
-                    icon: const Icon(
-                      Icons.visibility_outlined,
-                      size: 18,
-                      color: Color(0xff1769F5),
-                    ),
-                  ),
-
-                  IconButton(
-                    tooltip: 'More',
+                    tooltip: 'view',
 
                     onPressed: () {
                       ref
-                          .read(tenantPageProvider.notifier)
-                          .viewRentalMonth(rentalMonth, tenant);
+                          .read(workspaceProvider.notifier)
+                          .openForm(
+                            DashboardPageStructure(
+                              introText: '$introText / rent history',
+                              pageTitle: tenant.tenantName,
+                              supplementaryText:
+                                  '${tenant.tenantEmail} | ${tenant.tenantPhoneNumber} | ${unit?.unitName} | ${property?.propertyName}',
+                              introRowWidgets: [],
+                              introButton: IntroButtonWidget(),
+                              scrollableDashboardWidget: RentalMonthWidget(
+                                rentalMonth: rentalMonth,
+                                tenant: tenant,
+                                introText: '$introText / rent history / month',
+                              ),
+                            ),
+                          );
                     },
 
                     icon: const Icon(Icons.more_vert, size: 18),

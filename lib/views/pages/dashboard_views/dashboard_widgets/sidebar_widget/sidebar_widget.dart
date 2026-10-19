@@ -1,4 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/providers/page_providers/selected_page_provider/selected_page_notifier.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/logo_widget/logo_widget.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/welcome_text.dart';
 
@@ -9,9 +11,8 @@ class SidebarWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appUser = ref.watch(
-      userInformationProvider.select((state) => state.appUser),
-    );
+    final appData = ref.watch(userInformationProvider);
+    final appUser = appData.appUser;
     final themeIsDark = ref.watch(themeIsDarkProvider);
 
     return Container(
@@ -47,18 +48,15 @@ class SidebarWidget extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final item = dashboardItems[index];
 
-                  return ValueListenableBuilder(
-                    valueListenable: selectedWebPageNotifier,
-                    builder: (context, pageIndex, child) {
-                      return SideBarItemWidget(
-                        icon: item.icon,
-                        title: item.title,
-                        index: item.index,
-                        onPressedCallBack: () async {
-                          selectedWebPageNotifier.value = item.index!;
-                          selectedSideItemNotifier.value = item.index!;
-                        },
-                      );
+                  return SideBarItemWidget(
+                    icon: item.icon,
+                    title: item.title,
+                    index: item.index,
+                    onPressedCallBack: () async {
+                      ref.read(workspaceProvider.notifier).closeWorkspace();
+                      ref
+                          .read(selectedPageProvider.notifier)
+                          .selectPage(item.index!);
                     },
                   );
                 },
@@ -67,66 +65,75 @@ class SidebarWidget extends ConsumerWidget {
           ),
 
           // User
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: Color(0xff18365F))),
-            ),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Color(0xffDDE7FF),
-                  child: UserNameText(isInitials: true),
-                ),
-
-                const SizedBox(width: 25),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          !appData.isLoading
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 20.0,
+                  ),
+                  decoration: const BoxDecoration(
+                    border: Border(top: BorderSide(color: Color(0xff18365F))),
+                  ),
+                  child: Row(
                     children: [
-                      UserNameText(),
+                      const CircleAvatar(
+                        radius: 22,
+                        backgroundColor: Color(0xffDDE7FF),
+                        child: UserNameText(isInitials: true),
+                      ),
 
-                      SizedBox(height: 3),
-                      Text(
-                        appUser?.userType ?? '',
-                        style: TextStyle(
-                          color: Color(0xffAFC2DF),
-                          fontSize: 12,
+                      const SizedBox(width: 25),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            UserNameText(),
+
+                            SizedBox(height: 3),
+                            Text(
+                              appUser?.userType ?? '',
+                              style: TextStyle(
+                                color: Color(0xffAFC2DF),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
+
+                      IconButton(
+                        onPressed: () => showDialog<bool>(
+                          context: context,
+                          builder: (dialogContext) {
+                            return AlertModal(
+                              dialogTitle: 'Log Out',
+                              isDeleteModal: false,
+                              dialogInformation:
+                                  ' Hello  ${appUser?.userName} \n Are you sure you want to log out of your account ?',
+                              buttonTitle: 'Log out',
+                              onButtonPressedCallBack: () async {
+                                ref
+                                    .read(selectedPageProvider.notifier)
+                                    .selectPage(0);
+                                //       //todo: Dispose all providers
+
+                                //Log out
+                                await ref
+                                    .read(authServiceProvider)
+                                    .signOutUser();
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                        ),
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        color: Colors.white,
                       ),
                     ],
                   ),
-                ),
-
-                IconButton(
-                  onPressed: () => showDialog<bool>(
-                    context: context,
-                    builder: (dialogContext) {
-                      return AlertModal(
-                        dialogTitle: 'Log Out',
-                        isDeleteModal: false,
-                        dialogInformation:
-                            ' Hello  ${appUser?.userName} \n Are you sure you want to log out of your account ?',
-                        buttonTitle: 'Log out',
-                        onButtonPressedCallBack: () async {
-                          selectedPageNotifier.value = 0;
-                          //       //todo: Dispose all providers
-
-                          //Log out
-                          await ref.read(authServiceProvider).signOutUser();
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  ),
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ),
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );

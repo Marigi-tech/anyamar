@@ -6,14 +6,14 @@ class RentEntriesPageSummaryCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
-    final appData = ref.watch(appDataProvider);
-    final totalIncome = appData.rentRecords.fold<double>(
+    final appData = ref.watch(userInformationProvider);
+    final totalIncome = appData.rentalRecords.fold<double>(
       0.0,
       (sum, record) => sum + record.rentEntry.amountPaid,
     );
     final payingTenants = appData.tenants
         .where(
-          (tenant) => appData.rentRecords.any(
+          (tenant) => appData.rentalRecords.any(
             (record) => record.tenantId == tenant.tenantId,
           ),
         )
@@ -29,7 +29,7 @@ class RentEntriesPageSummaryCards extends ConsumerWidget {
         SummaryCard(
           icon: Icons.numbers,
           title: 'Total records',
-          value: '${appData.rentRecords.length}',
+          value: '${appData.rentalRecords.length}',
           subtitle: 'Total Rental records recorded ',
           iconCardColor: AppColors.orange,
           onPressedCallBack: () {},

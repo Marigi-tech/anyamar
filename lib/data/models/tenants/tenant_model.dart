@@ -24,7 +24,8 @@ abstract class Tenant with _$Tenant {
     DateTime? endOfLease,
     Person?
     nextOfKin, // Include name , phone number and email address of the tenant's next of kin
-    final String? nationalId,
+    String? nationalId,
+    bool? isActive,
     DateTime? lastUpdateDate,
   }) = _Tenant;
 

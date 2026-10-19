@@ -1,5 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/page_providers/finances_page/finances_notifier.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
 
@@ -16,8 +16,13 @@ class ExpenseRecord extends StatelessWidget {
 
 class ExpenseRecordForm extends ConsumerStatefulWidget {
   final FinancialRecord? financialRecord;
+  final Property? currentProperty;
 
-  const ExpenseRecordForm({super.key, this.financialRecord});
+  const ExpenseRecordForm({
+    super.key,
+    this.financialRecord,
+    this.currentProperty,
+  });
 
   @override
   ConsumerState<ExpenseRecordForm> createState() => _ExpenseRecordFormState();
@@ -39,6 +44,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
   @override
   void initState() {
     super.initState();
+    selectedProperty = widget.currentProperty;
     _initializeForm();
   }
 
@@ -429,7 +435,6 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
           'Record added successfully',
           AppColorsConstant.greenColor,
         );
-        ref.read(financesPageProvider.notifier).viewFinancialRecord(newRecord);
       }
     } catch (e, stackTrace) {
       log('Error adding financial record: $e', stackTrace: stackTrace);
@@ -442,6 +447,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     } finally {
       if (mounted) {
         lazyLoader.hideLoader();
+        ref.read(workspaceProvider.notifier).closeWorkspace();
 
         // Navigator.pop(context);
       }
@@ -518,9 +524,6 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
         'Record updated successfully',
         AppColorsConstant.greenColor,
       );
-      ref
-          .read(financesPageProvider.notifier)
-          .viewFinancialRecord(updatedRecord);
     } catch (e, stackTrace) {
       log('Error updating financial record: $e', stackTrace: stackTrace);
 
@@ -534,6 +537,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     } finally {
       if (mounted) {
         lazyLoader.hideLoader();
+        ref.read(workspaceProvider.notifier).closeWorkspace();
       }
     }
   }

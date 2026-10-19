@@ -28,6 +28,7 @@ _Tenant _$TenantFromJson(Map<String, dynamic> json) => _Tenant(
       ? null
       : Person.fromJson(json['nextOfKin'] as Map<String, dynamic>),
   nationalId: json['nationalId'] as String?,
+  isActive: json['isActive'] as bool?,
   lastUpdateDate: json['lastUpdateDate'] == null
       ? null
       : DateTime.parse(json['lastUpdateDate'] as String),
@@ -49,5 +50,6 @@ Map<String, dynamic> _$TenantToJson(_Tenant instance) => <String, dynamic>{
   'endOfLease': instance.endOfLease?.toIso8601String(),
   'nextOfKin': instance.nextOfKin?.toJson(),
   'nationalId': instance.nationalId,
+  'isActive': instance.isActive,
   'lastUpdateDate': instance.lastUpdateDate?.toIso8601String(),
 };

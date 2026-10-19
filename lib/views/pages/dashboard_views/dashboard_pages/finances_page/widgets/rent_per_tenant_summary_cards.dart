@@ -6,9 +6,9 @@ class RentPerTenantSummaryCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     //rent records
-    final rentRecords = appData.rentRecords;
+    final rentRecords = appData.rentalRecords;
     final totalRent = rentRecords
         .map((rentRecord) => rentRecord.rentEntry)
         .fold<double>(0, (sum, record) => sum + record.amountPaid);

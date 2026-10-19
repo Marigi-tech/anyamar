@@ -5,29 +5,23 @@ import 'package:anyamar/commons/exports.dart';
 class OccupancyGaugePainter extends CustomPainter {
   final double percentage;
 
-  OccupancyGaugePainter({
-    required this.percentage,
-  });
+  OccupancyGaugePainter({required this.percentage});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(
-      size.width / 2,
-      size.height * .63,
-    );
+    final center = Offset(size.width / 2, size.height * .63);
 
-    final radius =
-        math.min(size.width / 2, size.height) - 25;
+    final radius = math.min(size.width / 2, size.height) - 25;
 
     final backgroundPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 21
+      ..strokeWidth = 13
       ..strokeCap = StrokeCap.round
       ..color = const Color(0xFFE0E4E9);
 
     final progressPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 21
+      ..strokeWidth = 13
       ..strokeCap = StrokeCap.round
       ..color = const Color(0xFF2469DB);
 
@@ -35,10 +29,7 @@ class OccupancyGaugePainter extends CustomPainter {
     const totalSweep = math.pi;
 
     canvas.drawArc(
-      Rect.fromCircle(
-        center: center,
-        radius: radius,
-      ),
+      Rect.fromCircle(center: center, radius: radius),
       startAngle,
       totalSweep,
       false,
@@ -46,10 +37,7 @@ class OccupancyGaugePainter extends CustomPainter {
     );
 
     canvas.drawArc(
-      Rect.fromCircle(
-        center: center,
-        radius: radius,
-      ),
+      Rect.fromCircle(center: center, radius: radius),
       startAngle,
       totalSweep * percentage,
       false,
@@ -58,9 +46,7 @@ class OccupancyGaugePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(
-    covariant OccupancyGaugePainter oldDelegate,
-  ) {
+  bool shouldRepaint(covariant OccupancyGaugePainter oldDelegate) {
     return oldDelegate.percentage != percentage;
   }
 }

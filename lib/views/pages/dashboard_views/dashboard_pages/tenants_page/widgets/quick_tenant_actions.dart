@@ -1,5 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/page_providers/tenant_page/tenant_page_notifier.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 
 class QuickActionsTenantWidget extends ConsumerWidget {
   final Tenant? tenant;
@@ -12,8 +12,20 @@ class QuickActionsTenantWidget extends ConsumerWidget {
         //Update tenant
         if (tenant != null)
           QWidget(
-            onPressedCallBack: () =>
-                ref.read(tenantPageProvider.notifier).updateTenant(tenant!),
+            onPressedCallBack: () => ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  DashboardPageStructure(
+                    introText: 'tenants / tenant / update tenant',
+                    pageTitle: tenant?.tenantName,
+                    introRowWidgets: [],
+                    introButton: IntroButtonWidget(),
+                    scrollableDashboardWidget: TenantForm(
+                      currentTenant: tenant,
+                    ),
+                  ),
+                ),
+            // ref.read(tenantPageProvider.notifier).updateTenant(tenant!),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -27,17 +39,17 @@ class QuickActionsTenantWidget extends ConsumerWidget {
           ),
         if (tenant != null) CardItemSeparator(),
         //Add Tenant
-        QWidget(
-          onPressedCallBack: () =>
-              ref.read(tenantPageProvider.notifier).showAddTenantForm(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RowTitleWidget(text: 'Add Tenant', icon: CupertinoIcons.add),
-              Icon(CupertinoIcons.chevron_right, size: 15),
-            ],
-          ),
-        ),
+        // QWidget(
+        //   onPressedCallBack: () =>
+        //       ref.read(tenantPageProvider.notifier).showAddTenantForm(),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       RowTitleWidget(text: 'Add Tenant', icon: CupertinoIcons.add),
+        //       Icon(CupertinoIcons.chevron_right, size: 15),
+        //     ],
+        //   ),
+        // ),
         CardItemSeparator(),
       ],
     );

@@ -6,19 +6,23 @@ import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_p
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_units/property_units.dart';
 
 class PropertyTabs extends ConsumerWidget {
+  final String introText;
   final Property property;
-  final double expectedMonthlyIncome;
 
-  const PropertyTabs({super.key, required this.property, required this.expectedMonthlyIncome});
+  const PropertyTabs({
+    super.key,
+    required this.property,
+    required this.introText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appData = ref.watch(appDataProvider);
-
+    final appData = ref.watch(userInformationProvider);
+    // units in the property
     final propertyUnits = appData.units
         .where((unit) => unit.propertyId == property.propertyId)
         .toList();
-
+    // tenants
     final propertyTenants = appData.tenants
         .where(
           (tenant) => propertyUnits.any((unit) => unit.unitId == tenant.unitId),
@@ -56,7 +60,7 @@ class PropertyTabs extends ConsumerWidget {
                 Tab(text: 'Units'),
                 Tab(text: 'Tenants'),
                 Tab(text: 'Finances'),
-                Tab(text: 'Reports'),
+                // Tab(text: 'Reports'),
               ],
             ),
           ),
@@ -76,16 +80,25 @@ class PropertyTabs extends ConsumerWidget {
                   property: property,
                   propertyUnits: propertyUnits,
                   propertyTenants: propertyTenants,
-                  expectedMonthlyIncome: expectedMonthlyIncome,
+                  introText: '$introText / overview',
                 ),
                 //Property Units
-                PropertyUnits(property: property),
+                PropertyUnits(
+                  property: property,
+                  introText: '$introText / units',
+                ),
                 //Property Tenants
-                PropertyTenants(property: property),
+                PropertyTenants(
+                  property: property,
+                  introText: '$introText / tenants',
+                ),
                 //Finances
-                PropertyRecords(property: property),
+                PropertyRecords(
+                  property: property,
+                  introText: '$introText / financial records',
+                ),
                 //Reports
-                Text('Reports'),
+                // Text('Reports'),
               ],
             ),
           ),

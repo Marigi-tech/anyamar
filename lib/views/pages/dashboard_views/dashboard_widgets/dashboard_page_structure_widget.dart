@@ -1,4 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 
 class DashboardPageStructure extends ConsumerWidget {
   final String? introText;
@@ -44,6 +45,7 @@ class DashboardPageStructure extends ConsumerWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // ------------------------------------------------
                 // PAGE HEADER
@@ -78,16 +80,16 @@ class DashboardPageStructure extends ConsumerWidget {
   }
 }
 
-class IntroButtonWidget extends StatefulWidget {
-  final String? buttonText;
-  final GestureTapCallback? onPressedCallBack;
-  const IntroButtonWidget({super.key, this.buttonText, this.onPressedCallBack});
+class IntroButtonWidget extends ConsumerStatefulWidget {
+  // final String? buttonText;
+  // final GestureTapCallback? onPressedCallBack;
+  const IntroButtonWidget({super.key});
 
   @override
-  State<IntroButtonWidget> createState() => _IntroButtonWidgetState();
+  ConsumerState<IntroButtonWidget> createState() => _IntroButtonWidgetState();
 }
 
-class _IntroButtonWidgetState extends State<IntroButtonWidget> {
+class _IntroButtonWidgetState extends ConsumerState<IntroButtonWidget> {
   Color textColor = AppColors.primaryBlue;
   bool isUnderLined = false;
   @override
@@ -107,19 +109,20 @@ class _IntroButtonWidgetState extends State<IntroButtonWidget> {
         });
       },
       child: GestureDetector(
-        onTap: widget.onPressedCallBack,
+        onTap: () => ref.read(workspaceProvider.notifier).closeWorkspace(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.arrow_back, color: textColor, size: 13),
-            SizedBox(width: 10.0),
+            Icon(CupertinoIcons.arrow_left_circle, color: textColor, size: 16),
+            SizedBox(width: 3.0),
             Text(
-              widget.buttonText ?? '',
-
+              'Back',
               style: CustomTextStyles.cardDescriptionStyle.copyWith(
                 color: textColor,
                 fontStyle: FontStyle.normal,
+                fontSize: 16,
+                letterSpacing: 0.8,
                 decoration: isUnderLined ? TextDecoration.underline : null,
               ),
             ),
@@ -165,9 +168,11 @@ class _PageHeader extends StatelessWidget {
               pageTitleWidget ??
                   Text(
                     pageTitle ?? '',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
+                    style: CustomTextStyles.cardExtraDescriptionStyle.copyWith(
+                      fontSize: 23,
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.normal,
+
                       color: themeIsDark
                           ? AppColors.darkText
                           : const Color(0xff12234A),

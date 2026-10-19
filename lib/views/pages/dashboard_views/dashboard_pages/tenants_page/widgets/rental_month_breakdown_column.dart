@@ -3,25 +3,53 @@ import 'package:anyamar/commons/exports.dart';
 class RentalMonthBreakdownColumn extends ConsumerWidget {
   final RentalMonth rentalMonth;
   final Tenant tenant;
+  final Unit? unit;
   const RentalMonthBreakdownColumn({
     super.key,
     required this.rentalMonth,
     required this.tenant,
+    this.unit,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double expectedTotal =
-        rentalMonth.unitRent?.rentAmount ??
-        0 +
-            (rentalMonth.unitRent?.utilities ?? []).fold<double>(
-              0,
-              (sum, utility) => sum + utility.amountPayable,
-            );
-    final actualTotal = rentalMonth.rentEntries.fold<double>(
+    // double expectedTotal =
+    //     rentalMonth.unitRent?.rentAmount ??
+    //     0 +
+    //         (rentalMonth.unitRent?.utilities ?? []).fold<double>(
+    //           0,
+    //           (sum, utility) => sum + utility.amountPayable,
+    //         );
+    // final actualTotal = rentalMonth.rentEntries.fold<double>(
+    //   0,
+    //   (sum, entry) => entry.amountPaid,
+    // );
+    // Total
+    double actualTotal = rentalMonth.rentEntries.fold<double>(
       0,
-      (sum, entry) => entry.amountPaid,
+      (sum, amount) => sum + amount.amountPaid,
     );
+    // Expected total
+    double expectedTotal = rentalMonth.map((month) {
+      double? total;
+
+      if (month.unitRent != null) {
+        if (month.unitRent!.utilities != null) {
+          total =
+              month.unitRent!.rentAmount +
+              month.unitRent!.utilities!.fold<double>(
+                0,
+                (sum, utility) => utility.amountPayable,
+              );
+        }
+        if (month.unitRent?.utilities == null) {
+          total = month.unitRent!.rentAmount;
+        }
+      } else {
+        total = 0.0;
+      }
+      return total ?? 0.0;
+    });
     double balance = expectedTotal - actualTotal;
     double excess = actualTotal - expectedTotal;
 
@@ -98,17 +126,11 @@ class RentalMonthBreakdownColumn extends ConsumerWidget {
 //------------------------------------------------------------------------------
 
 class RentalMonthTenantInfoColumn extends ConsumerWidget {
-
   final Tenant tenant;
-  const RentalMonthTenantInfoColumn({
-    super.key,
-  
-    required this.tenant,
-  });
+  const RentalMonthTenantInfoColumn({super.key, required this.tenant});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  
     return DashboardCardWidget(
       cardTitle: 'Tenant',
       child: Column(
@@ -150,7 +172,6 @@ class RentalMonthTenantInfoColumn extends ConsumerWidget {
               ),
             ],
           ),
-      
         ],
       ),
     );

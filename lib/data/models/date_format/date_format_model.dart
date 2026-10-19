@@ -41,6 +41,10 @@ String formatMonthName(DateTime date) {
   return "${date.month}";
 }
 
+String formatYearName(DateTime date) {
+  return "${date.year}";
+}
+
 String formatMonthAndYearName(DateTime date) {
   final month = DateFormat('MMM').format(date); // MONTH
   final year = DateFormat('yyyy').format(date); // YEAR

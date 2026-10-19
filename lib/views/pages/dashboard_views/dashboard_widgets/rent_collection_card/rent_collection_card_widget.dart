@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -15,22 +14,32 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
   List<RentalRecord> thisMonthRecords = [];
   List<RentalMonth> rentalMonths = [];
   String? selectedRentalMonth;
+  String? selectedRentalMonthYear;
+  double? excessCollection;
+  double? outstandingBalance = 0;
   //get current Rental month
   String currentRentalMonth = formatMonthAndYearName(DateTime.now());
 
   @override
   void initState() {
     super.initState();
+
     selectedRentalMonth = currentRentalMonth;
+
+    final parts = currentRentalMonth.split('/');
+    if (parts.length == 2) {
+      selectedRentalMonthYear = parts[1].trim();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final userInfo = ref.watch(userInformationProvider);
+
     //get all rental records
-    List<RentalRecord> rentalRecords = userInfo.appData?.rentRecords ?? [];
+    List<RentalRecord> rentalRecords = userInfo.rentalRecords;
     //active tenants
-    List<Tenant> activeTenants = userInfo.appData?.activeTenants.toList() ?? [];
+    List<Tenant> activeTenants = userInfo.activeTenants.toList();
     // expected rental income for this month
     final double expectedRentalIncome = activeTenants.fold<double>(0.0, (
       total,
@@ -45,12 +54,18 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
 
       return total + rent + utilities;
     });
-    //all recorded rental months
-    rentalMonths = rentalRecords
-        .map((record) => record.rentalMonth)
-        .where((rentalMonth) => rentalMonth.rentalMonth != currentRentalMonth)
-        .toList();
-
+    //Rental months that can be displayed in the popup
+    rentalMonths = rentalRecords.map((record) => record.rentalMonth).where((
+      rentalMonth,
+    ) {
+      final parts = rentalMonth.rentalMonth.split('/');
+      if (parts.length != 2) return false;
+      final month = parts[0].trim();
+      final year = parts[1].trim();
+      final selectedMonth = selectedRentalMonth?.trim();
+      final selectedYear = selectedRentalMonthYear?.trim();
+      return '$month/$year' != selectedMonth && year == selectedYear;
+    }).toList();
     // this month's rental records
     thisMonthRecords = rentalRecords
         .where(
@@ -64,18 +79,27 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
       (sum, record) => sum + record.rentEntry.amountPaid,
     );
     //collected percentage
-    double collectedPercentage = collectedRentalIncome / expectedRentalIncome;
+    final double collectedPercentage = expectedRentalIncome > 0
+        ? collectedRentalIncome / expectedRentalIncome
+        : 0.0;
+    // indicator percentage
+    final double indicatorPercent = collectedPercentage.clamp(0.0, 1.0);
+    // excess Collection
+    excessCollection = collectedRentalIncome > expectedRentalIncome
+        ? collectedRentalIncome - expectedRentalIncome
+        : null;
     //Outstanding balance
-
-    double outStandingBalance = expectedRentalIncome - collectedRentalIncome;
-
+    outstandingBalance = expectedRentalIncome > collectedRentalIncome
+        ? expectedRentalIncome - collectedRentalIncome
+        : null;
+    //Theme
     final themeIsDark = ref.watch(themeIsDarkProvider);
 
     return DashboardCardWidget(
-      cardTitle: 'Rent Collection - ',
+      cardTitle: 'Rent Collection (${formatYearName(DateTime.now())}) - ',
 
       buttonWidget1: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 05, vertical: 3),
+        padding: const EdgeInsets.only(left: 15, top: 3, bottom: 3),
         decoration: BoxDecoration(
           border: Border.all(
             color: themeIsDark == true
@@ -87,13 +111,16 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 selectedRentalMonth != currentRentalMonth
                     ? '$selectedRentalMonth '
-                    : 'This Month ',
-                style: GoogleFonts.inter(
-                  fontSize: 10,
+                    : ' This Month ',
+                style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                  fontSize: 12,
+                  fontStyle: FontStyle.normal,
                   color: themeIsDark == true
                       ? AppColors.darkText
                       : const Color(0xFF25344B),
@@ -101,15 +128,17 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
               ),
               PopupMenuButton<String>(
                 tooltip: '',
-                icon: const Icon(Icons.keyboard_arrow_down, size: 17),
-
+                icon: const Icon(Icons.keyboard_arrow_down, size: 14),
                 onSelected: (value) {
-                  LazyLoader lazyLoader = LazyLoader(context: context);
-                  lazyLoader.showLoader();
+                  final parts = value.split('/');
+                  if (parts.length != 2) {
+                    debugPrint('Invalid rental month format: $value');
+                    return;
+                  }
                   setState(() {
                     selectedRentalMonth = value;
+                    selectedRentalMonthYear = parts[1];
                   });
-                  lazyLoader.hideLoader();
                 },
 
                 itemBuilder: (context) {
@@ -148,31 +177,43 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
                     children: [
                       CircularPercentIndicator(
                         radius: 55,
-                        lineWidth: 11,
-                        percent: collectedPercentage,
+                        lineWidth: 7,
+                        percent: indicatorPercent,
                         startAngle: 0,
                         circularStrokeCap: CircularStrokeCap.round,
                         backgroundColor: const Color(0xFFE6E9ED),
-                        progressColor: const Color(0xFF24B358),
+                        progressColor: collectedPercentage > 1.0
+                            ? AppColors
+                                  .orange // Over-collected
+                            : const Color(0xFF24B358), // Normal collection
                       ),
+
                       Column(
                         mainAxisSize: MainAxisSize.min,
 
                         children: [
                           Text(
-                            '${(collectedPercentage * 100).truncateToDouble()} %',
-                            style: GoogleFonts.inter(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF168B47),
-                            ),
+                            '${(collectedPercentage * 100).toStringAsFixed(0)} %',
+                            style: AppTextStylesConstant.cardDescriptionStyle
+                                .copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: collectedPercentage > 1.0
+                                      ? AppColors.orange
+                                      : const Color(0xFF168B47),
+                                ),
                           ),
+                          SizedBox(height: 05),
+
                           Text(
                             'Collected',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              color: const Color(0xFF25344B),
-                            ),
+                            style: AppTextStylesConstant.cardDescriptionStyle
+                                .copyWith(
+                                  fontSize: 11,
+                                  color: themeIsDark == true
+                                      ? AppColors.darkText
+                                      : const Color(0xFF25344B),
+                                ),
                           ),
                         ],
                       ),
@@ -193,14 +234,24 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
                       ),
                     ),
                     SizedBox(height: 4),
-                    _CollectionRow(
-                      color: const Color(0xFF2869DB),
-                      title: 'Outstanding',
-                      amount: formatMoneyWithCurrency(
-                        outStandingBalance,
-                        'Ksh',
+                    if (outstandingBalance != null)
+                      _CollectionRow(
+                        color: const Color(0xFF2869DB),
+                        title: 'Outstanding',
+                        amount: formatMoneyWithCurrency(
+                          outstandingBalance ?? 0.0,
+                          'Ksh',
+                        ),
                       ),
-                    ),
+                    if (excessCollection != null)
+                      _CollectionRow(
+                        color: AppColors.orange,
+                        title: 'Excess collected',
+                        amount: formatMoneyWithCurrency(
+                          excessCollection ?? 0.0,
+                          'Ksh',
+                        ),
+                      ),
                     SizedBox(height: 4),
                     _CollectionRow(
                       color: const Color(0xFFADB3BC),
@@ -221,7 +272,7 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
   }
 }
 
-class _CollectionRow extends StatelessWidget {
+class _CollectionRow extends ConsumerWidget {
   final Color color;
   final String title;
   final String amount;
@@ -233,7 +284,8 @@ class _CollectionRow extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeIsDark = ref.watch(themeIsDarkProvider);
     return Container(
       height: 52,
       decoration: const BoxDecoration(
@@ -257,8 +309,10 @@ class _CollectionRow extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 12,
-                    fontStyle: FontStyle.italic,
-                    color: const Color(0xFF39465A),
+                    fontStyle: FontStyle.normal,
+                    color: themeIsDark == true
+                        ? AppColors.darkText
+                        : const Color(0xFF39465A),
                   ),
                 ),
               ),
@@ -271,7 +325,9 @@ class _CollectionRow extends StatelessWidget {
               fontSize: 12,
 
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF17243B),
+              color: themeIsDark == true
+                  ? AppColors.darkText
+                  : const Color(0xFF17243B),
             ),
           ),
         ],

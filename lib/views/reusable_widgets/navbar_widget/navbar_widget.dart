@@ -12,74 +12,68 @@ class _NavbarWidgetState extends ConsumerState<NavbarWidget> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeIsDarkProvider);
-    return ValueListenableBuilder(
-      valueListenable: selectedWebPageNotifier,
-      builder: (context, selectedWebPage, child) {
-        return Padding(
-          padding: const EdgeInsets.only(
-            left: 35,
-            right: 35,
-            top: 0.0,
-            bottom: 20.0,
-          ),
-          child: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 05.0),
-                decoration: BoxDecoration(
-                  color: themeMode
-                      ? AppColorsConstant.darkNavColor.withValues(alpha: 0.95)
-                      : AppColorsConstant.kWhite7.withValues(alpha: 0.95),
-                  // : AppColorsConstant.lightNavColor.withValues(alpha: 0.95),
-                  // color: Colors.white.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.12),
-                  ),
+
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 35,
+        right: 35,
+        top: 0.0,
+        bottom: 20.0,
+      ),
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+          child: Container(
+            height: 50,
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 05.0),
+            decoration: BoxDecoration(
+              color: themeMode
+                  ? AppColorsConstant.darkNavColor.withValues(alpha: 0.95)
+                  : AppColorsConstant.kWhite7.withValues(alpha: 0.95),
+              // : AppColorsConstant.lightNavColor.withValues(alpha: 0.95),
+              // color: Colors.white.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomNavigationItem(
+                  icon: CupertinoIcons.home,
+                  label: "Home",
+                  index: 0,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomNavigationItem(
-                      icon: CupertinoIcons.home,
-                      label: "Home",
-                      index: 0,
-                    ),
-                    CustomNavigationItem(
-                      icon: CupertinoIcons.building_2_fill,
-                      label: 'Properties',
-                      index: 1,
-                    ),
-                    CustomNavigationItem(
-                      icon: CupertinoIcons.creditcard,
-                      label: 'Finances',
-                      index: 2,
-                    ),
-                    CustomNavigationItem(
-                      icon: CupertinoIcons.person_3,
-                      label: 'Tenants',
-                      index: 3,
-                    ),
-                    CustomNavigationItem(
-                      icon: CupertinoIcons.gear,
-                      label: 'Settings',
-                      index: 4,
-                    ),
-                    CustomNavigationItem(
-                      icon: CupertinoIcons.person,
-                      label: 'My Account',
-                      index: 5,
-                    ),
-                  ],
+                CustomNavigationItem(
+                  icon: CupertinoIcons.building_2_fill,
+                  label: 'Properties',
+                  index: 1,
                 ),
-              ),
+                CustomNavigationItem(
+                  icon: CupertinoIcons.creditcard,
+                  label: 'Finances',
+                  index: 2,
+                ),
+                CustomNavigationItem(
+                  icon: CupertinoIcons.person_3,
+                  label: 'Tenants',
+                  index: 3,
+                ),
+                CustomNavigationItem(
+                  icon: CupertinoIcons.gear,
+                  label: 'Settings',
+                  index: 4,
+                ),
+                CustomNavigationItem(
+                  icon: CupertinoIcons.person,
+                  label: 'My Account',
+                  index: 5,
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -106,13 +100,14 @@ class _CustomNavigationItemState extends ConsumerState<CustomNavigationItem> {
   bool isHovered = false;
   @override
   void initState() {
-    isSelected = selectedPageNotifier.value == widget.index ? true : false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
+    final selectedPage = ref.watch(selectedPageProvider);
+    isSelected = selectedPage == widget.index ? true : false;
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onHover: (event) {
@@ -128,8 +123,9 @@ class _CustomNavigationItemState extends ConsumerState<CustomNavigationItem> {
 
       child: GestureDetector(
         onTap: () {
-          selectedWebPageNotifier.value = widget.index;
-          selectedSideItemNotifier.value = widget.index;
+          ref.read(selectedPageProvider.notifier).selectPage(widget.index);
+          // selectedWebPageNotifier.value = widget.index;
+          // selectedSideItemNotifier.value = widget.index;
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),

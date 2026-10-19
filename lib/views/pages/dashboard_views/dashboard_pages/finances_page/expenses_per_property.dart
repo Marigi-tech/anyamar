@@ -1,9 +1,10 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/expenses_per_property_summary_cards.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/expense_per_property_table.dart';
+import 'package:anyamar/tables/expense_per_property_table.dart';
 
 class ExpensesPerProperty extends ConsumerStatefulWidget {
-  const ExpensesPerProperty({super.key});
+  final String introText;
+  const ExpensesPerProperty({super.key, required this.introText});
 
   @override
   ConsumerState<ExpensesPerProperty> createState() =>
@@ -17,7 +18,7 @@ class _ExpensesPerPropertyState extends ConsumerState<ExpensesPerProperty> {
   double totalExpectedRent = 0.0;
   @override
   Widget build(BuildContext context) {
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     List<FinancialRecord> expenses = appData.finances
         .where((record) => record.recordNature == FinancialRecordNature.expense)
         .toList();
@@ -44,6 +45,7 @@ class _ExpensesPerPropertyState extends ConsumerState<ExpensesPerProperty> {
         ExpensesPerPropertyTable(
           properties: propertiesWithRecordedExpenses,
           expenseRecords: expenses,
+          introText: widget.introText,
         ),
       ],
     );

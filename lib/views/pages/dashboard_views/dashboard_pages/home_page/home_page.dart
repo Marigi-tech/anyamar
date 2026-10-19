@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/dashboard_cards_row/dashboard_cards_row_widget.dart';
-
 import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/occupancy_widget/occupancy_widget.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/rent_collection_card/rent_collection_card_widget.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/rent_payments/recent_rent_payments.dart';
@@ -10,9 +9,9 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     return DashboardPageStructure(
-      introText: 'Dashboard',
+      introText: 'dashboard',
       pageTitle:
           'Hello ${appData.appUser?.userName.trim().split(' ').first ?? ''} \u{1F44B}',
       supplementaryText: 'Here\'s what happening with your properties today',
@@ -48,7 +47,11 @@ class HomePage extends ConsumerWidget {
                         SizedBox(width: 15),
                         Expanded(child: OccupancyCardWidget()),
                         SizedBox(width: 15),
-                        Expanded(child: TenantInformationCardWidget()),
+                        Expanded(
+                          child: TenantInformationCardWidget(
+                            introText: 'dashboard / tenant',
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 20.0),
@@ -72,7 +75,7 @@ class HomePage extends ConsumerWidget {
                     OccupancyCardWidget(),
                     SizedBox(height: 15),
                     //Tenant Information
-                    TenantInformationCardWidget(),
+                    TenantInformationCardWidget(introText: 'dashboard / tenant'),
                     SizedBox(height: 15),
                     //Recent Payments
                     RecentPaymentsCard(),

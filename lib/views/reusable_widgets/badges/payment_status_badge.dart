@@ -22,9 +22,20 @@ class PaymentSatusBadge extends StatelessWidget {
         foreground = const Color(0xFFE94444);
         break;
 
-      default:
+      case PaymentStatus.complete:
         background = const Color(0xFFE1F7E9);
         foreground = const Color(0xFF168D49);
+        break;
+
+      case PaymentStatus.excess:
+        background = const Color.fromARGB(255, 217, 226, 255);
+        foreground = AppColors.buttonBlueColor;
+        break;
+
+      default:
+        background = const Color(0xFFFFF0D9);
+        foreground = AppColors.amber;
+        break;
     }
 
     return Container(

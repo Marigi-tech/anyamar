@@ -59,9 +59,7 @@ class CustomVerticalSeparator extends ConsumerWidget {
     return Container(
       width: 1 / pixelRatio,
       height: double.infinity,
-      color: themeIsDark
-          ? AppColors.darkBorder
-          : AppColors.lightBorder,
+      color: themeIsDark ? AppColors.darkBorder : AppColors.lightBorder,
     );
   }
 }
