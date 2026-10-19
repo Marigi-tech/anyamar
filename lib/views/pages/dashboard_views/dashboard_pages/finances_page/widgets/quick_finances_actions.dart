@@ -1,10 +1,22 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/page_providers/finances_page/finances_notifier.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_expenses_page_state.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_income_state_page.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/expense_per_property_state_page.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/rent_per_tenant_page_state.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/view_all_expenses_state.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/view_all_rent_entries_state.dart';
 
 class QuickFinancesActions extends ConsumerWidget {
   final FinancialRecord? financialRecord;
   final SingleRentEntry? rentEntry;
-  const QuickFinancesActions({super.key, this.financialRecord, this.rentEntry});
+  final String introText;
+  const QuickFinancesActions({
+    super.key,
+    this.financialRecord,
+    this.rentEntry,
+    required this.introText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,46 +25,21 @@ class QuickFinancesActions extends ConsumerWidget {
         : true;
     return QuickActionsWidget(
       children: [
-        //Update Record
-        // if (financialRecord != null || rentEntry != null)
-        if (!isGeneralPage)
-          QWidget(
-            onPressedCallBack: () {
-              //If financial record
-              if (financialRecord != null) {
-                ref
-                    .read(financesPageProvider.notifier)
-                    .updateFinancialRecord(financialRecord!);
-              }
-              //If rent Entry
-              if (rentEntry != null) {
-                ref
-                    .read(financesPageProvider.notifier)
-                    .updateRentEntryRecord(rentEntry!);
-              }
-            },
-            //     // ref.read(tenantPageProvider.notifier).updateTenant(tenant!),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RowTitleWidget(
-                  text: 'Update Record',
-                  icon: CupertinoIcons.pencil,
-                ),
-                Icon(CupertinoIcons.chevron_right, size: 15),
-              ],
-            ),
-          ),
         if (financialRecord != null || rentEntry != null) CardItemSeparator(),
         //Add Expense Record
         QWidget(
-          onPressedCallBack: () =>
-              ref.read(financesPageProvider.notifier).addExpenseRecord(),
+          onPressedCallBack: () => ref
+              .read(workspaceProvider.notifier)
+              .openForm(
+                AddExpensesStatePage(
+                  introText: '$introText / add expense record',
+                ),
+              ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               RowTitleWidget(
-                text: 'Add Expense Record',
+                text: 'Add expense record',
                 icon: CupertinoIcons.add,
               ),
               Icon(CupertinoIcons.chevron_right, size: 15),
@@ -62,13 +49,18 @@ class QuickFinancesActions extends ConsumerWidget {
         CardItemSeparator(),
         //Add Rent Entry
         QWidget(
-          onPressedCallBack: () =>
-              ref.read(financesPageProvider.notifier).addIncomeRecord(),
+          onPressedCallBack: () => ref
+              .read(workspaceProvider.notifier)
+              .openForm(
+                AddIncomeStatePage(introText: '$introText / add rent record'),
+              ),
 
+          // onPressedCallBack: () =>
+          //     ref.read(financesPageProvider.notifier).addIncomeRecord(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              RowTitleWidget(text: 'Add Rent Entry', icon: CupertinoIcons.add),
+              RowTitleWidget(text: 'Add rent record', icon: CupertinoIcons.add),
               Icon(CupertinoIcons.chevron_right, size: 15),
             ],
           ),
@@ -77,13 +69,18 @@ class QuickFinancesActions extends ConsumerWidget {
         //View expense records
         if (isGeneralPage)
           QWidget(
-            onPressedCallBack: () =>
-                ref.read(financesPageProvider.notifier).viewAllExpenses(),
+            onPressedCallBack: () => ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  ViewAllExpensesStatePage(
+                    introText: '$introText / all expense records',
+                  ),
+                ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View Expense records',
+                  text: 'View expense records',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),
@@ -94,13 +91,18 @@ class QuickFinancesActions extends ConsumerWidget {
         //View rent records
         if (isGeneralPage)
           QWidget(
-            onPressedCallBack: () =>
-                ref.read(financesPageProvider.notifier).viewAllRentalEntries(),
+            onPressedCallBack: () => ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  ViewAllRentEntriesPageState(
+                    introText: '$introText / all rent records',
+                  ),
+                ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View Rent records',
+                  text: 'View rent records',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),
@@ -111,14 +113,40 @@ class QuickFinancesActions extends ConsumerWidget {
         if (isGeneralPage)
           QWidget(
             onPressedCallBack: () => ref
-                .read(financesPageProvider.notifier)
-                .viewExpensesPerProperty(),
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  ExpensesPerPropertyStatePage(
+                    introText: '$introText / expense records per property',
+                  ),
+                ),
 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View Expenses / Property',
+                  text: 'View expenses / property',
+                  icon: CupertinoIcons.info,
+                ),
+                Icon(CupertinoIcons.chevron_right, size: 15),
+              ],
+            ),
+          ),
+        if (isGeneralPage) CardItemSeparator(),
+        if (isGeneralPage)
+          QWidget(
+            onPressedCallBack: () => ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  RentPerTenantStatePage(
+                    introText: '$introText / rent records per property',
+                  ),
+                ),
+
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RowTitleWidget(
+                  text: 'View rent records / tenant',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),

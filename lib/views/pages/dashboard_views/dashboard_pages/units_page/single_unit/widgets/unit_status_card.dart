@@ -8,7 +8,7 @@ class UnitStatusCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         ClearButtonWidget(
           iconData: isOccupied
@@ -17,6 +17,7 @@ class UnitStatusCard extends ConsumerWidget {
           iconBackgroundColor: isOccupied
               ? AppColors.lightGreen
               : AppColors.red,
+
           title: 'Unit Status',
           description: isOccupied ? 'Occupied' : 'Vacant',
         ),

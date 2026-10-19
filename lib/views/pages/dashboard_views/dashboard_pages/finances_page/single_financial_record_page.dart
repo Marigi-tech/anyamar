@@ -1,22 +1,22 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/financial_record_info_column.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/financial_summary_cards.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/quick_expenses_actions.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/quick_rent_entry_actions.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/related_info_column.dart';
 
 class SingleFinancialRecordPage extends ConsumerWidget {
   final FinancialRecord? financialRecord;
   final SingleRentEntry? rentEntry;
+  final String introText;
   const SingleFinancialRecordPage({
     super.key,
     this.financialRecord,
     this.rentEntry,
+    required this.introText,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
 
     final personName = financialRecord != null
         ? financialRecord?.paymentBy.personName
@@ -90,25 +90,11 @@ class SingleFinancialRecordPage extends ConsumerWidget {
                               ),
                         SizedBox(height: 20.0),
                         // SizedBox(height: 30.0),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: FinancialRecordInformationColumn(
-                                financialRecord: financialRecord,
-                                rentEntry: rentEntry,
-                              ),
-                            ),
-                            SizedBox(width: 10.0),
-                            Expanded(
-                              child: RelatedInfoColumn(
-                                personName: personName,
-                                unitName: unit?.unitName,
-                                propertyName: propertyName,
-                                isRent: rentEntry != null ? true : false,
-                              ),
-                            ),
-                          ],
+                        FinancialRecordInformationColumn(
+                          financialRecord: financialRecord,
+                          rentEntry: rentEntry,
                         ),
+
                         SizedBox(height: 20.0),
                       ],
                     ),
@@ -119,13 +105,12 @@ class SingleFinancialRecordPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        //Tenant Info
-                        if (financialRecord != null)
-                          QuickExpensesActions(expenseRecord: financialRecord),
-                        if (rentEntry != null)
-                          QuickRentEntryActions(rentEntry: rentEntry),
-
-                        SizedBox(height: 20.0),
+                        RelatedInfoColumn(
+                          personName: personName,
+                          unitName: unit?.unitName,
+                          propertyName: propertyName,
+                          isRent: rentEntry != null ? true : false,
+                        ),
 
                         SizedBox(height: 20.0),
                       ],

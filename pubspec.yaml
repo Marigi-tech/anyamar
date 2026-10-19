@@ -56,6 +56,7 @@ dependencies:
   another_flushbar: ^1.12.30
   google_fonts: ^8.1.0
   percent_indicator: ^4.2.5
+  skeletonizer: ^3.0.0
 
 dev_dependencies:
   riverpod_generator: ^3.0.0

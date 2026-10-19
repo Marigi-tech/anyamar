@@ -5,8 +5,8 @@ import 'package:anyamar/data/models/rent/rent_history_model.dart';
 import 'package:anyamar/data/models/rent/single_rental_entry_model.dart';
 import 'package:anyamar/data/models/tenants/tenant_model.dart';
 import 'package:anyamar/data/providers/rent_provider.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/custom_data_table.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_tables/rent_history.dart';
+import 'package:anyamar/tables/custom_data_table.dart';
+import 'package:anyamar/tables/rent_history.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -27,15 +27,15 @@ class QWidget extends ConsumerStatefulWidget {
 }
 
 class _QWidgetState extends ConsumerState<QWidget> {
-  Color? currentBg;
+  bool isHovered = false;
   @override
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
 
-    Color? hoverBackground = themeIsDark == true
+    Color hoverBackground = themeIsDark == true
         ? AppColors.darkBlue.withValues(alpha: 0.9)
         : AppColorsConstant.kPrimaryColor.withValues(alpha: 0.9);
-    Color? background = themeIsDark == true
+    Color background = themeIsDark == true
         ? AppColors.darkCard.withValues(alpha: 0.9)
         : AppColors.lightCard.withValues(alpha: 0.9);
 
@@ -43,18 +43,20 @@ class _QWidgetState extends ConsumerState<QWidget> {
       cursor: SystemMouseCursors.click,
       onHover: (event) {
         setState(() {
-          currentBg = hoverBackground;
+          isHovered = true;
         });
       },
       onExit: (event) {
         setState(() {
-          currentBg = background;
+          isHovered = false;
         });
       },
       child: GestureDetector(
         onTap: widget.onPressedCallBack,
         child: Container(
-          decoration: BoxDecoration(color: currentBg),
+          decoration: BoxDecoration(
+            color: isHovered ? hoverBackground : background,
+          ),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.0),
           child: widget.child,
         ),

@@ -6,7 +6,7 @@ class TenantInformationColumn extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     Unit currentUnit = appData.units
         .where((u) => u.unitId == tenant.unitId)
         .single;

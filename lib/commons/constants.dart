@@ -53,6 +53,7 @@ class CustomTextStyles {
   );
   static const TextStyle cardDescriptionStyle = TextStyle(
     fontSize: 14,
+    letterSpacing: -0.3,
     fontStyle: FontStyle.italic,
   );
   static const TextStyle cardExtraDescriptionStyle = TextStyle(

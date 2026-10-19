@@ -1,5 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/page_providers/property_pages/property_page_notifier.dart';
+import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/utils/text_input_formatters/phone_number_formatter.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
@@ -349,28 +349,21 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
       } else {
         try {
           await db.addProperty(property);
-          ref.read(userInformationProvider.notifier).appendProperty(property);
+          await ref
+              .read(userInformationProvider.notifier)
+              .appendProperty(property);
 
           displaySnackBar(
             context,
             'Property added succesfully',
             AppColorsConstant.greenColor,
           );
+          ref.read(workspaceProvider.notifier).closeWorkspace();
         } catch (e, stackTrace) {
           log('Error adding property: $e', stackTrace: stackTrace);
           displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
         } finally {
           lazyLoader.hideLoader();
-          ref.read(propertyPageProvider.notifier).showProperty(property);
-          // widget.isFromUnitPage == true
-          //     ? Navigator.pop(context)
-          //     : Navigator.pushReplacement(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) =>
-          //               SinglePropertyPage(property: property),
-          //         ),
-          //       );
         }
       }
     }
@@ -408,7 +401,7 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
           currentProperty,
         );
         if (updatedProperty != null) {
-          ref
+          await ref
               .read(userInformationProvider.notifier)
               .updateProperty(updatedProperty);
 
@@ -417,16 +410,7 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
             'Property Updated succesfully',
             AppColorsConstant.greenColor,
           );
-          ref.read(propertyPageProvider.notifier).showProperty(updatedProperty);
-          // widget.isFromUnitPage == true
-          //     ? Navigator.pop(context)
-          //     : Navigator.pushReplacement(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) =>
-          //               SinglePropertyPage(property: updatedProperty),
-          //         ),
-          //       );
+          ref.read(workspaceProvider.notifier).closeWorkspace();
         }
       } catch (e, stackTrace) {
         log('Error adding property: $e', stackTrace: stackTrace);

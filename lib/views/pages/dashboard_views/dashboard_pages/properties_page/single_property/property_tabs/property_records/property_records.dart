@@ -1,10 +1,13 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/views/reusable_widgets/badges/payment_method_badge.dart';
-import 'package:anyamar/views/reusable_widgets/badges/record_nature_badge.dart';
 
 class PropertyRecords extends ConsumerStatefulWidget {
   final Property property;
-  const PropertyRecords({super.key, required this.property});
+  final String introText;
+  const PropertyRecords({
+    super.key,
+    required this.property,
+    required this.introText,
+  });
 
   @override
   ConsumerState<PropertyRecords> createState() => _PropertyRecordsState();
@@ -13,53 +16,85 @@ class PropertyRecords extends ConsumerStatefulWidget {
 class _PropertyRecordsState extends ConsumerState<PropertyRecords> {
   @override
   Widget build(BuildContext context) {
-    final appData = ref.watch(appDataProvider);
-    final propertyRecords = appData.finances
-        .where((element) => element.propertyId == widget.property.propertyId)
+    final appData = ref.watch(userInformationProvider);
+    //units
+    // final propertyUnits = appData.units
+    //     .where((element) => element.propertyId == widget.property.propertyId)
+    //     .toList();
+    // //tenants
+    // final PropertyRecords = appData.tenants
+    //     .where(
+    //       (tenant) => propertyUnits.any((unit) => unit.unitId == tenant.unitId),
+    //     )
+    //     .toList();
+    //finances
+    final financialRecords = appData.finances
+        .where((record) => record.propertyId == widget.property.propertyId)
         .toList();
 
-    final columns = [
-      TableColumnConfig(title: '#', flex: 0.3),
-      TableColumnConfig(title: 'Amount', flex: 1.1),
-      TableColumnConfig(title: 'Date paid', flex: 1.1),
-      TableColumnConfig(title: 'Paid By', flex: 1.1),
-      TableColumnConfig(title: 'Nature', flex: 1.1),
-      TableColumnConfig(title: 'Method', flex: 1.1),
-      TableColumnConfig(title: 'Actions', flex: 0.4),
-    ];
-    final rows = propertyRecords.map((record) {
-      var index = propertyRecords.indexOf(record) + 1;
-      return [
-        ItemCell(value: '${index++}'),
-        ItemCell(value: formatMoneyWithCurrency(record.amountPaid, null)),
-        ItemCell(value: formatPrettyDate(record.datePaid)),
-        ItemCell(value: record.paymentBy.personName),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: RecordNatureBadge(
-            isIncome: record.recordNature == FinancialRecordNature.revenue
-                ? true
-                : false,
-          ),
-        ),
-         Align(
-          alignment: Alignment.centerLeft,
-          child: PaymentMethodBadge(
-            method: record.paymentMethod
-          ),
-        ),
-
-
-        IconButton(
-          icon: Icon(Icons.more_vert, size: 18, color: Color(0xFF7D8794)),
-          onPressed: () {},
-        ),
-      ];
-    }).toList();
-
-    return SearchlessTableWidget(columns: columns, rows: rows);
+    return FinancesTable(
+      introText: widget.introText,
+      isFromHomePage: false,
+      financialRecords: financialRecords,
+    );
   }
 }
+
+// class PropertyRecords extends ConsumerStatefulWidget {
+//   final Property property;
+//   const PropertyRecords({super.key, required this.property});
+
+//   @override
+//   ConsumerState<PropertyRecords> createState() => _PropertyRecordsState();
+// }
+
+// class _PropertyRecordsState extends ConsumerState<PropertyRecords> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final appData = ref.watch(userInformationProvider);
+//     final propertyRecords = appData.finances
+//         .where((element) => element.propertyId == widget.property.propertyId)
+//         .toList();
+
+//     final columns = [
+//       TableColumnConfig(title: '#', flex: 0.3),
+//       TableColumnConfig(title: 'Amount', flex: 1.1),
+//       TableColumnConfig(title: 'Date paid', flex: 1.1),
+//       TableColumnConfig(title: 'Paid By', flex: 1.1),
+//       TableColumnConfig(title: 'Nature', flex: 1.1),
+//       TableColumnConfig(title: 'Method', flex: 1.1),
+//       TableColumnConfig(title: 'Actions', flex: 0.4),
+//     ];
+//     final rows = propertyRecords.map((record) {
+//       var index = propertyRecords.indexOf(record) + 1;
+//       return [
+//         ItemCell(value: '${index++}'),
+//         ItemCell(value: formatMoneyWithCurrency(record.amountPaid, null)),
+//         ItemCell(value: formatPrettyDate(record.datePaid)),
+//         ItemCell(value: record.paymentBy.personName),
+//         Align(
+//           alignment: Alignment.centerLeft,
+//           child: RecordNatureBadge(
+//             isIncome: record.recordNature == FinancialRecordNature.revenue
+//                 ? true
+//                 : false,
+//           ),
+//         ),
+//         Align(
+//           alignment: Alignment.centerLeft,
+//           child: PaymentMethodBadge(method: record.paymentMethod),
+//         ),
+
+//         IconButton(
+//           icon: Icon(Icons.more_vert, size: 18, color: Color(0xFF7D8794)),
+//           onPressed: () {},
+//         ),
+//       ];
+//     }).toList();
+
+//     return SearchlessTableWidget(columns: columns, rows: rows);
+//   }
+// }
 
 // class PropertyRecords extends ConsumerStatefulWidget {
 //   final Property property;

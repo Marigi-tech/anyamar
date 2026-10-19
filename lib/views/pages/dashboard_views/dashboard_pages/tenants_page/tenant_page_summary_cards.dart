@@ -5,8 +5,8 @@ class TenantPageSummaryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridCount = Responsiveness.isMobile(context) ? 1 : 3;
-    final appData = ref.watch(appDataProvider);
+    final gridCount = Responsiveness.isMobile(context) ? 1 : 5;
+    final appData = ref.watch(userInformationProvider);
     final occupiedUnits = appData.units.where((u) => u.isOccupied).length;
     final vacantUnits = appData.units.where((u) => !u.isOccupied).length;
     final occupancyRate = occupiedUnits / appData.units.length;
@@ -58,7 +58,7 @@ class SingleTenantPageSummaryCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridCount = Responsiveness.isMobile(context) ? 1 : 3;
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
 
     Unit currentUnit = appData.units
         .where((unit) => unit.unitId == tenant.unitId)

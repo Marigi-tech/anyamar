@@ -21,7 +21,7 @@ class UserNameText extends ConsumerWidget {
     //   data: (AppUser? user) {
     //     if (user == null) {
     //       return const Text('User not found');
-    final userName = userInfo.appData?.appUser?.userName ?? '';
+    final userName = userInfo.appUser?.userName ?? '';
     //     }
     return isInitials == true
         ? Text(

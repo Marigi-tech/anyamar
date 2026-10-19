@@ -1,7 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/tenant_page_summary_cards.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/next_of_kin_information.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/recent_activity.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/single_page_quick_actions.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/tenant_information_column.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/tenant_rent_history.dart';
@@ -9,7 +8,12 @@ import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/s
 
 class SingleTenantPage extends ConsumerStatefulWidget {
   final Tenant tenant;
-  const SingleTenantPage({super.key, required this.tenant});
+  final String introText;
+  const SingleTenantPage({
+    super.key,
+    required this.tenant,
+    required this.introText,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -36,10 +40,10 @@ class _SingleTenantPageState extends ConsumerState<SingleTenantPage> {
 
   @override
   Widget build(BuildContext context) {
-    myProperties = ref.watch(
-      userInformationProvider.select((state) => state.properties),
-    );
-    myUnits = ref.watch(userInformationProvider.select((state) => state.units));
+    final appData = ref.watch(userInformationProvider);
+    myProperties = appData.properties;
+    
+    myUnits = appData.units;
 
     tenantUnit = myUnits
         .where((unit) => unit.unitId == widget.tenant.unitId)
@@ -59,9 +63,12 @@ class _SingleTenantPageState extends ConsumerState<SingleTenantPage> {
                   TenantInformationColumn(tenant: widget.tenant),
                   SizedBox(height: 20.0),
                   //Rent History
-                  TenantRentHistory(tenant: widget.tenant),
-                  //Recent Activity
-                  SinglePageRecentActivityWidget(tenant: widget.tenant),
+                  TenantRentHistory(
+                    tenant: widget.tenant,
+                    introText: '${widget.introText} / rent history ',
+                  ),
+                  //todo:Recent Activity
+                  // SinglePageRecentActivityWidget(tenant: widget.tenant),
                 ],
               )
             : Row(
@@ -78,25 +85,14 @@ class _SingleTenantPageState extends ConsumerState<SingleTenantPage> {
                         //Cards
                         SingleTenantPageSummaryCards(tenant: widget.tenant),
                         SizedBox(height: 30.0),
-                        //Tenant Information && Next of Kin Information
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TenantInformationColumn(
-                                tenant: widget.tenant,
-                              ),
-                            ),
-                            SizedBox(width: 15.0),
-                            Expanded(
-                              child: NextOfKinInformationColumn(
-                                person: widget.tenant.nextOfKin,
-                              ),
-                            ),
-                          ],
-                        ),
+                        //Tenant Information
+                        TenantInformationColumn(tenant: widget.tenant),
                         SizedBox(height: 20.0),
                         //Rent History
-                        TenantRentHistory(tenant: widget.tenant),
+                        TenantRentHistory(
+                          tenant: widget.tenant,
+                          introText: '${widget.introText} / rent history',
+                        ),
                         SizedBox(height: 20.0),
                         UlitiesChargeWidget(rentObject: widget.tenant.unitRent),
                       ],
@@ -109,10 +105,15 @@ class _SingleTenantPageState extends ConsumerState<SingleTenantPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         //Quick Actions
-                        SinglePageQuickActionsWidget(tenant: widget.tenant),
+                        SinglePageQuickActionsWidget(
+                          tenant: widget.tenant,
+                          introText: widget.introText,
+                        ),
                         SizedBox(height: 20.0),
-                        //Recent Activity
-                        SinglePageRecentActivityWidget(tenant: widget.tenant),
+                        //Next of Kin Information
+                        NextOfKinInformationColumn(
+                          person: widget.tenant.nextOfKin,
+                        ),
                       ],
                     ),
                   ),

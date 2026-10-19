@@ -7,7 +7,7 @@ class ExpensesPerPropertySummaryCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     final expenses = appData.finances
         .where(
           (expense) => expense.recordNature == FinancialRecordNature.expense,
@@ -16,9 +16,7 @@ class ExpensesPerPropertySummaryCards extends ConsumerWidget {
     final totalExpense = appData.finances
         .where((record) => record.recordNature == FinancialRecordNature.expense)
         .fold<double>(0, (sum, record) => sum + record.amountPaid);
-    // final occupiedUnits = appData.units.where((u) => u.isOccupied).length;
-    // final vacantUnits = appData.units.where((u) => !u.isOccupied).length;
-    // final occupancyRate = occupiedUnits / appData.units.length;
+
     return GridView.count(
       crossAxisCount: gridCount,
       shrinkWrap: true,

@@ -7,7 +7,7 @@ class OccupancyCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
 
     //Get occupied units
     List<Unit> occupiedUnits = appData.units

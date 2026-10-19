@@ -1,6 +1,7 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/providers/page_providers/selected_page_provider/selected_page_notifier.dart';
 
-class CollapsedSideItem extends StatefulWidget {
+class CollapsedSideItem extends ConsumerStatefulWidget {
   final String title;
   final VoidCallback? onPressedCallBack;
   final IconData icon;
@@ -16,27 +17,29 @@ class CollapsedSideItem extends StatefulWidget {
   });
 
   @override
-  State<CollapsedSideItem> createState() => _CollapsedSideItemState();
+  ConsumerState<CollapsedSideItem> createState() => _CollapsedSideItemState();
 }
 
-class _CollapsedSideItemState extends State<CollapsedSideItem> {
+class _CollapsedSideItemState extends ConsumerState<CollapsedSideItem> {
   late bool isHovered;
   late bool isSelected;
 
   @override
   void initState() {
     isHovered = false;
-    isSelected = _getIsSelected();
+    isSelected = false;
+    // isSelected = _getIsSelected();
     super.initState();
   }
 
-  bool _getIsSelected() {
-    return selectedSideItemNotifier.value == widget.index ? true : false;
+  bool _getIsSelected(int selectedPage) {
+    return selectedPage == widget.index ? true : false;
   }
 
   @override
   Widget build(BuildContext context) {
-    isSelected = _getIsSelected();
+    final selectedPage = ref.watch(selectedPageProvider);
+    isSelected = _getIsSelected(selectedPage);
     return Tooltip(
       message: widget.title, // 👈 Tooltip text
       waitDuration: const Duration(milliseconds: 300),

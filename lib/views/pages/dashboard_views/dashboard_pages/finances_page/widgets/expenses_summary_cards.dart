@@ -6,7 +6,7 @@ class ExpensesPageSummaryCards extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
-    final appData = ref.watch(appDataProvider);
+    final appData = ref.watch(userInformationProvider);
     // final totalIncome = appData.finances
     //     .where((record) => record.recordNature != FinancialRecordNature.expense)
     //     .fold<double>(0, (sum, record) => sum + record.amountPaid);

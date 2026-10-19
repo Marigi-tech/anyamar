@@ -1,8 +1,6 @@
-
 import 'package:bubble/bubble.dart';
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/chat/chat_message_model.dart';
-
 
 //Chat day Widget
 class ChatDayWidget extends StatelessWidget {
@@ -105,11 +103,11 @@ class ChatMessageBubble extends StatelessWidget {
 }
 
 //Chat Card Intro Title
-class ChatCardIntro extends StatelessWidget {
+class ChatCardIntro extends ConsumerWidget {
   const ChatCardIntro({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
       child: Row(
@@ -124,7 +122,8 @@ class ChatCardIntro extends StatelessWidget {
               //View button
               ColorButtonWidget(
                 onPressedCallBack: () {
-                  selectedWebPageNotifier.value = 4;
+                  ref.read(selectedPageProvider.notifier).selectPage(4);
+                  // selectedWebPageNotifier.value = 4;
                 },
                 buttonTitle: 'View all',
                 fontSize: 11,

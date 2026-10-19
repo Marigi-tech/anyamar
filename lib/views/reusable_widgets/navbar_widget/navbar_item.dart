@@ -43,7 +43,8 @@ class _NavItemState extends ConsumerState<NavItem> {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = selectedPageNotifier.value == widget.index;
+    final selectedPage = ref.watch(selectedPageProvider);
+    bool isSelected = selectedPage == widget.index;
 
     return Tooltip(
       message: widget.label, // 👈 Tooltip text
@@ -71,48 +72,44 @@ class _NavItemState extends ConsumerState<NavItem> {
           });
         },
 
-        child: ValueListenableBuilder(
-          valueListenable: selectedPageNotifier,
-          builder: (context, value, child) {
-            return GestureDetector(
-              onTap: () {
-                selectedPageNotifier.value = widget.index;
-              },
-
-              child: Row(
-                children: [
-                  widget.isHomeButton == true
-                      ? CentralButton(
-                          index: widget.index,
-                          backgroundColor: backgroundColor,
-                        )
-                      : Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            gradient: isSelected || isHovered
-                                ? _getHoverGradient().gradient
-                                : backgroundColor.gradient,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Icon(
-                            widget.icon,
-                            size: 18,
-                            color:
-                                ref.watch(themeIsDarkProvider) ==
-                                    true //DarkTheme
-                                ? isSelected || isHovered
-                                      ? AppColorsConstant.whiteColor
-                                      : AppColorsConstant.whiteColor
-                                : //Light Theme
-                                  isSelected || isHovered
-                                ? AppColorsConstant.whiteColor
-                                : const Color.fromARGB(255, 66, 67, 68),
-                          ),
-                        ),
-                ],
-              ),
-            );
+        child: GestureDetector(
+          onTap: () {
+            // selectedPageNotifier.value = widget.index;
+            ref.read(selectedPageProvider.notifier).selectPage(widget.index);
           },
+
+          child: Row(
+            children: [
+              widget.isHomeButton == true
+                  ? CentralButton(
+                      index: widget.index,
+                      backgroundColor: backgroundColor,
+                    )
+                  : Container(
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        gradient: isSelected || isHovered
+                            ? _getHoverGradient().gradient
+                            : backgroundColor.gradient,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        widget.icon,
+                        size: 18,
+                        color:
+                            ref.watch(themeIsDarkProvider) ==
+                                true //DarkTheme
+                            ? isSelected || isHovered
+                                  ? AppColorsConstant.whiteColor
+                                  : AppColorsConstant.whiteColor
+                            : //Light Theme
+                              isSelected || isHovered
+                            ? AppColorsConstant.whiteColor
+                            : const Color.fromARGB(255, 66, 67, 68),
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );
