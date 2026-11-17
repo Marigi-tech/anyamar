@@ -5,7 +5,7 @@ class RentPerTenantSummaryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
+    final gridCount = Responsiveness.isMobile(context) ? 2 : 5;
     final appData = ref.watch(userInformationProvider);
     //rent records
     final rentRecords = appData.rentalRecords;
@@ -32,10 +32,10 @@ class RentPerTenantSummaryCards extends ConsumerWidget {
           icon: Icons.wallet,
           title: 'No of Records ',
           value: '${rentRecords.length}',
-          subtitle: 'Number of expense records',
+          subtitle: 'Number of  records',
           iconCardColor: AppColors.lightGreen,
           onPressedCallBack: () {},
-          fontSize: 17,
+          fontSize: 13,
         ),
 
         SummaryCard(
@@ -45,7 +45,7 @@ class RentPerTenantSummaryCards extends ConsumerWidget {
           subtitle: 'Number of tenants with recorded rent records.',
           iconCardColor: AppColors.sideBarColor,
           onPressedCallBack: () {},
-          fontSize: 17,
+          fontSize: 13,
         ),
 
         SummaryCard(
@@ -55,7 +55,7 @@ class RentPerTenantSummaryCards extends ConsumerWidget {
           subtitle: 'Total rental income collected from tenants',
           iconCardColor: AppColors.primaryBlue,
           onPressedCallBack: () {},
-          fontSize: 17,
+          fontSize: 13,
         ),
       ],
     );

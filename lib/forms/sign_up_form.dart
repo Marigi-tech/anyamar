@@ -57,6 +57,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
         errorMessage = e.code;
         isSuccess = false;
       });
+      displaySnackBar(context, '$errorMessage', AppColorsConstant.redColor);
     }
   }
 
@@ -101,7 +102,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 30.0),
+              SizedBox(height: 15.0),
               // ============================================================
               // FULL NAME
               // ============================================================
@@ -229,12 +230,12 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                       : AppColorsConstant.redColor,
                 ),
               ),
-              SizedBox(height: 50.0),
+              SizedBox(height: 10.0),
               // ============================================================
               // SIGN USER UP
               // ============================================================
-              ColorButtonWidget(
-                onPressedCallBack: () async {
+              ElevatedButtonWidget(
+                onButtonPressedCallBack: () async {
                   if (_formKey.currentState!.validate() &&
                       selectedUserType != null) {
                     await _registerUser();
@@ -268,12 +269,13 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                   }
                 },
                 buttonTitle: 'Create account',
-                buttonColor: AppColorsConstant.greenColor,
+                // buttonColor: AppColorsConstant.greenColor,
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 15),
               //Add social sign up icons here
               SocialIconsWidget(),
+              SizedBox(height: 25),
             ],
           ),
         ),

@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/view_rent_entry_state_page.dart';
 import 'package:anyamar/views/reusable_widgets/badges/payment_method_badge.dart';
 
@@ -69,7 +68,7 @@ class _RentalEntriesTableState extends ConsumerState<RentalEntriesTable> {
           DataColumn(label: Text("Unit ", style: headerStyle)),
         DataColumn(label: Text('Method ', style: headerStyle)),
         if (widget.tenant == null)
-          DataColumn(label: Text("Actions", style: headerStyle)),
+          DataColumn(label: Text("View", style: headerStyle)),
       ],
 
       // --------------------------------------------
@@ -200,42 +199,7 @@ class _RentalEntriesTableState extends ConsumerState<RentalEntriesTable> {
                               ),
                             );
                       },
-                      icon: const Icon(
-                        CupertinoIcons.chevron_right,
-                        size: 15,
-                        color: Color(0xff1769F5),
-                      ),
-                    ),
-
-                    PopupMenuButton<String>(
-                      tooltip: 'More',
-                      icon: const Icon(Icons.more_vert, size: 18),
-                      onSelected: (value) {
-                        switch (value) {
-                          case 'view':
-                            ref
-                                .read(workspaceProvider.notifier)
-                                .openForm(
-                                  ViewRentEntryStatePage(
-                                    financialRecord: rentEntry,
-                                    introText: '$introText / rent record',
-                                  ),
-                                );
-                            break;
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        const PopupMenuItem(
-                          value: 'view',
-                          child: Row(
-                            children: [
-                              Icon(CupertinoIcons.info_circle, size: 18),
-                              SizedBox(width: 10),
-                              Text('View'),
-                            ],
-                          ),
-                        ),
-                      ],
+                      icon: const Icon(CupertinoIcons.chevron_right, size: 15),
                     ),
                   ],
                 ),

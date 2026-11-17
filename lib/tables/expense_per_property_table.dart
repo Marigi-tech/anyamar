@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/expense_per_property_widget.dart';
 
 class ExpensesPerPropertyTable extends ConsumerStatefulWidget {
@@ -62,17 +61,6 @@ class _ExpensesPerPropertyTableState
       // SEARCH
       // --------------------------------------------
       searchMatcher: (property, query) {
-        // final paymentMethod = expenseRecord.paymentMethod?.label ?? '';
-        // final recordType = expenseRecord.recordType.label;
-        // final recordNature = expenseRecord.recordNature.label;
-        // final amount = expenseRecord.amountPaid.toString();
-        // final personName = expenseRecord.paymentBy.personName;
-        // final datePaid = formatPrettyDate(expenseRecord.datePaid);
-        // Property? property = widget.properties
-        //     .where(
-        //       (property) => property.propertyId == expenseRecord.propertyId,
-        //     )
-        //     .singleOrNull;
         final propertyName = property.propertyName;
 
         return propertyName.toLowerCase().contains(query);

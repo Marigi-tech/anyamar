@@ -1,1 +1,8 @@
-List<String> familyRelations = ['parent', 'sibling', 'friend'];
+List<String> familyRelations = [
+  'Parent',
+  'Spouse',
+  'Sibling',
+  'Friend',
+  'Colleague',
+  'Prefer not to say',
+];

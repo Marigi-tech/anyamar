@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:anyamar/commons/exports.dart';
 import 'package:flutter/material.dart';
 
 class DataLoadingOverlay extends StatelessWidget {
@@ -21,9 +22,11 @@ class DataLoadingOverlay extends StatelessWidget {
         if (isLoading)
           Positioned.fill(
             child: ColoredBox(
-              color: (isDarkMode ? Colors.black : Colors.white).withValues(
-                alpha: 0.25,
-              ),
+              color:
+                  (isDarkMode
+                          ? Colors.black
+                          : const Color.fromARGB(255, 192, 209, 240))
+                      .withValues(alpha: 0.45),
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
@@ -79,7 +82,7 @@ class DataLoadingOverlay extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'Please be patient while we load your data. '
+                            'Please be patient while we fetch your information. '
                             'This should only take a moment.',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium

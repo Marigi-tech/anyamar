@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
 
@@ -129,9 +128,27 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
                       controller: leaseEndController,
                       keyboardType: TextInputType.datetime,
                       hintText: 'Enter date (date / month / year)',
+                      required: true,
                       inputFormatters: [DateInputFormatter()],
-                      customValidator: validateDate,
-                      required: false,
+                      onPressedCallBack: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                          helpText: 'Select end of lease',
+                        );
+
+                        if (pickedDate != null) {
+                          final formattedDate =
+                              '${pickedDate.day.toString().padLeft(2, '0')}/'
+                              '${pickedDate.month.toString().padLeft(2, '0')}/'
+                              '${pickedDate.year}';
+
+                          leaseEndController.text = formattedDate;
+                          _updateDatePaid(formattedDate, true);
+                        }
+                      },
                       onChangedCallBack: (value) {
                         _updateDatePaid(value, true);
                       },
@@ -234,6 +251,7 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
         lazyLoader.showLoader();
         final db = DbTenantService();
         final unitDB = DbUnitsService();
+        //1: create instance of the current tenant
         Tenant currentTenant = tenant!.copyWith(
           userId: currentUser!.uid,
           endOfLease: leaseEnd,
@@ -241,27 +259,25 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
           lastUpdateDate: DateTime.now(),
         );
         try {
+          //2: update the tenant information in the database
           Tenant? updatedTenant = await db.updateTenant(currentTenant);
           if (updatedTenant != null) {
-            //Update unit status to vacant if the  tenant's lease has ended
-
-            // if (leaseEnd != null)
-            // (leaseEnd!.isBefore(DateTime.now()) ||
-            //     leaseEnd!.isAtSameMomentAs(DateTime.now()))
-            //     ) //todo: rethink this time limit ?? maybe
-            // {
+            //3: add the tenant in a log of the unit's previous tenants
             List<String> previousTenants = [
               ...unit!.previousTenantsLog,
               tenant!.tenantId!,
             ];
+            //4 : create instance of the updated unit
             Unit updatedUnit = unit!.copyWith(
               currentTenant: null,
               isOccupied: false,
               lastUpdateDate: DateTime.now(),
               previousTenantsLog: previousTenants,
             );
-
+            //5: update the unit in the db
             final savedUnit = await unitDB.updateUnit(updatedUnit);
+
+            //6: update local providers
             await ref
                 .read(userInformationProvider.notifier)
                 .updateUnit(savedUnit);
@@ -269,11 +285,8 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
                 .read(userInformationProvider.notifier)
                 .updateTenant(updatedTenant);
 
-            displaySnackBar(
-              context,
-              'Lease ended successfully ',
-              AppColorsConstant.greenColor,
-            );
+            //  7: close the workspace
+            ref.read(workspaceProvider.notifier).closeWorkspace();
           }
         } catch (e, stackTrace) {
           log('Error ending the lease: $e', stackTrace: stackTrace);
@@ -285,7 +298,6 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
           // popPage();
         }
       }
-      log('Select a unit $unit , or end date $leaseEnd , or tenant $tenant');
     }
   }
 }

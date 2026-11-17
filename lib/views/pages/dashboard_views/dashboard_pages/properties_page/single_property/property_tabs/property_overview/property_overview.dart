@@ -51,6 +51,7 @@ class PropertyOverview extends StatelessWidget {
                       property: property,
                       propertyUnits: propertyUnits,
                       propertyTenants: propertyTenants,
+                      
                     ),
                   ],
                 ),

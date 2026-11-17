@@ -55,7 +55,6 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
       onTap: widget.onPressedCallBack,
       onChanged: widget.onChangedCallBack,
       readOnly: widget.isReadOnly,
-
       decoration: CustomInputDecoration.textInputDecoration(
         hintText: widget.hintText,
         prefixIcon: widget.prefixIcon,

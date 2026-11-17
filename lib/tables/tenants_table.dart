@@ -1,6 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/methods/delete_item_function.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
 
 class TenantsTable extends ConsumerStatefulWidget {
   final List<Tenant>? tenants;
@@ -97,6 +97,16 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
         propertyName = property?.propertyName ?? '';
         unitName = unit?.unitName ?? '';
         var number = index + 1;
+        void openTenantDetails() {
+          ref
+              .read(workspaceProvider.notifier)
+              .openForm(
+                SingleTenantPage(
+                  tenant: tenant,
+                  introText: '${widget.introText} / tenant',
+                ),
+              );
+        }
 
         return DataRow(
           cells: [
@@ -130,7 +140,7 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        tenant.tenantName,
+                        capitalizeFirstLetter(tenant.tenantName),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -153,29 +163,9 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
                   IconButton(
                     tooltip: 'View',
                     onPressed: () {
-                      // ref
-                      //     .read(tenantPageProvider.notifier)
-                      //     .viewTenantInformation(tenant);
-                      ref
-                          .read(workspaceProvider.notifier)
-                          .openForm(
-                            DashboardPageStructure(
-                              introText: '${widget.introText} / tenant',
-                              pageTitle: tenant.tenantName,
-                              introRowWidgets: [],
-                              introButton: IntroButtonWidget(),
-                              scrollableDashboardWidget: SingleTenantPage(
-                                tenant: tenant,
-                                introText: '${widget.introText} / tenant',
-                              ),
-                            ),
-                          );
+                      openTenantDetails();
                     },
-                    icon: const Icon(
-                      CupertinoIcons.chevron_right,
-                      size: 15,
-                      color: Color(0xff1769F5),
-                    ),
+                    icon: const Icon(CupertinoIcons.chevron_right, size: 15),
                   ),
 
                   PopupMenuButton<String>(
@@ -184,35 +174,16 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
                     onSelected: (value) {
                       switch (value) {
                         case 'view':
-                          ref
-                              .read(workspaceProvider.notifier)
-                              .openForm(
-                                DashboardPageStructure(
-                                  introText: '${widget.introText} / tenant',
-                                  pageTitle: tenant.tenantName,
-                                  introRowWidgets: [],
-                                  introButton: IntroButtonWidget(),
-                                  scrollableDashboardWidget: SingleTenantPage(
-                                    tenant: tenant,
-                                    introText: '${widget.introText} / tenant',
-                                  ),
-                                ),
-                              );
+                          openTenantDetails();
                           break;
 
                         case 'edit':
                           ref
                               .read(workspaceProvider.notifier)
                               .openForm(
-                                DashboardPageStructure(
-                                  introText: '${widget.introText} / update tenant',
-                                  pageTitle: tenant.tenantName,
-                                  introRowWidgets: [],
-                                  introButton: IntroButtonWidget(),
-                                  scrollableDashboardWidget: TenantForm(
-                                    currentTenant: tenant,
-                                 
-                                  ),
+                                UpdateTenantState(
+                                  tenant: tenant,
+                                  introText: widget.introText,
                                 ),
                               );
                           break;
@@ -232,7 +203,7 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
                         value: 'view',
                         child: Row(
                           children: [
-                            Icon(CupertinoIcons.eye, size: 18),
+                            Icon(CupertinoIcons.chevron_right, size: 18),
                             SizedBox(width: 10),
                             Text('View'),
                           ],

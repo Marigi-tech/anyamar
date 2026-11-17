@@ -26,10 +26,7 @@ class RentRecordsPerTenantWidget extends ConsumerWidget {
           // SinglePropertyPageSummaryCards(property: property),
           SingleTenantPageSummaryCards(tenant: tenant),
           SizedBox(height: 20.0),
-          TenantRentHistory(
-            tenant: tenant,
-            introText: '$introText / rent history',
-          ),
+          TenantRentHistory(tenant: tenant, introText: '$introText '),
         ],
       ),
     );

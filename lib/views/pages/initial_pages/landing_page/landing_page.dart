@@ -1,103 +1,203 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/hero/features/hero_content.dart';
+import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/hero/features/hero_orbit.dart';
+import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/landing_navigation.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({super.key});
 
   @override
+  ConsumerState<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends ConsumerState<LandingPage>
+    with TickerProviderStateMixin {
+  late AnimationController _floatingController;
+  late AnimationController _glowController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Subtle glowing animation
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _floatingController.dispose();
+    _glowController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final bool isDark = ref.watch(themeIsDarkProvider);
+
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          //Background image
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 0.35), // overlay
-              BlendMode.darken,
-            ),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            //? ----- Logo -----
-            Image.asset('assets/images/logo.png', height: size.height * .55),
-            //?----- Intro text -----
-            Padding(
-              padding: EdgeInsets.only(right: 45.0, left: 15.0),
-              child: RichText(
-                text: TextSpan(
-                  text: "S",
-                  style: TextStyle(
-                    fontSize: 60,
-                    fontWeight: FontWeight.w600,
-                    color: AppColorsConstant.yellowColor,
-                    fontFamily: 'Lato',
+      backgroundColor: isDark
+          ? const Color(0xFF07091F)
+          : AppColors.lightBackground,
+
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth <= 950;
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              //================================
+              // Background
+              //================================
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: isDark
+                          ? const [
+                              Color(0xFF080A24),
+                              Color(0xFF090C29),
+                              Color(0xFF05071D),
+                            ]
+                          : [
+                              AppColors.lightBackground,
+                              AppColors.lightCard,
+                              AppColorsConstant.kPrimaryColor,
+                            ],
+                    ),
                   ),
-                  children: [
-                    TextSpan(
-                      text: "mart property solutions for ",
-                      style: TextStyle(
-                        fontSize: 42,
-                        fontWeight: FontWeight.bold,
-                        color: AppColorsConstant.whiteColor,
-                        fontFamily: 'Lato',
-                      ),
-                    ),
-                    TextSpan(
-                      text: "elevated living.",
-                      style: TextStyle(
-                        fontSize: 42,
-                        fontWeight: FontWeight.bold,
-                        color: AppColorsConstant.greenColor,
-                        fontFamily: 'Lato',
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            // Buttons
-            Container(
-              alignment: Alignment.bottomRight,
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
 
-              child: Column(
-                children: [
-                  //? ----- Get Started Button -----
-                  ColorButtonWidget(
-                    onPressedCallBack: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => SignUpPage()),
-                      );
-                    },
-                    buttonTitle: 'Get Started',
-                    buttonColor: AppColorsConstant.greenColor,
+              //================================
+              // Decorative background glows
+              //================================
+              Positioned(
+                top: -100,
+                right: -100,
+                child: _backgroundGlow(
+                  size: 350,
+                  color: const Color(0xFF3431B9),
+                ),
+              ),
+
+              Positioned(
+                bottom: -180,
+                left: -130,
+                child: _backgroundGlow(
+                  size: 350,
+                  color: const Color(0xFF292EAE),
+                ),
+              ),
+
+              //================================
+              // Main content
+              //================================
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 22 : constraints.maxWidth * 0.07,
+                    vertical: isMobile ? 12 : 20,
                   ),
-                  //Spacing
-                  SizedBox(height: 10),
-                  //? ----- Sign In Button -----
-                  AppTextButton(
-                    onPressedCallBack: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => LoginPage()),
-                      );
-                    },
-                    buttonTitle: "Sign in",
+
+                  child: Column(
+                    children: [
+                      // Navigation
+                      LandingNavigation(isMobile: isMobile),
+
+                      SizedBox(height: isMobile ? 20 : 25),
+
+                      // Hero takes remaining screen height
+                      Expanded(
+                        child: isMobile
+                            ? _buildMobileHero()
+                            : _buildDesktopHero(),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  //========================================
+  // Background glow
+  //========================================
+
+  Widget _backgroundGlow({required double size, required Color color}) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            color.withValues(alpha: 0.18),
+            color.withValues(alpha: 0.04),
+            Colors.transparent,
+          ],
+        ),
+      ),
+    );
+  }
+
+  //========================================
+  // Desktop hero
+  //========================================
+
+  Widget _buildDesktopHero() {
+    return SizedBox.expand(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(flex: 5, child: HeroContent(isMobile: false)),
+
+            const SizedBox(width: 30),
+
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: FeatureOrbitIllustration(),
+                ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  //========================================
+  // Mobile hero
+  //========================================
+
+  Widget _buildMobileHero() {
+    return SizedBox.expand(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: constraints.maxWidth,
+              child: HeroContent(isMobile: true),
+            ),
+          );
+        },
       ),
     );
   }

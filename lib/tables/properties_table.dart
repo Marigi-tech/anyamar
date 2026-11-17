@@ -1,7 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/methods/delete_item_function.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
-import 'package:anyamar/forms/add_property_form.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/page_states/property_page_states.dart';
 
 class PropertiesTable extends ConsumerStatefulWidget {
   final String introText;
@@ -17,6 +16,8 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
   List<Unit> units = [];
   List<Unit> occupiedUnits = [];
   List<Tenant> tenants = [];
+  List<RentalRecord> rentalRecords = [];
+
   // double _propertyExpectedRent(List<Unit> occupiedUnits) {
   //   return occupiedUnits.fold<double>(0, (total, unit) {
   //     final rent = unit.unitRent?.rentAmount ?? 0;
@@ -90,18 +91,18 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
   //   return totalCollected;
   // }
 
-  Property _latestProperty({
-    required Property property,
-    required List<Property> properties,
-  }) {
-    for (final latest in properties) {
-      if (latest.propertyId == property.propertyId) {
-        return latest;
-      }
-    }
+  // Property _latestProperty({
+  //   required Property property,
+  //   required List<Property> properties,
+  // }) {
+  //   for (final latest in properties) {
+  //     if (latest.propertyId == property.propertyId) {
+  //       return latest;
+  //     }
+  //   }
 
-    return property;
-  }
+  //   return property;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +111,7 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
     units = appData.units;
     occupiedUnits = appData.occupiedUnits;
     tenants = appData.tenants;
-    final rentalRecords = appData.rentalRecords;
+    rentalRecords = appData.rentalRecords;
     final themeIsDark = ref.watch(themeIsDarkProvider);
     final headerStyle = CustomTextStyles.cardDescriptionStyle.copyWith(
       color: themeIsDark ? AppColors.whiteColor : AppColors.blueGreyColor,
@@ -143,30 +144,24 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
         DataColumn(label: Text('Vacant', style: headerStyle)),
         DataColumn(label: Text('Occupancy Rate', style: headerStyle)),
         DataColumn(label: Text('Collected Rent', style: headerStyle)),
-        DataColumn(label: Text('Status', style: headerStyle)),
+        DataColumn(label: Text('Floors', style: headerStyle)),
         DataColumn(label: Text('Actions', style: headerStyle)),
       ],
       searchMatcher: (property, query) {
-        // final propUnits = appData.units
-        //     .where((unit) => unit.propertyId == property.propertyId)
-        //     .toList();
-
-        // return property.propertyName.toLowerCase().contains(query) ||
-        //     property.propertyLocation.toLowerCase().contains(query) ||
-        //     property.propertyFloors.toString().toLowerCase().contains(query) ||
-        //     propUnits.toString().toLowerCase().contains(query);
-        final currentProperty = _latestProperty(
-          property: property,
-          properties: properties,
-        );
+        Property? searchProperty = properties
+            .where((property) => property.propertyId == property.propertyId)
+            .singleOrNull;
 
         final propertyUnits = units
-            .where((unit) => unit.propertyId == currentProperty.propertyId)
+            .where((unit) => unit.propertyId == searchProperty?.propertyId)
             .toList();
+        String propertyName = searchProperty?.propertyName ?? '';
+        String propertyLocation = searchProperty?.propertyLocation ?? '';
+        String propertyFloors = searchProperty?.propertyFloors.toString() ?? '';
 
-        return currentProperty.propertyName.toLowerCase().contains(query) ||
-            currentProperty.propertyLocation.toLowerCase().contains(query) ||
-            currentProperty.propertyFloors.toString().contains(query) ||
+        return propertyName.toLowerCase().contains(query) ||
+            propertyLocation.toLowerCase().contains(query) ||
+            propertyFloors.toString().contains(query) ||
             propertyUnits.toString().toLowerCase().contains(query);
       },
 
@@ -179,10 +174,9 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
       },
       rowBuilder: (property, index) {
         // Always resolve the most recent version from Riverpod.
-        final currentProperty = _latestProperty(
-          property: property,
-          properties: properties,
-        );
+        Property currentProperty = properties
+            .where((prope) => prope.propertyId == property.propertyId)
+            .single;
 
         final propertyUnits = units
             .where((unit) => unit.propertyId == currentProperty.propertyId)
@@ -213,19 +207,9 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
           ref
               .read(workspaceProvider.notifier)
               .openForm(
-                DashboardPageStructure(
+                SinglePropertyPage(
+                  property: currentProperty,
                   introText: '${widget.introText} / property',
-                  pageTitle: currentProperty.propertyName,
-                  supplementaryText:
-                      '${currentProperty.propertyLocation} | '
-                      '${currentProperty.propertyFloors} Floors | '
-                      '${propertyUnits.length} Units',
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: SinglePropertyPage(
-                    property: currentProperty,
-                    introText: '${widget.introText} / property',
-                  ),
                 ),
               );
         }
@@ -312,18 +296,14 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
-            DataCell(StatusBadge(status: 'active')),
+            DataCell(StatusBadge(floors: property.propertyFloors)),
             DataCell(
               Row(
                 children: [
                   IconButton(
                     tooltip: 'View',
                     onPressed: openPropertyDetails,
-                    icon: const Icon(
-                      CupertinoIcons.chevron_right,
-                      size: 15,
-                      color: Color(0xff1769F5),
-                    ),
+                    icon: const Icon(CupertinoIcons.chevron_right, size: 15),
                   ),
                   PopupMenuButton<String>(
                     tooltip: 'More',
@@ -338,14 +318,9 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
                           ref
                               .read(workspaceProvider.notifier)
                               .openForm(
-                                DashboardPageStructure(
-                                  introText: '${widget.introText} / update property',
-                                  pageTitle: currentProperty.propertyName,
-                                  introRowWidgets: [],
-                                  introButton: IntroButtonWidget(),
-                                  scrollableDashboardWidget: AddPropertyForm(
-                                    currentProperty: currentProperty,
-                                  ),
+                                UpdatePropertyState(
+                                  introText: widget.introText,
+                                  property: currentProperty,
                                 ),
                               );
                           break;
@@ -365,7 +340,7 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
                         value: 'view',
                         child: Row(
                           children: [
-                            Icon(CupertinoIcons.eye, size: 18),
+                            Icon(CupertinoIcons.chevron_right, size: 18),
                             SizedBox(width: 10),
                             Text('View'),
                           ],
@@ -418,24 +393,24 @@ Future<void> _deleteProperty(
 }
 
 class StatusBadge extends StatelessWidget {
-  final String status;
+  final int floors;
 
-  const StatusBadge({super.key, required this.status});
+  const StatusBadge({super.key, required this.floors});
 
   @override
   Widget build(BuildContext context) {
-    final bool active = status.toLowerCase() == 'active';
+    // final bool active = status.toLowerCase() == 'active';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
       decoration: BoxDecoration(
-        color: active ? const Color(0xffE5F8EC) : const Color(0xffEEF1F5),
+        color: floors > 0 ? const Color(0xffE5F8EC) : const Color(0xffEEF1F5),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        status,
+        floors.toString(),
         style: TextStyle(
-          color: active ? const Color(0xff168344) : const Color(0xff526070),
+          color: floors > 0 ? const Color(0xff168344) : const Color(0xff526070),
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),

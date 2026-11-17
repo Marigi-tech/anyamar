@@ -74,7 +74,7 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
               // EMAIL ADDRESS
               // ============================================================
               FormLabel(label: 'Email address', isRequired: true),
-              SizedBox(height: 6),
+              SizedBox(height: 10),
               FormFieldWidget(
                 controller: emailController,
                 inputFormatters: [
@@ -89,7 +89,7 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
               // PASSWORD
               // ============================================================
               FormLabel(label: 'Password', isRequired: true),
-              SizedBox(height: 6),
+              SizedBox(height: 10),
               FormFieldWidget(
                 controller: passwordController,
                 keyboardType: TextInputType.text,
@@ -107,7 +107,7 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
                   cursor: SystemMouseCursors.click,
                   onHover: (event) {
                     setState(() {
-                      textColor = AppColorsConstant.greenColor;
+                      textColor = AppColorsConstant.primaryColor;
                     });
                   },
                   onExit: (event) {
@@ -135,28 +135,29 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
                   ),
                 ),
               ),
-              Text(
-                errorMessage ?? 'no error',
-                style: TextStyle(
-                  color: isSuccess == null
-                      ? null
-                      : isSuccess == true
-                      ? AppColorsConstant.greenColor
-                      : AppColorsConstant.redColor,
-                ),
-              ),
+
               SizedBox(height: 30.0),
               // ==========================================================
               // SUBMIT BUTTON
               // ==========================================================
-              ColorButtonWidget(
-                onPressedCallBack: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await _signInUser();
-                  }
-                },
-                buttonTitle: 'Sign In',
-                buttonColor: AppColorsConstant.greenColor,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButtonWidget(
+                    buttonTitle: 'Reset',
+                    onButtonPressedCallBack: () {},
+                    isClear: true,
+                  ),
+                  SizedBox(width: 20.0),
+                  ElevatedButtonWidget(
+                    onButtonPressedCallBack: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await _signInUser();
+                      }
+                    },
+                    buttonTitle: 'Sign In',
+                  ),
+                ],
               ),
 
               SizedBox(height: 30),

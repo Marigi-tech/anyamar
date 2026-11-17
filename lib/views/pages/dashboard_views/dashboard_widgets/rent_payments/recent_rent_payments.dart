@@ -5,6 +5,9 @@ class RecentPaymentsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FinancesTable(isFromHomePage: true, introText: 'finances');
+    return FinancesTable(
+      isFromHomePage: true,
+      introText: 'dashboard / recent payments',
+    );
   }
 }

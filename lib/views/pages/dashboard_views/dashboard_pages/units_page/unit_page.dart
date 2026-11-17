@@ -1,5 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/single_unit/widgets/unit_cards_list.dart';
 import 'package:anyamar/tables/units_table.dart';
 
@@ -23,15 +23,7 @@ class UnitsPage extends ConsumerWidget {
           onButtonPressedCallBack: () {
             ref
                 .read(workspaceProvider.notifier)
-                .openForm(
-                  DashboardPageStructure(
-                    introText: 'units / add unit',
-                    pageTitle: 'Add Unit',
-                    introRowWidgets: [],
-                    introButton: IntroButtonWidget(),
-                    scrollableDashboardWidget: AddOrUpdateUnitForm(),
-                  ),
-                );
+                .openForm(AddUnitState(introText: 'units'));
           },
         ),
       ],

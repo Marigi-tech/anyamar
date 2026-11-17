@@ -119,6 +119,20 @@ class QuickPropertySummaryWidget extends StatelessWidget {
             ],
           ),
           CardItemSeparator(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RowTitleWidget(
+                icon: Icons.apartment,
+                text: 'Floors',
+                iconColor: AppColors.primaryBlue,
+              ),
+              Text(
+                property.propertyFloors.toString(),
+                style: CustomTextStyles.cardDescriptionStyle,
+              ),
+            ],
+          ),
           //todo: monthly expense
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.spaceBetween,

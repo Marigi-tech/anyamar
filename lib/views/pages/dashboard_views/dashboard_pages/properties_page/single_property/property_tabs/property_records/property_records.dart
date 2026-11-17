@@ -17,16 +17,7 @@ class _PropertyRecordsState extends ConsumerState<PropertyRecords> {
   @override
   Widget build(BuildContext context) {
     final appData = ref.watch(userInformationProvider);
-    //units
-    // final propertyUnits = appData.units
-    //     .where((element) => element.propertyId == widget.property.propertyId)
-    //     .toList();
-    // //tenants
-    // final PropertyRecords = appData.tenants
-    //     .where(
-    //       (tenant) => propertyUnits.any((unit) => unit.unitId == tenant.unitId),
-    //     )
-    //     .toList();
+
     //finances
     final financialRecords = appData.finances
         .where((record) => record.propertyId == widget.property.propertyId)

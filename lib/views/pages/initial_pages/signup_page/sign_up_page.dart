@@ -1,7 +1,6 @@
+import 'package:anyamar/forms/sign_up_form.dart';
+import 'package:anyamar/views/pages/initial_pages/form_shell_web.dart';
 import 'package:flutter/material.dart';
-import 'package:anyamar/responsiveness/responsiveness.dart';
-import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page_mobile.dart';
-import 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page_web.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -25,11 +24,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Responsiveness.isDesktop(context)
-          ? SignUpPageWeb()
-          : SignUpPageMobile(),
+    return FormShellWeb(
+      photoRight: true,
+      webForm: SignUpForm(),
+      imageAsset: 'assets/images/mosque.jpg',
     );
   }
 }

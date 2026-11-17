@@ -1,13 +1,18 @@
 import 'package:anyamar/commons/exports.dart';
 
 class ThemeToggleWidget extends ConsumerWidget {
-  const ThemeToggleWidget({super.key});
+  final double? iconSize;
+  const ThemeToggleWidget({super.key, this.iconSize = 18});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeIsDarkProvider);
+    final themeIsDarkMode = ref.watch(themeIsDarkProvider);
     return IconButton(
-      icon: Icon(themeMode ? Icons.light_mode : Icons.dark_mode_outlined),
+      icon: Icon(
+        themeIsDarkMode ? Icons.light_mode : Icons.dark_mode_outlined,
+        size: iconSize,
+        color: themeIsDarkMode ? AppColors.darkText : AppColors.lightText,
+      ),
 
       onPressed: () => ref.read(themeIsDarkProvider.notifier).toggleTheme(),
     );

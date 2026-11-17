@@ -1,20 +1,21 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/enums/currencies.dart';
 import 'package:anyamar/data/models/enums/payment_frequency.dart';
-import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
-import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
 
 class AddOrUpdateUnitForm extends ConsumerStatefulWidget {
   final Unit? unit;
   final Property? currentProperty;
   final bool? isFromTenantPage;
   final bool? isInUnitPage;
+  final String introText;
+
   const AddOrUpdateUnitForm({
     super.key,
     this.unit,
     this.currentProperty,
     this.isFromTenantPage,
     this.isInUnitPage,
+    required this.introText,
   });
 
   @override
@@ -88,7 +89,7 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
     // Existing utilities
     unitUtilities.addAll(unit.unitRent?.utilities ?? []);
   }
-  
+
   // ============================================================
   // RESET
   // ============================================================
@@ -157,25 +158,6 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
     // NO PROPERTIES
     // ==========================================================
 
-    if (myProperties.isEmpty) {
-      return InfoUnavailableLottie(
-        text:
-            'There are no properties at the moment, add a property to the system for better management',
-        ctaButtonWidget: CardButtonWidget(
-          buttonTitle: 'Click here to add a property',
-          onPressedCallBack: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => AddProperty(isFromUnitPage: true),
-            ),
-          ),
-        ),
-      );
-    }
-
-    // ==========================================================
-    // FORM
-    // ==========================================================
-
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 980),
@@ -187,7 +169,6 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
               // ========================================================
               // FORM FIELDS
               // ========================================================
-          
               FormCardWidget(
                 noOfColumnsPerRow: 3,
                 formInputs: [
@@ -779,6 +760,7 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
         ? null
         : int.tryParse(floorController.text.trim());
     final db = DbUnitsService();
+    //1: create instance of new unit
 
     final Unit newUnit = Unit(
       propertyId: selectedProperty!.propertyId!,
@@ -801,6 +783,8 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
 
     final lazyLoader = LazyLoader(context: context);
     lazyLoader.showLoader();
+
+    //2 : confirm no similar unit exist in the database
     List<Unit> existingUnits = ref.watch(
       userInformationProvider.select((state) => state.units),
     );
@@ -822,20 +806,13 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
       );
     } else {
       try {
+        //3: add the unit to the database
         final addedUnit = await db.addUnit(newUnit);
+        //4: update the local state
 
         ref.read(userInformationProvider.notifier).appendUnit(addedUnit);
-
-        if (!mounted) return;
-
-        displaySnackBar(
-          context,
-          'Unit added successfully',
-          AppColorsConstant.greenColor,
-        );
-        // ref.read(unitPageProvider.notifier).showUnit(addedUnit);
-
-        // Navigator.pop(context);
+        //5: close the workspace
+        ref.read(workspaceProvider.notifier).closeWorkspace();
       } catch (e, stackTrace) {
         log('Error adding unit: $e', stackTrace: stackTrace);
 
@@ -915,7 +892,7 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
 
     try {
       final db = DbUnitsService();
-
+      //1: create instance of unit with it's updated values
       final Unit updatedUnit = widget.unit!.copyWith(
         propertyId: selectedProperty!.propertyId!,
         propertyName: selectedProperty!.propertyName,
@@ -929,27 +906,18 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
           rentDeposit: rentDeposit,
           rentCurrency: selectedCurrency,
           paymentFrequency: freqShortHand,
-          // paymentFrequency: selectedPaymentFrequency,
           utilities: List<UnitUtility>.from(unitUtilities),
         ),
         lastUpdateDate: DateTime.now(),
       );
-
+      //2: update the database
       final result = await db.updateUnit(updatedUnit);
+      //3: update local state
 
       ref.read(userInformationProvider.notifier).updateUnit(result);
 
-      if (!mounted) return;
-
-      displaySnackBar(
-        context,
-        'Unit updated successfully',
-        AppColorsConstant.greenColor,
-      );
-      // ref.read(unitPageProvider.notifier).showUnit(result);
-      // if (widget.isInUnitPage != true) {
-      //   Navigator.pop(context);
-      // }
+      //4: close the workspace
+      ref.read(workspaceProvider.notifier).closeWorkspace();
     } catch (e, stackTrace) {
       log('Error updating unit: $e', stackTrace: stackTrace);
 

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/reusable_widgets/text/text_widget.dart';
 
 class FormPages extends StatelessWidget {
@@ -12,25 +12,6 @@ class FormPages extends StatelessWidget {
     required this.form,
     this.isSignInOrSignUp,
   });
-
-  //   @override
-  //   Widget build(BuildContext context) {
-  //     return Row(
-  //       children: [
-  //         Expanded(
-  //           child: Column(
-  //             children: [
-  //               PageTitleWidget(pageTitle: pageTitle),
-  //               SizedBox(height: 20.0),
-  //               // Form
-  //               SingleChildScrollView(child: form),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,7 +20,9 @@ class FormPages extends StatelessWidget {
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 10.0),
               PageTitleWidget(pageTitle: pageTitle),
               const SizedBox(height: 10.0),
               SingleChildScrollView(child: form),

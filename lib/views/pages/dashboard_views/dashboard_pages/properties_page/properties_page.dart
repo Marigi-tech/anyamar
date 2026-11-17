@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
-import 'package:anyamar/forms/add_property_form.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/page_states/property_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/property_page_summary_cards.dart';
 import 'package:anyamar/tables/properties_table.dart';
 
@@ -20,15 +19,7 @@ class PropertiesPage extends ConsumerWidget {
           onButtonPressedCallBack: () {
             ref
                 .read(workspaceProvider.notifier)
-                .openForm(
-                  DashboardPageStructure(
-                    introText: 'properties / add property',
-                    pageTitle: 'Add Property',
-                    introRowWidgets: [],
-                    introButton: IntroButtonWidget(),
-                    scrollableDashboardWidget: AddPropertyForm(),
-                  ),
-                );
+                .openForm(AddPropertyState(introText: 'properties'));
           },
         ),
       ],

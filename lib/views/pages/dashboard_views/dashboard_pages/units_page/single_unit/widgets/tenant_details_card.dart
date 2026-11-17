@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/forms/end_tenant_lease_form.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/welcome_text.dart';
 
@@ -151,31 +150,26 @@ class TenantDetailsCard extends ConsumerWidget {
               ],
             ),
           SizedBox(height: 10.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButtonWidget(
-                buttonIcon: Icon(Icons.person),
-                buttonTitle: 'View tenant\'s details',
-                onButtonPressedCallBack: () {
-                  ref
-                      .read(workspaceProvider.notifier)
-                      .openForm(
-                        DashboardPageStructure(
-                          introText: '$introText / tenant',
-                          pageTitle: tenant?.tenantName,
-                          introRowWidgets: [],
-                          introButton: IntroButtonWidget(),
-                          scrollableDashboardWidget: SingleTenantPage(
+          if (tenant != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButtonWidget(
+                  buttonIcon: Icon(Icons.person),
+                  buttonTitle: 'View tenant\'s details',
+                  onButtonPressedCallBack: () {
+                    ref
+                        .read(workspaceProvider.notifier)
+                        .openForm(
+                          SingleTenantPage(
                             tenant: tenant!,
                             introText: '$introText / tenant',
                           ),
-                        ),
-                      );
-                },
-              ),
-            ],
-          ),
+                        );
+                  },
+                ),
+              ],
+            ),
           SizedBox(height: 10),
           //End lease button
           if (tenant != null && tenant?.endOfLease == null)

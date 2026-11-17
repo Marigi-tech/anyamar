@@ -1,6 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/methods/delete_item_function.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 
 class UnitsTable extends ConsumerStatefulWidget {
   final List<Unit>? units;
@@ -124,23 +124,13 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
                       ref
                           .read(workspaceProvider.notifier)
                           .openForm(
-                            DashboardPageStructure(
+                            SingleUnitWidget(
+                              unit: unit,
                               introText: '${widget.introText} / unit',
-                              pageTitle: unit.unitName,
-                              introRowWidgets: [],
-                              introButton: IntroButtonWidget(),
-                              scrollableDashboardWidget: SingleUnitWidget(
-                                unit: unit,
-                                introText: '${widget.introText} / unit',
-                              ),
                             ),
                           );
                     },
-                    icon: const Icon(
-                      CupertinoIcons.chevron_right,
-                      size: 15,
-                      color: Color(0xff1769F5),
-                    ),
+                    icon: const Icon(CupertinoIcons.chevron_right, size: 15),
                   ),
 
                   PopupMenuButton<String>(
@@ -152,15 +142,9 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
                           ref
                               .read(workspaceProvider.notifier)
                               .openForm(
-                                DashboardPageStructure(
+                                SingleUnitWidget(
+                                  unit: unit,
                                   introText: '${widget.introText} / unit',
-                                  pageTitle: unit.unitName,
-                                  introRowWidgets: [],
-                                  introButton: IntroButtonWidget(),
-                                  scrollableDashboardWidget: SingleUnitWidget(
-                                    unit: unit,
-                                    introText: '${widget.introText} / unit',
-                                  ),
                                 ),
                               );
                           break;
@@ -169,14 +153,9 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
                           ref
                               .read(workspaceProvider.notifier)
                               .openForm(
-                                DashboardPageStructure(
-                                  introText:
-                                      '${widget.introText} / update unit',
-                                  pageTitle: unit.unitName,
-                                  introRowWidgets: [],
-                                  introButton: IntroButtonWidget(),
-                                  scrollableDashboardWidget:
-                                      AddOrUpdateUnitForm(unit: unit),
+                                UpdateUnitState(
+                                  introText: widget.introText,
+                                  unit: unit,
                                 ),
                               );
                           break;
@@ -196,7 +175,7 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
                         value: 'view',
                         child: Row(
                           children: [
-                            Icon(CupertinoIcons.eye, size: 18),
+                            Icon(CupertinoIcons.chevron_right, size: 18),
                             SizedBox(width: 10),
                             Text('View'),
                           ],

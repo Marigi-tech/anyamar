@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_expenses_page_state.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_income_state_page.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/expense_per_property_state_page.dart';
@@ -73,7 +72,7 @@ class QuickFinancesActions extends ConsumerWidget {
                 .read(workspaceProvider.notifier)
                 .openForm(
                   ViewAllExpensesStatePage(
-                    introText: '$introText / all expense records',
+                    introText: '$introText / expense records',
                   ),
                 ),
             child: Row(
@@ -95,7 +94,7 @@ class QuickFinancesActions extends ConsumerWidget {
                 .read(workspaceProvider.notifier)
                 .openForm(
                   ViewAllRentEntriesPageState(
-                    introText: '$introText / all rent records',
+                    introText: '$introText /  rent records',
                   ),
                 ),
             child: Row(
@@ -138,7 +137,7 @@ class QuickFinancesActions extends ConsumerWidget {
                 .read(workspaceProvider.notifier)
                 .openForm(
                   RentPerTenantStatePage(
-                    introText: '$introText / rent records per property',
+                    introText: '$introText / rent records per tenant',
                   ),
                 ),
 

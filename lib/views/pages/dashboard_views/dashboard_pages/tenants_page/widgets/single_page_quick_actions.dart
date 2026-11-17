@@ -1,6 +1,7 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+
 import 'package:anyamar/forms/end_tenant_lease_form.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
 
 class SinglePageQuickActionsWidget extends ConsumerWidget {
   final Tenant tenant;
@@ -23,13 +24,7 @@ class SinglePageQuickActionsWidget extends ConsumerWidget {
           onPressedCallBack: () => ref
               .read(workspaceProvider.notifier)
               .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / update tenant',
-                  pageTitle: tenant.tenantName,
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: TenantForm(currentTenant: tenant),
-                ),
+                UpdateTenantState(introText: introText, tenant: tenant),
               ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,16 +95,7 @@ class SinglePageQuickActionsWidget extends ConsumerWidget {
           onPressedCallBack: () => ref
               .read(workspaceProvider.notifier)
               .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / unit',
-                  pageTitle: unit.unitName,
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: SingleUnitWidget(
-                    unit: unit,
-                    introText: '$introText / unit',
-                  ),
-                ),
+                SingleUnitWidget(unit: unit, introText: '$introText / unit'),
               ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

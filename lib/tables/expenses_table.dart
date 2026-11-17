@@ -1,10 +1,10 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/view_expense_record_state_page.dart';
 import 'package:anyamar/views/reusable_widgets/badges/payment_method_badge.dart';
 
 class ExpensesTable extends ConsumerStatefulWidget {
-  const ExpensesTable({super.key});
+  final String introText;
+  const ExpensesTable({super.key, required this.introText});
 
   @override
   ConsumerState<ExpensesTable> createState() => _ExpensesTableState();
@@ -40,6 +40,7 @@ class _ExpensesTableState extends ConsumerState<ExpensesTable> {
 
     return ReusableDataTableWidget<FinancialRecord>(
       items: expenses,
+      cardTitle: 'Expense records',
 
       searchHint: 'Search ',
 
@@ -50,7 +51,7 @@ class _ExpensesTableState extends ConsumerState<ExpensesTable> {
         DataColumn(label: Text("Record Type ", style: headerStyle)),
         DataColumn(label: Text('Payment By ', style: headerStyle)),
         DataColumn(label: Text('Method ', style: headerStyle)),
-        DataColumn(label: Text("Actions", style: headerStyle)),
+        DataColumn(label: Text("View", style: headerStyle)),
       ],
 
       // --------------------------------------------
@@ -162,88 +163,16 @@ class _ExpensesTableState extends ConsumerState<ExpensesTable> {
                   IconButton(
                     tooltip: 'View',
                     onPressed: () {
-                      // ref
-                      //     .read(financesPageProvider.notifier)
-                      //     .viewFinancialRecord(financialRecord);
                       ref
                           .read(workspaceProvider.notifier)
                           .openForm(
                             ViewExpenseRecordStatePage(
                               financialRecord: financialRecord,
-                              introText: 'finances / expense record',
+                              introText: '${widget.introText} / expense record',
                             ),
                           );
                     },
-                    icon: const Icon(
-                      CupertinoIcons.chevron_right,
-                      size: 15,
-                      color: Color(0xff1769F5),
-                    ),
-                  ),
-
-                  PopupMenuButton<String>(
-                    tooltip: 'More',
-                    icon: const Icon(Icons.more_vert, size: 18),
-                    onSelected: (value) {
-                      switch (value) {
-                        case 'view':
-                          ref
-                              .read(workspaceProvider.notifier)
-                              .openForm(
-                                ViewExpenseRecordStatePage(
-                                  financialRecord: financialRecord,
-                                  introText: 'finances / expense record',
-                                ),
-                              );
-
-                          break;
-
-                        // case 'edit':
-                        //   ref
-                        //       .read(financesPageProvider.notifier)
-                        //       .updateFinancialRecord(financialRecord);
-
-                        //   break;
-
-                        // case 'delete':
-                        //   // _deleteUnit(context, ref, unit);
-                        //   break;
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'view',
-                        child: Row(
-                          children: [
-                            Icon(CupertinoIcons.eye, size: 18),
-                            SizedBox(width: 10),
-                            Text('View'),
-                          ],
-                        ),
-                      ),
-
-                      // const PopupMenuItem(
-                      //   value: 'edit',
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(Icons.edit, size: 18),
-                      //       SizedBox(width: 10),
-                      //       Text('Update'),
-                      //     ],
-                      //   ),
-                      // ),
-
-                      // const PopupMenuItem(
-                      //   value: 'delete',
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(Icons.delete_outline, size: 18),
-                      //       SizedBox(width: 10),
-                      //       Text('Delete'),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
+                    icon: const Icon(CupertinoIcons.chevron_right, size: 15),
                   ),
                 ],
               ),

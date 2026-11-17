@@ -1,18 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
 import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
-
-class ExpenseRecord extends StatelessWidget {
-  final FinancialRecord? financialRecord;
-  const ExpenseRecord({super.key, this.financialRecord});
-  @override
-  Widget build(BuildContext context) {
-    return DashboardForm(
-      form: ExpenseRecordForm(financialRecord: financialRecord),
-    );
-  }
-}
 
 class ExpenseRecordForm extends ConsumerStatefulWidget {
   final FinancialRecord? financialRecord;
@@ -274,7 +262,25 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
                         keyboardType: TextInputType.datetime,
                         hintText: 'Enter date (date / month / year)',
                         inputFormatters: [DateInputFormatter()],
-                        customValidator: validateDate,
+                        onPressedCallBack: () async {
+                          final DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                            helpText: 'Select date',
+                          );
+
+                          if (pickedDate != null) {
+                            final formattedDate =
+                                '${pickedDate.day.toString().padLeft(2, '0')}/'
+                                '${pickedDate.month.toString().padLeft(2, '0')}/'
+                                '${pickedDate.year}';
+
+                            datePaidController.text = formattedDate;
+                            _updateDatePaid(formattedDate);
+                          }
+                        },
                         onChangedCallBack: (value) {
                           _updateDatePaid(value);
                         },
@@ -411,7 +417,15 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     }
     final lazyLoader = LazyLoader(context: context);
     lazyLoader.showLoader();
+    final appData = ref.watch(userInformationProvider);
     final db = DbFinancesService();
+    final financialRecordId = db.generateFinancialRecordId(
+      finances: appData.finances
+          .where(
+            (finance) => finance.recordNature == FinancialRecordNature.expense,
+          )
+          .toList(),
+    );
     final financialRecord = FinancialRecord(
       datePaid: paymentDate!,
       amountPaid: amount,
@@ -422,20 +436,15 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       userId: currentUser.uid,
       propertyId: selectedProperty?.propertyId,
       paymentMethod: paymentMethod,
+      recordId: financialRecordId,
     );
     try {
       final newRecord = await db.addRecord(financialRecord);
       if (newRecord != null) {
         // update Riverpod state.
         ref.read(userInformationProvider.notifier).appendFinances(newRecord);
-
-        if (!mounted) return;
-        displaySnackBar(
-          context,
-          'Record added successfully',
-          AppColorsConstant.greenColor,
-        );
       }
+      ref.read(workspaceProvider.notifier).closeWorkspace();
     } catch (e, stackTrace) {
       log('Error adding financial record: $e', stackTrace: stackTrace);
       if (!mounted) return;
@@ -447,9 +456,6 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     } finally {
       if (mounted) {
         lazyLoader.hideLoader();
-        ref.read(workspaceProvider.notifier).closeWorkspace();
-
-        // Navigator.pop(context);
       }
     }
   }
@@ -518,12 +524,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     try {
       final updatedRecord = await db.updateRecord(updatedFinancialRecord);
       ref.read(userInformationProvider.notifier).updateFinance(updatedRecord);
-      if (!mounted) return;
-      displaySnackBar(
-        context,
-        'Record updated successfully',
-        AppColorsConstant.greenColor,
-      );
+      ref.read(workspaceProvider.notifier).closeWorkspace();
     } catch (e, stackTrace) {
       log('Error updating financial record: $e', stackTrace: stackTrace);
 
@@ -537,7 +538,6 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     } finally {
       if (mounted) {
         lazyLoader.hideLoader();
-        ref.read(workspaceProvider.notifier).closeWorkspace();
       }
     }
   }

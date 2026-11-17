@@ -141,12 +141,8 @@ class UserInformationNotifier extends Notifier<UserInformation> {
         finances: finances,
         isLoading: false,
         appUser: appUser,
-        //todo: change to isActive after
-        // activeTenants: tenants
-        //     .where((tenant) => tenant.isActive == true)
-        //     .toList(),
         activeTenants: tenants
-            .where((tenant) => tenant.endOfLease == null)
+            .where((tenant) => tenant.isActive == true)
             .toList(),
         rentalRecords: rentalRecords,
       );
@@ -276,7 +272,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
 
     final DateTime end = DateTime(now.year, now.month);
 
-    while (!current.isAfter(end)) {
+    while (!current.isAfter(end) || current.isAtSameMomentAs(end)) {
       months.add(_formatRentalMonth(current));
 
       current = DateTime(current.year, current.month + 1);
@@ -319,16 +315,15 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     state = state.copyWith(units: [...state.units, newUnit]);
   }
 
-  void appendFinances(FinancialRecord newRecord) {
+  Future<void> appendFinances(FinancialRecord newRecord) async {
     state = state.copyWith(finances: [...state.finances, newRecord]);
   }
 
-  Future<void> updateFinance(FinancialRecord updatedRecord) async {
-    // final updatedFinances = state.finances.map((record) {
-    //   return record.recordId == updatedRecord.recordId ? updatedRecord : record;
-    // }).toList();
+  Future<void> appendRentRecords(RentalRecord newRecord) async {
+    state = state.copyWith(rentalRecords: [...state.rentalRecords, newRecord]);
+  }
 
-    // state = state.copyWith(finances: updatedFinances);
+  Future<void> updateFinance(FinancialRecord updatedRecord) async {
     state = state.copyWith(
       finances: [
         for (final financialRecord in state.finances)
@@ -341,15 +336,6 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   }
 
   Future<void> updateUnit(Unit updatedUnit) async {
-    // state = state.copyWith(
-    //   units: state.units.map((unit) {
-    //     if (unit.unitId == updatedUnit.unitId) {
-    //       return updatedUnit;
-    //     }
-
-    //     return unit;
-    //   }).toList(),
-    // );
     state = state.copyWith(
       units: [
         for (final unit in state.units)
@@ -359,15 +345,6 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   }
 
   Future<void> updateTenant(Tenant updatedTenant) async {
-    // state = state.copyWith(
-    //   tenants: state.tenants.map((tenant) {
-    //     if (tenant.tenantId == updatedTenant.tenantId) {
-    //       return updatedTenant;
-    //     }
-
-    //     return tenant;
-    //   }).toList(),
-    // );
     state = state.copyWith(
       tenants: [
         for (final tenant in state.tenants)
@@ -380,15 +357,6 @@ class UserInformationNotifier extends Notifier<UserInformation> {
   }
 
   Future<void> updateProperty(Property updatedProperty) async {
-    // state = state.copyWith(
-    //   properties: state.properties.map((property) {
-    //     if (property.propertyId == updatedProperty.propertyId) {
-    //       return updatedProperty;
-    //     }
-
-    //     return property;
-    //   }).toList(),
-    // );
     state = state.copyWith(
       properties: [
         for (final property in state.properties)
