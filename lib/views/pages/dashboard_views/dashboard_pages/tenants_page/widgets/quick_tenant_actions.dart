@@ -1,9 +1,14 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
 
 class QuickActionsTenantWidget extends ConsumerWidget {
   final Tenant? tenant;
-  const QuickActionsTenantWidget({super.key, this.tenant});
+  final String introText;
+  const QuickActionsTenantWidget({
+    super.key,
+    this.tenant,
+    required this.introText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,15 +20,7 @@ class QuickActionsTenantWidget extends ConsumerWidget {
             onPressedCallBack: () => ref
                 .read(workspaceProvider.notifier)
                 .openForm(
-                  DashboardPageStructure(
-                    introText: 'tenants / tenant / update tenant',
-                    pageTitle: tenant?.tenantName,
-                    introRowWidgets: [],
-                    introButton: IntroButtonWidget(),
-                    scrollableDashboardWidget: TenantForm(
-                      currentTenant: tenant,
-                    ),
-                  ),
+                  UpdateTenantState(introText: introText, tenant: tenant!),
                 ),
             // ref.read(tenantPageProvider.notifier).updateTenant(tenant!),
             child: Row(
@@ -38,18 +35,7 @@ class QuickActionsTenantWidget extends ConsumerWidget {
             ),
           ),
         if (tenant != null) CardItemSeparator(),
-        //Add Tenant
-        // QWidget(
-        //   onPressedCallBack: () =>
-        //       ref.read(tenantPageProvider.notifier).showAddTenantForm(),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       RowTitleWidget(text: 'Add Tenant', icon: CupertinoIcons.add),
-        //       Icon(CupertinoIcons.chevron_right, size: 15),
-        //     ],
-        //   ),
-        // ),
+
         CardItemSeparator(),
       ],
     );

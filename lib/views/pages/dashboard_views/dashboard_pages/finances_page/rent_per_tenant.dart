@@ -3,7 +3,8 @@ import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_pag
 import 'package:anyamar/tables/rent_per_tenant_table.dart';
 
 class RentPerTenant extends ConsumerStatefulWidget {
-  const RentPerTenant({super.key});
+  final String introText;
+  const RentPerTenant({super.key, required this.introText});
 
   @override
   ConsumerState<RentPerTenant> createState() => _RentPerTenantState();
@@ -36,6 +37,7 @@ class _RentPerTenantState extends ConsumerState<RentPerTenant> {
         // --------------------------------------------
         RentPerTenantTable(
           tenants: tenants,
+          introText: widget.introText,
           rentEntries: rentRecords.map((record) => record.rentEntry).toList(),
         ),
       ],

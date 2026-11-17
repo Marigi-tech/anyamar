@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_expenses_page_state.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/expense_per_property_state_page.dart';
 
@@ -7,7 +6,11 @@ class QuickExpensesActions extends ConsumerWidget {
   final FinancialRecord? expenseRecord;
   final String introText;
 
-  const QuickExpensesActions({super.key, this.expenseRecord, required this.introText});
+  const QuickExpensesActions({
+    super.key,
+    this.expenseRecord,
+    required this.introText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +33,7 @@ class QuickExpensesActions extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               RowTitleWidget(
-                text: 'Add Expense Record',
+                text: 'Add expense record',
                 icon: CupertinoIcons.add,
               ),
               Icon(CupertinoIcons.chevron_right, size: 15),
@@ -41,12 +44,18 @@ class QuickExpensesActions extends ConsumerWidget {
         //View properties with the expenses
         if (isGeneralPage)
           QWidget(
-            onPressedCallBack: () => ref.read(workspaceProvider.notifier).openForm(ExpensesPerPropertyStatePage(introText: '$introText / expenses per property',)),
+            onPressedCallBack: () => ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  ExpensesPerPropertyStatePage(
+                    introText: '$introText / expenses per property',
+                  ),
+                ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View Expenses / Property',
+                  text: 'View expenses / property',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),

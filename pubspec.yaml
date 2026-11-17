@@ -111,6 +111,9 @@ flutter:
     - family: Bevan
       fonts:
         - asset: assets/fonts/Bevan/Bevan-Regular.ttf
+    - family: DancingScript
+      fonts:
+        - asset: assets/fonts/DancingScript/DancingScript-Regular.ttf
 
     # - family: AnticDidone
     #   fonts:

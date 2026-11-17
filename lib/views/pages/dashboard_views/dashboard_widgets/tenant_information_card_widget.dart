@@ -1,27 +1,32 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 
 class TenantInformationCardWidget extends ConsumerWidget {
   final bool isUnitTenant; // if not a unit tenant then it's a property tenant
   final Property? property;
   final List<Tenant>? tenants;
   final String introText;
+  final List<String>? tenantIds;
   const TenantInformationCardWidget({
     super.key,
     this.isUnitTenant = false,
     this.property,
     this.tenants,
     required this.introText,
+    this.tenantIds,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Property> myProperties = ref.watch(
-      userInformationProvider.select((state) => state.properties),
-    );
-    final List<Tenant> myTenants =
-        tenants ??
-        ref.watch(userInformationProvider.select((state) => state.tenants));
+    final appData = ref.watch(userInformationProvider);
+    List<String> previousTenantIds = tenantIds ?? [];
+    List<Tenant> previousTenants = appData.tenants
+        .where((t) => previousTenantIds.contains(t.tenantId))
+        .toList();
+    List<Property> myProperties = appData.properties;
+
+    List<Tenant> myTenants =
+        (tenants ??
+        ref.watch(userInformationProvider.select((state) => state.tenants)));
 
     return DashboardCardWidget(
       cardTitle: 'Tenants ',
@@ -36,7 +41,9 @@ class TenantInformationCardWidget extends ConsumerWidget {
       child: ListView.separated(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: isUnitTenant
+        itemCount: previousTenants.isNotEmpty
+            ? previousTenants.length
+            : isUnitTenant
             ? myTenants
                   .where((tenant) => tenant.propertyId == property?.propertyId)
                   .length
@@ -46,7 +53,9 @@ class TenantInformationCardWidget extends ConsumerWidget {
         itemBuilder: (context, index) {
           // final tenant = mytenants[index];
 
-          final Tenant tenant = isUnitTenant
+          final Tenant tenant = previousTenants.isNotEmpty
+              ? previousTenants[index]
+              : isUnitTenant
               ? myTenants
                     .where(
                       (tenant) => tenant.propertyId == property?.propertyId,
@@ -91,17 +100,9 @@ class TenantInformationCardWidget extends ConsumerWidget {
               ref
                   .read(workspaceProvider.notifier)
                   .openForm(
-                    DashboardPageStructure(
-                      introText: introText,
-                      introRowWidgets: [],
-                      pageTitle: tenant.tenantName,
-                      supplementaryText:
-                          '${tenant.tenantPhoneNumber}  |  ${tenant.tenantEmail}',
-                      introButton: IntroButtonWidget(),
-                      scrollableDashboardWidget: SingleTenantPage(
-                        tenant: tenant,
-                        introText: introText,
-                      ),
+                    SingleTenantPage(
+                      tenant: tenant,
+                      introText: '$introText / tenant',
                     ),
                   );
             },

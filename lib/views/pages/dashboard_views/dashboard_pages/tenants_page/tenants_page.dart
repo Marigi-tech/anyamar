@@ -1,5 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/tenant_page_summary_cards.dart';
 
 class TenantsPage extends ConsumerWidget {
@@ -19,15 +19,7 @@ class TenantsPage extends ConsumerWidget {
           onButtonPressedCallBack: () {
             ref
                 .read(workspaceProvider.notifier)
-                .openForm(
-                  DashboardPageStructure(
-                    introText: 'tenants / add tenant',
-                    pageTitle: 'Add Tenant',
-                    introRowWidgets: [],
-                    introButton: IntroButtonWidget(),
-                    scrollableDashboardWidget: TenantForm(),
-                  ),
-                );
+                .openForm(AddTenantState(introText: 'tenants'));
           },
         ),
       ],

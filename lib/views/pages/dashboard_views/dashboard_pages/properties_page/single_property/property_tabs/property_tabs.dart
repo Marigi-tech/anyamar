@@ -30,7 +30,7 @@ class PropertyTabs extends ConsumerWidget {
         .toList();
     final pixelRatio = MediaQuery.devicePixelRatioOf(context);
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

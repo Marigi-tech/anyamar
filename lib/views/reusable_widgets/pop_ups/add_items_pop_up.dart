@@ -1,11 +1,13 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/page_states/property_page_states.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 
-
-class AddItemsWidget extends StatelessWidget {
+class AddItemsWidget extends ConsumerWidget {
   const AddItemsWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,7 +31,14 @@ class AddItemsWidget extends StatelessWidget {
             ElevatedButtonWidget(
               buttonTitle: 'Add Property',
               buttonIcon: Icon(Icons.add),
-              onButtonPressedCallBack: () => AddProperty(),
+              onButtonPressedCallBack: () async {
+                await popContext(context);
+                ref
+                    .read(workspaceProvider.notifier)
+                    .openForm(
+                      AddPropertyState(introText: 'dashboard'),
+                    );
+              },
             ),
             const SizedBox(height: 15),
             // ==================================================
@@ -39,7 +48,14 @@ class AddItemsWidget extends StatelessWidget {
               buttonTitle: 'Add Tenant',
               buttonIcon: Icon(Icons.add),
               buttonColor: AppColors.lightGreen,
-              onButtonPressedCallBack: () => AddTenant(),
+              onButtonPressedCallBack: () async {
+                await popContext(context);
+                ref
+                    .read(workspaceProvider.notifier)
+                    .openForm(
+                      AddTenantState(introText: 'dashboard'),
+                    );
+              },
             ),
             const SizedBox(height: 15),
             // ==================================================
@@ -49,9 +65,12 @@ class AddItemsWidget extends StatelessWidget {
               buttonTitle: 'Add Unit',
               buttonIcon: Icon(Icons.add),
               buttonColor: AppColors.orange,
-              onButtonPressedCallBack: () {},
-
-              // onButtonPressedCallBack: () => AddUnit(),
+              onButtonPressedCallBack: () async {
+                await popContext(context);
+                ref
+                    .read(workspaceProvider.notifier)
+                    .openForm(AddUnitState(introText: 'dashboard'));
+              },
             ),
             const SizedBox(height: 15),
             // ==================================================
@@ -68,10 +87,47 @@ class AddItemsWidget extends StatelessWidget {
             // Add Rental Payment
             // ==================================================
             ElevatedButtonWidget(
-              buttonTitle: 'Add Rental payment',
+              buttonTitle: 'Add Rental record',
               buttonIcon: Icon(Icons.add),
               buttonColor: AppColors.lightGreen,
-              onButtonPressedCallBack: () => AddRentalRecord(),
+              onButtonPressedCallBack: () async {
+                await popContext(context);
+                ref
+                    .read(workspaceProvider.notifier)
+                    .openForm(
+                      DashboardPageStructure(
+                        introText: 'dashboard / add rent record',
+                        pageTitle: 'Add rent record',
+                        introRowWidgets: [],
+                        introButton: IntroButtonWidget(),
+                        scrollableDashboardWidget: RentalRecordForm(),
+                      ),
+                    );
+              },
+            ),
+            const SizedBox(height: 15),
+
+            // ==================================================
+            // Add Expense
+            // ==================================================
+            ElevatedButtonWidget(
+              buttonTitle: 'Add Expense',
+              buttonIcon: Icon(Icons.add),
+              buttonColor: AppColors.orange,
+              onButtonPressedCallBack: () async {
+                await popContext(context);
+                ref
+                    .read(workspaceProvider.notifier)
+                    .openForm(
+                      DashboardPageStructure(
+                        introText: 'dashboard / add expense record',
+                        pageTitle: 'Add expense record',
+                        introRowWidgets: [],
+                        introButton: IntroButtonWidget(),
+                        scrollableDashboardWidget: ExpenseRecordForm(),
+                      ),
+                    );
+              },
             ),
             const SizedBox(height: 15),
           ],
@@ -81,12 +137,16 @@ class AddItemsWidget extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
+            popContext(context);
           },
 
           child: const Text('Close'),
         ),
       ],
     );
+  }
+
+  Future<void> popContext(BuildContext dialogcontext) async {
+    Navigator.pop(dialogcontext);
   }
 }

@@ -26,11 +26,14 @@ class SocialIconsWidget extends StatelessWidget {
 
         // Row of social icons
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(child: socialIconButton(AppSocialIconConstant.googleIcon)),
+            Expanded(
+              child: SocialIconButtonWidget(
+                socialIcon: AppSocialIconConstant.googleIcon,
+              ),
+            ),
             SizedBox(width: 10),
-            Expanded(child: socialIconButton(AppSocialIconConstant.appleIcon)),
           ],
         ),
       ],

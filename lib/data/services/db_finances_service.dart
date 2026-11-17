@@ -13,6 +13,32 @@ final dbFinancesServiceProvider = Provider<DbFinancesService>((ref) {
 });
 
 class DbFinancesService {
+  String generateFinancialRecordId({required List<FinancialRecord> finances}) {
+    final initials = 'FR';
+
+    final existingIds = finances
+        .map((entry) => entry.recordId)
+        .whereType<String>();
+
+    int highestNumber = 0;
+
+    for (final id in existingIds) {
+      // if (!id.startsWith(initials)) continue;
+
+      final numberPart = id.substring(initials.length);
+
+      final number = int.tryParse(numberPart);
+
+      if (number != null && number > highestNumber) {
+        highestNumber = number;
+      }
+    }
+
+    final nextNumber = highestNumber + 1;
+
+    return '$initials${nextNumber.toString().padLeft(4, '0')}';
+  }
+
   //Provider
   final CollectionReference _financesRef = FirebaseFirestore.instance
       .collection('finances');
@@ -20,9 +46,10 @@ class DbFinancesService {
   // Add Record
   Future<FinancialRecord?> addRecord(FinancialRecord record) async {
     DocumentReference doc = _financesRef.doc();
-    final FinancialRecord newRecord = record.copyWith(recordId: doc.id);
+    FinancialRecord? newRecord;
     try {
-      await doc.set(newRecord.toJson());
+      await doc.set(record.toJson());
+      newRecord = record;
     } on FirebaseException catch (e) {
       log('${e.message}');
     }

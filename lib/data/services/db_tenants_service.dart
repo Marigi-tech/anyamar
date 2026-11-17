@@ -14,12 +14,14 @@ class DbTenantService {
   );
 
   // Add Tenant
-  Future<Tenant> addTenant(Tenant tenant) async {
+  Future<Tenant?> addTenant(Tenant tenant) async {
     log('getting to the db service');
+    Tenant? newTenant;
     DocumentReference doc = _tenantsRef.doc();
-    final Tenant newTenant = tenant.copyWith(tenantId: doc.id);
+    Tenant t = tenant.copyWith(tenantId: doc.id);
     try {
-      await doc.set(newTenant.toJson());
+      await doc.set(t.toJson());
+      newTenant = t;
     } on FirebaseException catch (e) {
       log('${e.message}');
     }
@@ -59,8 +61,7 @@ class DbTenantService {
     }
   }
 
-
-   //Delete Tenant
+  //Delete Tenant
   Future<bool> deleteTenantRecord(Tenant record) async {
     bool isSuccess = false;
     try {

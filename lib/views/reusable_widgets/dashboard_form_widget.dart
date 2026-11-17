@@ -54,6 +54,6 @@ class DashboardFormWeb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormShellWeb(webForm: form);
+    return FormShellWeb(webForm: form, photoRight: true);
   }
 }

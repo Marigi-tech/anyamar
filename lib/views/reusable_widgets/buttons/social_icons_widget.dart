@@ -1,34 +1,73 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:anyamar/data/models/social_icon/social_icon_model.dart';
+import 'package:anyamar/commons/exports.dart';
 
-Widget socialIconButton(SocialIconModel socialIcon) {
-  return InkWell(
-    onTap: () {}, // TO DO: Add sign-in logic
-    borderRadius: BorderRadius.circular(12),
-    child: Container(
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(socialIcon.iconPath, width: 13, height: 13),
-          SizedBox(width: 8),
-          Flexible(
-            child: FittedBox(
-              child: Text(
-                socialIcon.iconName,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 11.0),
-                overflow: TextOverflow.ellipsis,
+class SocialIconButtonWidget extends ConsumerStatefulWidget {
+  final SocialIconModel socialIcon;
+  const SocialIconButtonWidget({super.key, required this.socialIcon});
+
+  @override
+  ConsumerState<SocialIconButtonWidget> createState() =>
+      _SocialIconButtonWidgetState();
+}
+
+class _SocialIconButtonWidgetState
+    extends ConsumerState<SocialIconButtonWidget> {
+  bool isHovered = false;
+  Color? bgColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = ref.watch(themeIsDarkProvider);
+    bgColor = isHovered
+        ? AppColors.primaryBlue
+        : isDark
+        ? AppColors.darkElevatedCard.withValues(alpha: 0.85)
+        : AppColors.lightCard.withValues(alpha: 0.85);
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onHover: (event) {
+        setState(() {
+          isHovered = true;
+        });
+      },
+      onExit: (event) {
+        setState(() {
+          isHovered = false;
+        });
+      },
+
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: !isDark ? AppColors.lightBorder : AppColors.darkBorder,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(widget.socialIcon.iconPath, width: 13, height: 13),
+            SizedBox(width: 8),
+            Flexible(
+              child: FittedBox(
+                child: Text(
+                  widget.socialIcon.iconName,
+                  textAlign: TextAlign.center,
+                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                    fontSize: 13.0,
+                    fontStyle: FontStyle.normal,
+                    color: isHovered ? AppColors.whiteColor : null,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

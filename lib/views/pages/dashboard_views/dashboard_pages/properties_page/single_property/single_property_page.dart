@@ -6,6 +6,7 @@ import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_p
 class SinglePropertyPage extends ConsumerStatefulWidget {
   final Property property;
   final String introText;
+
   const SinglePropertyPage({
     super.key,
     required this.property,
@@ -26,90 +27,103 @@ class _SinglePropertyPageState extends ConsumerState<SinglePropertyPage> {
     List<Tenant> propertyTenants = appData.tenants
         .where((tenant) => tenant.propertyId == property.propertyId)
         .toList();
+    List<Unit> propertyUnits = appData.units
+        .where((unit) => unit.propertyId == property.propertyId)
+        .toList();
     final String introText = widget.introText;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Responsiveness.isMobile(context)
-            ? Column(
-                children: [
-                  // --------------------------------------------
-                  // Data Row
-                  // --------------------------------------------
-                  SinglePropertyPageSummaryCards(property: property),
-                  SizedBox(height: 20.0),
-                  // --------------------------------------------
-                  // Property tabs
-                  // --------------------------------------------
-                  SizedBox(
-                    height: 600,
-                    child: SingleChildScrollView(
-                      child: PropertyTabs(
-                        property: property,
-                        introText: widget.introText,
+    return DashboardPageStructure(
+      introText: widget.introText,
+      pageTitle: property.propertyName,
+      supplementaryText:
+          '${property.propertyLocation} | '
+          '${property.propertyFloors} Floors | '
+          '${propertyUnits.length} Units',
+      introRowWidgets: [],
+      introButton: IntroButtonWidget(),
+      scrollableDashboardWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Responsiveness.isMobile(context)
+              ? Column(
+                  children: [
+                    // --------------------------------------------
+                    // Data Row
+                    // --------------------------------------------
+                    SinglePropertyPageSummaryCards(property: property),
+                    SizedBox(height: 20.0),
+                    // --------------------------------------------
+                    // Property tabs
+                    // --------------------------------------------
+                    SizedBox(
+                      height: 600,
+                      child: SingleChildScrollView(
+                        child: PropertyTabs(
+                          property: property,
+                          introText: widget.introText,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // --------------------------------------------
-                        // Data Row
-                        // --------------------------------------------
-                        SinglePropertyPageSummaryCards(property: property),
-                        SizedBox(height: 30.0),
-                        // --------------------------------------------
-                        // Property tabs
-                        // --------------------------------------------
-                        SizedBox(
-                          height: 600,
-                          child: PropertyTabs(
-                            property: property,
-                            introText: widget.introText,
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // --------------------------------------------
+                          // Data Row
+                          // --------------------------------------------
+                          SinglePropertyPageSummaryCards(property: property),
+                          SizedBox(height: 30.0),
+                          // --------------------------------------------
+                          // Property tabs
+                          // --------------------------------------------
+                          SizedBox(
+                            height: 600,
+                            child: PropertyTabs(
+                              property: property,
+                              introText: widget.introText,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 25.0),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // --------------------------------------------
-                        // Quick Actions
-                        // --------------------------------------------
-                        QuickActionsPropertyWidget(
-                          property: property,
-                          introText: introText,
-                        ),
-                        SizedBox(height: 20.0),
-                        // --------------------------------------------
-                        // Tenant List
-                        // --------------------------------------------
-                        if (propertyTenants.isNotEmpty)
-                          TenantInformationCardWidget(
+                    SizedBox(width: 25.0),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // --------------------------------------------
+                          // Quick Actions
+                          // --------------------------------------------
+                          QuickActionsPropertyWidget(
                             property: property,
-                            introText: '${widget.introText} / tenant',
-                            tenants: propertyTenants,
+                            introText: introText,
                           ),
-                      ],
+                          SizedBox(height: 20.0),
+                          // --------------------------------------------
+                          // Tenant List
+                          // --------------------------------------------
+                          if (propertyTenants.isNotEmpty)
+                            TenantInformationCardWidget(
+                              property: property,
+                              introText: '${widget.introText} / tenant',
+                              tenants: propertyTenants,
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-      ],
+                  ],
+                ),
+        ],
+      ),
     );
   }
 }

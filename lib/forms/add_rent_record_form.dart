@@ -1,25 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
-import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
-import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
-
-class AddRentalRecord extends StatelessWidget {
-  final Unit? unit;
-  final Tenant? tenant;
-  final RentalMonth? rentalMonth;
-  const AddRentalRecord({super.key, this.unit, this.tenant, this.rentalMonth});
-
-  @override
-  Widget build(BuildContext context) {
-    return DashboardForm(
-      form: RentalRecordForm(
-        tenant: tenant,
-        unit: unit,
-        rentalMonth: rentalMonth,
-      ),
-    );
-  }
-}
 
 class RentalRecordForm extends ConsumerStatefulWidget {
   final Unit? unit;
@@ -419,8 +398,28 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
                           controller: paymentDateController,
                           keyboardType: TextInputType.datetime,
                           hintText: 'Enter date (date / month / year)',
+                          // inputFormatters: [DateInputFormatter()],
+                          // customValidator: validateDate,
                           inputFormatters: [DateInputFormatter()],
-                          customValidator: validateDate,
+                          onPressedCallBack: () async {
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              helpText: 'Select date',
+                            );
+
+                            if (pickedDate != null) {
+                              final formattedDate =
+                                  '${pickedDate.day.toString().padLeft(2, '0')}/'
+                                  '${pickedDate.month.toString().padLeft(2, '0')}/'
+                                  '${pickedDate.year}';
+
+                              paymentDateController.text = formattedDate;
+                              _updateDatePaid(formattedDate);
+                            }
+                          },
                           onChangedCallBack: (value) {
                             _updateDatePaid(value);
                           },
@@ -636,10 +635,22 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
           .addRentEntry(rentEntry, actualMonth, tenantRentHistory);
 
       if (updatedHistory != null) {
-        ref
+        await ref
             .read(userInformationProvider.notifier)
             .updateTenant(selectedTenant!);
-        ref
+        await ref
+            .read(userInformationProvider.notifier)
+            .appendRentRecords(
+              RentalRecord(
+                tenantId: selectedTenant!.tenantId!,
+                unitId: selectedUnit!.unitId!,
+                rentEntry: rentEntry,
+                rentalMonth: actualMonth,
+                rentHistory: tenantRentHistory,
+              ),
+            );
+
+        await ref
             .read(userInformationProvider.notifier)
             .appendFinances(
               FinancialRecord(
@@ -653,12 +664,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
                 paymentBy: Person(personName: selectedTenant!.tenantName),
               ),
             );
-
-        displaySnackBar(
-          context,
-          'Rental record added successfully',
-          AppColorsConstant.greenColor,
-        );
+        ref.read(workspaceProvider.notifier).closeWorkspace();
       }
     } catch (e) {
       log('Error adding rent entry for existing rent history: $e');
@@ -670,7 +676,6 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
       );
     } finally {
       lazyLoader.hideLoader();
-      ref.read(workspaceProvider.notifier).closeWorkspace();
     }
   }
 
@@ -697,9 +702,26 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
       if (newHistory == null) {
         return;
       }
+      await ref
+          .read(userInformationProvider.notifier)
+          .updateTenant(selectedTenant!);
+      await ref
+          .read(userInformationProvider.notifier)
+          .appendRentRecords(
+            RentalRecord(
+              tenantId: selectedTenant!.tenantId!,
+              unitId: selectedUnit!.unitId!,
+              rentEntry: rentEntry,
+              rentalMonth: RentalMonth(
+                rentalMonth: rentEntry.rentalMonth,
+                rentEntries: [rentEntry],
+              ),
+              rentHistory: newHistory,
+            ),
+          );
 
       // Add financial record locally.
-      ref
+      await ref
           .read(userInformationProvider.notifier)
           .appendFinances(
             FinancialRecord(
@@ -714,19 +736,11 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
             ),
           );
 
-      displaySnackBar(
-        context,
-        'Rental record added successfully',
-        AppColorsConstant.greenColor,
-      );
+      ref.read(workspaceProvider.notifier).closeWorkspace();
     } catch (e) {
       log('Error adding rent history: $e');
     } finally {
       lazyLoader.hideLoader();
-      if (context.mounted) {
-        Navigator.of(context).pop();
-        ref.read(workspaceProvider.notifier).closeWorkspace();
-      }
     }
   }
 }

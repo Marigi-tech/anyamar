@@ -22,14 +22,6 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
     final themeIsDarkMode = ref.watch(themeIsDarkProvider);
     final appData = ref.watch(userInformationProvider);
 
-    // final baseColor = themeIsDarkMode
-    //     ? AppColors.darkElevatedCard
-    //     : AppColors.lightCard;
-
-    // final highlightColor = themeIsDarkMode
-    //     ? const Color(0xFF3A4658)
-    //     : const Color(0xFFEAF1FA);
-
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: themeIsDarkMode == true
@@ -39,65 +31,49 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
           ? Drawer(elevation: 6, child: SidebarWidget(pages: webPages))
           : null,
 
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          /// Desktop Sidebar with animation
-          if (isSidebarVisible && !Responsiveness.isMobile(context))
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeInOut,
-              width: 220,
-              child: SidebarWidget(pages: webPages),
-            ),
-
-          // Page Area
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //Intro row
-                IntroRowWidget(scaffoldKey: _scaffoldKey),
-
-                //Actual page content starts here
-                // Expanded(child: MainWorkspace()),
-                Expanded(
-                  child: DataLoadingOverlay(
-                    isLoading: appData.isLoading,
-                    isDarkMode: themeIsDarkMode,
-                    child: Skeletonizer(
-                      enabled: appData.isLoading,
-                      enableSwitchAnimation: true,
-                      effect: ShimmerEffect(
-                        baseColor: themeIsDarkMode
-                            ? AppColors.darkElevatedCard
-                            : AppColors.lightCard,
-                        highlightColor: themeIsDarkMode
-                            ? const Color(0xFF3A4658)
-                            : const Color(0xFFEAF1FA),
-                        duration: const Duration(milliseconds: 1500),
-                      ),
-                      child: MainWorkspace(),
-                    ),
-                  ),
+      body: DataLoadingOverlay(
+        isLoading: appData.isLoading,
+        isDarkMode: themeIsDarkMode,
+        child: Skeletonizer(
+          enabled: appData.isLoading,
+          enableSwitchAnimation: true,
+          effect: ShimmerEffect(
+            baseColor: themeIsDarkMode
+                ? AppColors.darkElevatedCard
+                : AppColors.lightCard,
+            highlightColor: themeIsDarkMode
+                ? const Color(0xFF3A4658)
+                : const Color(0xFFEAF1FA),
+            duration: const Duration(milliseconds: 250),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              /// Desktop Sidebar with animation
+              if (isSidebarVisible && !Responsiveness.isMobile(context))
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.easeInOut,
+                  width: 220,
+                  child: SidebarWidget(pages: webPages),
                 ),
 
-                // Expanded(
-                //   child: Skeletonizer(
-                //     effect: ShimmerEffect(
-                //       baseColor: baseColor,
-                //       highlightColor: highlightColor,
-                //       duration: const Duration(milliseconds: 100),
-                //     ),
-                //     enabled: appData.isLoading,
-                //     enableSwitchAnimation: true,
-                //     child: MainWorkspace(),
-                //   ),
-                // ),
-              ],
-            ),
+              // Page Area
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    //Intro row
+                    IntroRowWidget(scaffoldKey: _scaffoldKey),
+
+                    //Actual page content starts here
+                    Expanded(child: MainWorkspace()),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

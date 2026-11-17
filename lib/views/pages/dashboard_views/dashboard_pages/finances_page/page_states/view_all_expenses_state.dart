@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_expenses_page_state.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/back_button_widget.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/expenses_summary_cards.dart';
@@ -41,7 +40,7 @@ class ViewAllExpensesStatePage extends ConsumerWidget {
               children: [
                 ExpensesPageSummaryCards(),
                 SizedBox(height: 15.0),
-                ExpensesTable(),
+                ExpensesTable(introText: introText ),
               ],
             ),
           ),

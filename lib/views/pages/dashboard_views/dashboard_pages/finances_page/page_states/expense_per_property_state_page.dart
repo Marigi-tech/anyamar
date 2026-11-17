@@ -1,6 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/expenses_per_property.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/back_button_widget.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_expenses_page_state.dart';
 
 class ExpensesPerPropertyStatePage extends ConsumerWidget {
   final String introText;
@@ -10,12 +10,22 @@ class ExpensesPerPropertyStatePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DashboardPageStructure(
       introText: introText,
-      introButton: FinancesBackButtonWidget(),
-      pageTitle: 'Expenses / Property',
-      introRowWidgets: [],
+      introButton: IntroButtonWidget(),
+      pageTitle: 'Expenses / property',
+
+      introRowWidgets: [
+        ElevatedButtonWidget(
+          buttonTitle: 'Add expense',
+          onButtonPressedCallBack: () {
+            ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  AddExpensesStatePage(introText: '$introText / add expense'),
+                );
+          },
+        ),
+      ],
       scrollableDashboardWidget: ExpensesPerProperty(introText: introText),
     );
   }
 }
-
-

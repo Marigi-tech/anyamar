@@ -47,8 +47,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               ),
               SizedBox(height: 30.0),
               //? send
-              ColorButtonWidget(
-                onPressedCallBack: () async {
+              ElevatedButtonWidget(
+                onButtonPressedCallBack: () async {
                   if (_formKey.currentState!.validate()) {
                     final auth = AuthService();
                     LazyLoader lazyLoader = LazyLoader(context: context);
@@ -61,7 +61,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                         displaySnackBar(
                           context,
                           'A reset password link has been sent to your email address',
-                          AppColorsConstant.greenColor,
+                          AppColors.primaryBlue,
                         );
                         Navigator.of(
                           context,
@@ -81,7 +81,6 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   }
                 },
                 buttonTitle: 'Submit',
-                buttonColor: AppColorsConstant.greenColor,
               ),
             ],
           ),

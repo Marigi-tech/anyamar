@@ -58,7 +58,6 @@ export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page
 export 'package:anyamar/views/reusable_widgets/information_badges/information_badge_widget.dart';
 export 'package:anyamar/data/services/db_property_service.dart';
 export 'package:anyamar/tables/view_chevron_card.dart';
-export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/add_property.dart';
 export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/single_property_page.dart';
 export 'package:anyamar/views/reusable_widgets/modals/alert_modal.dart';
 export 'package:anyamar/data/models/enums/financial_record_types.dart';
@@ -72,19 +71,15 @@ export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page
 export 'package:anyamar/forms/tenant_form.dart';
 export 'dart:developer' hide Flow;
 export 'package:anyamar/data/providers/user_info/user_information_provider.dart';
-export 'package:anyamar/forms/rental_month_form.dart';
 export 'package:anyamar/data/models/enums/financial_record_nature.dart';
-export 'package:anyamar/tables/custom_data_table.dart';
 export 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/dashboard_page_shell.dart';
 export 'package:anyamar/tables/financial_records_table.dart';
 export 'package:anyamar/views/reusable_widgets/table_intro_widget/table_intro_widget.dart';
 export 'package:anyamar/forms/add_update_unit_form.dart';
 export 'package:anyamar/tables/tenants_table.dart';
 export 'package:anyamar/views/reusable_widgets/buttons/custom_back_button.dart';
-export 'package:anyamar/views/pages/dashboard_views/information_pages/unit_info/unit_rent_history.dart';
 export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/unit_page.dart';
 export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/rental_income_page/rental_income_page.dart';
-export 'package:anyamar/tables/rent_history.dart';
 export 'package:anyamar/utils/text_input_formatters/email_formatter.dart';
 export 'package:anyamar/views/pages/initial_pages/reset_password/forgot_password_page.dart';
 export 'package:anyamar/views/pages/widget_tree/widget_tree.dart';
@@ -133,3 +128,9 @@ export 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/searchless
 export 'package:anyamar/data/providers/page_providers/selected_page_provider/selected_page_notifier.dart';
 export 'package:anyamar/views/pages/dashboard_views/dashboard_workspace/main_workspace.dart';
 export 'package:skeletonizer/skeletonizer.dart';
+export 'package:anyamar/data/models/page_intro_info/page_intro_info.dart';
+export 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+export 'package:anyamar/data/methods/text_methods.dart';
+export 'package:anyamar/utils/text_input_formatters/phone_number_formatter.dart';
+export 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
+export 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';

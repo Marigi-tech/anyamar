@@ -1,4 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/models/unavailable_info/unavailable_info_model.dart';
 import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 
 class DashboardPageStructure extends ConsumerWidget {
@@ -10,7 +11,7 @@ class DashboardPageStructure extends ConsumerWidget {
   final bool? isTable;
   final Widget? introButton;
   final Widget? pageTitleWidget;
-
+  final UnavailableInfoModel? unavailableInfo;
   const DashboardPageStructure({
     super.key,
     required this.introText,
@@ -21,6 +22,7 @@ class DashboardPageStructure extends ConsumerWidget {
     this.isTable,
     this.introButton,
     this.pageTitleWidget,
+    this.unavailableInfo,
   });
 
   @override
@@ -43,35 +45,38 @@ class DashboardPageStructure extends ConsumerWidget {
           // PAGE CONTENT
           // ------------------------------------------------
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // ------------------------------------------------
-                // PAGE HEADER
-                // ------------------------------------------------
-                _PageHeader(
-                  pageTitle: pageTitle,
-                  pageTitleWidget: pageTitleWidget,
-                  supplementaryText: supplementaryText,
-                  introRowWidgets: introRowWidgets,
-                  themeIsDark: themeIsDark,
-                  introButton: introButton,
-                ),
+            child: InfoUnavailableOverlay(
+              unavailableInfo: unavailableInfo,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // ------------------------------------------------
+                  // PAGE HEADER
+                  // ------------------------------------------------
+                  _PageHeader(
+                    pageTitle: pageTitle,
+                    pageTitleWidget: pageTitleWidget,
+                    supplementaryText: supplementaryText,
+                    introRowWidgets: introRowWidgets,
+                    themeIsDark: themeIsDark,
+                    introButton: introButton,
+                  ),
 
-                const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                // ------------------------------------------------
-                // TABLE / CONTENT
-                // ------------------------------------------------
-                isTable == true
-                    ? Expanded(child: scrollableDashboardWidget)
-                    : Expanded(
-                        child: SingleChildScrollView(
-                          child: scrollableDashboardWidget,
+                  // ------------------------------------------------
+                  // TABLE / CONTENT
+                  // ------------------------------------------------
+                  isTable == true
+                      ? Expanded(child: scrollableDashboardWidget)
+                      : Expanded(
+                          child: SingleChildScrollView(
+                            child: scrollableDashboardWidget,
+                          ),
                         ),
-                      ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -81,8 +86,6 @@ class DashboardPageStructure extends ConsumerWidget {
 }
 
 class IntroButtonWidget extends ConsumerStatefulWidget {
-  // final String? buttonText;
-  // final GestureTapCallback? onPressedCallBack;
   const IntroButtonWidget({super.key});
 
   @override

@@ -25,9 +25,12 @@ class ExpensesPerPropertyWidget extends ConsumerWidget {
           // --------------------------------------------
           SinglePropertyPageSummaryCards(property: property),
           SizedBox(height: 20.0),
-          PropertyRecords(
-            property: property,
-            introText: '$introText / expense records',
+          SizedBox(
+            height: 500,
+            child: PropertyRecords(
+              property: property,
+              introText: introText,
+            ),
           ),
         ],
       ),

@@ -2,19 +2,18 @@ import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/enums/currencies.dart';
 import 'package:anyamar/data/models/enums/payment_frequency.dart';
 import 'package:anyamar/utils/text_input_formatters/id_or_passport_formatter.dart';
-import 'package:anyamar/utils/text_input_formatters/phone_number_formatter.dart';
-import 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
-import 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
 
 class TenantForm extends ConsumerStatefulWidget {
   final Property? currentProperty;
   final Unit? currentUnit;
   final Tenant? currentTenant;
+  final String introText;
   const TenantForm({
     super.key,
     this.currentProperty,
     this.currentUnit,
     this.currentTenant,
+    required this.introText,
   });
 
   @override
@@ -247,519 +246,503 @@ class _TenantFormState extends ConsumerState<TenantForm> {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 980),
-        child: allUnits.isEmpty
-            ? InfoUnavailableLottie(
-                text:
-                    'There are no units at the moment, add a unit to the system for better management',
-                ctaButtonWidget: CardButtonWidget(
-                  buttonTitle: 'Click here to add a unit',
-                  // onPressedCallBack: () => Navigator.of(context).push(
-                  //   // MaterialPageRoute(
-                  //   //   builder: (_) => AddUnit(
-                  //   //     currentProperty: widget.currentProperty,
-                  //   //     isFromTenantPage: true,
-                  //   //   ),
-                  //   // ),
-                  // ),
-                ),
-              )
-            : myVacantUnits.isEmpty
-            ? InfoUnavailableLottie(
-                text: 'There are currently no vacant units',
-                ctaButtonWidget: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CardButtonWidget(
-                      buttonTitle: 'Click here to add a unit',
-                      backgroundColor: AppColorsConstant.lightGreenColor,
-                      // onPressedCallBack: () => Navigator.of(context).push(
-                      //   // MaterialPageRoute(
-                      //   //   builder: (_) =>
-                      //   //       AddUnit(currentProperty: widget.currentProperty),
-                      //   // ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // ========================================================
+              // FORM FIELDS
+              // ========================================================
+              //Tenant Information
+              FormCardWidget(
+                noOfColumnsPerRow: 3,
+                formCardTitle: 'Basic tenant information',
+                formTitleIcon: Icons.person,
+                formInputs: [
+                  // ==================================================
+                  // TENANT NAME
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Tenant Name',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: tenantNameController,
+                      keyboardType: TextInputType.name,
+                      hintText: 'Enter full name',
                     ),
-                    // ),
-                    SizedBox(height: 06),
-                    CardButtonWidget(
-                      buttonTitle: 'Go back',
-                      onPressedCallBack: () => Navigator.pop(context),
+                  ),
+                  // ==========================================================
+                  // PHONE NUMBER
+                  // ==========================================================
+                  FormItemWidget(
+                    label: 'Phone number',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: tenantPhoneController,
+                      keyboardType: TextInputType.phone,
+                      customValidator: validatePhoneNumber,
+                      hintText: 'Enter Phone number (07...)',
                     ),
-                  ],
-                ),
-              )
-            : Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // ========================================================
-                    // FORM FIELDS
-                    // ========================================================
-                    //Tenant Information
-                    FormCardWidget(
-                      noOfColumnsPerRow: 3,
-                      formCardTitle: 'Basic tenant information',
-                      formTitleIcon: Icons.person,
-                      formInputs: [
-                        // ==================================================
-                        // TENANT NAME
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Tenant Name',
-                          required: true,
-                          child: FormFieldWidget(
-                            controller: tenantNameController,
-                            keyboardType: TextInputType.name,
-                            hintText: 'Enter full name',
-                          ),
-                        ),
-                        // ==========================================================
-                        // PHONE NUMBER
-                        // ==========================================================
-                        FormItemWidget(
-                          label: 'Phone number',
-                          required: true,
-                          child: FormFieldWidget(
-                            controller: tenantPhoneController,
-                            keyboardType: TextInputType.phone,
-                            customValidator: validatePhoneNumber,
-                            hintText: 'Enter Phone number (07...)',
-                          ),
-                        ),
-                        // ==================================================
-                        // EMAIL ADDRESS
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Email address',
-                          required: false,
-                          child: FormFieldWidget(
-                            controller: tenantEmailController,
-                            keyboardType: TextInputType.emailAddress,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                            ],
-                            hintText: 'Enter email address',
-                            customValidator: validateEmail,
-                          ),
-                        ),
-                        // ==================================================
-                        // NATIONAL ID / PASSPORT NUMBER
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'National ID / Passport Number',
-                          required: false,
-
-                          child: FormFieldWidget(
-                            controller: tenantNationalIdController,
-                            keyboardType: TextInputType.text,
-                            inputFormatters: [IdentityDocumentInputFormatter()],
-                            hintText: 'Enter National ID or passport number',
-                            customValidator: validateIdentityDocument,
-                          ),
-                        ),
-                        // ==================================================
-                        // OCCUPATION
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Occupation / Job',
-                          required: false,
-                          child: FormFieldWidget(
-                            controller: occupationController,
-                            keyboardType: TextInputType.text,
-                            hintText: 'Enter Occupation',
-                            required: false,
-                          ),
-                        ),
+                  ),
+                  // ==================================================
+                  // EMAIL ADDRESS
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Email address',
+                    required: false,
+                    child: FormFieldWidget(
+                      controller: tenantEmailController,
+                      keyboardType: TextInputType.emailAddress,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
                       ],
+                      hintText: 'Enter email address',
+                      customValidator: validateEmail,
                     ),
-                    SizedBox(height: 20),
-                    //Unit Information
-                    FormCardWidget(
-                      noOfColumnsPerRow: 3,
-                      formCardTitle: 'Unit Information',
-                      formTitleIcon: Icons.house,
-                      formInputs: [
-                        // ==================================================
-                        // SELECT UNIT
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Unit',
-                          required: true,
-                          child: DropdownButtonFormField<String>(
-                            hint: const Text('Select Unit'),
-                            initialValue: selectedUnit?.unitId,
-                            decoration:
-                                CustomInputDecoration.textInputDecoration(),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            items: isUpdateMode
-                                ? allUnits
-                                      .where((unit) => unit.unitId != null)
-                                      .map((unit) {
-                                        final property = myProperties
-                                            .firstWhere(
-                                              (p) =>
-                                                  p.propertyId ==
-                                                  unit.propertyId,
-                                            );
+                  ),
+                  // ==================================================
+                  // NATIONAL ID / PASSPORT NUMBER
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'National ID / Passport Number',
+                    required: false,
 
-                                        return DropdownMenuItem<String>(
-                                          value: unit.unitId!,
-                                          child: Text(
-                                            '${unit.unitName}, ${property.propertyName}',
-                                          ),
-                                        );
-                                      })
-                                      .toList()
-                                : myVacantUnits
-                                      .where((unit) => unit.unitId != null)
-                                      .map((unit) {
-                                        final property = myProperties
-                                            .firstWhere(
-                                              (p) =>
-                                                  p.propertyId ==
-                                                  unit.propertyId,
-                                            );
-
-                                        return DropdownMenuItem<String>(
-                                          value: unit.unitId!,
-                                          child: Text(
-                                            '${unit.unitName}, ${property.propertyName}',
-                                          ),
-                                        );
-                                      })
-                                      .toList(),
-
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Select the unit where the tenant resides';
-                              }
-                              return null;
-                            },
-
-                            onChanged: (unitId) {
-                              final unit = myVacantUnits.firstWhere(
-                                (unit) => unit.unitId == unitId,
-                              );
-
-                              log(
-                                'This is the selected Unit: ${unit.unitName}',
-                              );
-
-                              setState(() {
-                                selectedUnit = unit;
-                                if (isUpdateMode != true) {
-                                  rentController.text =
-                                      selectedUnit?.unitRent?.rentAmount
-                                          .toString() ??
-                                      '';
-                                  rentDepositController.text =
-                                      selectedUnit?.unitRent?.rentDeposit
-                                          .toString() ??
-                                      '';
-                                  freqShortHand =
-                                      selectedUnit
-                                          ?.unitRent
-                                          ?.paymentFrequency ??
-                                      '';
-                                  selectedPaymentFrequency =
-                                      getFrequencyFromFreq(freqShortHand);
-                                  rentCurrencyController.text =
-                                      selectedUnit?.unitRent?.rentCurrency ??
-                                      'Ksh';
-
-                                  // Existing utilities
-                                  unitUtilities.addAll(
-                                    selectedUnit?.unitRent?.utilities ?? [],
-                                  );
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        // ==========================================================
-                        // START OF LEASE
-                        // ==========================================================
-                        FormItemWidget(
-                          label: 'Start of lease',
-                          required: true,
-                          child: FormFieldWidget(
-                            controller: leaseStartController,
-                            keyboardType: TextInputType.datetime,
-                            hintText: 'Enter date (date / month / year)',
-                            inputFormatters: [DateInputFormatter()],
-                            customValidator: validateDate,
-                            onChangedCallBack: (value) {
-                              _updateDatePaid(value, false);
-                            },
-                          ),
-                        ),
-                        // ==================================================
-                        // END OF LEASE
-                        // ==================================================
-                        if (isUpdateMode)
-                          FormItemWidget(
-                            label: 'End of lease',
-                            required: false,
-                            child: FormFieldWidget(
-                              controller: leaseEndController,
-                              keyboardType: TextInputType.datetime,
-                              hintText: 'Enter date (date / month / year)',
-                              inputFormatters: [DateInputFormatter()],
-                              customValidator: validateDate,
-                              required: false,
-                              onChangedCallBack: (value) {
-                                _updateDatePaid(value, true);
-                              },
-                            ),
-                          ),
-                      ],
+                    child: FormFieldWidget(
+                      controller: tenantNationalIdController,
+                      keyboardType: TextInputType.text,
+                      inputFormatters: [IdentityDocumentInputFormatter()],
+                      hintText: 'Enter National ID or passport number',
+                      customValidator: validateIdentityDocument,
                     ),
-                    SizedBox(height: 20), // Next of Kin Information
-                    FormCardWidget(
-                      noOfColumnsPerRow: 3,
-                      formCardTitle: 'Next of kin Information',
-                      formInputs: [
-                        // ==================================================
-                        // Name
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Name',
-                          required: true,
-                          child: FormFieldWidget(
-                            controller: emergencyContactNameController,
-                            keyboardType: TextInputType.text,
-                            required: true,
-                            hintText: 'Enter Name',
-                            customValidator: validateUserName,
-                          ),
-                        ),
-                        // ==================================================
-                        // Phone number
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Phone Number',
-                          required: true,
-                          child: FormFieldWidget(
-                            controller: emergencyContactPhoneController,
-                            keyboardType: TextInputType.text,
-                            required: false,
-                            hintText: 'Phone Number',
-                            customValidator: validatePhoneNumber,
-                          ),
-                        ),
-                        // ==================================================
-                        // Email
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Email',
-                          required: false,
-                          child: FormFieldWidget(
-                            controller: emergencyContactEmailController,
-                            keyboardType: TextInputType.emailAddress,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                            ],
-                            hintText: 'Email',
-                            required: false,
-                          ),
-                        ),
-                        // ==================================================
-                        // Relationship
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Relationship with tenant',
-                          required: false,
-                          child: DropdownButtonFormField<String>(
-                            hint: const Text('Select'),
-                            decoration:
-                                CustomInputDecoration.textInputDecoration(),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            items: familyRelations.map((relationship) {
-                              return DropdownMenuItem(
-                                value: relationship,
-                                child: Text(relationship),
-                              );
-                            }).toList(),
-                            onChanged: ((value) {
-                              if (value != null) {
-                                emergencyContactRelationShipController.text =
-                                    value;
-                              }
-                            }),
-                          ),
-                        ),
-                      ],
+                  ),
+                  // ==================================================
+                  // OCCUPATION
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Occupation / Job',
+                    required: false,
+                    child: FormFieldWidget(
+                      controller: occupationController,
+                      keyboardType: TextInputType.text,
+                      hintText: 'Enter Occupation',
+                      required: false,
                     ),
-                    SizedBox(height: 20),
-                    //Rent Information
-                    FormCardWidget(
-                      noOfColumnsPerRow: 3,
-                      formInputs: [
-                        // ==================================================
-                        // Payment Frequency
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Payment Frequency',
-                          required: true,
-                          child: DropdownButtonFormField<PaymentFrequency>(
-                            initialValue: selectedPaymentFrequency,
-                            hint: Text(
-                              'Select ',
-                              style: CustomInputDecoration.textInputDecoration()
-                                  .hintStyle,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            decoration:
-                                CustomInputDecoration.textInputDecoration(),
-                            items: PaymentFrequency.values.map((frequency) {
-                              return DropdownMenuItem<PaymentFrequency>(
-                                value: frequency,
-                                child: Text(frequency.label),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedPaymentFrequency = value;
-                                freqShortHand = getFreqFromPaymentFrequency(
-                                  value,
-                                );
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Select an option';
-                              }
-
-                              return null;
-                            },
-                          ),
-                        ),
-                        // ==================================================
-                        // Currency
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Currency',
-                          required: false,
-                          child: DropdownButtonFormField<Currencies>(
-                            initialValue: currency,
-                            hint: Text(
-                              'Select ',
-                              style: CustomInputDecoration.textInputDecoration()
-                                  .hintStyle,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            decoration:
-                                CustomInputDecoration.textInputDecoration(),
-                            items: Currencies.values.map((currency) {
-                              return DropdownMenuItem<Currencies>(
-                                value: currency,
-                                child: Text(currency.label),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                currency = value;
-                                selectedCurrency = currency?.label ?? '';
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Select an option';
-                              }
-
-                              return null;
-                            },
-                          ),
-                        ),
-                        // ==================================================
-                        // RENT DEPOSIT
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Rent Deposit',
-                          required: false,
-                          child: FormFieldWidget(
-                            controller: rentDepositController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            inputFormatters: [MoneyInputFormatter()],
-                            required: false,
-                            isMoneyField: true,
-                            moneyCurrency: selectedCurrency,
-                            hintText: 'Enter rent deposit',
-                          ),
-                        ),
-                        // ==================================================
-                        // RENT
-                        // ==================================================
-                        FormItemWidget(
-                          label: 'Rent / $freqShortHand',
-                          required: true,
-
-                          child: FormFieldWidget(
-                            controller: rentController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [MoneyInputFormatter()],
-                            hintText: 'Enter Rent',
-                            isMoneyField: true,
-                            moneyCurrency: selectedCurrency,
-                          ),
-                        ),
-
-                        // ========================================================
-                        // Utilities
-                        // ========================================================
-                        _buildUtilitiesSection(),
-                      ],
-                      formCardTitle: 'Rental Information',
-                      formTitleIcon: Icons.wallet,
-                    ),
-
-                    SizedBox(height: 25.0),
-                    // ==========================================================
-                    // SUBMIT BUTTON
-                    // ==========================================================
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //Clear Button
-                        if (!isUpdateMode)
-                          ElevatedButtonWidget(
-                            buttonTitle: 'Reset',
-                            isClear: true,
-                            onButtonPressedCallBack: () async {
-                              _resetForm();
-                            },
-                          ),
-                        SizedBox(width: 10),
-                        //Submit button
-                        ElevatedButtonWidget(
-                          buttonTitle: isUpdateMode
-                              ? 'Update Tenant'
-                              : 'Add Tenant',
-                          buttonIcon: isUpdateMode
-                              ? Icon(CupertinoIcons.pen)
-                              : Icon(Icons.add),
-                          onButtonPressedCallBack: () async {
-                            if (isUpdateMode) {
-                              await updateTenantMethod(context, currentUser);
-                            } else {
-                              await addTenantMethod(context, currentUser);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+              SizedBox(height: 20),
+              //Unit Information
+              FormCardWidget(
+                noOfColumnsPerRow: 3,
+                formCardTitle: 'Unit Information',
+                formTitleIcon: Icons.house,
+                formInputs: [
+                  // ==================================================
+                  // SELECT UNIT
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Unit',
+                    required: true,
+                    child: DropdownButtonFormField<String>(
+                      hint: const Text('Select Unit'),
+                      initialValue: selectedUnit?.unitId,
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      items: isUpdateMode
+                          ? allUnits.where((unit) => unit.unitId != null).map((
+                              unit,
+                            ) {
+                              final property = myProperties.firstWhere(
+                                (p) => p.propertyId == unit.propertyId,
+                              );
+
+                              return DropdownMenuItem<String>(
+                                value: unit.unitId!,
+                                child: Text(
+                                  '${unit.unitName}, ${property.propertyName}',
+                                ),
+                              );
+                            }).toList()
+                          : myVacantUnits
+                                .where((unit) => unit.unitId != null)
+                                .map((unit) {
+                                  final property = myProperties.firstWhere(
+                                    (p) => p.propertyId == unit.propertyId,
+                                  );
+
+                                  return DropdownMenuItem<String>(
+                                    value: unit.unitId!,
+                                    child: Text(
+                                      '${unit.unitName}, ${property.propertyName}',
+                                    ),
+                                  );
+                                })
+                                .toList(),
+
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Select the unit where the tenant resides';
+                        }
+                        return null;
+                      },
+
+                      onChanged: (unitId) {
+                        final unit = myVacantUnits.firstWhere(
+                          (unit) => unit.unitId == unitId,
+                        );
+
+                        log('This is the selected Unit: ${unit.unitName}');
+
+                        setState(() {
+                          selectedUnit = unit;
+                          if (isUpdateMode != true) {
+                            rentController.text =
+                                selectedUnit?.unitRent?.rentAmount.toString() ??
+                                '';
+                            rentDepositController.text =
+                                selectedUnit?.unitRent?.rentDeposit
+                                    .toString() ??
+                                '';
+                            freqShortHand =
+                                selectedUnit?.unitRent?.paymentFrequency ?? '';
+                            selectedPaymentFrequency = getFrequencyFromFreq(
+                              freqShortHand,
+                            );
+                            rentCurrencyController.text =
+                                selectedUnit?.unitRent?.rentCurrency ?? 'Ksh';
+
+                            // Existing utilities
+                            unitUtilities.addAll(
+                              selectedUnit?.unitRent?.utilities ?? [],
+                            );
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  // ==========================================================
+                  // START OF LEASE
+                  // ==========================================================
+                  FormItemWidget(
+                    label: 'Start of lease',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: leaseStartController,
+                      keyboardType: TextInputType.none,
+                      hintText: 'Select start date',
+                      onPressedCallBack: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                          helpText: 'Select start of lease',
+                        );
+
+                        if (pickedDate != null) {
+                          final formattedDate =
+                              '${pickedDate.day.toString().padLeft(2, '0')}/'
+                              '${pickedDate.month.toString().padLeft(2, '0')}/'
+                              '${pickedDate.year}';
+
+                          leaseStartController.text = formattedDate;
+                          _updateDatePaid(formattedDate, false);
+                        }
+                      },
+                      onChangedCallBack: (value) {
+                        _updateDatePaid(value, false);
+                      },
+                      // customValidator: validateDate,
+                    ),
+                  ),
+                  // FormItemWidget(
+                  //   label: 'Start of lease',
+                  //   required: true,
+                  //   child: FormFieldWidget(
+                  //     controller: leaseStartController,
+                  //     keyboardType: TextInputType.datetime,
+                  //     hintText: 'Enter date (date / month / year)',
+                  //     inputFormatters: [DateInputFormatter()],
+                  //     customValidator: validateDate,
+                  //     onChangedCallBack: (value) {
+                  //       _updateDatePaid(value, false);
+                  //     },
+                  //   ),
+                  // ),
+                  // ==================================================
+                  // END OF LEASE
+                  // ==================================================
+                  if (isUpdateMode)
+                    FormItemWidget(
+                      label: 'End of lease',
+                      required: false,
+                      child: FormFieldWidget(
+                        controller: leaseEndController,
+                        keyboardType: TextInputType.datetime,
+                        hintText: 'Enter date (date / month / year)',
+                        // inputFormatters: [DateInputFormatter()],
+                        onPressedCallBack: () async {
+                          final DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                            helpText: 'Select end of lease',
+                          );
+
+                          if (pickedDate != null) {
+                            final formattedDate =
+                                '${pickedDate.day.toString().padLeft(2, '0')}/'
+                                '${pickedDate.month.toString().padLeft(2, '0')}/'
+                                '${pickedDate.year}';
+
+                            leaseEndController.text = formattedDate;
+                            _updateDatePaid(formattedDate, true);
+                          }
+                        },
+                        // customValidator: validateDate,
+                        required: false,
+                        onChangedCallBack: (value) {
+                          _updateDatePaid(value, true);
+                        },
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(height: 20), // Next of Kin Information
+              FormCardWidget(
+                noOfColumnsPerRow: 3,
+                formCardTitle: 'Next of kin Information',
+                formInputs: [
+                  // ==================================================
+                  // Name
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Name',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: emergencyContactNameController,
+                      keyboardType: TextInputType.text,
+                      required: true,
+                      hintText: 'Enter Name',
+                      customValidator: validateUserName,
+                    ),
+                  ),
+                  // ==================================================
+                  // Phone number
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Phone Number',
+                    required: true,
+                    child: FormFieldWidget(
+                      controller: emergencyContactPhoneController,
+                      keyboardType: TextInputType.text,
+                      required: false,
+                      hintText: 'Phone Number',
+                      customValidator: validatePhoneNumber,
+                    ),
+                  ),
+                  // ==================================================
+                  // Email
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Email',
+                    required: false,
+                    child: FormFieldWidget(
+                      controller: emergencyContactEmailController,
+                      keyboardType: TextInputType.emailAddress,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                      ],
+                      hintText: 'Email',
+                      required: false,
+                    ),
+                  ),
+                  // ==================================================
+                  // Relationship
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Relationship with tenant',
+                    required: false,
+                    child: DropdownButtonFormField<String>(
+                      hint: const Text('Select'),
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      items: familyRelations.map((relationship) {
+                        return DropdownMenuItem(
+                          value: relationship,
+                          child: Text(relationship),
+                        );
+                      }).toList(),
+                      onChanged: ((value) {
+                        if (value != null) {
+                          emergencyContactRelationShipController.text = value;
+                        }
+                      }),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              //Rent Information
+              FormCardWidget(
+                noOfColumnsPerRow: 3,
+                formInputs: [
+                  // ==================================================
+                  // Payment Frequency
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Payment Frequency',
+                    required: true,
+                    child: DropdownButtonFormField<PaymentFrequency>(
+                      initialValue: selectedPaymentFrequency,
+                      hint: Text(
+                        'Select ',
+                        style: CustomInputDecoration.textInputDecoration()
+                            .hintStyle,
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      items: PaymentFrequency.values.map((frequency) {
+                        return DropdownMenuItem<PaymentFrequency>(
+                          value: frequency,
+                          child: Text(frequency.label),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedPaymentFrequency = value;
+                          freqShortHand = getFreqFromPaymentFrequency(value);
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Select an option';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ),
+                  // ==================================================
+                  // Currency
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Currency',
+                    required: false,
+                    child: DropdownButtonFormField<Currencies>(
+                      initialValue: currency,
+                      hint: Text(
+                        'Select ',
+                        style: CustomInputDecoration.textInputDecoration()
+                            .hintStyle,
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: CustomInputDecoration.textInputDecoration(),
+                      items: Currencies.values.map((currency) {
+                        return DropdownMenuItem<Currencies>(
+                          value: currency,
+                          child: Text(currency.label),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          currency = value;
+                          selectedCurrency = currency?.label ?? '';
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Select an option';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ),
+                  // ==================================================
+                  // RENT DEPOSIT
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Rent Deposit',
+                    required: false,
+                    child: FormFieldWidget(
+                      controller: rentDepositController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [MoneyInputFormatter()],
+                      required: false,
+                      isMoneyField: true,
+                      moneyCurrency: selectedCurrency,
+                      hintText: 'Enter rent deposit',
+                    ),
+                  ),
+                  // ==================================================
+                  // RENT
+                  // ==================================================
+                  FormItemWidget(
+                    label: 'Rent / $freqShortHand',
+                    required: true,
+
+                    child: FormFieldWidget(
+                      controller: rentController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [MoneyInputFormatter()],
+                      hintText: 'Enter Rent',
+                      isMoneyField: true,
+                      moneyCurrency: selectedCurrency,
+                    ),
+                  ),
+
+                  // ========================================================
+                  // Utilities
+                  // ========================================================
+                  _buildUtilitiesSection(),
+                ],
+                formCardTitle: 'Rental Information',
+                formTitleIcon: Icons.wallet,
+              ),
+
+              SizedBox(height: 25.0),
+              // ==========================================================
+              // SUBMIT BUTTON
+              // ==========================================================
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //Clear Button
+                  if (!isUpdateMode)
+                    ElevatedButtonWidget(
+                      buttonTitle: 'Reset',
+                      isClear: true,
+                      onButtonPressedCallBack: () async {
+                        _resetForm();
+                      },
+                    ),
+                  SizedBox(width: 10),
+                  //Submit button
+                  ElevatedButtonWidget(
+                    buttonTitle: isUpdateMode ? 'Update Tenant' : 'Add Tenant',
+                    buttonIcon: isUpdateMode
+                        ? Icon(CupertinoIcons.pen)
+                        : Icon(Icons.add),
+                    onButtonPressedCallBack: () async {
+                      if (isUpdateMode) {
+                        await updateTenantMethod(context, currentUser);
+                      } else {
+                        await addTenantMethod(context, currentUser);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -774,23 +757,35 @@ class _TenantFormState extends ConsumerState<TenantForm> {
         lazyLoader.showLoader();
         final db = DbTenantService();
         final unitDB = DbUnitsService();
+        final appData = ref.watch(userInformationProvider);
+        //1: create instance of new tenant
+
         Tenant newTenant = Tenant(
           userId: currentUser!.uid,
           nationalId: tenantNationalIdController.text.trim(),
           unitId: selectedUnit!.unitId!,
           propertyId: selectedUnit!.propertyId,
-          tenantName: tenantNameController.text.trim(),
+          tenantName: capitalizeFirstLetter(tenantNameController.text.trim()),
           tenantNationalId: tenantNationalIdController.text.trim(),
           tenantEmail: tenantEmailController.text.trim(),
           tenantOccupation: occupationController.text.trim(),
           tenantPhoneNumber: tenantPhoneController.text.trim(),
           unitName: selectedUnit!.unitName,
-          unitRent: selectedUnit!.unitRent,
+          unitRent: Rent(
+            rentAmount: double.parse(rentController.text.trim()),
+            rentDeposit: double.parse(rentDepositController.text.trim()),
+            paymentFrequency: freqShortHand,
+            rentCurrency: selectedCurrency,
+            utilities: unitUtilities,
+          ),
           startOfLease: leaseStart!,
           lastUpdateDate: DateTime.now(),
-       
+          isActive: true,
+
           nextOfKin: Person(
-            personName: emergencyContactNameController.text.trim(),
+            personName: capitalizeFirstLetter(
+              emergencyContactNameController.text.trim(),
+            ),
             personEmail: emergencyContactEmailController.text.trim(),
             personPhone: emergencyContactPhoneController.text.trim(),
             relationship: emergencyContactRelationShipController.text.trim(),
@@ -799,9 +794,9 @@ class _TenantFormState extends ConsumerState<TenantForm> {
         setState(() {
           currentTenant = newTenant;
         });
-        List<Tenant> existingTenants = ref.watch(
-          userInformationProvider.select((state) => state.tenants),
-        );
+        //2: watch local state for a list of existing tenants
+        List<Tenant> existingTenants = appData.tenants;
+        //3: Confirm that no similar tenant record exists
         final recordExists = existingTenants.any(
           (existingTenants) =>
               existingTenants.tenantName.trim().toLowerCase() ==
@@ -813,34 +808,34 @@ class _TenantFormState extends ConsumerState<TenantForm> {
           lazyLoader.hideLoader();
           displaySnackBar(
             context,
-            'A similar property already exists in the database',
+            'A similar tenant record already exists in the database',
             AppColorsConstant.redColor,
           );
         } else {
+          //4: Add tenant to database
           try {
-            Tenant newT = await db.addTenant(newTenant);
-            //Update unit status to occupied
-            final updatedUnit = selectedUnit!.copyWith(
-              isOccupied: true,
-              tenantId: newT.tenantId,
-              lastUpdateDate: DateTime.now(),
-            );
-            final savedUnit = await unitDB.updateUnit(updatedUnit);
-            ref.read(userInformationProvider.notifier).appendTenant(newT);
-            ref.read(userInformationProvider.notifier).updateUnit(savedUnit);
+            Tenant? newT = await db.addTenant(newTenant);
+            if (newT != null) {
+              //*Update unit status to occupied
+              final updatedUnit = selectedUnit!.copyWith(
+                isOccupied: true,
+                tenantId: newT.tenantId,
+                currentTenant: newT,
+                lastUpdateDate: DateTime.now(),
+              );
+              final savedUnit = await unitDB.updateUnit(updatedUnit);
+              //5: update local changes to the unit and tenant states
+              ref.read(userInformationProvider.notifier).appendTenant(newT);
+              ref.read(userInformationProvider.notifier).updateUnit(savedUnit);
 
-            displaySnackBar(
-              context,
-              'Tenant added succesfully',
-              AppColorsConstant.greenColor,
-            );
+              // 6: close the workspace
+              ref.read(workspaceProvider.notifier).closeWorkspace();
+            }
           } catch (e, stackTrace) {
             log('Error adding tenant: $e', stackTrace: stackTrace);
-
             displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
           } finally {
             lazyLoader.hideLoader();
-            // popPage();
           }
         }
         log('Select a unit , or start date');
@@ -856,42 +851,53 @@ class _TenantFormState extends ConsumerState<TenantForm> {
     User? currentUser,
   ) async {
     if (_formKey.currentState!.validate()) {
-      log('getting here');
       if (selectedUnit != null && leaseStart != null) {
         final LazyLoader lazyLoader = LazyLoader(context: context);
         lazyLoader.showLoader();
         final db = DbTenantService();
         final unitDB = DbUnitsService();
+        //1: create instace of tenant with relevant updated changes
         Tenant currentTenant = widget.currentTenant!.copyWith(
           userId: currentUser!.uid,
           nationalId: tenantNationalIdController.text.trim(),
           unitId: selectedUnit!.unitId!,
           propertyId: selectedUnit!.propertyId,
-          tenantName: tenantNameController.text.trim(),
+          tenantName: capitalizeFirstLetter(tenantNameController.text.trim()),
           tenantNationalId: tenantNationalIdController.text.trim(),
           tenantEmail: tenantEmailController.text.trim(),
           tenantOccupation: occupationController.text.trim(),
           tenantPhoneNumber: tenantPhoneController.text.trim(),
           unitName: selectedUnit!.unitName,
-          unitRent: selectedUnit!.unitRent,
+          // unitRent: selectedUnit!.unitRent,
+          unitRent: Rent(
+            rentAmount: double.parse(rentController.text.trim()),
+            rentDeposit: double.parse(rentDepositController.text.trim()),
+            paymentFrequency: freqShortHand,
+            rentCurrency: selectedCurrency,
+            utilities: unitUtilities,
+          ),
           startOfLease: leaseStart!,
           endOfLease: leaseEnd,
           lastUpdateDate: DateTime.now(),
           nextOfKin: Person(
-            personName: emergencyContactNameController.text.trim(),
+            personName: capitalizeFirstLetter(
+              emergencyContactNameController.text.trim(),
+            ),
             personEmail: emergencyContactEmailController.text.trim(),
             personPhone: emergencyContactPhoneController.text.trim(),
             relationship: emergencyContactRelationShipController.text.trim(),
           ),
         );
         try {
+          //2.Update the tenant in db
           Tenant? updatedTenant = await db.updateTenant(currentTenant);
           if (updatedTenant != null) {
-            //Update unit status to vacant if the  tenant's lease has ended
+            //*Update unit status to vacant if the  tenant's lease has ended
             Unit? updatedUnit;
             if (leaseEnd != null &&
                 (leaseEnd!.isBefore(DateTime.now()) ||
                     leaseEnd!.isAtSameMomentAs(DateTime.now()))) {
+              //3: If the tenant has moved out : add them to a log of the unit's previous tenants
               List<String> previousTenants = [
                 ...selectedUnit!.previousTenantsLog,
                 widget.currentTenant!.tenantId!,
@@ -907,17 +913,15 @@ class _TenantFormState extends ConsumerState<TenantForm> {
                 lastUpdateDate: DateTime.now(),
               );
             }
+            //3: updated the unit with this new information
             final savedUnit = await unitDB.updateUnit(updatedUnit);
+            //4: update local tenant and unit states
             ref.read(userInformationProvider.notifier).updateUnit(savedUnit);
             ref
                 .read(userInformationProvider.notifier)
                 .updateTenant(updatedTenant);
-
-            displaySnackBar(
-              context,
-              'Tenant added succesfully',
-              AppColorsConstant.greenColor,
-            );
+            //5: close the workspace
+            ref.read(workspaceProvider.notifier).closeWorkspace();
           }
         } catch (e, stackTrace) {
           log('Error adding tenant: $e', stackTrace: stackTrace);
@@ -925,7 +929,6 @@ class _TenantFormState extends ConsumerState<TenantForm> {
           displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
         } finally {
           lazyLoader.hideLoader();
-          // popPage();
         }
       }
       log('Select a unit , or start date');
@@ -1177,28 +1180,5 @@ class _TenantFormState extends ConsumerState<TenantForm> {
     } finally {
       amountController.clear();
     }
-  }
-}
-
-class AddTenant extends StatelessWidget {
-  final Property? currentProperty;
-  final Unit? currentUnit;
-  final Tenant? currentTenant;
-  const AddTenant({
-    super.key,
-    this.currentProperty,
-    this.currentUnit,
-    this.currentTenant,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return DashboardForm(
-      form: TenantForm(
-        currentProperty: currentProperty,
-        currentUnit: currentUnit,
-        currentTenant: currentTenant,
-      ),
-    );
   }
 }

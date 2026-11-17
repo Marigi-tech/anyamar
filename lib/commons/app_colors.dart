@@ -143,3 +143,11 @@ class AppColorsConstant {
   static const materialBlack = Colors.black;
   static const materialWhite = Colors.white;
 }
+
+class LandingHeroColors {
+  static const Color teal = AppColors.primaryBlue;
+  static const Color darkTeal = AppColors.darkBlueColor;
+  static const Color ink = Color(0xFF102A35);
+  static const Color muted = Color(0xFF52677A);
+  static const Color pageBackground = Color(0xFFE8EEF2);
+}

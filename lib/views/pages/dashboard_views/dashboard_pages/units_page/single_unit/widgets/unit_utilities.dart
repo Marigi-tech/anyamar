@@ -74,7 +74,7 @@ class ClearButtonWidget extends ConsumerStatefulWidget {
   final String? description;
   final String? extraDescription;
   final IconData? iconData;
-  final VoidCallbackAction? onPressedCallBack;
+  final VoidCallback? onPressedCallBack;
   final double? fontSize;
   final Color? iconColor;
   final Color? iconBackgroundColor;
@@ -105,7 +105,7 @@ class _ClearButtonWidgetState extends ConsumerState<ClearButtonWidget> {
       onHover: (event) => setState(() => isCardHovered = true),
       onExit: (event) => setState(() => isCardHovered = false),
       child: GestureDetector(
-        onTap: () => widget.onPressedCallBack,
+        onTap: widget.onPressedCallBack,
         child: Card(
           color: themeIsDark == true
               ? AppColors.darkElevatedCard.withValues(alpha: 0.9)

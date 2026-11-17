@@ -1,11 +1,16 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
-import 'package:anyamar/forms/add_property_form.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/page_states/property_page_states.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 
 class QuickActionsPropertyWidget extends ConsumerWidget {
   final Property property;
   final String introText;
-  const QuickActionsPropertyWidget({super.key, required this.property, required this.introText});
+  const QuickActionsPropertyWidget({
+    super.key,
+    required this.property,
+    required this.introText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,15 +23,7 @@ class QuickActionsPropertyWidget extends ConsumerWidget {
           onPressedCallBack: () => ref
               .read(workspaceProvider.notifier)
               .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / update property',
-                  pageTitle: 'Update Property',
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: AddPropertyForm(
-                    currentProperty: property,
-                  ),
-                ),
+                UpdatePropertyState(introText: introText, property: property),
               ),
 
           child: Row(
@@ -47,17 +44,7 @@ class QuickActionsPropertyWidget extends ConsumerWidget {
         QWidget(
           onPressedCallBack: () => ref
               .read(workspaceProvider.notifier)
-              .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / add unit',
-                  pageTitle: 'Add Unit',
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: AddOrUpdateUnitForm(
-                    currentProperty: property,
-                  ),
-                ),
-              ),
+              .openForm(AddUnitState(introText: introText)),
 
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,17 +62,7 @@ class QuickActionsPropertyWidget extends ConsumerWidget {
         QWidget(
           onPressedCallBack: () => ref
               .read(workspaceProvider.notifier)
-              .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / add tenant',
-                  pageTitle: 'Add Tenant',
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: TenantForm(
-                    currentProperty: property,
-                  ),
-                ),
-              ),
+              .openForm(AddTenantState(introText: introText)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -1,10 +1,16 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 
 class QuickActionsUnitWidget extends ConsumerWidget {
   final Unit unit;
   final String introText;
-  const QuickActionsUnitWidget({super.key, required this.unit, required this.introText});
+  const QuickActionsUnitWidget({
+    super.key,
+    required this.unit,
+    required this.introText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,17 +26,7 @@ class QuickActionsUnitWidget extends ConsumerWidget {
         QWidget(
           onPressedCallBack: () => ref
               .read(workspaceProvider.notifier)
-              .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / update unit',
-                  pageTitle: 'Update unit',
-                  supplementaryText: '${unit.unitName} | ${unit.propertyName}',
-
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: AddOrUpdateUnitForm(unit: unit),
-                ),
-              ),
+              .openForm(UpdateUnitState(introText: introText, unit: unit)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -65,23 +61,13 @@ class QuickActionsUnitWidget extends ConsumerWidget {
             ],
           ),
         ),
-       
+
         CardItemSeparator(),
         if (unit.isOccupied != true)
           QWidget(
             onPressedCallBack: () => ref
                 .read(workspaceProvider.notifier)
-                .openForm(
-                  DashboardPageStructure(
-                    introText: '$introText / add tenant',
-                    pageTitle: 'Add tenant',
-                    supplementaryText:
-                        '${unit.unitName} | ${unit.propertyName}',
-                    introRowWidgets: [],
-                    introButton: IntroButtonWidget(),
-                    scrollableDashboardWidget: TenantForm(currentUnit: unit),
-                  ),
-                ),
+                .openForm(AddTenantState(introText: introText)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
