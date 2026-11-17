@@ -75,9 +75,7 @@ class LandingNavigation extends ConsumerWidget {
     );
   }
 
-  Widget _navItem(String title, bool selected) {
-    return NavItemWidget(title: title, isSelected: selected);
-  }
+
 }
 
 class NavItemWidget extends ConsumerStatefulWidget {
