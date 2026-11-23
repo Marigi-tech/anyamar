@@ -1,7 +1,4 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:anyamar/commons/exports.dart';
 
 // //todo:use riverpod for state management
 // ValueNotifier<AuthService> authServiceNotifier = ValueNotifier(AuthService());
@@ -24,6 +21,24 @@ class AuthService {
 
   Stream<User?> get authStateChanges =>
       _firebaseAuth.authStateChanges(); //checking connection
+
+
+
+  // Emits updates when the user's Firebase information changes.
+  Stream<User?> get userChanges => _firebaseAuth.userChanges();
+
+  Future<bool> reloadAndCheckEmailVerification() async {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      return false;
+    }
+
+    await user.reload();
+
+    // Retrieve the refreshed user rather than relying on the old instance.
+    return _firebaseAuth.currentUser?.emailVerified ?? false;
+  }
 
   //create account
   Future<UserCredential> createUser({
@@ -137,5 +152,36 @@ class AuthService {
       rethrow;
     }
     return isSuccess;
+  }
+
+  //==========================
+  // Google Authentication
+  //===========================
+  Future<UserCredential> authenticateWithGoogle() async {
+    try {
+      final googleProvider = GoogleAuthProvider()
+        ..setCustomParameters({'prompt': 'select_account'});
+
+      final userCredential = await _firebaseAuth.signInWithPopup(
+        googleProvider,
+      );
+
+      final user = userCredential.user;
+
+      if (user == null) {
+        throw Exception('Google authentication failed. No user returned.');
+      }
+
+      // Ensure the user's Firestore profile exists.
+      //todo: create an new user
+      // final db = DbService();
+      // await db.createUserProfileIfNotExists(user);
+
+      return userCredential;
+    } on FirebaseAuthException {
+      rethrow;
+    } catch (e) {
+      throw Exception('Google authentication failed: $e');
+    }
   }
 }

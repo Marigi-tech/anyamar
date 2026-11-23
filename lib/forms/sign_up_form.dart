@@ -17,7 +17,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
   Color? textColor;
   final _formKey = GlobalKey<FormState>();
   bool isSuccess = false;
-  String? errorMessage;
+  String? systemMessage;
   AppUser? createdUser;
 
   @override
@@ -54,10 +54,9 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.code;
+        systemMessage = e.code;
         isSuccess = false;
       });
-      displaySnackBar(context, '$errorMessage', AppColorsConstant.redColor);
     }
   }
 
@@ -84,7 +83,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
           );
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.code;
+        systemMessage = e.code;
         isSuccess = false;
       });
     }
@@ -92,6 +91,10 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     return FormPages(
       pageTitle: 'Create account',
       isSignInOrSignUp: true,
@@ -140,7 +143,15 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                 decoration: CustomInputDecoration.textInputDecoration(),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 items: UserType.values.map((user) {
-                  return DropdownMenuItem(value: user, child: Text(user.label));
+                  return DropdownMenuItem(
+                    value: user,
+                    child: Text(
+                      user.label,
+                      style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                  );
                 }).toList(),
                 validator: (value) {
                   if (value == null) {
@@ -193,7 +204,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                   cursor: SystemMouseCursors.click,
                   onHover: (event) {
                     setState(() {
-                      textColor = AppColorsConstant.greenColor;
+                      textColor = AppColors.primaryBlue;
                     });
                   },
                   onExit: (event) {
@@ -222,14 +233,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                   ),
                 ),
               ),
-              Text(
-                errorMessage ?? '',
-                style: TextStyle(
-                  color: isSuccess
-                      ? AppColorsConstant.greenColor
-                      : AppColorsConstant.redColor,
-                ),
-              ),
+
               SizedBox(height: 10.0),
               // ============================================================
               // SIGN USER UP
@@ -238,9 +242,12 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                 onButtonPressedCallBack: () async {
                   if (_formKey.currentState!.validate() &&
                       selectedUserType != null) {
+                    LazyLoader lazyLoader = LazyLoader(context: context);
+                    lazyLoader.showLoader();
                     await _registerUser();
-                    //If user is succesfully authenticated
-                    final db = DbService(); //instance of db
+                    //* If user is succesfully authenticated
+                    //* Add them to database
+                    final db = DbService(); //!instance of db
                     if (isSuccess && createdUser != null) {
                       // add user to db
                       try {
@@ -248,8 +255,15 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                           if (value != null) {
                             setState(() {
                               isSuccess = true;
-                              errorMessage = 'User created succesfully';
+                              systemMessage = 'User created succesfully';
                             });
+                            lazyLoader.hideLoader();
+                            displaySnackBar(
+                              context,
+                              '$systemMessage',
+                              dialogColor,
+                              isSuccess,
+                            );
                             //Redirect to user dashboard
                             _redirectToDashboard();
                           }
@@ -258,23 +272,32 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                         // if adding user to db fails // remove user from authentication
                         _deleteFromAuthentication();
                         setState(() {
-                          errorMessage = e.toString();
+                          systemMessage = e.toString();
                         });
+                        displaySnackBar(
+                          context,
+                          '$systemMessage',
+                          dialogColor,
+                          isSuccess,
+                        );
                       }
                     } else {
                       setState(() {
-                        errorMessage = 'Authentication failed';
+                        systemMessage = 'Authentication failed';
                       });
+                      displaySnackBar(
+                        context,
+                        '$systemMessage',
+                        dialogColor,
+                        isSuccess,
+                      );
                     }
                   }
                 },
                 buttonTitle: 'Create account',
-                // buttonColor: AppColorsConstant.greenColor,
               ),
 
               SizedBox(height: 15),
-              //Add social sign up icons here
-              SocialIconsWidget(),
               SizedBox(height: 25),
             ],
           ),

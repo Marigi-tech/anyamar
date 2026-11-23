@@ -13,6 +13,7 @@ abstract class RentalRecord with _$RentalRecord {
     required SingleRentEntry rentEntry,
     required RentalMonth rentalMonth,
     required RentHistory rentHistory,
+    required String propertyId,
   }) = _RentalRecord;
 
   factory RentalRecord.fromJson(Map<String, dynamic> json) =>

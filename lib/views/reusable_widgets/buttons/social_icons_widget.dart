@@ -17,6 +17,10 @@ class _SocialIconButtonWidgetState
   @override
   Widget build(BuildContext context) {
     final bool isDark = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDark
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
+
     bgColor = isHovered
         ? AppColors.primaryBlue
         : isDark
@@ -36,36 +40,61 @@ class _SocialIconButtonWidgetState
         });
       },
 
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      child: GestureDetector(
+        onTap: () async {
+          try {
+            final userCredential = await ref
+                .read(authServiceProvider)
+                .authenticateWithGoogle();
 
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: !isDark ? AppColors.lightBorder : AppColors.darkBorder,
+            final user = userCredential.user;
+
+            if (user != null) {
+              // Authentication and Firestore profile initialization succeeded.
+            }
+          } on FirebaseAuthException catch (e) {
+            // Handle Firebase authentication errors.
+            displaySnackBar(context, 'Error : $e', dialogColor, false);
+          } catch (e) {
+            // Handle other errors.
+            displaySnackBar(context, 'Error : $e', dialogColor, false);
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: !isDark ? AppColors.lightBorder : AppColors.darkBorder,
+            ),
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(widget.socialIcon.iconPath, width: 13, height: 13),
-            SizedBox(width: 8),
-            Flexible(
-              child: FittedBox(
-                child: Text(
-                  widget.socialIcon.iconName,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
-                    fontSize: 13.0,
-                    fontStyle: FontStyle.normal,
-                    color: isHovered ? AppColors.whiteColor : null,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                widget.socialIcon.iconPath,
+                width: 13,
+                height: 13,
+              ),
+              SizedBox(width: 8),
+              Flexible(
+                child: FittedBox(
+                  child: Text(
+                    widget.socialIcon.iconName,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                      fontSize: 13.0,
+                      fontStyle: FontStyle.normal,
+                      color: isHovered ? AppColors.whiteColor : null,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

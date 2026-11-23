@@ -17,7 +17,9 @@ class ViewExpenseRecordStatePage extends ConsumerWidget {
       pageTitle: 'Expense record ',
       supplementaryText: 'expense record : ${financialRecord.recordId}',
       introButton: IntroButtonWidget(),
-      introRowWidgets: [],
+      introRowWidgets: [
+        
+      ],
       scrollableDashboardWidget: SingleFinancialRecordPage(
         financialRecord: financialRecord,
         introText: introText,

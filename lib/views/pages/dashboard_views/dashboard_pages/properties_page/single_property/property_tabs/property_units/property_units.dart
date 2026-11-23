@@ -21,10 +21,12 @@ class _PropertyUnitsState extends ConsumerState<PropertyUnits> {
     final propertyUnits = appData.units
         .where((element) => element.propertyId == widget.property.propertyId)
         .toList();
-    return UnitsTable(
-      units: propertyUnits,
-      hasTitle: true,
-      introText: widget.introText,
+    return SingleChildScrollView(
+      child: UnitsTable(
+        units: propertyUnits,
+        hasTitle: true,
+        introText: widget.introText,
+      ),
     );
   }
 }

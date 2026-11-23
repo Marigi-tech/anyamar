@@ -1,13 +1,13 @@
 import 'package:anyamar/commons/exports.dart';
 
-class ForgotPasswordForm extends StatefulWidget {
+class ForgotPasswordForm extends ConsumerStatefulWidget {
   const ForgotPasswordForm({super.key});
 
   @override
-  State<ForgotPasswordForm> createState() => _ForgotPasswordFormState();
+  ConsumerState<ForgotPasswordForm> createState() => _ForgotPasswordFormState();
 }
 
-class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
+class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
   TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
@@ -18,6 +18,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     return FormPages(
       pageTitle: 'Reset password',
 
@@ -61,7 +65,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                         displaySnackBar(
                           context,
                           'A reset password link has been sent to your email address',
-                          AppColors.primaryBlue,
+                          dialogColor,
+                          true,
                         );
                         Navigator.of(
                           context,
@@ -72,7 +77,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                         displaySnackBar(
                           context,
                           'Error $e occured when sending the reset password link has been sent to your email address',
-                          AppColorsConstant.redColor,
+                          dialogColor,
+                          false,
                         );
                       }
                     } finally {

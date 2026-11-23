@@ -6,8 +6,9 @@ enum FinancialRecordTypes {
   securityExpense('Security bill', FinancialRecordNature.expense),
   waterExpense('Water bill', FinancialRecordNature.expense),
   electrityExpense('Electricity bill', FinancialRecordNature.expense),
-  otherExpense('Other expense', FinancialRecordNature.expense),
-  otherRevenueSource('Other revenue source', FinancialRecordNature.expense);
+  maintenanceExpense('Maintenace bill', FinancialRecordNature.expense),
+  otherExpense('Other', FinancialRecordNature.expense),
+  otherRevenueSource('Other revenue source', FinancialRecordNature.revenue);
 
   final FinancialRecordNature nature;
 

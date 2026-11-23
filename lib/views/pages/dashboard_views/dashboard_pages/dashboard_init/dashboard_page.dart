@@ -39,10 +39,10 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
           enableSwitchAnimation: true,
           effect: ShimmerEffect(
             baseColor: themeIsDarkMode
-                ? AppColors.darkElevatedCard
+                ? AppColors.darkElevatedCard.withValues(alpha: 0.95)
                 : AppColors.lightCard,
             highlightColor: themeIsDarkMode
-                ? const Color(0xFF3A4658)
+                ? AppColors.darkBackground.withValues(alpha: 0.35)
                 : const Color(0xFFEAF1FA),
             duration: const Duration(milliseconds: 250),
           ),

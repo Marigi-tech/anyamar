@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserInformation {
 
- List<Property> get properties; List<Tenant> get tenants; List<Tenant> get activeTenants; List<Unit> get units; List<FinancialRecord> get finances; AppUser? get appUser; List<RentalRecord> get rentalRecords; bool get isLoading;
+ List<Property> get properties; List<Tenant> get tenants; List<Tenant> get activeTenants; List<Unit> get units; List<FinancialRecord> get finances; AppUser? get appUser; List<RentalRecord> get rentalRecords; bool get isLoading; List<RentHistory> get rentalHistories;
 /// Create a copy of UserInformation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserInformationCopyWith<UserInformation> get copyWith => _$UserInformationCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInformation&&const DeepCollectionEquality().equals(other.properties, properties)&&const DeepCollectionEquality().equals(other.tenants, tenants)&&const DeepCollectionEquality().equals(other.activeTenants, activeTenants)&&const DeepCollectionEquality().equals(other.units, units)&&const DeepCollectionEquality().equals(other.finances, finances)&&(identical(other.appUser, appUser) || other.appUser == appUser)&&const DeepCollectionEquality().equals(other.rentalRecords, rentalRecords)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInformation&&const DeepCollectionEquality().equals(other.properties, properties)&&const DeepCollectionEquality().equals(other.tenants, tenants)&&const DeepCollectionEquality().equals(other.activeTenants, activeTenants)&&const DeepCollectionEquality().equals(other.units, units)&&const DeepCollectionEquality().equals(other.finances, finances)&&(identical(other.appUser, appUser) || other.appUser == appUser)&&const DeepCollectionEquality().equals(other.rentalRecords, rentalRecords)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.rentalHistories, rentalHistories));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(properties),const DeepCollectionEquality().hash(tenants),const DeepCollectionEquality().hash(activeTenants),const DeepCollectionEquality().hash(units),const DeepCollectionEquality().hash(finances),appUser,const DeepCollectionEquality().hash(rentalRecords),isLoading);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(properties),const DeepCollectionEquality().hash(tenants),const DeepCollectionEquality().hash(activeTenants),const DeepCollectionEquality().hash(units),const DeepCollectionEquality().hash(finances),appUser,const DeepCollectionEquality().hash(rentalRecords),isLoading,const DeepCollectionEquality().hash(rentalHistories));
 
 @override
 String toString() {
-  return 'UserInformation(properties: $properties, tenants: $tenants, activeTenants: $activeTenants, units: $units, finances: $finances, appUser: $appUser, rentalRecords: $rentalRecords, isLoading: $isLoading)';
+  return 'UserInformation(properties: $properties, tenants: $tenants, activeTenants: $activeTenants, units: $units, finances: $finances, appUser: $appUser, rentalRecords: $rentalRecords, isLoading: $isLoading, rentalHistories: $rentalHistories)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserInformationCopyWith<$Res>  {
   factory $UserInformationCopyWith(UserInformation value, $Res Function(UserInformation) _then) = _$UserInformationCopyWithImpl;
 @useResult
 $Res call({
- List<Property> properties, List<Tenant> tenants, List<Tenant> activeTenants, List<Unit> units, List<FinancialRecord> finances, AppUser? appUser, List<RentalRecord> rentalRecords, bool isLoading
+ List<Property> properties, List<Tenant> tenants, List<Tenant> activeTenants, List<Unit> units, List<FinancialRecord> finances, AppUser? appUser, List<RentalRecord> rentalRecords, bool isLoading, List<RentHistory> rentalHistories
 });
 
 
@@ -65,7 +65,7 @@ class _$UserInformationCopyWithImpl<$Res>
 
 /// Create a copy of UserInformation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? properties = null,Object? tenants = null,Object? activeTenants = null,Object? units = null,Object? finances = null,Object? appUser = freezed,Object? rentalRecords = null,Object? isLoading = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? properties = null,Object? tenants = null,Object? activeTenants = null,Object? units = null,Object? finances = null,Object? appUser = freezed,Object? rentalRecords = null,Object? isLoading = null,Object? rentalHistories = null,}) {
   return _then(_self.copyWith(
 properties: null == properties ? _self.properties : properties // ignore: cast_nullable_to_non_nullable
 as List<Property>,tenants: null == tenants ? _self.tenants : tenants // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,8 @@ as List<Unit>,finances: null == finances ? _self.finances : finances // ignore: 
 as List<FinancialRecord>,appUser: freezed == appUser ? _self.appUser : appUser // ignore: cast_nullable_to_non_nullable
 as AppUser?,rentalRecords: null == rentalRecords ? _self.rentalRecords : rentalRecords // ignore: cast_nullable_to_non_nullable
 as List<RentalRecord>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,rentalHistories: null == rentalHistories ? _self.rentalHistories : rentalHistories // ignore: cast_nullable_to_non_nullable
+as List<RentHistory>,
   ));
 }
 /// Create a copy of UserInformation
@@ -172,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Property> properties,  List<Tenant> tenants,  List<Tenant> activeTenants,  List<Unit> units,  List<FinancialRecord> finances,  AppUser? appUser,  List<RentalRecord> rentalRecords,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Property> properties,  List<Tenant> tenants,  List<Tenant> activeTenants,  List<Unit> units,  List<FinancialRecord> finances,  AppUser? appUser,  List<RentalRecord> rentalRecords,  bool isLoading,  List<RentHistory> rentalHistories)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserInformation() when $default != null:
-return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_that.finances,_that.appUser,_that.rentalRecords,_that.isLoading);case _:
+return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_that.finances,_that.appUser,_that.rentalRecords,_that.isLoading,_that.rentalHistories);case _:
   return orElse();
 
 }
@@ -193,10 +194,10 @@ return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Property> properties,  List<Tenant> tenants,  List<Tenant> activeTenants,  List<Unit> units,  List<FinancialRecord> finances,  AppUser? appUser,  List<RentalRecord> rentalRecords,  bool isLoading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Property> properties,  List<Tenant> tenants,  List<Tenant> activeTenants,  List<Unit> units,  List<FinancialRecord> finances,  AppUser? appUser,  List<RentalRecord> rentalRecords,  bool isLoading,  List<RentHistory> rentalHistories)  $default,) {final _that = this;
 switch (_that) {
 case _UserInformation():
-return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_that.finances,_that.appUser,_that.rentalRecords,_that.isLoading);case _:
+return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_that.finances,_that.appUser,_that.rentalRecords,_that.isLoading,_that.rentalHistories);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +214,10 @@ return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Property> properties,  List<Tenant> tenants,  List<Tenant> activeTenants,  List<Unit> units,  List<FinancialRecord> finances,  AppUser? appUser,  List<RentalRecord> rentalRecords,  bool isLoading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Property> properties,  List<Tenant> tenants,  List<Tenant> activeTenants,  List<Unit> units,  List<FinancialRecord> finances,  AppUser? appUser,  List<RentalRecord> rentalRecords,  bool isLoading,  List<RentHistory> rentalHistories)?  $default,) {final _that = this;
 switch (_that) {
 case _UserInformation() when $default != null:
-return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_that.finances,_that.appUser,_that.rentalRecords,_that.isLoading);case _:
+return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_that.finances,_that.appUser,_that.rentalRecords,_that.isLoading,_that.rentalHistories);case _:
   return null;
 
 }
@@ -228,7 +229,7 @@ return $default(_that.properties,_that.tenants,_that.activeTenants,_that.units,_
 @JsonSerializable()
 
 class _UserInformation implements UserInformation {
-  const _UserInformation({final  List<Property> properties = const [], final  List<Tenant> tenants = const [], final  List<Tenant> activeTenants = const [], final  List<Unit> units = const [], final  List<FinancialRecord> finances = const [], this.appUser, final  List<RentalRecord> rentalRecords = const [], this.isLoading = false}): _properties = properties,_tenants = tenants,_activeTenants = activeTenants,_units = units,_finances = finances,_rentalRecords = rentalRecords;
+  const _UserInformation({final  List<Property> properties = const [], final  List<Tenant> tenants = const [], final  List<Tenant> activeTenants = const [], final  List<Unit> units = const [], final  List<FinancialRecord> finances = const [], this.appUser, final  List<RentalRecord> rentalRecords = const [], this.isLoading = false, final  List<RentHistory> rentalHistories = const []}): _properties = properties,_tenants = tenants,_activeTenants = activeTenants,_units = units,_finances = finances,_rentalRecords = rentalRecords,_rentalHistories = rentalHistories;
   factory _UserInformation.fromJson(Map<String, dynamic> json) => _$UserInformationFromJson(json);
 
  final  List<Property> _properties;
@@ -275,6 +276,13 @@ class _UserInformation implements UserInformation {
 }
 
 @override@JsonKey() final  bool isLoading;
+ final  List<RentHistory> _rentalHistories;
+@override@JsonKey() List<RentHistory> get rentalHistories {
+  if (_rentalHistories is EqualUnmodifiableListView) return _rentalHistories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_rentalHistories);
+}
+
 
 /// Create a copy of UserInformation
 /// with the given fields replaced by the non-null parameter values.
@@ -289,16 +297,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInformation&&const DeepCollectionEquality().equals(other._properties, _properties)&&const DeepCollectionEquality().equals(other._tenants, _tenants)&&const DeepCollectionEquality().equals(other._activeTenants, _activeTenants)&&const DeepCollectionEquality().equals(other._units, _units)&&const DeepCollectionEquality().equals(other._finances, _finances)&&(identical(other.appUser, appUser) || other.appUser == appUser)&&const DeepCollectionEquality().equals(other._rentalRecords, _rentalRecords)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInformation&&const DeepCollectionEquality().equals(other._properties, _properties)&&const DeepCollectionEquality().equals(other._tenants, _tenants)&&const DeepCollectionEquality().equals(other._activeTenants, _activeTenants)&&const DeepCollectionEquality().equals(other._units, _units)&&const DeepCollectionEquality().equals(other._finances, _finances)&&(identical(other.appUser, appUser) || other.appUser == appUser)&&const DeepCollectionEquality().equals(other._rentalRecords, _rentalRecords)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._rentalHistories, _rentalHistories));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_properties),const DeepCollectionEquality().hash(_tenants),const DeepCollectionEquality().hash(_activeTenants),const DeepCollectionEquality().hash(_units),const DeepCollectionEquality().hash(_finances),appUser,const DeepCollectionEquality().hash(_rentalRecords),isLoading);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_properties),const DeepCollectionEquality().hash(_tenants),const DeepCollectionEquality().hash(_activeTenants),const DeepCollectionEquality().hash(_units),const DeepCollectionEquality().hash(_finances),appUser,const DeepCollectionEquality().hash(_rentalRecords),isLoading,const DeepCollectionEquality().hash(_rentalHistories));
 
 @override
 String toString() {
-  return 'UserInformation(properties: $properties, tenants: $tenants, activeTenants: $activeTenants, units: $units, finances: $finances, appUser: $appUser, rentalRecords: $rentalRecords, isLoading: $isLoading)';
+  return 'UserInformation(properties: $properties, tenants: $tenants, activeTenants: $activeTenants, units: $units, finances: $finances, appUser: $appUser, rentalRecords: $rentalRecords, isLoading: $isLoading, rentalHistories: $rentalHistories)';
 }
 
 
@@ -309,7 +317,7 @@ abstract mixin class _$UserInformationCopyWith<$Res> implements $UserInformation
   factory _$UserInformationCopyWith(_UserInformation value, $Res Function(_UserInformation) _then) = __$UserInformationCopyWithImpl;
 @override @useResult
 $Res call({
- List<Property> properties, List<Tenant> tenants, List<Tenant> activeTenants, List<Unit> units, List<FinancialRecord> finances, AppUser? appUser, List<RentalRecord> rentalRecords, bool isLoading
+ List<Property> properties, List<Tenant> tenants, List<Tenant> activeTenants, List<Unit> units, List<FinancialRecord> finances, AppUser? appUser, List<RentalRecord> rentalRecords, bool isLoading, List<RentHistory> rentalHistories
 });
 
 
@@ -326,7 +334,7 @@ class __$UserInformationCopyWithImpl<$Res>
 
 /// Create a copy of UserInformation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? properties = null,Object? tenants = null,Object? activeTenants = null,Object? units = null,Object? finances = null,Object? appUser = freezed,Object? rentalRecords = null,Object? isLoading = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? properties = null,Object? tenants = null,Object? activeTenants = null,Object? units = null,Object? finances = null,Object? appUser = freezed,Object? rentalRecords = null,Object? isLoading = null,Object? rentalHistories = null,}) {
   return _then(_UserInformation(
 properties: null == properties ? _self._properties : properties // ignore: cast_nullable_to_non_nullable
 as List<Property>,tenants: null == tenants ? _self._tenants : tenants // ignore: cast_nullable_to_non_nullable
@@ -336,7 +344,8 @@ as List<Unit>,finances: null == finances ? _self._finances : finances // ignore:
 as List<FinancialRecord>,appUser: freezed == appUser ? _self.appUser : appUser // ignore: cast_nullable_to_non_nullable
 as AppUser?,rentalRecords: null == rentalRecords ? _self._rentalRecords : rentalRecords // ignore: cast_nullable_to_non_nullable
 as List<RentalRecord>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,rentalHistories: null == rentalHistories ? _self._rentalHistories : rentalHistories // ignore: cast_nullable_to_non_nullable
+as List<RentHistory>,
   ));
 }
 

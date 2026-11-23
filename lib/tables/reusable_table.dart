@@ -63,7 +63,7 @@ class ReusableDataTableWidget<T> extends ConsumerStatefulWidget {
     this.dataRowMaxHeight = 50,
     this.emptyWidget,
     this.cardTitle,
-    this.cardTitleButtonWidget
+    this.cardTitleButtonWidget,
   });
 
   @override
@@ -78,6 +78,7 @@ class _ReusableDataTableWidgetState<T>
   int currentPage = 0;
 
   String searchQuery = '';
+  bool isHovered = false;
 
   @override
   void initState() {
@@ -145,172 +146,205 @@ class _ReusableDataTableWidgetState<T>
     final themeIsDark = ref.watch(themeIsDarkProvider);
     final pageItems = currentPageItems;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: themeIsDark == true
-            ? AppColors.darkElevatedCard
-            : AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: themeIsDark == true
-              ? AppColors.darkBorder
-              : const Color(0xffE5EAF1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          //CARD TITILE AND ACTION BUTTONS
-          widget.cardTitle != null
-              ? Padding(
-                  padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.cardTitle!,
-                        style: AppTextStylesConstant.cardDescriptionStyle
-                            .copyWith(
-                              color: themeIsDark == true
-                                  ? AppColors.whiteColor
-                                  : AppColors.blueGreyColor,
-                              fontStyle: FontStyle.normal,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onHover: (event) => setState(() {
+        isHovered = true;
+      }),
+      onExit: (event) => setState(() {
+        isHovered = false;
+      }),
+      child: AnimatedPadding(
+        padding: isHovered
+            ? const EdgeInsets.only(bottom: 3.0)
+            : const EdgeInsets.only(top: 3.0),
+
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+
+        child: AnimatedScale(
+          scale: isHovered ? 1.0001 : 1.0,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+
+          // ==========================================
+          // FIXED CARD DIMENSIONS
+          // ==========================================
+          child: Container(
+            decoration: BoxDecoration(
+              color: themeIsDark == true
+                  ? AppColors.darkElevatedCard
+                  : AppColors.whiteColor,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                color: themeIsDark == true
+                    ? AppColors.darkBorder
+                    : const Color(0xffE5EAF1),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: isHovered
+                      ? AppColors.darkInfo.withValues(alpha: 0.5)
+                      : Colors.black.withValues(alpha: 0.025),
+                  blurRadius: 3,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //CARD TITILE AND ACTION BUTTONS
+                widget.cardTitle != null
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.cardTitle!,
+                              style: CustomTextStyles.cardDescriptionStyle
+                                  .copyWith(
+                                    color: AppColors.primaryBlue,
+                                    fontStyle: FontStyle.normal,
+                                    // fontSize: 13,
+                                  ),
+                            ),
+                            widget.cardTitleButtonWidget ?? SizedBox.shrink(),
+                          ],
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                CustomDividerWidget(),
+                // --------------------------------------------------
+                // SEARCH / FILTER / EXPORT
+                // --------------------------------------------------
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isSmallScreen = constraints.maxWidth < 700;
+
+                      if (isSmallScreen) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (widget.showSearch)
+                              SizedBox(
+                                width: double.infinity,
+                                height: 42,
+                                child: _buildSearchField(),
+                              ),
+
+                            if (widget.showSearch &&
+                                (widget.showFilter || widget.showExport))
+                              const SizedBox(height: 10),
+
+                            // Wrap(
+                            //   spacing: 10,
+                            //   runSpacing: 10,
+                            //   children: [
+                            //     if (widget.showFilter) _buildFilterButton(),
+
+                            //     if (widget.showExport) _buildExportButton(),
+                            //   ],
+                            // ),
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        children: [
+                          if (widget.showSearch)
+                            SizedBox(
+                              width: 360,
+                              height: 42,
+                              child: _buildSearchField(),
+                            ),
+
+                          if (widget.showSearch &&
+                              (widget.showFilter || widget.showExport))
+                            const SizedBox(width: 12),
+
+                          // if (widget.showFilter) _buildFilterButton(),
+                          const Spacer(),
+
+                          // if (widget.showExport) _buildExportButton(),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+
+                const Divider(height: 1),
+
+                // --------------------------------------------------
+                // TABLE
+                // --------------------------------------------------
+                if (pageItems.isEmpty)
+                  widget.emptyWidget ??
+                      const Padding(
+                        padding: EdgeInsets.all(40),
+                        child: Center(
+                          child: Text(
+                            'No records found',
+                            style: TextStyle(
+                              color: Color(0xff718096),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      )
+                else
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: constraints.maxWidth,
+                          ),
+                          child: DataTable(
+                            headingRowHeight: widget.headingRowHeight,
+                            dataRowMinHeight: widget.dataRowMinHeight,
+                            dataRowMaxHeight: widget.dataRowMaxHeight,
+                            horizontalMargin: widget.horizontalMargin,
+                            columnSpacing: widget.columnSpacing,
+
+                            headingTextStyle: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xff44506A),
                               fontSize: 13,
                             ),
-                      ),
-                      widget.cardTitleButtonWidget ??  SizedBox.shrink(),
-                    ],
-                  ),
-                )
-              : SizedBox.shrink(),
-          CustomDividerWidget(),
-          // --------------------------------------------------
-          // SEARCH / FILTER / EXPORT
-          // --------------------------------------------------
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isSmallScreen = constraints.maxWidth < 700;
 
-                if (isSmallScreen) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (widget.showSearch)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 42,
-                          child: _buildSearchField(),
+                            columns: widget.columns,
+
+                            rows: pageItems.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final item = entry.value;
+
+                              final actualIndex =
+                                  currentPage * rowsPerPage + index;
+
+                              return widget.rowBuilder(item, actualIndex);
+                            }).toList(),
+                          ),
                         ),
+                      );
+                    },
+                  ),
 
-                      if (widget.showSearch &&
-                          (widget.showFilter || widget.showExport))
-                        const SizedBox(height: 10),
+                const Divider(height: 1),
 
-                      // Wrap(
-                      //   spacing: 10,
-                      //   runSpacing: 10,
-                      //   children: [
-                      //     if (widget.showFilter) _buildFilterButton(),
-
-                      //     if (widget.showExport) _buildExportButton(),
-                      //   ],
-                      // ),
-                    ],
-                  );
-                }
-
-                return Row(
-                  children: [
-                    if (widget.showSearch)
-                      SizedBox(
-                        width: 360,
-                        height: 42,
-                        child: _buildSearchField(),
-                      ),
-
-                    if (widget.showSearch &&
-                        (widget.showFilter || widget.showExport))
-                      const SizedBox(width: 12),
-
-                    // if (widget.showFilter) _buildFilterButton(),
-                    const Spacer(),
-
-                    // if (widget.showExport) _buildExportButton(),
-                  ],
-                );
-              },
+                // --------------------------------------------------
+                // PAGINATION
+                // --------------------------------------------------
+                _buildPagination(),
+              ],
             ),
           ),
-
-          const Divider(height: 1),
-
-          // --------------------------------------------------
-          // TABLE
-          // --------------------------------------------------
-          if (pageItems.isEmpty)
-            widget.emptyWidget ??
-                const Padding(
-                  padding: EdgeInsets.all(40),
-                  child: Center(
-                    child: Text(
-                      'No records found',
-                      style: TextStyle(color: Color(0xff718096), fontSize: 14),
-                    ),
-                  ),
-                )
-          else
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                    child: DataTable(
-                      headingRowHeight: widget.headingRowHeight,
-                      dataRowMinHeight: widget.dataRowMinHeight,
-                      dataRowMaxHeight: widget.dataRowMaxHeight,
-                      horizontalMargin: widget.horizontalMargin,
-                      columnSpacing: widget.columnSpacing,
-
-                      headingTextStyle: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff44506A),
-                        fontSize: 13,
-                      ),
-
-                      columns: widget.columns,
-
-                      rows: pageItems.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final item = entry.value;
-
-                        final actualIndex = currentPage * rowsPerPage + index;
-
-                        return widget.rowBuilder(item, actualIndex);
-                      }).toList(),
-                    ),
-                  ),
-                );
-              },
-            ),
-
-          const Divider(height: 1),
-
-          // --------------------------------------------------
-          // PAGINATION
-          // --------------------------------------------------
-          _buildPagination(),
-        ],
+        ),
       ),
     );
   }

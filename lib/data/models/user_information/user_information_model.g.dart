@@ -42,16 +42,23 @@ _UserInformation _$UserInformationFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       isLoading: json['isLoading'] as bool? ?? false,
+      rentalHistories:
+          (json['rentalHistories'] as List<dynamic>?)
+              ?.map((e) => RentHistory.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
-Map<String, dynamic> _$UserInformationToJson(_UserInformation instance) =>
-    <String, dynamic>{
-      'properties': instance.properties.map((e) => e.toJson()).toList(),
-      'tenants': instance.tenants.map((e) => e.toJson()).toList(),
-      'activeTenants': instance.activeTenants.map((e) => e.toJson()).toList(),
-      'units': instance.units.map((e) => e.toJson()).toList(),
-      'finances': instance.finances.map((e) => e.toJson()).toList(),
-      'appUser': instance.appUser?.toJson(),
-      'rentalRecords': instance.rentalRecords.map((e) => e.toJson()).toList(),
-      'isLoading': instance.isLoading,
-    };
+Map<String, dynamic> _$UserInformationToJson(
+  _UserInformation instance,
+) => <String, dynamic>{
+  'properties': instance.properties.map((e) => e.toJson()).toList(),
+  'tenants': instance.tenants.map((e) => e.toJson()).toList(),
+  'activeTenants': instance.activeTenants.map((e) => e.toJson()).toList(),
+  'units': instance.units.map((e) => e.toJson()).toList(),
+  'finances': instance.finances.map((e) => e.toJson()).toList(),
+  'appUser': instance.appUser?.toJson(),
+  'rentalRecords': instance.rentalRecords.map((e) => e.toJson()).toList(),
+  'isLoading': instance.isLoading,
+  'rentalHistories': instance.rentalHistories.map((e) => e.toJson()).toList(),
+};

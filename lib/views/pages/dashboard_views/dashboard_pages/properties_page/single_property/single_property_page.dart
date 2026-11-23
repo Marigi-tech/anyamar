@@ -1,4 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/page_states/property_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/property_page_summary_cards.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_tabs.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/widgets/quick_property_actions_widget.dart';
@@ -38,7 +39,22 @@ class _SinglePropertyPageState extends ConsumerState<SinglePropertyPage> {
           '${property.propertyLocation} | '
           '${property.propertyFloors} Floors | '
           '${propertyUnits.length} Units',
-      introRowWidgets: [],
+      introRowWidgets: [
+        ElevatedButtonWidget(
+          buttonTitle: 'Update property',
+          buttonIcon: const Icon(Icons.edit),
+          onButtonPressedCallBack: () {
+            ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  UpdatePropertyState(
+                    introText: widget.introText,
+                    property: property,
+                  ),
+                );
+          },
+        ),
+      ],
       introButton: IntroButtonWidget(),
       scrollableDashboardWidget: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -49,7 +65,10 @@ class _SinglePropertyPageState extends ConsumerState<SinglePropertyPage> {
                     // --------------------------------------------
                     // Data Row
                     // --------------------------------------------
-                    SinglePropertyPageSummaryCards(property: property),
+                    SinglePropertyPageSummaryCards(
+                      property: property,
+                      isFromExpenses: false,
+                    ),
                     SizedBox(height: 20.0),
                     // --------------------------------------------
                     // Property tabs
@@ -79,7 +98,10 @@ class _SinglePropertyPageState extends ConsumerState<SinglePropertyPage> {
                           // --------------------------------------------
                           // Data Row
                           // --------------------------------------------
-                          SinglePropertyPageSummaryCards(property: property),
+                          SinglePropertyPageSummaryCards(
+                            property: property,
+                            isFromExpenses: false,
+                          ),
                           SizedBox(height: 30.0),
                           // --------------------------------------------
                           // Property tabs
@@ -114,7 +136,7 @@ class _SinglePropertyPageState extends ConsumerState<SinglePropertyPage> {
                           if (propertyTenants.isNotEmpty)
                             TenantInformationCardWidget(
                               property: property,
-                              introText: '${widget.introText} / tenant',
+                              introText: '${widget.introText} ',
                               tenants: propertyTenants,
                             ),
                         ],

@@ -7,12 +7,14 @@ class RentalEntriesTable extends ConsumerStatefulWidget {
   final Tenant? tenant;
   final Unit? unit;
   final String introText;
+  final Property? property;
   const RentalEntriesTable({
     super.key,
     this.rentEntries,
     this.tenant,
     this.unit,
     required this.introText,
+    this.property,
   });
 
   @override
@@ -62,9 +64,13 @@ class _RentalEntriesTableState extends ConsumerState<RentalEntriesTable> {
         DataColumn(label: SizedBox(width: 11, child: Text("#"))),
         DataColumn(label: Text("Date Paid", style: headerStyle)),
         DataColumn(label: Text("Amount", style: headerStyle)),
-        if (widget.unit != null)
+        if (widget.property != null)
+          DataColumn(label: Text('Property', style: headerStyle)),
+        if (widget.unit != null && widget.property == null)
           DataColumn(label: Text("Tenant ", style: headerStyle)),
-        if (widget.tenant != null && widget.unit == null)
+        if (widget.tenant != null &&
+            widget.unit == null &&
+            widget.property == null)
           DataColumn(label: Text("Unit ", style: headerStyle)),
         DataColumn(label: Text('Method ', style: headerStyle)),
         if (widget.tenant == null)
@@ -178,9 +184,15 @@ class _RentalEntriesTableState extends ConsumerState<RentalEntriesTable> {
             DataCell(
               Text(formatMoneyWithCurrency(amount, 'Ksh'), style: labelStyle),
             ),
-            if (widget.unit != null)
+            if (widget.unit != null && widget.property != null)
+              DataCell(
+                Text(widget.property?.propertyName ?? '', style: labelStyle),
+              ),
+            if (widget.unit != null && widget.property == null)
               DataCell(Text(tenantName, style: labelStyle)),
-            if (widget.tenant != null && widget.unit == null)
+            if (widget.tenant != null &&
+                widget.unit == null &&
+                widget.property == null)
               DataCell(Text(unitName ?? 'N/A', style: labelStyle)),
             DataCell(PaymentMethodBadge(method: paymentMethod)),
             if (widget.tenant == null)

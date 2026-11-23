@@ -5,13 +5,13 @@ import 'package:anyamar/tables/rent_entries_table.dart';
 
 class RentalMonthWidget extends ConsumerWidget {
   final RentalMonth rentalMonth;
-  final Tenant tenant;
+  final Tenant? tenant;
   final Unit? unit;
   final String introText;
   const RentalMonthWidget({
     super.key,
     required this.rentalMonth,
-    required this.tenant,
+    this.tenant,
     this.unit,
     required this.introText,
   });

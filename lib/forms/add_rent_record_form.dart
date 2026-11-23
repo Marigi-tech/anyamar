@@ -64,6 +64,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
                 (sum, utility) => sum + utility.amountPayable,
               )
         : 0.0;
+    // totalAmountPayable =
     if (widget.rentalMonth != null) {
       initialMonth = widget.rentalMonth;
       final parts = initialMonth!.rentalMonth.split('/');
@@ -82,7 +83,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
     final initialRecord = widget.rentalMonth;
     // ADD MODE
     if (initialRecord == null) {
-      paymentDateController.text = formatStandardDate(DateTime.now());
+      // paymentDateController.text = formatStandardDate(DateTime.now());
       datePaid = DateTime.now();
 
       return;
@@ -186,6 +187,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
   @override
   Widget build(BuildContext context) {
     final appData = ref.watch(userInformationProvider);
+    final notifier = ref.read(userInformationProvider.notifier);
     myUnits = appData.units;
     myTenants = appData.tenants;
 
@@ -193,24 +195,18 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
       // final rentHistoryAsync = ref.watch(
       //   rentProvider(selectedTenant!.tenantId!),
       // );
-      tenantRentalMonths = appData.rentalRecords
-          .where((record) => record.tenantId == selectedTenant!.tenantId)
-          .map((record) => record.rentalMonth)
+      tenantRentalMonths = appData.rentalHistories
+          .where((history) => history.tenantId == selectedTenant!.tenantId)
+          .expand((history) => history.rentalMonths)
           .toList();
       // rentHistoryAsync.value?.rentalMonths ?? [];
       // these should be months where rental payments are not complete
       viableRentalMonths = tenantRentalMonths.where((month) {
-        final totalPerMonth =
-            month.unitRent!.rentAmount +
-            (month.unitRent?.utilities ?? []).fold<double>(
-              0,
-              (sum, utility) => sum + utility.amountPayable,
-            );
-
-        final totalPaid = month.rentEntries.fold<double>(
-          0.0,
-          (sum, entry) => sum + entry.amountPaid,
+        final totalPerMonth = notifier.calculateMonthlyAmountPayable(
+          month.unitRent,
         );
+
+        final totalPaid = notifier.calculateMonthlyAmountPaid(month);
         return totalPaid < totalPerMonth;
       }).toList();
     }
@@ -223,7 +219,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 980),
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 40.0),
           child: Form(
             key: _formKey,
@@ -499,246 +495,173 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
       ),
     );
   }
+  //*==========================================
+  //*ADD RENT RECORD
+  //*==========================================
 
-  //===================================================================
-  // ADD RENTAL RECORD
-  //===================================================================
   Future<void> _addRentalRecordMethod() async {
-    LazyLoader lazyLoader = LazyLoader(context: context);
-    final rentalUser = ref.watch(authServiceProvider).currentUser;
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
+    final lazyLoader = LazyLoader(context: context);
 
-    final db = DbRentalService();
+    if (_formKey.currentState?.validate() != true ||
+        datePaid == null ||
+        paymentMethod == null ||
+        selectedMonth == null ||
+        selectedUnit == null ||
+        selectedTenant == null) {
+      displaySnackBar(
+        context,
+        'Please complete all required fields.',
+        dialogColor,
+        false,
+      );
+      return;
+    }
 
-    if (_formKey.currentState!.validate() &&
-        datePaid != null &&
-        paymentMethod != null &&
-        selectedMonth != null &&
-        selectedTenant != null &&
-        selectedUnit != null) {
-      lazyLoader.showLoader();
+    final currentUser = ref.read(authServiceProvider).currentUser;
 
-      // ========================================================
-      // RENT HISTORY
-      // ========================================================
-      RentHistory newRentHistory = RentHistory(
-        tenantId: selectedTenant?.tenantId ?? '',
-        unitId: selectedUnit?.unitId ?? '',
-        userId: rentalUser!.uid,
-        tenantName: selectedTenant?.tenantName,
+    if (currentUser == null || selectedTenant!.tenantId == null) {
+      displaySnackBar(
+        context,
+        'Unable to identify the current user or tenant.',
+        dialogColor,
+        false,
+      );
+      return;
+    }
+
+    lazyLoader.showLoader();
+
+    try {
+      final notifier = ref.read(userInformationProvider.notifier);
+      final db = DbRentalService();
+
+      final tenant = selectedTenant!;
+      final unit = selectedUnit!;
+
+      // 1. Synchronize tenant rental history.
+      // This also creates the history if it doesn't exist.
+      final history = await notifier.synchronizeTenantRentalMonths(tenant);
+
+      if (history == null) {
+        displaySnackBar(
+          context,
+          'Error: Unable to fetch the tenant\'s rent history, check your connection and try again.',
+          dialogColor,
+          false,
+        );
+        throw Exception('Error:Unable to synchronize tenant rental history.');
+      }
+
+      // 2. Identify the selected rental month.
+      final rentalMonthName =
+          widget.rentalMonth?.rentalMonth ??
+          '${selectedMonth!.monthName}/${yearController.text.trim()}';
+
+      final existingMonth = history.rentalMonths
+          .where((month) => month.rentalMonth == rentalMonthName)
+          .firstOrNull;
+
+      if (existingMonth == null) {
+        displaySnackBar(
+          context,
+          'Error: The selected rental month does not exist in the tenant history, check your connection and try again.',
+          dialogColor,
+          false,
+        );
+        throw Exception(
+          'The selected rental month does not exist in the tenant history.',
+        );
+      }
+
+      // 3. Determine applicable monthly charges.
+      final applicableRent = existingMonth.unitRent;
+
+      if (applicableRent == null) {
+        throw Exception(
+          'No rental charges have been configured for this month.',
+        );
+      }
+
+      final amountPayable = notifier.calculateMonthlyAmountPayable(
+        applicableRent,
       );
 
-      // ========================================================
-      // RENT ENTRY
-      // ========================================================
-      //Generate rentalId
-
-      // ========================================================
-      // CHECK EXISTING RENT HISTORY
-      // ========================================================
-      final tenantRentHistory = await db.getRentHistory(
-        selectedTenant!.tenantId!,
-      );
-      //==========================================================
-      // INSTANCE OF SINGLE ENTRY
-      //==========================================================
-      //? ==============================
-      //? GeneratIng rentEntry Id (YK0001)
-      //?================================
-
+      // 4. Generate a unique payment entry ID.
       final rentEntryId = db.generateRentEntryId(
-        tenantName: selectedTenant!.tenantName,
-        rentalMonths: tenantRentHistory != null
-            ? tenantRentHistory.rentalMonths
-            : newRentHistory.rentalMonths,
+        tenantName: tenant.tenantName,
+        rentalMonths: history.rentalMonths,
       );
-      SingleRentEntry rentEntry = SingleRentEntry(
+
+      // 5. Create the actual payment transaction.
+      final rentEntry = SingleRentEntry(
         paymentDate: datePaid!,
-        amountPayable: selectedUnit?.rentPerMonth ?? 0.0,
+        amountPayable: amountPayable,
         amountPaid: double.parse(amountController.text.replaceAll(',', '')),
-        unitId: selectedUnit!.unitId,
-        tenantId: selectedTenant!.tenantId,
-        tenantName: selectedTenant!.tenantName,
+        unitId: unit.unitId,
+        propertyId: tenant.propertyId,
+        tenantId: tenant.tenantId,
+        tenantName: tenant.tenantName,
         paymentMethod: paymentMethod!,
-        rentalMonth:
-            widget.rentalMonth?.rentalMonth ??
-            '${selectedMonth?.monthName}/${yearController.text.trim()}',
+        rentalMonth: rentalMonthName,
         rentEntryId: rentEntryId,
         lastUpdatedDate: DateTime.now(),
       );
 
-      if (tenantRentHistory == null) {
-        log('Tenant history does not currently exist');
+      // 6. Persist payment and obtain the updated history.
 
-        await rentEntryForNewHistory(
-          newRentHistory,
-          rentEntry,
-          context,
-          lazyLoader,
-        );
-      } else {
-        await rentEntryForExistingHistory(
-          rentEntry,
-          tenantRentHistory,
-          context,
-          lazyLoader,
-        );
+      // final updatedHistory = await ref
+      //     .read(rentProvider(tenant.tenantId!).notifier)
+      //     .addRentEntry(rentEntry, existingMonth, history);
+
+      final updatedHistory = await db.addRentEntry(
+        rentEntry,
+        existingMonth,
+        history,
+      );
+
+      if (updatedHistory == null) {
+        throw Exception('Failed to save rental payment.');
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Enter required fields\n'
-            'date paid: $datePaid\n'
-            'payment method: $paymentMethod\n'
-            'selected month: '
-            '${selectedMonth?.monthName}\n'
-            'tenant name: '
-            '${selectedTenant?.tenantName}\n'
-            'unit name: '
-            '${selectedUnit?.unitName}',
-          ),
+
+      // 7. Update global rental history and rental records.
+      notifier.updateRentalHistory(updatedHistory);
+
+      // 8. Append financial revenue record.
+      await notifier.appendFinances(
+        FinancialRecord(
+          recordId: rentEntry.rentEntryId,
+          datePaid: rentEntry.paymentDate,
+          amountPaid: rentEntry.amountPaid,
+          recordType: FinancialRecordTypes.rent,
+          recordNature: FinancialRecordNature.revenue,
+          paymentMethod: rentEntry.paymentMethod,
+          lastUpdatedDate: rentEntry.lastUpdatedDate ?? DateTime.now(),
+          paymentBy: Person(personName: tenant.tenantName),
         ),
       );
-    }
-  }
 
-  Future<void> rentEntryForExistingHistory(
-    SingleRentEntry rentEntry,
-    RentHistory tenantRentHistory,
-    BuildContext context,
-    LazyLoader lazyLoader,
-  ) async {
-    // Find the rental month
-    final existingMonth = tenantRentHistory.rentalMonths
-        .where((month) => month.rentalMonth == rentEntry.rentalMonth)
-        .firstOrNull;
-
-    final RentalMonth actualMonth;
-
-    if (existingMonth != null) {
-      log('Rental month already exists');
-      // Month already exists.
-      // The DB method will add the entry to it.
-      actualMonth = existingMonth;
-    } else {
-      log('Rental month does not exsist and new one has been added');
-      // Month doesn't exist yet.
-      actualMonth = RentalMonth(
-        rentalMonth: rentEntry.rentalMonth,
-        rentEntries: [],
-        unitRent: selectedUnit?.unitRent,
-      );
-    }
-    try {
-      final updatedHistory = await ref
-          .read(rentProvider(selectedTenant!.tenantId!).notifier)
-          .addRentEntry(rentEntry, actualMonth, tenantRentHistory);
-
-      if (updatedHistory != null) {
-        await ref
-            .read(userInformationProvider.notifier)
-            .updateTenant(selectedTenant!);
-        await ref
-            .read(userInformationProvider.notifier)
-            .appendRentRecords(
-              RentalRecord(
-                tenantId: selectedTenant!.tenantId!,
-                unitId: selectedUnit!.unitId!,
-                rentEntry: rentEntry,
-                rentalMonth: actualMonth,
-                rentHistory: tenantRentHistory,
-              ),
-            );
-
-        await ref
-            .read(userInformationProvider.notifier)
-            .appendFinances(
-              FinancialRecord(
-                recordId: rentEntry.rentEntryId,
-                datePaid: rentEntry.paymentDate,
-                amountPaid: rentEntry.amountPaid,
-                recordType: FinancialRecordTypes.rent,
-                recordNature: FinancialRecordNature.revenue,
-                paymentMethod: rentEntry.paymentMethod,
-                lastUpdatedDate: rentEntry.lastUpdatedDate ?? DateTime.now(),
-                paymentBy: Person(personName: selectedTenant!.tenantName),
-              ),
-            );
-        ref.read(workspaceProvider.notifier).closeWorkspace();
-      }
-    } catch (e) {
-      log('Error adding rent entry for existing rent history: $e');
+      // 9. Close workspace.
+      ref.read(workspaceProvider.notifier).closeWorkspace();
 
       displaySnackBar(
         context,
-        'Error adding rental record: $e',
-        AppColorsConstant.redColor,
+        'Rental payment recorded successfully.',
+        dialogColor,
+        true,
       );
-    } finally {
-      lazyLoader.hideLoader();
-    }
-  }
+    } catch (e, stackTrace) {
+      log('Error adding rental payment: $e', stackTrace: stackTrace);
 
-  Future<void> rentEntryForNewHistory(
-    RentHistory rentHistory,
-    SingleRentEntry rentEntry,
-    BuildContext context,
-    LazyLoader lazyLoader,
-  ) async {
-    try {
-      final historyWithMonth = rentHistory.copyWith(
-        rentalMonths: [
-          RentalMonth(
-            rentalMonth: rentEntry.rentalMonth,
-            rentEntries: [rentEntry],
-          ),
-        ],
+      displaySnackBar(
+        context,
+        'Error adding rental payment: $e',
+        dialogColor,
+        false,
       );
-
-      final newHistory = await ref
-          .read(rentProvider(selectedTenant!.tenantId!).notifier)
-          .addTenantRentHistory(historyWithMonth);
-
-      if (newHistory == null) {
-        return;
-      }
-      await ref
-          .read(userInformationProvider.notifier)
-          .updateTenant(selectedTenant!);
-      await ref
-          .read(userInformationProvider.notifier)
-          .appendRentRecords(
-            RentalRecord(
-              tenantId: selectedTenant!.tenantId!,
-              unitId: selectedUnit!.unitId!,
-              rentEntry: rentEntry,
-              rentalMonth: RentalMonth(
-                rentalMonth: rentEntry.rentalMonth,
-                rentEntries: [rentEntry],
-              ),
-              rentHistory: newHistory,
-            ),
-          );
-
-      // Add financial record locally.
-      await ref
-          .read(userInformationProvider.notifier)
-          .appendFinances(
-            FinancialRecord(
-              recordId: rentEntry.rentEntryId,
-              datePaid: rentEntry.paymentDate,
-              amountPaid: rentEntry.amountPaid,
-              recordType: FinancialRecordTypes.rent,
-              recordNature: FinancialRecordNature.revenue,
-              paymentMethod: rentEntry.paymentMethod,
-              lastUpdatedDate: rentEntry.lastUpdatedDate ?? DateTime.now(),
-              paymentBy: Person(personName: selectedTenant!.tenantName),
-            ),
-          );
-
-      ref.read(workspaceProvider.notifier).closeWorkspace();
-    } catch (e) {
-      log('Error adding rent history: $e');
     } finally {
       lazyLoader.hideLoader();
     }

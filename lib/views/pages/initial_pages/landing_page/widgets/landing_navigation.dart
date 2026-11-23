@@ -3,11 +3,17 @@ import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/brand_log
 
 class LandingNavigation extends ConsumerWidget {
   final bool isMobile;
-  const LandingNavigation({super.key, required this.isMobile});
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  const LandingNavigation({
+    super.key,
+    required this.isMobile,
+    required this.scaffoldKey,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isDark = ref.watch(themeIsDarkProvider);
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 20 : 25,
@@ -59,7 +65,7 @@ class LandingNavigation extends ConsumerWidget {
           ] else ...[
             IconButton(
               onPressed: () {
-                //todo:Open drawer
+                scaffoldKey.currentState?.openEndDrawer();
               },
               icon: Icon(
                 Icons.menu_rounded,
@@ -74,8 +80,6 @@ class LandingNavigation extends ConsumerWidget {
       ),
     );
   }
-
-
 }
 
 class NavItemWidget extends ConsumerStatefulWidget {

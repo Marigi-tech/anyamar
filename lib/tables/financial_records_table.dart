@@ -123,12 +123,20 @@ class _FinancesTableState extends ConsumerState<FinancesTable> {
         final amount = financialRecord.amountPaid;
         final personName = financialRecord.paymentBy.personName;
         //Check if this is a rent Entry
-        final SingleRentEntry? rentEntry = appData.rentalRecords
-            .where(
-              (record) =>
-                  record.rentEntry.rentEntryId == financialRecord.recordId,
-            )
+        // final SingleRentEntry? rentEntry = appData.rentalRecords
+        //     .where(
+        //       (record) =>
+        //           record.rentEntry.rentEntryId == financialRecord.recordId,
+        //     )
+        //     .map((record) => record.rentEntry)
+        //     .singleOrNull;
+        // bool isRentEntry =
+        //     financialRecord.recordType == FinancialRecordTypes.rent
+        //     ? true
+        //     : false;
+        SingleRentEntry? rentEntry = appData.rentalRecords
             .map((record) => record.rentEntry)
+            .where((record) => record.rentEntryId == financialRecord.recordId)
             .singleOrNull;
 
         var number = index + 1;
@@ -218,7 +226,7 @@ class _FinancesTableState extends ConsumerState<FinancesTable> {
                                   ),
                                 );
                     },
-                    icon: const Icon(Icons.chevron_right, size: 15),
+                    icon: const Icon(Icons.chevron_right),
                   ),
                 ],
               ),

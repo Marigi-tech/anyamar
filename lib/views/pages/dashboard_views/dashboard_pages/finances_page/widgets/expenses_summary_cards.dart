@@ -5,7 +5,7 @@ class ExpensesPageSummaryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
+    final gridCount = Responsiveness.isMobile(context) ? 1 : 3;
     final appData = ref.watch(userInformationProvider);
     // final totalIncome = appData.finances
     //     .where((record) => record.recordNature != FinancialRecordNature.expense)
@@ -16,13 +16,9 @@ class ExpensesPageSummaryCards extends ConsumerWidget {
     // final occupiedUnits = appData.units.where((u) => u.isOccupied).length;
     // final vacantUnits = appData.units.where((u) => !u.isOccupied).length;
     // final occupancyRate = occupiedUnits / appData.units.length;
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.numbers,
           title: 'Total records',

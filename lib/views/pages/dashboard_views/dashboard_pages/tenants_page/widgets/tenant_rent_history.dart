@@ -1,4 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/data/services/pdf_service.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/widgets/rental_month_widget.dart';
 import 'package:anyamar/views/reusable_widgets/badges/payment_status_badge.dart';
 
@@ -22,12 +23,12 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
     final appData = ref.watch(userInformationProvider);
-    final rentRecords = appData.rentalRecords.where(
-      (r) => r.tenantId == widget.tenant.tenantId,
-    );
-    for (var record in rentRecords) {
-      rentalMonths.add(record.rentalMonth);
-    }
+    rentalMonths = appData.rentalHistories
+        .where((history) => history.tenantId == widget.tenant.tenantId)
+        .expand((history) => history.rentalMonths)
+        .toSet()
+        .toList();
+
     String introText = widget.introText;
     final TextStyle headerStyle = CustomTextStyles.cardDescriptionStyle
         .copyWith(
@@ -93,6 +94,9 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
       // --------------------------------------------
       rowBuilder: (rentalMonth, index) {
         List<SingleRentEntry> rentEntries = rentalMonth.rentEntries;
+        RentHistory rentHistory = appData.rentalHistories.firstWhere(
+          (history) => history.rentalMonths.contains(rentalMonth),
+        );
         final tenant = widget.tenant;
         //Instance of unit
         final unit = appData.units
@@ -126,12 +130,14 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
         );
         PaymentStatus paymentStatus;
 
-        if (totalPaid < totalAmountPayableMonthly) {
+        if (totalPaid < totalAmountPayableMonthly && totalPaid != 0) {
           paymentStatus = PaymentStatus.partial;
         } else if (totalPaid == totalAmountPayableMonthly) {
           paymentStatus = PaymentStatus.complete;
         } else if (totalPaid > totalAmountPayableMonthly) {
           paymentStatus = PaymentStatus.excess;
+        } else if (totalPaid == 0) {
+          paymentStatus = PaymentStatus.pending;
         } else {
           paymentStatus = PaymentStatus.pending;
         }
@@ -178,8 +184,42 @@ class _TenantRentHistoryState extends ConsumerState<TenantRentHistory> {
                               introText: '$introText/  month ',
                               pageTitle: rentalMonth.rentalMonth,
                               supplementaryText:
-                                  '${tenant.tenantName} | ${tenant.tenantEmail} | ${tenant.tenantPhoneNumber} | ${unit?.unitName} | ${property?.propertyName}',
-                              introRowWidgets: [],
+                                  ' Name : ${tenant.tenantName} | Email : ${tenant.tenantEmail} | Phone :  ${tenant.tenantPhoneNumber} | Unit : ${unit?.unitName} | Property : ${property?.propertyName}',
+                              introRowWidgets: [
+                                if (paymentStatus == PaymentStatus.pending)
+                                  ElevatedButtonWidget(
+                                    buttonTitle: 'Generate Invoice',
+                                    buttonColor: AppColors.purpleColor,
+                                    buttonIcon: Icon(Icons.receipt),
+                                    onButtonPressedCallBack: () async {
+                                      await PdfDocumentService.instance
+                                          .generateTenantInvoice(
+                                            tenant: tenant,
+                                            unit: unit!,
+                                            property: property!,
+                                            rentalMonth:
+                                                rentalMonth.rentalMonth,
+                                            monthRecord: rentalMonth,
+                                            rentHistory: rentHistory,
+                                          );
+                                    },
+                                  ),
+                                if (paymentStatus == PaymentStatus.complete)
+                                  ElevatedButtonWidget(
+                                    buttonTitle: 'Generate Receipt',
+                                    buttonIcon: Icon(Icons.receipt),
+                                    buttonColor: AppColors.orange,
+                                    onButtonPressedCallBack: () async {
+                                      await PdfDocumentService.instance
+                                          .generateMonthlyRentalReceipt(
+                                            tenant: tenant,
+                                            unit: unit!,
+                                            property: property!,
+                                            rentalMonth: rentalMonth,
+                                          );
+                                    },
+                                  ),
+                              ],
                               introButton: IntroButtonWidget(),
                               scrollableDashboardWidget: RentalMonthWidget(
                                 rentalMonth: rentalMonth,

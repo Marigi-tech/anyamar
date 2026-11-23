@@ -1,6 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_expenses_page_state.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/add_income_state_page.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/expense_per_property_state_page.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/rent_per_tenant_page_state.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/view_all_expenses_state.dart';
@@ -24,47 +22,47 @@ class QuickFinancesActions extends ConsumerWidget {
         : true;
     return QuickActionsWidget(
       children: [
-        if (financialRecord != null || rentEntry != null) CardItemSeparator(),
-        //Add Expense Record
-        QWidget(
-          onPressedCallBack: () => ref
-              .read(workspaceProvider.notifier)
-              .openForm(
-                AddExpensesStatePage(
-                  introText: '$introText / add expense record',
-                ),
-              ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RowTitleWidget(
-                text: 'Add expense record',
-                icon: CupertinoIcons.add,
-              ),
-              Icon(CupertinoIcons.chevron_right, size: 15),
-            ],
-          ),
-        ),
-        CardItemSeparator(),
-        //Add Rent Entry
-        QWidget(
-          onPressedCallBack: () => ref
-              .read(workspaceProvider.notifier)
-              .openForm(
-                AddIncomeStatePage(introText: '$introText / add rent record'),
-              ),
+        // if (financialRecord != null || rentEntry != null) CardItemSeparator(),
+        // //Add Expense Record
+        // QWidget(
+        //   onPressedCallBack: () => ref
+        //       .read(workspaceProvider.notifier)
+        //       .openForm(
+        //         AddExpensesStatePage(
+        //           introText: '$introText / add expense record',
+        //         ),
+        //       ),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       RowTitleWidget(
+        //         text: 'Add expense record',
+        //         icon: CupertinoIcons.add,
+        //       ),
+        //       Icon(CupertinoIcons.chevron_right, size: 15),
+        //     ],
+        //   ),
+        // ),
+        // CardItemSeparator(),
+        // //Add Rent Entry
+        // QWidget(
+        //   onPressedCallBack: () => ref
+        //       .read(workspaceProvider.notifier)
+        //       .openForm(
+        //         AddIncomeStatePage(introText: '$introText / add rent record'),
+        //       ),
 
-          // onPressedCallBack: () =>
-          //     ref.read(financesPageProvider.notifier).addIncomeRecord(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RowTitleWidget(text: 'Add rent record', icon: CupertinoIcons.add),
-              Icon(CupertinoIcons.chevron_right, size: 15),
-            ],
-          ),
-        ),
-        CardItemSeparator(),
+        //   // onPressedCallBack: () =>
+        //   //     ref.read(financesPageProvider.notifier).addIncomeRecord(),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       RowTitleWidget(text: 'Add rent record', icon: CupertinoIcons.add),
+        //       Icon(CupertinoIcons.chevron_right, size: 15),
+        //     ],
+        //   ),
+        // ),
+        // CardItemSeparator(),
         //View expense records
         if (isGeneralPage)
           QWidget(
@@ -79,7 +77,7 @@ class QuickFinancesActions extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View expense records',
+                  text: 'View Expense Records',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),
@@ -101,7 +99,7 @@ class QuickFinancesActions extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View rent records',
+                  text: 'View Rent Records',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),
@@ -123,7 +121,7 @@ class QuickFinancesActions extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View expenses / property',
+                  text: 'View Expenses /Property',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),
@@ -145,7 +143,7 @@ class QuickFinancesActions extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RowTitleWidget(
-                  text: 'View rent records / tenant',
+                  text: 'View Rent records / Tenant',
                   icon: CupertinoIcons.info,
                 ),
                 Icon(CupertinoIcons.chevron_right, size: 15),

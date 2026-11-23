@@ -22,7 +22,7 @@ SingleRentEntry _$SingleRentEntryFromJson(
 /// @nodoc
 mixin _$SingleRentEntry {
 
- DateTime get paymentDate; double get amountPayable; double get amountPaid; double? get balance; PaymentMethods get paymentMethod; String get rentalMonth; DateTime? get lastUpdatedDate; String? get rentEntryId; String? get transactionCode; String? get tenantId; String? get tenantName; String? get unitId; String? get propertyId;
+ DateTime get paymentDate; double get amountPayable; double get amountPaid; double? get balance; PaymentMethods get paymentMethod; String get rentalMonth; DateTime? get lastUpdatedDate; String? get rentEntryId; String? get transactionCode; String? get tenantId; String? get tenantName; String? get unitId; String? get propertyId; String? get historyId;
 /// Create a copy of SingleRentEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -35,16 +35,16 @@ $SingleRentEntryCopyWith<SingleRentEntry> get copyWith => _$SingleRentEntryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SingleRentEntry&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.amountPayable, amountPayable) || other.amountPayable == amountPayable)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.rentEntryId, rentEntryId) || other.rentEntryId == rentEntryId)&&(identical(other.transactionCode, transactionCode) || other.transactionCode == transactionCode)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SingleRentEntry&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.amountPayable, amountPayable) || other.amountPayable == amountPayable)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.rentEntryId, rentEntryId) || other.rentEntryId == rentEntryId)&&(identical(other.transactionCode, transactionCode) || other.transactionCode == transactionCode)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.historyId, historyId) || other.historyId == historyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,paymentDate,amountPayable,amountPaid,balance,paymentMethod,rentalMonth,lastUpdatedDate,rentEntryId,transactionCode,tenantId,tenantName,unitId,propertyId);
+int get hashCode => Object.hash(runtimeType,paymentDate,amountPayable,amountPaid,balance,paymentMethod,rentalMonth,lastUpdatedDate,rentEntryId,transactionCode,tenantId,tenantName,unitId,propertyId,historyId);
 
 @override
 String toString() {
-  return 'SingleRentEntry(paymentDate: $paymentDate, amountPayable: $amountPayable, amountPaid: $amountPaid, balance: $balance, paymentMethod: $paymentMethod, rentalMonth: $rentalMonth, lastUpdatedDate: $lastUpdatedDate, rentEntryId: $rentEntryId, transactionCode: $transactionCode, tenantId: $tenantId, tenantName: $tenantName, unitId: $unitId, propertyId: $propertyId)';
+  return 'SingleRentEntry(paymentDate: $paymentDate, amountPayable: $amountPayable, amountPaid: $amountPaid, balance: $balance, paymentMethod: $paymentMethod, rentalMonth: $rentalMonth, lastUpdatedDate: $lastUpdatedDate, rentEntryId: $rentEntryId, transactionCode: $transactionCode, tenantId: $tenantId, tenantName: $tenantName, unitId: $unitId, propertyId: $propertyId, historyId: $historyId)';
 }
 
 
@@ -55,7 +55,7 @@ abstract mixin class $SingleRentEntryCopyWith<$Res>  {
   factory $SingleRentEntryCopyWith(SingleRentEntry value, $Res Function(SingleRentEntry) _then) = _$SingleRentEntryCopyWithImpl;
 @useResult
 $Res call({
- DateTime paymentDate, double amountPayable, double amountPaid, double? balance, PaymentMethods paymentMethod, String rentalMonth, DateTime? lastUpdatedDate, String? rentEntryId, String? transactionCode, String? tenantId, String? tenantName, String? unitId, String? propertyId
+ DateTime paymentDate, double amountPayable, double amountPaid, double? balance, PaymentMethods paymentMethod, String rentalMonth, DateTime? lastUpdatedDate, String? rentEntryId, String? transactionCode, String? tenantId, String? tenantName, String? unitId, String? propertyId, String? historyId
 });
 
 
@@ -72,7 +72,7 @@ class _$SingleRentEntryCopyWithImpl<$Res>
 
 /// Create a copy of SingleRentEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? paymentDate = null,Object? amountPayable = null,Object? amountPaid = null,Object? balance = freezed,Object? paymentMethod = null,Object? rentalMonth = null,Object? lastUpdatedDate = freezed,Object? rentEntryId = freezed,Object? transactionCode = freezed,Object? tenantId = freezed,Object? tenantName = freezed,Object? unitId = freezed,Object? propertyId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? paymentDate = null,Object? amountPayable = null,Object? amountPaid = null,Object? balance = freezed,Object? paymentMethod = null,Object? rentalMonth = null,Object? lastUpdatedDate = freezed,Object? rentEntryId = freezed,Object? transactionCode = freezed,Object? tenantId = freezed,Object? tenantName = freezed,Object? unitId = freezed,Object? propertyId = freezed,Object? historyId = freezed,}) {
   return _then(_self.copyWith(
 paymentDate: null == paymentDate ? _self.paymentDate : paymentDate // ignore: cast_nullable_to_non_nullable
 as DateTime,amountPayable: null == amountPayable ? _self.amountPayable : amountPayable // ignore: cast_nullable_to_non_nullable
@@ -87,6 +87,7 @@ as String?,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: 
 as String?,tenantName: freezed == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
 as String?,unitId: freezed == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String?,propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
+as String?,historyId: freezed == historyId ? _self.historyId : historyId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -172,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime paymentDate,  double amountPayable,  double amountPaid,  double? balance,  PaymentMethods paymentMethod,  String rentalMonth,  DateTime? lastUpdatedDate,  String? rentEntryId,  String? transactionCode,  String? tenantId,  String? tenantName,  String? unitId,  String? propertyId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime paymentDate,  double amountPayable,  double amountPaid,  double? balance,  PaymentMethods paymentMethod,  String rentalMonth,  DateTime? lastUpdatedDate,  String? rentEntryId,  String? transactionCode,  String? tenantId,  String? tenantName,  String? unitId,  String? propertyId,  String? historyId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SingleRentalEntry() when $default != null:
-return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.balance,_that.paymentMethod,_that.rentalMonth,_that.lastUpdatedDate,_that.rentEntryId,_that.transactionCode,_that.tenantId,_that.tenantName,_that.unitId,_that.propertyId);case _:
+return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.balance,_that.paymentMethod,_that.rentalMonth,_that.lastUpdatedDate,_that.rentEntryId,_that.transactionCode,_that.tenantId,_that.tenantName,_that.unitId,_that.propertyId,_that.historyId);case _:
   return orElse();
 
 }
@@ -193,10 +194,10 @@ return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.bal
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime paymentDate,  double amountPayable,  double amountPaid,  double? balance,  PaymentMethods paymentMethod,  String rentalMonth,  DateTime? lastUpdatedDate,  String? rentEntryId,  String? transactionCode,  String? tenantId,  String? tenantName,  String? unitId,  String? propertyId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime paymentDate,  double amountPayable,  double amountPaid,  double? balance,  PaymentMethods paymentMethod,  String rentalMonth,  DateTime? lastUpdatedDate,  String? rentEntryId,  String? transactionCode,  String? tenantId,  String? tenantName,  String? unitId,  String? propertyId,  String? historyId)  $default,) {final _that = this;
 switch (_that) {
 case _SingleRentalEntry():
-return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.balance,_that.paymentMethod,_that.rentalMonth,_that.lastUpdatedDate,_that.rentEntryId,_that.transactionCode,_that.tenantId,_that.tenantName,_that.unitId,_that.propertyId);case _:
+return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.balance,_that.paymentMethod,_that.rentalMonth,_that.lastUpdatedDate,_that.rentEntryId,_that.transactionCode,_that.tenantId,_that.tenantName,_that.unitId,_that.propertyId,_that.historyId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +214,10 @@ return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.bal
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime paymentDate,  double amountPayable,  double amountPaid,  double? balance,  PaymentMethods paymentMethod,  String rentalMonth,  DateTime? lastUpdatedDate,  String? rentEntryId,  String? transactionCode,  String? tenantId,  String? tenantName,  String? unitId,  String? propertyId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime paymentDate,  double amountPayable,  double amountPaid,  double? balance,  PaymentMethods paymentMethod,  String rentalMonth,  DateTime? lastUpdatedDate,  String? rentEntryId,  String? transactionCode,  String? tenantId,  String? tenantName,  String? unitId,  String? propertyId,  String? historyId)?  $default,) {final _that = this;
 switch (_that) {
 case _SingleRentalEntry() when $default != null:
-return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.balance,_that.paymentMethod,_that.rentalMonth,_that.lastUpdatedDate,_that.rentEntryId,_that.transactionCode,_that.tenantId,_that.tenantName,_that.unitId,_that.propertyId);case _:
+return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.balance,_that.paymentMethod,_that.rentalMonth,_that.lastUpdatedDate,_that.rentEntryId,_that.transactionCode,_that.tenantId,_that.tenantName,_that.unitId,_that.propertyId,_that.historyId);case _:
   return null;
 
 }
@@ -228,7 +229,7 @@ return $default(_that.paymentDate,_that.amountPayable,_that.amountPaid,_that.bal
 @JsonSerializable()
 
 class _SingleRentalEntry implements SingleRentEntry {
-  const _SingleRentalEntry({required this.paymentDate, required this.amountPayable, required this.amountPaid, this.balance, required this.paymentMethod, required this.rentalMonth, this.lastUpdatedDate, this.rentEntryId, this.transactionCode, this.tenantId, this.tenantName, this.unitId, this.propertyId});
+  const _SingleRentalEntry({required this.paymentDate, required this.amountPayable, required this.amountPaid, this.balance, required this.paymentMethod, required this.rentalMonth, this.lastUpdatedDate, this.rentEntryId, this.transactionCode, this.tenantId, this.tenantName, this.unitId, this.propertyId, this.historyId});
   factory _SingleRentalEntry.fromJson(Map<String, dynamic> json) => _$SingleRentalEntryFromJson(json);
 
 @override final  DateTime paymentDate;
@@ -244,6 +245,7 @@ class _SingleRentalEntry implements SingleRentEntry {
 @override final  String? tenantName;
 @override final  String? unitId;
 @override final  String? propertyId;
+@override final  String? historyId;
 
 /// Create a copy of SingleRentEntry
 /// with the given fields replaced by the non-null parameter values.
@@ -258,16 +260,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SingleRentalEntry&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.amountPayable, amountPayable) || other.amountPayable == amountPayable)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.rentEntryId, rentEntryId) || other.rentEntryId == rentEntryId)&&(identical(other.transactionCode, transactionCode) || other.transactionCode == transactionCode)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SingleRentalEntry&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.amountPayable, amountPayable) || other.amountPayable == amountPayable)&&(identical(other.amountPaid, amountPaid) || other.amountPaid == amountPaid)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.lastUpdatedDate, lastUpdatedDate) || other.lastUpdatedDate == lastUpdatedDate)&&(identical(other.rentEntryId, rentEntryId) || other.rentEntryId == rentEntryId)&&(identical(other.transactionCode, transactionCode) || other.transactionCode == transactionCode)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.tenantName, tenantName) || other.tenantName == tenantName)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId)&&(identical(other.historyId, historyId) || other.historyId == historyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,paymentDate,amountPayable,amountPaid,balance,paymentMethod,rentalMonth,lastUpdatedDate,rentEntryId,transactionCode,tenantId,tenantName,unitId,propertyId);
+int get hashCode => Object.hash(runtimeType,paymentDate,amountPayable,amountPaid,balance,paymentMethod,rentalMonth,lastUpdatedDate,rentEntryId,transactionCode,tenantId,tenantName,unitId,propertyId,historyId);
 
 @override
 String toString() {
-  return 'SingleRentEntry(paymentDate: $paymentDate, amountPayable: $amountPayable, amountPaid: $amountPaid, balance: $balance, paymentMethod: $paymentMethod, rentalMonth: $rentalMonth, lastUpdatedDate: $lastUpdatedDate, rentEntryId: $rentEntryId, transactionCode: $transactionCode, tenantId: $tenantId, tenantName: $tenantName, unitId: $unitId, propertyId: $propertyId)';
+  return 'SingleRentEntry(paymentDate: $paymentDate, amountPayable: $amountPayable, amountPaid: $amountPaid, balance: $balance, paymentMethod: $paymentMethod, rentalMonth: $rentalMonth, lastUpdatedDate: $lastUpdatedDate, rentEntryId: $rentEntryId, transactionCode: $transactionCode, tenantId: $tenantId, tenantName: $tenantName, unitId: $unitId, propertyId: $propertyId, historyId: $historyId)';
 }
 
 
@@ -278,7 +280,7 @@ abstract mixin class _$SingleRentalEntryCopyWith<$Res> implements $SingleRentEnt
   factory _$SingleRentalEntryCopyWith(_SingleRentalEntry value, $Res Function(_SingleRentalEntry) _then) = __$SingleRentalEntryCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime paymentDate, double amountPayable, double amountPaid, double? balance, PaymentMethods paymentMethod, String rentalMonth, DateTime? lastUpdatedDate, String? rentEntryId, String? transactionCode, String? tenantId, String? tenantName, String? unitId, String? propertyId
+ DateTime paymentDate, double amountPayable, double amountPaid, double? balance, PaymentMethods paymentMethod, String rentalMonth, DateTime? lastUpdatedDate, String? rentEntryId, String? transactionCode, String? tenantId, String? tenantName, String? unitId, String? propertyId, String? historyId
 });
 
 
@@ -295,7 +297,7 @@ class __$SingleRentalEntryCopyWithImpl<$Res>
 
 /// Create a copy of SingleRentEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? paymentDate = null,Object? amountPayable = null,Object? amountPaid = null,Object? balance = freezed,Object? paymentMethod = null,Object? rentalMonth = null,Object? lastUpdatedDate = freezed,Object? rentEntryId = freezed,Object? transactionCode = freezed,Object? tenantId = freezed,Object? tenantName = freezed,Object? unitId = freezed,Object? propertyId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? paymentDate = null,Object? amountPayable = null,Object? amountPaid = null,Object? balance = freezed,Object? paymentMethod = null,Object? rentalMonth = null,Object? lastUpdatedDate = freezed,Object? rentEntryId = freezed,Object? transactionCode = freezed,Object? tenantId = freezed,Object? tenantName = freezed,Object? unitId = freezed,Object? propertyId = freezed,Object? historyId = freezed,}) {
   return _then(_SingleRentalEntry(
 paymentDate: null == paymentDate ? _self.paymentDate : paymentDate // ignore: cast_nullable_to_non_nullable
 as DateTime,amountPayable: null == amountPayable ? _self.amountPayable : amountPayable // ignore: cast_nullable_to_non_nullable
@@ -310,6 +312,7 @@ as String?,tenantId: freezed == tenantId ? _self.tenantId : tenantId // ignore: 
 as String?,tenantName: freezed == tenantName ? _self.tenantName : tenantName // ignore: cast_nullable_to_non_nullable
 as String?,unitId: freezed == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String?,propertyId: freezed == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
+as String?,historyId: freezed == historyId ? _self.historyId : historyId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

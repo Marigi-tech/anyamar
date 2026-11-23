@@ -23,14 +23,14 @@ class ExpensesPerPropertyWidget extends ConsumerWidget {
           // --------------------------------------------
           // Data Row
           // --------------------------------------------
-          SinglePropertyPageSummaryCards(property: property),
+          SinglePropertyPageSummaryCards(
+            property: property,
+            isFromExpenses: true,
+          ),
           SizedBox(height: 20.0),
           SizedBox(
             height: 500,
-            child: PropertyRecords(
-              property: property,
-              introText: introText,
-            ),
+            child: PropertyRecords(property: property, introText: introText),
           ),
         ],
       ),

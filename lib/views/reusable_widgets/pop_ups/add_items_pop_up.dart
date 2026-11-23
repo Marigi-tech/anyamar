@@ -81,8 +81,7 @@ class AddItemsWidget extends ConsumerWidget {
             //   buttonIcon: Icon(Icons.add),
             //   buttonColor: AppColors.red,
             //   onButtonPressedCallBack: () => AddExpenseRecord(),
-            // ),
-            const SizedBox(height: 15),
+            // 
             // ==================================================
             // Add Rental Payment
             // ==================================================

@@ -21,6 +21,7 @@ abstract class FinancialRecord with _$FinancialRecord {
     PaymentMethods? paymentMethod,
     String? userId,
     String? propertyId,
+    String? paymentDescription,
   }) = _FinancialRecord;
 
   factory FinancialRecord.fromJson(Map<String, dynamic> json) =>

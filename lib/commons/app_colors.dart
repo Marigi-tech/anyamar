@@ -19,6 +19,9 @@ class AppColors {
   static const Color buttonBlueColor = Color(0xff1769F5);
   static const Color sideBarColor = Color(0xff06244F);
   static const Color darkBlueColor = Color.fromARGB(255, 13, 71, 161);
+  static const Color purpleColor = Colors.purple;
+  static const Color pinkColor = Colors.pink;
+  static const Color blackColor = Colors.black;
 
   // ============================================================
   // LIGHT MODE

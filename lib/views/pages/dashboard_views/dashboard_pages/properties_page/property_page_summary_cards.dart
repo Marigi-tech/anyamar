@@ -42,33 +42,30 @@ class PropertyPageSummaryCards extends ConsumerWidget {
 
       return total + rent + utilities;
     });
-    List<RentalRecord> collectedRentRecords = appData.rentalRecords
-        .where(
-          (record) => propertyUnits
-              .map((unit) => unit.unitId)
-              .toList()
-              .any(
-                (unitId) =>
-                    record.unitId == unitId &&
-                    record.rentalMonth.rentalMonth ==
-                        formatMonthAndYearName(DateTime.now()),
-              ),
-        )
-        .toList();
+    List<RentalRecord> collectedRecords = appData.rentalRecords;
 
-    double? collectedRent = collectedRentRecords.fold<double>(
+    // List<RentalRecord> collectedRentRecords = appData.rentalRecords
+    //     .where(
+    //       (record) => propertyUnits
+    //           .map((unit) => unit.unitId)
+    //           .toList()
+    //           .any(
+    //             (unitId) =>
+    //                 record.unitId == unitId &&
+    //                 record.rentalMonth.rentalMonth ==
+    //                     formatMonthAndYearName(DateTime.now()),
+    //           ),
+    //     )
+    //     .toList();
+
+    double? collectedRent = collectedRecords.fold<double>(
       0.0,
       (sum, record) => sum + record.rentEntry.amountPaid,
     );
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      mainAxisSpacing: 5,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.apartment_outlined,
           title: 'Total Properties',
@@ -103,7 +100,7 @@ class PropertyPageSummaryCards extends ConsumerWidget {
           icon: Icons.attach_money,
           title: 'Expected Income / month',
           value: formatMoneyWithCurrency(expectedRent, 'Ksh'),
-          subtitle: 'This month',
+          subtitle: 'every month',
           iconCardColor: AppColors.orange,
           onPressedCallBack: () {},
           // fontSize: 15,
@@ -111,10 +108,9 @@ class PropertyPageSummaryCards extends ConsumerWidget {
 
         SummaryCard(
           icon: Icons.receipt_long_outlined,
-          title: 'Collected Income / month',
+          title: 'Collected Income ',
           value: formatMoneyWithCurrency(collectedRent, 'Ksh'),
-          subtitle:
-              'Ksh ${(collectedRent / expectedRent * 100).toStringAsFixed(1)}% of expected',
+          subtitle: 'so far',
           iconCardColor: AppColors.darkInfo,
           onPressedCallBack: () {},
           // fontSize: 15,
@@ -130,7 +126,14 @@ class PropertyPageSummaryCards extends ConsumerWidget {
 
 class SinglePropertyPageSummaryCards extends ConsumerStatefulWidget {
   final Property property;
-  const SinglePropertyPageSummaryCards({super.key, required this.property});
+  final bool isFromExpenses;
+  final bool? isFromPropertyRentRecords;
+  const SinglePropertyPageSummaryCards({
+    super.key,
+    required this.property,
+    required this.isFromExpenses,
+    this.isFromPropertyRentRecords,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -141,8 +144,20 @@ class _SinglePropertyPageSummaryCardsState
     extends ConsumerState<SinglePropertyPageSummaryCards> {
   @override
   Widget build(BuildContext context) {
-    final gridCount = Responsiveness.isMobile(context) ? 2 : 5;
+    final gridCount = Responsiveness.isMobile(context)
+        ? 2
+        : widget.isFromExpenses
+        ? 4
+        : 3;
     final appData = ref.watch(userInformationProvider);
+    //expenses
+    List<FinancialRecord> expenses = appData.finances
+        .where(
+          (record) =>
+              record.recordNature == FinancialRecordNature.expense &&
+              record.propertyId == widget.property.propertyId,
+        )
+        .toList();
     //units in the property
     final noOfUnits = appData.units
         .where((unit) => unit.propertyId == widget.property.propertyId)
@@ -150,14 +165,19 @@ class _SinglePropertyPageSummaryCardsState
     //tenants in the property
     final propertyTenants = appData.tenants
         .where(
-          (tenant) => noOfUnits.any((unit) => unit.unitId == tenant.unitId),
+          (tenant) => noOfUnits.any(
+            (unit) => unit.unitId == tenant.unitId && tenant.isActive == true,
+          ),
         )
         .toList();
     //occupied units
-    final occupiedUnits = noOfUnits.where((u) => u.isOccupied == true).toList();
+    // final occupiedUnits = noOfUnits.where((u) => u.isOccupied == true).toList();
+    //tenants in the units
+    final
     //expected rent
-    double totalExpectedRent = occupiedUnits
-        .map((unit) => unit.unitRent)
+    double
+    totalExpectedRent = propertyTenants
+        .map((tenant) => tenant.unitRent)
         .fold<double>(0.0, (total, unitRent) {
           final rent = unitRent?.rentAmount ?? 0.0;
 
@@ -169,33 +189,40 @@ class _SinglePropertyPageSummaryCardsState
           return total + rent + utilities;
         });
 
-    List<RentalRecord> collectedRentRecords = appData.rentalRecords
-        .where(
-          (record) => noOfUnits
-              .map((unit) => unit.unitId)
-              .toList()
-              .any(
-                (unitId) =>
-                    record.unitId == unitId &&
-                    record.rentalMonth.rentalMonth ==
-                        formatMonthAndYearName(DateTime.now()),
-              ),
-        )
-        .toList();
+    List<RentalRecord> collectedRentRecords =
+        // widget.isFromPropertyRentRecords == true || widget.isFromExpenses
+        // ?
+        appData.rentalRecords
+            .where((record) => record.propertyId == widget.property.propertyId)
+            .toList();
+    // : appData.rentalRecords
+    //       .where(
+    //         (record) => noOfUnits
+    //             .map((unit) => unit.unitId)
+    //             .toList()
+    //             .any(
+    //               (unitId) =>
+    //                   record.unitId == unitId &&
+    //                   record.rentalMonth.rentalMonth ==
+    //                       formatMonthAndYearName(DateTime.now()),
+    //             ),
+    //       )
+    //       .toList();
 
     double? collectedRent = collectedRentRecords.fold<double>(
       0.0,
       (sum, record) => sum + record.rentEntry.amountPaid,
     );
+    log(
+      'Collected Rental records: $collectedRentRecords \n collected rent : $collectedRent',
+    );
+    double? totalExpenses = ref
+        .read(userInformationProvider.notifier)
+        .calculateTotalExpenses(expenses);
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      mainAxisSpacing: 07,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.home,
           title: 'Total units',
@@ -226,12 +253,24 @@ class _SinglePropertyPageSummaryCardsState
         ),
         SummaryCard(
           icon: Icons.attach_money,
-          title: 'Collected Income/',
+          title: 'Collected Income ',
           value: ' ${formatMoneyWithCurrency(collectedRent, 'Ksh')}',
           subtitle:
-              'collected for the month of ${formatMonthAndYearName(DateTime.now())}',
+              // widget.isFromExpenses || widget.isFromPropertyRentRecords == true
+              // ?
+              'Collected for this property',
+          // : 'Month of ${formatMonthAndYearName(DateTime.now())}',
           onPressedCallBack: () {},
           iconCardColor: AppColors.lightGreen,
+          fontSize: 12,
+        ),
+        SummaryCard(
+          icon: Icons.attach_money,
+          title: 'Total expenses ',
+          value: ' ${formatMoneyWithCurrency(totalExpenses, 'Ksh')}',
+          subtitle: 'total expenses incurred in the property',
+          onPressedCallBack: () {},
+          iconCardColor: AppColors.purpleColor,
           fontSize: 12,
         ),
         SummaryCard(isChartWidget: OccupancyCard(property: widget.property)),

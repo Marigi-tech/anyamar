@@ -29,6 +29,7 @@ _FinancialRecord _$FinancialRecordFromJson(Map<String, dynamic> json) =>
       ),
       userId: json['userId'] as String?,
       propertyId: json['propertyId'] as String?,
+      paymentDescription: json['paymentDescription'] as String?,
     );
 
 Map<String, dynamic> _$FinancialRecordToJson(_FinancialRecord instance) =>
@@ -43,6 +44,7 @@ Map<String, dynamic> _$FinancialRecordToJson(_FinancialRecord instance) =>
       'paymentMethod': _$PaymentMethodsEnumMap[instance.paymentMethod],
       'userId': instance.userId,
       'propertyId': instance.propertyId,
+      'paymentDescription': instance.paymentDescription,
     };
 
 const _$FinancialRecordTypesEnumMap = {
@@ -51,6 +53,7 @@ const _$FinancialRecordTypesEnumMap = {
   FinancialRecordTypes.securityExpense: 'securityExpense',
   FinancialRecordTypes.waterExpense: 'waterExpense',
   FinancialRecordTypes.electrityExpense: 'electrityExpense',
+  FinancialRecordTypes.maintenanceExpense: 'maintenanceExpense',
   FinancialRecordTypes.otherExpense: 'otherExpense',
   FinancialRecordTypes.otherRevenueSource: 'otherRevenueSource',
 };

@@ -36,8 +36,8 @@ class InfoTile extends ConsumerWidget {
         style: CustomTextStyles.cardDescriptionStyle.copyWith(
           inherit: true,
           fontStyle: FontStyle.normal,
-          fontSize: fontSize ?? 14,
-          fontFamily: 'Lato',
+          // fontSize: fontSize ?? 14,
+          // fontFamily: 'Lato',
           color: themeIsDark == true ? AppColors.darkText : AppColors.lightText,
         ),
       ),
