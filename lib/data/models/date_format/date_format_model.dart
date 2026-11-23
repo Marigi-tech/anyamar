@@ -1,3 +1,4 @@
+import 'package:anyamar/data/models/month/month_model.dart';
 import 'package:intl/intl.dart';
 
 String formatPrettyDate(DateTime date) {
@@ -50,4 +51,13 @@ String formatMonthAndYearName(DateTime date) {
   final year = DateFormat('yyyy').format(date); // YEAR
 
   return "$month/$year ";
+}
+
+String getMonthAndYearInNumericForm(String date) {
+  //getDateAndYearNumber
+  final parts = date.split('/');
+  final month = parts[0].trim();
+  final year = parts[1].trim();
+
+  return '${getMonthNumber(month)}$year';
 }

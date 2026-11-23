@@ -26,6 +26,7 @@ _SingleRentalEntry _$SingleRentalEntryFromJson(Map<String, dynamic> json) =>
       tenantName: json['tenantName'] as String?,
       unitId: json['unitId'] as String?,
       propertyId: json['propertyId'] as String?,
+      historyId: json['historyId'] as String?,
     );
 
 Map<String, dynamic> _$SingleRentalEntryToJson(_SingleRentalEntry instance) =>
@@ -43,6 +44,7 @@ Map<String, dynamic> _$SingleRentalEntryToJson(_SingleRentalEntry instance) =>
       'tenantName': instance.tenantName,
       'unitId': instance.unitId,
       'propertyId': instance.propertyId,
+      'historyId': instance.historyId,
     };
 
 const _$PaymentMethodsEnumMap = {

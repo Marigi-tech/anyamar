@@ -15,6 +15,7 @@ abstract class UserInformation with _$UserInformation {
     AppUser? appUser,
     @Default([]) List<RentalRecord> rentalRecords,
     @Default(false) bool isLoading,
+    @Default([]) List<RentHistory> rentalHistories,
   }) = _UserInformation;
 
   factory UserInformation.fromJson(Map<String, dynamic> json) =>

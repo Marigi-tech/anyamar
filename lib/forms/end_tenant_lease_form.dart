@@ -104,137 +104,139 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 980),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // ========================================================
-              // FORM FIELDS
-              // ========================================================
-              FormCardWidget(
-                noOfColumnsPerRow: 2,
-                formCardTitle: 'Enter the date the tenant moved out',
-                formTitleIcon: Icons.house,
-                formInputs: [
-                  // ==================================================
-                  // END OF LEASE
-                  // ==================================================
-                  FormItemWidget(
-                    label: 'Date ',
-                    required: false,
-                    child: FormFieldWidget(
-                      controller: leaseEndController,
-                      keyboardType: TextInputType.datetime,
-                      hintText: 'Enter date (date / month / year)',
-                      required: true,
-                      inputFormatters: [DateInputFormatter()],
-                      onPressedCallBack: () async {
-                        final DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                          helpText: 'Select end of lease',
-                        );
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // ========================================================
+                // FORM FIELDS
+                // ========================================================
+                FormCardWidget(
+                  noOfColumnsPerRow: 2,
+                  formCardTitle: 'Enter the date the tenant moved out',
+                  formTitleIcon: Icons.house,
+                  formInputs: [
+                    // ==================================================
+                    // END OF LEASE
+                    // ==================================================
+                    FormItemWidget(
+                      label: 'Date ',
+                      required: false,
+                      child: FormFieldWidget(
+                        controller: leaseEndController,
+                        keyboardType: TextInputType.datetime,
+                        hintText: 'Enter date (date / month / year)',
+                        required: true,
+                        inputFormatters: [DateInputFormatter()],
+                        onPressedCallBack: () async {
+                          final DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                            helpText: 'Select end of lease',
+                          );
 
-                        if (pickedDate != null) {
-                          final formattedDate =
-                              '${pickedDate.day.toString().padLeft(2, '0')}/'
-                              '${pickedDate.month.toString().padLeft(2, '0')}/'
-                              '${pickedDate.year}';
+                          if (pickedDate != null) {
+                            final formattedDate =
+                                '${pickedDate.day.toString().padLeft(2, '0')}/'
+                                '${pickedDate.month.toString().padLeft(2, '0')}/'
+                                '${pickedDate.year}';
 
-                          leaseEndController.text = formattedDate;
-                          _updateDatePaid(formattedDate, true);
-                        }
-                      },
-                      onChangedCallBack: (value) {
-                        _updateDatePaid(value, true);
+                            leaseEndController.text = formattedDate;
+                            _updateDatePaid(formattedDate, true);
+                          }
+                        },
+                        onChangedCallBack: (value) {
+                          _updateDatePaid(value, true);
+                        },
+                      ),
+                    ),
+                    // ==================================================
+                    // Select Tenant from a list of tenants
+                    // ==================================================
+                    tenantsList.isNotEmpty && tenant == null
+                        ? FormItemWidget(
+                            label: 'Tenant',
+                            required: true,
+                            child: DropdownButtonFormField<String>(
+                              hint: const Text('Select tenant'),
+                              initialValue: '',
+                              decoration:
+                                  CustomInputDecoration.textInputDecoration(),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              items: tenantsList
+                                  // .where((tenant) => tenant.isActive == true) //todo : remove the quotes
+                                  .map((tenant) {
+                                    return DropdownMenuItem<String>(
+                                      value: tenant.tenantId,
+                                      child: Text('${tenant.unitName}'),
+                                    );
+                                  })
+                                  .toList(),
+
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Select a tenant';
+                                }
+                                return null;
+                              },
+
+                              onChanged: (tenantId) {
+                                Tenant? tenann = tenants
+                                    .where(
+                                      (tenant) => tenant.tenantId == tenantId,
+                                    )
+                                    .singleOrNull;
+
+                                log(
+                                  'This is the selected tenant: ${tenann?.tenantName}',
+                                );
+
+                                setState(() {
+                                  tenant = tenann;
+                                });
+                              },
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                  ],
+                ),
+
+                SizedBox(height: 25.0),
+                // ==========================================================
+                // SUBMIT BUTTON
+                // ==========================================================
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Clear Button
+                    ElevatedButtonWidget(
+                      buttonTitle: 'Reset',
+                      isClear: true,
+                      onButtonPressedCallBack: () async {
+                        _resetForm();
                       },
                     ),
-                  ),
-                  // ==================================================
-                  // Select Tenant from a list of tenants
-                  // ==================================================
-                  tenantsList.isNotEmpty && tenant == null
-                      ? FormItemWidget(
-                          label: 'Tenant',
-                          required: true,
-                          child: DropdownButtonFormField<String>(
-                            hint: const Text('Select tenant'),
-                            initialValue: '',
-                            decoration:
-                                CustomInputDecoration.textInputDecoration(),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            items: tenantsList
-                                // .where((tenant) => tenant.isActive == true) //todo : remove the quotes
-                                .map((tenant) {
-                                  return DropdownMenuItem<String>(
-                                    value: tenant.tenantId,
-                                    child: Text('${tenant.unitName}'),
-                                  );
-                                })
-                                .toList(),
+                    SizedBox(width: 10),
+                    //Submit button
+                    ElevatedButtonWidget(
+                      buttonTitle: 'Update Tenant',
+                      buttonIcon: Icon(CupertinoIcons.pen),
 
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Select a tenant';
-                              }
-                              return null;
-                            },
-
-                            onChanged: (tenantId) {
-                              Tenant? tenann = tenants
-                                  .where(
-                                    (tenant) => tenant.tenantId == tenantId,
-                                  )
-                                  .singleOrNull;
-
-                              log(
-                                'This is the selected tenant: ${tenann?.tenantName}',
-                              );
-
-                              setState(() {
-                                tenant = tenann;
-                              });
-                            },
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                ],
-              ),
-
-              SizedBox(height: 25.0),
-              // ==========================================================
-              // SUBMIT BUTTON
-              // ==========================================================
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Clear Button
-                  ElevatedButtonWidget(
-                    buttonTitle: 'Reset',
-                    isClear: true,
-                    onButtonPressedCallBack: () async {
-                      _resetForm();
-                    },
-                  ),
-                  SizedBox(width: 10),
-                  //Submit button
-                  ElevatedButtonWidget(
-                    buttonTitle: 'Update Tenant',
-                    buttonIcon: Icon(CupertinoIcons.pen),
-
-                    onButtonPressedCallBack: () async {
-                      await endLeaseMethod(context, currentUser);
-                    },
-                  ),
-                ],
-              ),
-            ],
+                      onButtonPressedCallBack: () async {
+                        await endLeaseMethod(context, currentUser);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -245,6 +247,10 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
   // End lease
   // ==========================================================
   Future<void> endLeaseMethod(BuildContext context, User? currentUser) async {
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     if (_formKey.currentState!.validate()) {
       if (leaseEnd != null && tenant != null && unit != null) {
         final LazyLoader lazyLoader = LazyLoader(context: context);
@@ -291,7 +297,7 @@ class _EndTenantLeaseFormState extends ConsumerState<EndTenantLeaseForm> {
         } catch (e, stackTrace) {
           log('Error ending the lease: $e', stackTrace: stackTrace);
 
-          displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
+          displaySnackBar(context, 'Error: $e', dialogColor, false);
         } finally {
           lazyLoader.hideLoader();
           ref.read(workspaceProvider.notifier).closeWorkspace();

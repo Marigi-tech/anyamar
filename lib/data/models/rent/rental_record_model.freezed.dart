@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RentalRecord {
 
- String get tenantId; String get unitId; SingleRentEntry get rentEntry; RentalMonth get rentalMonth; RentHistory get rentHistory;
+ String get tenantId; String get unitId; SingleRentEntry get rentEntry; RentalMonth get rentalMonth; RentHistory get rentHistory; String get propertyId;
 /// Create a copy of RentalRecord
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RentalRecordCopyWith<RentalRecord> get copyWith => _$RentalRecordCopyWithImpl<R
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RentalRecord&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.rentEntry, rentEntry) || other.rentEntry == rentEntry)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.rentHistory, rentHistory) || other.rentHistory == rentHistory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RentalRecord&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.rentEntry, rentEntry) || other.rentEntry == rentEntry)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.rentHistory, rentHistory) || other.rentHistory == rentHistory)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,tenantId,unitId,rentEntry,rentalMonth,rentHistory);
+int get hashCode => Object.hash(runtimeType,tenantId,unitId,rentEntry,rentalMonth,rentHistory,propertyId);
 
 @override
 String toString() {
-  return 'RentalRecord(tenantId: $tenantId, unitId: $unitId, rentEntry: $rentEntry, rentalMonth: $rentalMonth, rentHistory: $rentHistory)';
+  return 'RentalRecord(tenantId: $tenantId, unitId: $unitId, rentEntry: $rentEntry, rentalMonth: $rentalMonth, rentHistory: $rentHistory, propertyId: $propertyId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RentalRecordCopyWith<$Res>  {
   factory $RentalRecordCopyWith(RentalRecord value, $Res Function(RentalRecord) _then) = _$RentalRecordCopyWithImpl;
 @useResult
 $Res call({
- String tenantId, String unitId, SingleRentEntry rentEntry, RentalMonth rentalMonth, RentHistory rentHistory
+ String tenantId, String unitId, SingleRentEntry rentEntry, RentalMonth rentalMonth, RentHistory rentHistory, String propertyId
 });
 
 
@@ -65,14 +65,15 @@ class _$RentalRecordCopyWithImpl<$Res>
 
 /// Create a copy of RentalRecord
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tenantId = null,Object? unitId = null,Object? rentEntry = null,Object? rentalMonth = null,Object? rentHistory = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tenantId = null,Object? unitId = null,Object? rentEntry = null,Object? rentalMonth = null,Object? rentHistory = null,Object? propertyId = null,}) {
   return _then(_self.copyWith(
 tenantId: null == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String,unitId: null == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String,rentEntry: null == rentEntry ? _self.rentEntry : rentEntry // ignore: cast_nullable_to_non_nullable
 as SingleRentEntry,rentalMonth: null == rentalMonth ? _self.rentalMonth : rentalMonth // ignore: cast_nullable_to_non_nullable
 as RentalMonth,rentHistory: null == rentHistory ? _self.rentHistory : rentHistory // ignore: cast_nullable_to_non_nullable
-as RentHistory,
+as RentHistory,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 /// Create a copy of RentalRecord
@@ -184,10 +185,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tenantId,  String unitId,  SingleRentEntry rentEntry,  RentalMonth rentalMonth,  RentHistory rentHistory)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tenantId,  String unitId,  SingleRentEntry rentEntry,  RentalMonth rentalMonth,  RentHistory rentHistory,  String propertyId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RentalRecord() when $default != null:
-return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_that.rentHistory);case _:
+return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_that.rentHistory,_that.propertyId);case _:
   return orElse();
 
 }
@@ -205,10 +206,10 @@ return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tenantId,  String unitId,  SingleRentEntry rentEntry,  RentalMonth rentalMonth,  RentHistory rentHistory)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tenantId,  String unitId,  SingleRentEntry rentEntry,  RentalMonth rentalMonth,  RentHistory rentHistory,  String propertyId)  $default,) {final _that = this;
 switch (_that) {
 case _RentalRecord():
-return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_that.rentHistory);case _:
+return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_that.rentHistory,_that.propertyId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -225,10 +226,10 @@ return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tenantId,  String unitId,  SingleRentEntry rentEntry,  RentalMonth rentalMonth,  RentHistory rentHistory)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tenantId,  String unitId,  SingleRentEntry rentEntry,  RentalMonth rentalMonth,  RentHistory rentHistory,  String propertyId)?  $default,) {final _that = this;
 switch (_that) {
 case _RentalRecord() when $default != null:
-return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_that.rentHistory);case _:
+return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_that.rentHistory,_that.propertyId);case _:
   return null;
 
 }
@@ -240,7 +241,7 @@ return $default(_that.tenantId,_that.unitId,_that.rentEntry,_that.rentalMonth,_t
 @JsonSerializable()
 
 class _RentalRecord implements RentalRecord {
-  const _RentalRecord({required this.tenantId, required this.unitId, required this.rentEntry, required this.rentalMonth, required this.rentHistory});
+  const _RentalRecord({required this.tenantId, required this.unitId, required this.rentEntry, required this.rentalMonth, required this.rentHistory, required this.propertyId});
   factory _RentalRecord.fromJson(Map<String, dynamic> json) => _$RentalRecordFromJson(json);
 
 @override final  String tenantId;
@@ -248,6 +249,7 @@ class _RentalRecord implements RentalRecord {
 @override final  SingleRentEntry rentEntry;
 @override final  RentalMonth rentalMonth;
 @override final  RentHistory rentHistory;
+@override final  String propertyId;
 
 /// Create a copy of RentalRecord
 /// with the given fields replaced by the non-null parameter values.
@@ -262,16 +264,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RentalRecord&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.rentEntry, rentEntry) || other.rentEntry == rentEntry)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.rentHistory, rentHistory) || other.rentHistory == rentHistory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RentalRecord&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.unitId, unitId) || other.unitId == unitId)&&(identical(other.rentEntry, rentEntry) || other.rentEntry == rentEntry)&&(identical(other.rentalMonth, rentalMonth) || other.rentalMonth == rentalMonth)&&(identical(other.rentHistory, rentHistory) || other.rentHistory == rentHistory)&&(identical(other.propertyId, propertyId) || other.propertyId == propertyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,tenantId,unitId,rentEntry,rentalMonth,rentHistory);
+int get hashCode => Object.hash(runtimeType,tenantId,unitId,rentEntry,rentalMonth,rentHistory,propertyId);
 
 @override
 String toString() {
-  return 'RentalRecord(tenantId: $tenantId, unitId: $unitId, rentEntry: $rentEntry, rentalMonth: $rentalMonth, rentHistory: $rentHistory)';
+  return 'RentalRecord(tenantId: $tenantId, unitId: $unitId, rentEntry: $rentEntry, rentalMonth: $rentalMonth, rentHistory: $rentHistory, propertyId: $propertyId)';
 }
 
 
@@ -282,7 +284,7 @@ abstract mixin class _$RentalRecordCopyWith<$Res> implements $RentalRecordCopyWi
   factory _$RentalRecordCopyWith(_RentalRecord value, $Res Function(_RentalRecord) _then) = __$RentalRecordCopyWithImpl;
 @override @useResult
 $Res call({
- String tenantId, String unitId, SingleRentEntry rentEntry, RentalMonth rentalMonth, RentHistory rentHistory
+ String tenantId, String unitId, SingleRentEntry rentEntry, RentalMonth rentalMonth, RentHistory rentHistory, String propertyId
 });
 
 
@@ -299,14 +301,15 @@ class __$RentalRecordCopyWithImpl<$Res>
 
 /// Create a copy of RentalRecord
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tenantId = null,Object? unitId = null,Object? rentEntry = null,Object? rentalMonth = null,Object? rentHistory = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tenantId = null,Object? unitId = null,Object? rentEntry = null,Object? rentalMonth = null,Object? rentHistory = null,Object? propertyId = null,}) {
   return _then(_RentalRecord(
 tenantId: null == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String,unitId: null == unitId ? _self.unitId : unitId // ignore: cast_nullable_to_non_nullable
 as String,rentEntry: null == rentEntry ? _self.rentEntry : rentEntry // ignore: cast_nullable_to_non_nullable
 as SingleRentEntry,rentalMonth: null == rentalMonth ? _self.rentalMonth : rentalMonth // ignore: cast_nullable_to_non_nullable
 as RentalMonth,rentHistory: null == rentHistory ? _self.rentHistory : rentHistory // ignore: cast_nullable_to_non_nullable
-as RentHistory,
+as RentHistory,propertyId: null == propertyId ? _self.propertyId : propertyId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

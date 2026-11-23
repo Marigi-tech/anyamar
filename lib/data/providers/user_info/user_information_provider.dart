@@ -22,6 +22,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
           appUser: null,
           rentalRecords: [],
           activeTenants: [],
+          rentalHistories: [],
         );
       },
 
@@ -37,6 +38,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
           appUser: null,
           rentalRecords: [],
           activeTenants: [],
+          rentalHistories: [],
         );
       },
 
@@ -51,6 +53,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
             appUser: null,
             rentalRecords: [],
             activeTenants: [],
+            rentalHistories: [],
           );
         }
 
@@ -67,6 +70,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
           appUser: null,
           rentalRecords: [],
           activeTenants: [],
+          rentalHistories: [],
         );
       },
     );
@@ -95,13 +99,13 @@ class UserInformationNotifier extends Notifier<UserInformation> {
       List<RentHistory> rentalHistories = [];
 
       for (final tenant in tenants) {
-        final history = await _synchronizeTenantRentalMonths(tenant);
+        final history = await synchronizeTenantRentalMonths(tenant);
 
         if (history != null) {
           rentalHistories.add(history);
         }
       }
-      log('All rent histories  : ${rentalHistories.length}');
+
       // ------------------------------------------
       // 3. Derive ALL rental entries
       // ------------------------------------------
@@ -116,12 +120,13 @@ class UserInformationNotifier extends Notifier<UserInformation> {
                   rentalMonth: rentalMonth,
                   tenantId: history.tenantId,
                   unitId: history.unitId,
+                  propertyId: rentEntry.propertyId ?? '',
                 ),
               ),
             ),
           )
           .toList();
-      log('All rent records  : ${rentalRecords.length}');
+
       // 3. NOW get finances
       //
       // getFinancialRecords() reads rent histories,
@@ -145,6 +150,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
             .where((tenant) => tenant.isActive == true)
             .toList(),
         rentalRecords: rentalRecords,
+        rentalHistories: rentalHistories,
       );
     } catch (e, stackTrace) {
       log('Error bundling userInformation data: $e', stackTrace: stackTrace);
@@ -157,11 +163,11 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     }
   }
 
-  // ==========================================================
-  // RENTAL MONTH SYNCHRONIZATION
-  // ==========================================================
+  //! ==========================================================
+  //! RENTAL MONTH SYNCHRONIZATION
+  //! ==========================================================
 
-  Future<RentHistory?> _synchronizeTenantRentalMonths(Tenant tenant) async {
+  Future<RentHistory?> synchronizeTenantRentalMonths(Tenant tenant) async {
     final tenantId = tenant.tenantId;
     final rentalDb = DbRentalService();
 
@@ -189,6 +195,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
         tenantId: tenantId,
         unitId: tenant.unitId,
         userId: tenant.userId,
+        tenantName: tenant.tenantName,
       );
 
       history = await rentalDb.addRentHistory(history);
@@ -199,12 +206,20 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     }
 
     // --------------------------------------------------
-    // 3. Generate every required month
+    // 3. Determine the rental period
     // --------------------------------------------------
 
-    final requiredMonths = _generateRequiredMonths(
+    final now = DateTime.now();
+
+    // Do not generate rental months beyond the lease end date.
+    final generationEndDate =
+        tenant.endOfLease != null && tenant.endOfLease!.isBefore(now)
+        ? tenant.endOfLease!
+        : now;
+
+    final requiredMonths = generateRequiredMonths(
       tenant.startOfLease,
-      DateTime.now(),
+      generationEndDate,
     );
 
     // --------------------------------------------------
@@ -216,12 +231,51 @@ class UserInformationNotifier extends Notifier<UserInformation> {
         .toSet();
 
     // --------------------------------------------------
-    // 5. Add missing months
+    // 5. Prepare existing months for updates
     // --------------------------------------------------
 
     final updatedMonths = [...history.rentalMonths];
 
     bool changed = false;
+
+    // --------------------------------------------------
+    // 6. Update current month's charges when appropriate
+    // --------------------------------------------------
+
+    final currentMonthName = '${_monthName(now.month)}/${now.year}';
+
+    final currentMonthIndex = updatedMonths.indexWhere(
+      (month) => month.rentalMonth == currentMonthName,
+    );
+
+    if (currentMonthIndex != -1) {
+      final currentMonth = updatedMonths[currentMonthIndex];
+
+      // Only update current month's charges if no payment
+      // has been recorded for that month.
+      if (currentMonth.rentEntries.isEmpty) {
+        final currentCharges = currentMonth.unitRent;
+        final newCharges = tenant.unitRent;
+
+        if (currentCharges != newCharges) {
+          updatedMonths[currentMonthIndex] = currentMonth.copyWith(
+            unitRent: newCharges,
+            paymentIsCompleted: false,
+          );
+
+          changed = true;
+
+          log(
+            'Updated charges for $currentMonthName '
+            'for tenant ${tenant.tenantName}.',
+          );
+        }
+      }
+    }
+
+    // --------------------------------------------------
+    // 7. Add missing rental months
+    // --------------------------------------------------
 
     for (final monthName in requiredMonths) {
       if (!existingMonthNames.contains(monthName)) {
@@ -230,8 +284,12 @@ class UserInformationNotifier extends Notifier<UserInformation> {
             rentalMonth: monthName,
             unitRent: tenant.unitRent,
             rentEntries: const [],
+            paymentIsCompleted: false,
           ),
         );
+
+        // Keep the set updated to prevent duplicate additions.
+        existingMonthNames.add(monthName);
 
         changed = true;
 
@@ -243,7 +301,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     }
 
     // --------------------------------------------------
-    // 6. Nothing changed
+    // 8. Nothing changed
     // --------------------------------------------------
 
     if (!changed) {
@@ -251,7 +309,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     }
 
     // --------------------------------------------------
-    // 7. Save updated history
+    // 9. Save updated history
     // --------------------------------------------------
 
     final updatedHistory = history.copyWith(rentalMonths: updatedMonths);
@@ -261,11 +319,11 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     return updatedHistory;
   }
 
-  // ==========================================================
-  // GENERATE MONTHS
-  // ==========================================================
+  //? ==========================================================
+  //? GENERATE MONTHS
+  //? ==========================================================
 
-  List<String> _generateRequiredMonths(DateTime leaseStart, DateTime now) {
+  List<String> generateRequiredMonths(DateTime leaseStart, DateTime now) {
     final List<String> months = [];
 
     DateTime current = DateTime(leaseStart.year, leaseStart.month);
@@ -273,7 +331,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     final DateTime end = DateTime(now.year, now.month);
 
     while (!current.isAfter(end) || current.isAtSameMomentAs(end)) {
-      months.add(_formatRentalMonth(current));
+      months.add(formatRentalMonth(current));
 
       current = DateTime(current.year, current.month + 1);
     }
@@ -281,7 +339,7 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     return months;
   }
 
-  String _formatRentalMonth(DateTime date) {
+  String formatRentalMonth(DateTime date) {
     const monthNames = [
       'January',
       'February',
@@ -309,6 +367,14 @@ class UserInformationNotifier extends Notifier<UserInformation> {
 
   void appendTenant(Tenant newTenant) {
     state = state.copyWith(tenants: [...state.tenants, newTenant]);
+  }
+
+  void appendRentHistory(RentHistory newHistory) {
+    //todo: To add a rental record or not ?? that's the question
+
+    state = state.copyWith(
+      rentalHistories: [...state.rentalHistories, newHistory],
+    );
   }
 
   void appendUnit(Unit newUnit) {
@@ -352,6 +418,18 @@ class UserInformationNotifier extends Notifier<UserInformation> {
             updatedTenant
           else
             tenant,
+      ],
+    );
+  }
+
+  Future<void> updateRentalHistory(RentHistory updatedHistory) async {
+    state = state.copyWith(
+      rentalHistories: [
+        for (final history in state.rentalHistories)
+          if (updatedHistory.historyId == history.historyId)
+            updatedHistory
+          else
+            history,
       ],
     );
   }
@@ -408,5 +486,205 @@ class UserInformationNotifier extends Notifier<UserInformation> {
     state = state.copyWith(
       units: state.units.where((unit) => unit.unitId != unitId).toList(),
     );
+  }
+  //!=============================
+  //! UNIT RELATED METHODS
+  //!==============================
+
+  //*Generate list of floor Numbers
+  List<String> generatePropertyFloorNumbers(Property selectedP) {
+    return [
+      'Ground Floor',
+      ...List.generate(
+        selectedP.propertyFloors.toInt(),
+        (index) => '${index + 1} Floor',
+      ),
+    ];
+  }
+
+  //*Convert a unit's floor number to String
+  String convertFloorNumberToString(double floorNumber) {
+    if (floorNumber == 0) {
+      return 'Ground Floor';
+    }
+
+    return '${floorNumber.toInt()} Floor';
+  }
+
+  //* Convert a units floor string to Number
+  double? convertFloorStringToNumber(String floor) {
+    if (floor.isEmpty) return null;
+
+    if (floor == 'Ground Floor') return 0;
+
+    final match = RegExp(r'^(\d+) Floor$').firstMatch(floor);
+
+    return match != null ? double.tryParse(match.group(1)!) : null;
+  }
+
+  //*=====================================================================================
+  //*RENT RELATED METHODS
+  //*====================================================================================
+  //? Calculate all rent entries in a month
+  double calculateRentalMonthRentalRecords(RentalMonth rentalMonth) {
+    return rentalMonth.rentEntries.fold<double>(
+      0.0,
+      (total, entry) => total + entry.amountPaid,
+    );
+  }
+
+  //? Calculate utilities charge
+  double calculateUtilitiesCharge(Rent? rent) {
+    if (rent == null) return 0.0;
+
+    final utilitiesTotal =
+        rent.utilities?.fold<double>(
+          0.0,
+          (total, utility) => total + utility.amountPayable,
+        ) ??
+        0.0;
+    return utilitiesTotal;
+  }
+
+  //? Calculate amount payable monthly
+  double calculateMonthlyAmountPayable(Rent? rent) {
+    if (rent == null) return 0.0;
+
+    final utilitiesTotal =
+        rent.utilities?.fold<double>(
+          0.0,
+          (total, utility) => total + utility.amountPayable,
+        ) ??
+        0.0;
+
+    return rent.rentAmount + utilitiesTotal;
+  }
+
+  //?Total expenses
+  double calculateTotalExpenses(List<FinancialRecord> expenses) {
+    return expenses.fold<double>(0, (sum, record) => sum + record.amountPaid);
+  }
+
+  //? Get actual amount paid for a specific month
+  double calculateMonthlyAmountPaid(RentalMonth month) {
+    return month.rentEntries.fold<double>(
+      0.0,
+      (total, entry) => total + entry.amountPaid,
+    );
+  }
+
+  //? Get outstanding balance
+  double calculateMonthlyOutstandingPayment(RentalMonth month) {
+    return calculateMonthlyAmountPayable(month.unitRent) -
+        calculateMonthlyAmountPaid(month);
+  }
+
+  //? Get overPayment
+  double calculateMonthlyOverPayment(RentalMonth month) {
+    return calculateMonthlyAmountPaid(month) -
+        calculateMonthlyAmountPayable(month.unitRent);
+  }
+
+  //? Update an individual's monthly rental obligation
+  Future<void> updateMonthlyCharges({
+    required String tenantId,
+    required String rentalMonthName,
+    required Rent updatedRent,
+  }) async {
+    try {
+      // 1. Find the tenant's rental history.
+      final historyIndex = state.rentalHistories.indexWhere(
+        (history) => history.tenantId == tenantId,
+      );
+
+      if (historyIndex == -1) {
+        log('No rental history found for tenant: $tenantId');
+        return;
+      }
+
+      final history = state.rentalHistories[historyIndex];
+
+      // 2. Find the specified rental month.
+      final monthIndex = history.rentalMonths.indexWhere(
+        (month) => month.rentalMonth == rentalMonthName,
+      );
+
+      if (monthIndex == -1) {
+        log('Rental month not found: $rentalMonthName');
+        return;
+      }
+
+      // 3. Update only the selected month's charges.
+      final updatedMonths = [...history.rentalMonths];
+
+      updatedMonths[monthIndex] = updatedMonths[monthIndex].copyWith(
+        unitRent: updatedRent,
+        paymentIsCompleted:
+            calculateMonthlyAmountPaid(updatedMonths[monthIndex]) >=
+            calculateMonthlyAmountPayable(updatedRent),
+      );
+
+      // 4. Create the updated rental history.
+      final updatedHistory = history.copyWith(rentalMonths: updatedMonths);
+
+      // 5. Persist the updated history.
+      await DbRentalService().updateRentHistory(updatedHistory);
+
+      // 6. Update the global rental histories.
+      final updatedHistories = [...state.rentalHistories];
+
+      updatedHistories[historyIndex] = updatedHistory;
+
+      // 7. Rebuild flattened rental records.
+      final updatedRentalRecords = updatedHistories
+          .expand(
+            (history) => history.rentalMonths.expand(
+              (month) => month.rentEntries.map(
+                (entry) => RentalRecord(
+                  tenantId: history.tenantId,
+                  unitId: history.unitId,
+                  rentEntry: entry,
+                  rentalMonth: month,
+                  rentHistory: history,
+                  propertyId: entry.propertyId ?? '',
+                ),
+              ),
+            ),
+          )
+          .toList();
+
+      // 8. Publish the updated global state.
+      state = state.copyWith(
+        rentalHistories: updatedHistories,
+        rentalRecords: updatedRentalRecords,
+      );
+
+      log(
+        'Successfully updated charges for '
+        '$tenantId - $rentalMonthName',
+      );
+    } catch (e, stackTrace) {
+      log('Error updating monthly rental charges: $e', stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    return months[month - 1];
   }
 }

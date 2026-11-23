@@ -1,4 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/expense_per_property_state_page.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/rent_records_per_tenant_state.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/page_states/property_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
@@ -99,6 +101,50 @@ class QuickActionsPropertyWidget extends ConsumerWidget {
           ),
         ),
         CardItemSeparator(),
+        //------------------------------------------------------------------------------
+        // View Rent Records
+        //---------------------------------------------------------------------------------
+        QWidget(
+          onPressedCallBack: () => ref
+              .read(workspaceProvider.notifier)
+              .openForm(
+                RentRecordsPerPropertyState(
+                  introText: introText,
+                  property: property,
+                ),
+              ),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RowTitleWidget(
+                text: 'View Rent Records',
+                icon: CupertinoIcons.info_circle,
+              ),
+              Icon(CupertinoIcons.chevron_right, size: 15),
+            ],
+          ),
+        ),
+        CardItemSeparator(),
+        //------------------------------------------------------------------------------
+        // View Expense Records
+        //---------------------------------------------------------------------------------
+        QWidget(
+          onPressedCallBack: () => ref
+              .read(workspaceProvider.notifier)
+              .openForm(ExpensesPerPropertyStatePage(introText: introText)),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RowTitleWidget(
+                text: 'View Expense Records',
+                icon: CupertinoIcons.info_circle,
+              ),
+              Icon(CupertinoIcons.chevron_right, size: 15),
+            ],
+          ),
+        ),
       ],
     );
   }

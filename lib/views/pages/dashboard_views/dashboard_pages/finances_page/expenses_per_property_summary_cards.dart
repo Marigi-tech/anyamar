@@ -17,13 +17,9 @@ class ExpensesPerPropertySummaryCards extends ConsumerWidget {
         .where((record) => record.recordNature == FinancialRecordNature.expense)
         .fold<double>(0, (sum, record) => sum + record.amountPaid);
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.wallet,
           title: 'No of Records ',

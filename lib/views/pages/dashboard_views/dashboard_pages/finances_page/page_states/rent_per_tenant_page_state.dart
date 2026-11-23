@@ -27,3 +27,42 @@ class RentPerTenantStatePage extends ConsumerWidget {
     );
   }
 }
+
+// Rent records Per Property
+class RentRecordsPerPropertyStatePage extends ConsumerWidget {
+  final String introText;
+  final Property property;
+  const RentRecordsPerPropertyStatePage({
+    super.key,
+    required this.introText,
+    required this.property,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DashboardPageStructure(
+      introText: introText,
+      introButton: IntroButtonWidget(),
+      pageTitle: 'Rent records / Property',
+
+      introRowWidgets: [
+        ElevatedButtonWidget(
+          buttonTitle: 'Add rent record',
+          onButtonPressedCallBack: () {
+            ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  AddIncomeStatePage(
+                    introText: '$introText / add rental record',
+                  ),
+                );
+          },
+        ),
+      ],
+      scrollableDashboardWidget: RentPerProperty(
+        introText: introText,
+        property: property,
+      ),
+    );
+  }
+}

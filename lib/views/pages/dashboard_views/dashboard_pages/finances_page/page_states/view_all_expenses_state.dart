@@ -18,7 +18,7 @@ class ViewAllExpensesStatePage extends ConsumerWidget {
       introButton: FinancesBackButtonWidget(),
       introRowWidgets: [
         ElevatedButtonWidget(
-          buttonTitle: 'Add Expense',
+          buttonTitle: 'Add Expense Record',
           buttonColor: AppColors.red,
           buttonIcon: Icon(Icons.add),
           onButtonPressedCallBack: () {
@@ -40,7 +40,7 @@ class ViewAllExpensesStatePage extends ConsumerWidget {
               children: [
                 ExpensesPageSummaryCards(),
                 SizedBox(height: 15.0),
-                ExpensesTable(introText: introText ),
+                ExpensesTable(introText: introText),
               ],
             ),
           ),

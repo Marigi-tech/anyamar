@@ -18,91 +18,40 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
   List<Tenant> tenants = [];
   List<RentalRecord> rentalRecords = [];
 
-  // double _propertyExpectedRent(List<Unit> occupiedUnits) {
-  //   return occupiedUnits.fold<double>(0, (total, unit) {
-  //     final rent = unit.unitRent?.rentAmount ?? 0;
-
-  //     final utilities = (unit.unitRent?.utilities ?? []).fold<double>(
-  //       0,
-  //       (sum, utility) => sum + utility.amountPayable,
-  //     );
-
-  //     return total + rent + utilities;
-  //   });
-  // }
-
   double _propertyCollectedRent({
-    required List<Tenant> propertyTenants,
     required List<RentalRecord> rentalRecords,
+    required Property property,
   }) {
-    double totalCollected = 0;
-
-    for (final tenant in propertyTenants) {
-      final matchingRecords = rentalRecords.where(
-        (record) => record.rentHistory.tenantId == tenant.tenantId,
-      );
-
-      for (final record in matchingRecords) {
-        for (final month in record.rentHistory.rentalMonths) {
-          totalCollected += month.rentEntries.fold<double>(
-            0,
-            (sum, entry) => sum + entry.amountPaid,
-          );
-        }
-      }
-    }
-
-    return totalCollected;
+    return rentalRecords
+        .where((record) => record.propertyId == property.propertyId)
+        .fold(0.0, (sum, record) => sum + record.rentEntry.amountPaid);
   }
 
-  // double propertyexpectedRent(List<Unit> occUnits) {
-  //   return occUnits.fold<double>(0, (total, unit) {
-  //     final rent = unit.unitRent?.rentAmount ?? 0;
+  //   double _propertyCollectedRent({
+  //     required List<Tenant> propertyTenants,
+  //     required List<RentalRecord> rentalRecords,
+  //     required Property property;
+  //   }) {
+  //     double totalCollected = 0;
+  // totalCollected = rentalRecords.where((record) => record.propertyId ==  property.propertyId).
 
-  //     final utilities = (unit.unitRent?.utilities ?? []).fold<double>(
-  //       0,
-  //       (sum, utility) => sum + utility.amountPayable,
-  //     );
+  //     // for (final tenant in propertyTenants) {
+  //     //   final matchingRecords = rentalRecords.where(
+  //     //     (record) => record.rentHistory.tenantId == tenant.tenantId,
+  //     //   );
 
-  //     return total + rent + utilities;
-  //   });
-  // }
+  //     //   for (final record in matchingRecords) {
+  //     //     for (final month in record.rentHistory.rentalMonths) {
+  //     //       totalCollected += month.rentEntries.fold<double>(
+  //     //         0,
+  //     //         (sum, entry) => sum + entry.amountPaid,
+  //     //       );
+  //     //     }
+  //     //   }
+  //     // }
 
-  // double propertyCollectedRent(List<Tenant> propTenants) {
-  //   double totalCollected = 0;
-
-  //   for (final tenant in propTenants) {
-  //     final appDataPro = ref.watch(userInformationProvider);
-  //     RentalRecord? tenantRentRecord = appDataPro.rentalRecords
-  //         .where((record) => record.rentHistory.tenantId == tenant.tenantId)
-  //         .singleOrNull;
-  //     if (tenantRentRecord == null) continue;
-
-  //     for (final month in tenantRentRecord.rentHistory.rentalMonths) {
-  //       final monthTotalPaid = month.rentEntries.fold<double>(
-  //         0,
-  //         (sum, entry) => sum + entry.amountPaid,
-  //       );
-
-  //       totalCollected += monthTotalPaid;
-  //     }
+  //     return totalCollected;
   //   }
-
-  //   return totalCollected;
-  // }
-
-  // Property _latestProperty({
-  //   required Property property,
-  //   required List<Property> properties,
-  // }) {
-  //   for (final latest in properties) {
-  //     if (latest.propertyId == property.propertyId) {
-  //       return latest;
-  //     }
-  //   }
-
-  //   return property;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +79,7 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
 
     return ReusableDataTableWidget<Property>(
       items: properties,
+      cardTitle: 'All properties',
 
       searchHint: 'Search properties...',
 
@@ -192,14 +142,14 @@ class _PropertiesTableState extends ConsumerState<PropertiesTable> {
             ? 0.0
             : propertyOccupiedUnits.length / propertyUnits.length;
 
-        final propertyTenants = tenants.where((tenant) {
-          return propertyOccupiedUnits.any(
-            (unit) => unit.unitId == tenant.unitId,
-          );
-        }).toList();
+        // final propertyTenants = tenants.where((tenant) {
+        //   return propertyOccupiedUnits.any(
+        //     (unit) => unit.unitId == tenant.unitId,
+        //   );
+        // }).toList();
 
         final collectedRent = _propertyCollectedRent(
-          propertyTenants: propertyTenants,
+          property: property,
           rentalRecords: rentalRecords,
         );
 

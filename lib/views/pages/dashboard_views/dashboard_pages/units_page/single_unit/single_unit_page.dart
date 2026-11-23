@@ -1,4 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/single_unit/widgets/quick_actions_widget.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/single_unit/widgets/tenant_details_card.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/single_unit/widgets/unit_cards_list.dart';
@@ -31,19 +32,36 @@ class _SingleUnitWidgetState extends ConsumerState<SingleUnitWidget> {
     allUnitTenants = appData.tenants
         .where((t) => t.unitId == unit.unitId)
         .toList();
-    //todo:set current tenant
+
     // final Tenant currentTenant = unit.currentTenant;
     final Tenant? currentTenant = appData.tenants
         .where((t) => t.unitId == unit.unitId)
         .singleOrNull;
-    final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
     final String introText = widget.introText;
+    String propertyName = appData.properties
+        .where((property) => property.propertyId == widget.unit.propertyId)
+        .single
+        .propertyName;
 
     return DashboardPageStructure(
       introText: widget.introText,
       pageTitle: unit.unitName,
-      introRowWidgets: [],
+      introRowWidgets: [
+        ElevatedButtonWidget(
+          buttonTitle: 'Update unit',
+          buttonIcon: const Icon(Icons.edit),
+          onButtonPressedCallBack: () {
+            ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  UpdateUnitState(introText: widget.introText, unit: unit),
+                );
+          },
+        ),
+      ],
       introButton: IntroButtonWidget(),
+      supplementaryText:
+          'Unit Type : ${unit.unitType?.label}  |  Property : $propertyName  |  Floor : ${unit.floorNumber ?? 'N/A'}',
       scrollableDashboardWidget: Padding(
         padding: EdgeInsets.only(bottom: 50.0),
         child: Column(
@@ -55,10 +73,9 @@ class _SingleUnitWidgetState extends ConsumerState<SingleUnitWidget> {
                       // --------------------------------------------
                       // Data Row
                       // --------------------------------------------
-                      buildUnitSummaryCards(
-                        unit,
-                        gridCount,
-                        currentTenant?.tenantName,
+                      SingleUnitSummaryCards(
+                        unit: unit,
+                        tenantName: currentTenant?.tenantName,
                       ),
                       SizedBox(height: 30.0),
                       UnitInformationColumn(unit: unit),
@@ -94,10 +111,9 @@ class _SingleUnitWidgetState extends ConsumerState<SingleUnitWidget> {
                             // --------------------------------------------
                             // Data Row
                             // --------------------------------------------
-                            buildUnitSummaryCards(
-                              unit,
-                              gridCount,
-                              currentTenant?.tenantName,
+                            SingleUnitSummaryCards(
+                              unit: unit,
+                              tenantName: currentTenant?.tenantName,
                             ),
                             SizedBox(height: 30.0),
                             UnitInformationColumn(unit: unit),

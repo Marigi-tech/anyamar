@@ -1,5 +1,4 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/tenants_page/page_states/tenant_page_states.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 
@@ -35,39 +34,44 @@ class QuickActionsUnitWidget extends ConsumerWidget {
             ],
           ),
         ),
-        CardItemSeparator(),
+        if (unit.isOccupied) CardItemSeparator(),
         //Add rent Entry
-        QWidget(
-          onPressedCallBack: () => ref
-              .read(workspaceProvider.notifier)
-              .openForm(
-                DashboardPageStructure(
-                  introText: '$introText / add rent record',
-                  pageTitle: 'Add rent record',
-                  supplementaryText: '${unit.unitName} | ${unit.propertyName}',
-                  introRowWidgets: [],
-                  introButton: IntroButtonWidget(),
-                  scrollableDashboardWidget: RentalRecordForm(
-                    unit: unit,
-                    tenant: currentTenant,
+        if (unit.isOccupied)
+          QWidget(
+            onPressedCallBack: () => ref
+                .read(workspaceProvider.notifier)
+                .openForm(
+                  DashboardPageStructure(
+                    introText: '$introText / add rent record',
+                    pageTitle: 'Add rent record',
+                    supplementaryText:
+                        '${unit.unitName} | ${unit.propertyName}',
+                    introRowWidgets: [],
+                    introButton: IntroButtonWidget(),
+                    scrollableDashboardWidget: RentalRecordForm(
+                      unit: unit,
+                      tenant: currentTenant,
+                    ),
                   ),
                 ),
-              ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RowTitleWidget(text: 'Add rent record', icon: CupertinoIcons.add),
-              Icon(CupertinoIcons.chevron_right, size: 15),
-            ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RowTitleWidget(
+                  text: 'Add rent record',
+                  icon: CupertinoIcons.add,
+                ),
+                Icon(CupertinoIcons.chevron_right, size: 15),
+              ],
+            ),
           ),
-        ),
 
         CardItemSeparator(),
         if (unit.isOccupied != true)
           QWidget(
             onPressedCallBack: () => ref
                 .read(workspaceProvider.notifier)
-                .openForm(AddTenantState(introText: introText)),
+                .openForm(AddTenantState(introText: introText, unit: unit)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

@@ -10,13 +10,9 @@ class TenantPageSummaryCards extends ConsumerWidget {
     final occupiedUnits = appData.units.where((u) => u.isOccupied).length;
     final vacantUnits = appData.units.where((u) => !u.isOccupied).length;
     final occupancyRate = occupiedUnits / appData.units.length;
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.people,
           title: 'Total tenants',
@@ -78,13 +74,9 @@ class SingleTenantPageSummaryCards extends ConsumerWidget {
                 0,
                 (sum, utility) => sum + utility.amountPayable,
               );
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.house,
           title: 'Unit',

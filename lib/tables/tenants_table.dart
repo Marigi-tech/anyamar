@@ -46,7 +46,7 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
 
     return ReusableDataTableWidget<Tenant>(
       items: tenants,
-      cardTitle: widget.hasTitle == true ? 'Tenants' : '',
+      cardTitle: 'Tenants',
 
       searchHint: 'Search ',
 

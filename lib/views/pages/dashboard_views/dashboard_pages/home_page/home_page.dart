@@ -75,7 +75,7 @@ class HomePage extends ConsumerWidget {
                     OccupancyCardWidget(),
                     SizedBox(height: 15),
                     //Tenant Information
-                    TenantInformationCardWidget(introText: 'dashboard / tenant'),
+                    TenantInformationCardWidget(introText: 'dashboard / '),
                     SizedBox(height: 15),
                     //Recent Payments
                     RecentPaymentsCard(),

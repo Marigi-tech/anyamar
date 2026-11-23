@@ -25,7 +25,21 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
   // ============================================================
   // SIGN IN USER METHOD
   // ============================================================
+  // ============================================================
+  // SIGN IN USER METHOD
+  // ============================================================
+
   Future<void> _signInUser() async {
+    final lazyLoader = LazyLoader(context: context);
+
+    final isDarkMode = ref.read(themeIsDarkProvider);
+
+    final dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
+
+    lazyLoader.showLoader();
+
     try {
       await ref
           .read(authServiceProvider)
@@ -33,19 +47,63 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
           );
+
+      if (!mounted) return;
+
       final currentUser = ref.read(authServiceProvider).currentUser;
+
       if (currentUser != null) {
         setState(() {
           isSuccess = true;
-          errorMessage = 'user credential isn\'t the issue';
+          errorMessage = '';
         });
-        _redirectToDashboard();
+
+        await _redirectToDashboard().whenComplete(
+          () => lazyLoader.hideLoader(),
+        );
+
+        return;
       }
+      // displaySnackBar(
+      //   context,
+      //   'Something went wrong, restart the app and try again',
+      //   dialogColor,
+      //   false,
+      // );
+      lazyLoader.hideLoader();
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
+      final code = e.code == 'invalid-credential'
+          ? 'Incorrect email or password'
+          : e.message ?? e.code;
+
       setState(() {
-        errorMessage = e.code;
         isSuccess = false;
+        errorMessage = code;
       });
+
+      // Allow the loader to disappear before displaying the popup.
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      if (!mounted) return;
+
+      displaySnackBar(context, code, dialogColor, false);
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        isSuccess = false;
+        errorMessage = 'Something went wrong. Please try again.';
+      });
+
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      if (!mounted) return;
+      await lazyLoader.hideLoader();
+      displaySnackBar(context, errorMessage ?? '', dialogColor, false);
+    } finally {
+      lazyLoader.hideLoader();
     }
   }
 
@@ -55,6 +113,12 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
       context,
       MaterialPageRoute(builder: (_) => WidgetTree()),
     );
+  }
+
+  void _resetForm() {
+    _formKey.currentState?.reset();
+    emailController.clear();
+    passwordController.clear();
   }
 
   @override
@@ -145,7 +209,9 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
                 children: [
                   ElevatedButtonWidget(
                     buttonTitle: 'Reset',
-                    onButtonPressedCallBack: () {},
+                    onButtonPressedCallBack: () {
+                      _resetForm();
+                    },
                     isClear: true,
                   ),
                   SizedBox(width: 20.0),

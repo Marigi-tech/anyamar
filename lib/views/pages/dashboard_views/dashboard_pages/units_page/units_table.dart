@@ -10,8 +10,6 @@ Widget buildUnitsTable(
   List<Property> properties,
   bool themeIsDark,
 ) {
-  final gridCount = Responsiveness.isMobile(context) ? 1 : 5;
-
   return DashboardPageStructure(
     introText: 'Units',
     pageTitle: 'All Units',
@@ -28,8 +26,7 @@ Widget buildUnitsTable(
     scrollableDashboardWidget: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        buildUnitntroSummaryCards(units, gridCount),
-
+        UnitPageSummaryCards(),
         const SizedBox(height: 30),
         UnitsTable(units: units, introText: 'units'),
       ],

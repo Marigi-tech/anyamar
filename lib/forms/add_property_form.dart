@@ -1,18 +1,13 @@
 import 'package:anyamar/commons/exports.dart';
 
-
 class AddPropertyForm extends ConsumerStatefulWidget {
   final Property? currentProperty;
-  // final bool? isFromUnitPage;
-  // final PageIntroInfo pageIntroInfo;
   final String introText;
 
   const AddPropertyForm({
     super.key,
     this.currentProperty,
     required this.introText,
-    // this.isFromUnitPage,
-    // required this.pageIntroInfo,
   });
 
   @override
@@ -49,6 +44,7 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
 
   void _initializeForm() {
     final property = widget.currentProperty;
+
     // ==========================================================
     // ADD MODE
     // ==========================================================
@@ -108,17 +104,21 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(authServiceProvider).currentUser;
+    final appData = ref.watch(userInformationProvider);
+    if (widget.currentProperty == null) {
+      propertyManagerNameController.text = appData.appUser?.userName ?? '';
+      propertyManagerEmailController.text = appData.appUser?.userEmail ?? '';
+      propertyManagerPhoneController.text =
+          appData.appUser?.userPhoneNumber ?? '';
+      isAgency = appData.appUser?.userType == UserType.agent.label
+          ? true
+          : false;
+    }
 
-    // return DashboardPageStructure(
-    //   introText: widget.pageIntroInfo.introText,
-    //   pageTitle: widget.pageIntroInfo.pageTitle,
-    //   supplementaryText: widget.pageIntroInfo.supplementaryText,
-    //   introRowWidgets: [],
-    //   introButton: IntroButtonWidget(),
-    //   scrollableDashboardWidget: 
-    return  Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 980),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 980),
+        child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
@@ -315,8 +315,8 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
             ),
           ),
         ),
-      )
-    ;
+      ),
+    );
   }
 
   // ========================================================
@@ -324,6 +324,10 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
   // ========================================================
   Future<void> addProperty(BuildContext context, User? currentUser) async {
     final appData = ref.watch(userInformationProvider);
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     if (_formKey.currentState!.validate()) {
       final lazyLoader = LazyLoader(context: context);
       final db = DbPropertyService();
@@ -359,13 +363,14 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
             existingProperty.propertyManager?.personId ==
                 property.propertyManager?.personId,
       );
-
+      if (!mounted) return;
       if (recordExists) {
         lazyLoader.hideLoader();
         displaySnackBar(
           context,
           'A similar property already exists in the database',
-          AppColorsConstant.redColor,
+          dialogColor,
+          false,
         );
       } else {
         try {
@@ -381,7 +386,8 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
           ref.read(workspaceProvider.notifier).closeWorkspace();
         } catch (e, stackTrace) {
           log('Error adding property: $e', stackTrace: stackTrace);
-          displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
+          if (!mounted) return;
+          displaySnackBar(context, 'Error: $e', dialogColor, false);
         } finally {
           lazyLoader.hideLoader();
         }
@@ -393,6 +399,10 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
   // Update Property Method
   // ========================================================
   Future<void> updateProperty(BuildContext context, User? currentUser) async {
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     if (_formKey.currentState!.validate() && widget.currentProperty != null) {
       final lazyLoader = LazyLoader(context: context);
       final db = DbPropertyService();
@@ -429,7 +439,7 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
       } catch (e, stackTrace) {
         // Show your error message here.
         log('Error adding property: $e', stackTrace: stackTrace);
-        displaySnackBar(context, 'Error: $e', AppColorsConstant.redColor);
+        displaySnackBar(context, 'Error: $e', dialogColor, false);
       } finally {
         lazyLoader.hideLoader();
       }

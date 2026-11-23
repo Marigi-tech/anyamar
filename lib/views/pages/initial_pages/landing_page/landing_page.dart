@@ -2,6 +2,7 @@ import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/hero/features/hero_content.dart';
 import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/hero/features/hero_orbit.dart';
 import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/landing_navigation.dart';
+import 'package:anyamar/views/pages/initial_pages/landing_page/widgets/navbar_drawer.dart';
 
 class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({super.key});
@@ -12,8 +13,8 @@ class LandingPage extends ConsumerStatefulWidget {
 
 class _LandingPageState extends ConsumerState<LandingPage>
     with TickerProviderStateMixin {
-  late AnimationController _floatingController;
   late AnimationController _glowController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -28,19 +29,25 @@ class _LandingPageState extends ConsumerState<LandingPage>
 
   @override
   void dispose() {
-    _floatingController.dispose();
     _glowController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final bool isDark = ref.watch(themeIsDarkProvider);
+    // final showDrawer = ref.watch(drawerProvider);
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: isDark
           ? const Color(0xFF07091F)
           : AppColors.lightBackground,
+      endDrawer: Drawer(
+        elevation: 6,
+        child: NavBarDrawer(scaffoldKey: _scaffoldKey),
+      ),
 
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -108,7 +115,10 @@ class _LandingPageState extends ConsumerState<LandingPage>
                   child: Column(
                     children: [
                       // Navigation
-                      LandingNavigation(isMobile: isMobile),
+                      LandingNavigation(
+                        isMobile: isMobile,
+                        scaffoldKey: _scaffoldKey,
+                      ),
 
                       SizedBox(height: isMobile ? 20 : 25),
 

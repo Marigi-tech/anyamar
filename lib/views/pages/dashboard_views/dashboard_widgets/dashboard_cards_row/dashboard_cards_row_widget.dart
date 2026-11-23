@@ -1,4 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
+import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/page_states/view_all_rent_entries_state.dart';
 
 class DashboardCardsRowWidget extends ConsumerWidget {
   const DashboardCardsRowWidget({super.key});
@@ -72,15 +73,19 @@ class DashboardCardsRowWidget extends ConsumerWidget {
           ),
           IntroCardWidget(
             cardIcon: CupertinoIcons.money_dollar,
-            cardTitle: 'Rent',
+            cardTitle: 'Rent records',
             description: '${appData.rentRecordsCount}',
             extraInfo: 'rental records',
             iconCardColor: const Color.fromARGB(255, 215, 247, 215),
             iconColor: const Color.fromARGB(255, 9, 204, 16),
             onPressedCallBack: () {
-              ref.read(selectedPageProvider.notifier).selectPage(5);
-              // selectedWebPageNotifier.value = 5;
-              // selectedSideItemNotifier.value = 5;
+              ref
+                  .read(workspaceProvider.notifier)
+                  .openForm(
+                    ViewAllRentEntriesPageState(
+                      introText: 'dashboard/ rent records',
+                    ),
+                  );
             },
           ),
         ],

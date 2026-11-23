@@ -102,7 +102,6 @@ export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_p
 export 'package:anyamar/views/pages/dashboard_views/dashboard_pages/properties_page/single_property/property_tabs/property_overview/property_management_info.dart';
 export 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/tenant_information_card_widget.dart';
 export 'package:anyamar/data/data_sets/avatar_colors.dart';
-export 'package:anyamar/data/services/app_user_service.dart';
 export 'package:anyamar/views/pages/initial_pages/signup_page/sign_up_page.dart';
 export 'package:anyamar/views/reusable_widgets/buttons/text_button_widget.dart';
 export 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -134,3 +133,4 @@ export 'package:anyamar/data/methods/text_methods.dart';
 export 'package:anyamar/utils/text_input_formatters/phone_number_formatter.dart';
 export 'package:anyamar/views/reusable_widgets/form_elements/form_card_widget.dart';
 export 'package:anyamar/views/reusable_widgets/form_elements/form_item_widget.dart';
+export 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/page_display_cards/page_display_cards_widget.dart';

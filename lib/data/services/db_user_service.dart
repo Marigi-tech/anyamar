@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:anyamar/data/models/users/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,22 +28,25 @@ class DbService {
   }
 
   //update user
-  Future<AppUser> updateUser(AppUser appUser) async {
+  Future<AppUser?> updateUser(AppUser appUser) async {
     //todo: when testing is complete use this method
+    try {
+      final snapshot = await _usersRef
+          .where('userId', isEqualTo: appUser.userId)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isEmpty) {
+        throw Exception('No user document found for userId: ${appUser.userId}');
+      }
 
-    final snapshot = await _usersRef
-        .where('userId', isEqualTo: appUser.userId)
-        .limit(1)
-        .get();
-    if (snapshot.docs.isEmpty) {
-      throw Exception('No user document found for userId: ${appUser.userId}');
+      final doc = snapshot.docs.first.reference;
+
+      await doc.update(appUser.toJson());
+
+      return appUser;
+    } catch (e) {
+      throw Exception('Error : $e');
     }
-
-    final doc = snapshot.docs.first.reference;
-
-    await doc.update(appUser.toJson());
-
-    return appUser;
   }
 
   //fetch user from currentUser userId
@@ -104,6 +108,32 @@ class DbService {
       rethrow;
     }
     return user;
+  }
+
+  Future<void> createUserProfileIfNotExists(User user) async {
+    // final userDoc = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(user.uid);
+    final doc = await _usersRef.doc(user.uid).get();
+
+    if (!doc.exists) {
+      final AppUser appUser = AppUser(
+        userName: user.displayName ?? '',
+        userEmail: user.email ?? '',
+        userPassword: '',
+        userType: '',
+        registrationDate: DateTime.now(),
+      );
+      createUser(appUser);
+      // final appUser = AppUser(
+      //   // Replace these with the actual fields in your AppUser model.
+      //   userId: user.uid,
+      //   userEmail: user.email ?? '',
+      //   userName: user.displayName ?? '',
+      //   userType:
+
+      // );
+    }
   }
 
   //todo: delete user

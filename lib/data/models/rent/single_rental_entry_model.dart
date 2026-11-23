@@ -19,7 +19,8 @@ abstract class SingleRentEntry with _$SingleRentEntry {
     String? tenantId,
     String? tenantName,
     String? unitId,
-    String? propertyId
+    String? propertyId,
+    String? historyId,
   }) = _SingleRentalEntry;
 
   factory SingleRentEntry.fromJson(Map<String, dynamic> json) =>

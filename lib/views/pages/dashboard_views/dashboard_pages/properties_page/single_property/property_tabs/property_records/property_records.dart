@@ -1,8 +1,9 @@
 import 'package:anyamar/commons/exports.dart';
 
-class PropertyRecords extends ConsumerStatefulWidget {
+class PropertyRecords extends ConsumerWidget {
   final Property property;
   final String introText;
+
   const PropertyRecords({
     super.key,
     required this.property,
@@ -10,164 +11,49 @@ class PropertyRecords extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PropertyRecords> createState() => _PropertyRecordsState();
-}
-
-class _PropertyRecordsState extends ConsumerState<PropertyRecords> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final appData = ref.watch(userInformationProvider);
 
-    //finances
-    final financialRecords = appData.finances
-        .where((record) => record.propertyId == widget.property.propertyId)
-        .toList();
+    // Get rental income for this property.
+    final rentRecords = appData.rentalRecords
+        .where((record) => record.propertyId == property.propertyId)
+        .map((record) {
+          final rentEntry = record.rentEntry;
 
-    return FinancesTable(
-      introText: widget.introText,
-      isFromHomePage: false,
-      financialRecords: financialRecords,
+          final tenant = appData.tenants
+              .where((tenant) => tenant.tenantId == rentEntry.tenantId)
+              .singleOrNull;
+
+          return FinancialRecord(
+            datePaid: rentEntry.paymentDate,
+            amountPaid: rentEntry.amountPaid,
+            recordType: FinancialRecordTypes.rent,
+            recordId: rentEntry.rentEntryId,
+            propertyId: rentEntry.propertyId,
+            paymentMethod: rentEntry.paymentMethod,
+            paymentBy: Person(
+              personName: tenant?.tenantName ?? '',
+              personEmail: tenant?.tenantEmail ?? '',
+              personPhone: tenant?.tenantPhoneNumber ?? '',
+            ),
+            recordNature: FinancialRecordNature.revenue,
+          );
+        });
+
+    // Get expenses for this property.
+    final expenses = appData.finances.where(
+      (record) => record.propertyId == property.propertyId,
+    );
+
+    // Combine income and expenses.
+    final financialRecords = [...rentRecords, ...expenses];
+
+    return SingleChildScrollView(
+      child: FinancesTable(
+        introText: introText,
+        isFromHomePage: false,
+        financialRecords: financialRecords,
+      ),
     );
   }
 }
-
-// class PropertyRecords extends ConsumerStatefulWidget {
-//   final Property property;
-//   const PropertyRecords({super.key, required this.property});
-
-//   @override
-//   ConsumerState<PropertyRecords> createState() => _PropertyRecordsState();
-// }
-
-// class _PropertyRecordsState extends ConsumerState<PropertyRecords> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final appData = ref.watch(userInformationProvider);
-//     final propertyRecords = appData.finances
-//         .where((element) => element.propertyId == widget.property.propertyId)
-//         .toList();
-
-//     final columns = [
-//       TableColumnConfig(title: '#', flex: 0.3),
-//       TableColumnConfig(title: 'Amount', flex: 1.1),
-//       TableColumnConfig(title: 'Date paid', flex: 1.1),
-//       TableColumnConfig(title: 'Paid By', flex: 1.1),
-//       TableColumnConfig(title: 'Nature', flex: 1.1),
-//       TableColumnConfig(title: 'Method', flex: 1.1),
-//       TableColumnConfig(title: 'Actions', flex: 0.4),
-//     ];
-//     final rows = propertyRecords.map((record) {
-//       var index = propertyRecords.indexOf(record) + 1;
-//       return [
-//         ItemCell(value: '${index++}'),
-//         ItemCell(value: formatMoneyWithCurrency(record.amountPaid, null)),
-//         ItemCell(value: formatPrettyDate(record.datePaid)),
-//         ItemCell(value: record.paymentBy.personName),
-//         Align(
-//           alignment: Alignment.centerLeft,
-//           child: RecordNatureBadge(
-//             isIncome: record.recordNature == FinancialRecordNature.revenue
-//                 ? true
-//                 : false,
-//           ),
-//         ),
-//         Align(
-//           alignment: Alignment.centerLeft,
-//           child: PaymentMethodBadge(method: record.paymentMethod),
-//         ),
-
-//         IconButton(
-//           icon: Icon(Icons.more_vert, size: 18, color: Color(0xFF7D8794)),
-//           onPressed: () {},
-//         ),
-//       ];
-//     }).toList();
-
-//     return SearchlessTableWidget(columns: columns, rows: rows);
-//   }
-// }
-
-// class PropertyRecords extends ConsumerStatefulWidget {
-//   final Property property;
-//   const PropertyRecords({super.key, required this.property});
-
-//   @override
-//   ConsumerState<PropertyRecords> createState() => _PropertyRecordsState();
-// }
-
-// class _PropertyRecordsState extends ConsumerState<PropertyRecords> {
-//   List<FinancialRecord> propertyRecords = [];
-//   List<FinancialRecord> filteredRecords = [];
-//   String searchQuery = '';
-
-//   void filterFinancialRecordsTableData(String query) {
-//     setState(() {
-//       searchQuery = query.trim().toLowerCase();
-//     });
-//   }
-
-//   List<FinancialRecord> getFilteredFinancialRecords(
-//     List<FinancialRecord> currentRecords,
-//   ) {
-//     if (searchQuery.isEmpty) {
-//       return filteredRecords = currentRecords;
-//     } else {
-//       return filteredRecords = currentRecords
-//           .where((f) => f.matchesFinancialRecordsSearch(searchQuery))
-//           .toList();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     //todo: all expenses relating to a property
-//     propertyRecords = ref
-//         .watch(userInformationProvider.select((state) => state.finances))
-//         .where((element) => element.propertyId == widget.property.propertyId)
-//         .toList();
-
-//     filteredRecords = getFilteredFinancialRecords(propertyRecords);
-
-//     return Column(
-//       children: [
-//         SizedBox(height: 20),
-//         TableIntroWidget(
-//           dataLength: '${filteredRecords.length}',
-//           dataType: 'expense records',
-//           onSearch: filterFinancialRecordsTableData,
-//           onPressedCallBack: () => Navigator.of(
-//             context,
-//           ).push(MaterialPageRoute(builder: (_) => ExpenseRecord())),
-//         ),
-
-//         SizedBox(height: 30),
-//         Card(
-//           elevation: 8,
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(10.0),
-//           ),
-
-//           child: Padding(
-//             padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30.0),
-//             child: CustomDataTable(
-//               customDataColumns: [...buildFinancialRecordsHeaderRows()],
-//               customDataRows: [
-//                 ...filteredRecords.toList().asMap().entries.map((entry) {
-//                   int index = entry.key;
-//                   FinancialRecord financialRecord = entry.value;
-
-//                   return buildFinancialRecordsDataRow(
-//                     index + 1,
-//                     financialRecord,
-//                     context,
-//                     ref,
-//                   );
-//                 }),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

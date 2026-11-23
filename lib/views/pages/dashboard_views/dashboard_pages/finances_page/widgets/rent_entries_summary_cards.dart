@@ -5,7 +5,7 @@ class RentEntriesPageSummaryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
+    final gridCount = Responsiveness.isMobile(context) ? 1 : 3;
     final appData = ref.watch(userInformationProvider);
     final totalIncome = appData.rentalRecords.fold<double>(
       0.0,

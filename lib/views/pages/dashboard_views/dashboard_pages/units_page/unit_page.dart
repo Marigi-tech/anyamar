@@ -10,10 +10,10 @@ class UnitsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appData = ref.watch(userInformationProvider);
     List<Unit> units = appData.units.toList();
-    final gridCount = Responsiveness.isMobile(context) ? 2 : 5;
+
     return DashboardPageStructure(
       introText: 'units',
-      pageTitle: 'All units',
+      pageTitle: 'All Units',
       supplementaryText:
           'Manage all your units, their tenants and all other related information here ',
       introRowWidgets: [
@@ -30,8 +30,7 @@ class UnitsPage extends ConsumerWidget {
       scrollableDashboardWidget: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          buildUnitntroSummaryCards(units, gridCount),
-
+          UnitPageSummaryCards(),
           const SizedBox(height: 30),
           UnitsTable(units: units, introText: 'units'),
         ],

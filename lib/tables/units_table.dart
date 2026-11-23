@@ -45,7 +45,7 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
 
     return ReusableDataTableWidget<Unit>(
       items: units,
-      cardTitle: widget.hasTitle == true ? 'Units' : '',
+      cardTitle: 'Units',
       searchHint: 'Search units...',
 
       columns: [
@@ -127,6 +127,7 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
                             SingleUnitWidget(
                               unit: unit,
                               introText: '${widget.introText} / unit',
+                              
                             ),
                           );
                     },

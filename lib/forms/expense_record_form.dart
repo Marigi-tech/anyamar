@@ -21,6 +21,8 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController datePaidController = TextEditingController();
   final TextEditingController paymentByController = TextEditingController();
+  final TextEditingController paymentDescriptionController =
+      TextEditingController();
   DateTime? paymentDate;
   final _formKey = GlobalKey<FormState>();
   bool get isUpdateMode => widget.financialRecord != null;
@@ -40,7 +42,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     final record = widget.financialRecord;
     // ADD MODE
     if (record == null) {
-      datePaidController.text = formatStandardDate(DateTime.now());
+      // datePaidController.text = formatStandardDate(DateTime.now());
       return;
     }
     // UPDATE MODE
@@ -50,13 +52,13 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     paymentDate = record.datePaid;
     financialRecordType = record.recordType;
     paymentMethod = record.paymentMethod;
+    paymentDescriptionController.text = record.paymentDescription.toString();
   }
-
+ 
   void _updateDatePaid(String value) {
     final parts = value.split('/');
-    if (parts.length != 3) {
-      return;
-    }
+    if (parts.length != 3) return;
+
     try {
       final day = int.parse(parts[0]);
       final month = int.parse(parts[1]);
@@ -64,7 +66,6 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
 
       final parsedDate = DateTime(year, month, day);
 
-      // Make sure Dart didn't normalize an invalid date.
       if (parsedDate.year != year ||
           parsedDate.month != month ||
           parsedDate.day != day) {
@@ -90,6 +91,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     amountController.clear();
     datePaidController.clear();
     paymentByController.clear();
+    paymentDescriptionController.clear();
 
     // Reset selected values
     setState(() {
@@ -134,242 +136,265 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 980),
-        child: Form(
-          key: _formKey,
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // ============================================================
-                // BASIC INFO
-                // ============================================================
-                FormCardWidget(
-                  noOfColumnsPerRow: 2,
-                  formCardTitle: 'Basic Information',
-                  formTitleIcon: Icons.apartment,
-                  formInputs: [
-                    // ========================================================
-                    // FINANCIAL RECORD TYPE
-                    // ========================================================
-                    FormItemWidget(
-                      label: 'Financial record type',
-                      required: true,
-                      child: DropdownButtonFormField<FinancialRecordTypes>(
-                        initialValue: financialRecordType,
-                        hint: Text(
-                          'Select type',
-                          style: CustomInputDecoration.textInputDecoration()
-                              .hintStyle,
-                        ),
-                        decoration: CustomInputDecoration.textInputDecoration(),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        items: FinancialRecordTypes.values
-                            .where(
-                              (type) =>
-                                  type.nature == FinancialRecordNature.expense,
-                            )
-                            .map((type) {
-                              return DropdownMenuItem(
-                                value: type,
-                                child: Text(type.label),
-                              );
-                            })
-                            .toList(),
-                        onChanged: (value) async {
-                          setState(() {
-                            financialRecordType = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Select an option';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // ========================================================
-                    // PROPERTY
-                    // ========================================================
-                    FormItemWidget(
-                      label: 'Property with the expense',
-                      required: true,
-                      child: DropdownButtonFormField<Property>(
-                        initialValue: selectedProperty,
-                        hint: Text(
-                          'Select property ',
-                          style: CustomInputDecoration.textInputDecoration()
-                              .hintStyle,
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: CustomInputDecoration.textInputDecoration(),
-                        items: myProperties.map((property) {
-                          return DropdownMenuItem<Property>(
-                            value: property,
-                            child: Text(property.propertyName),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedProperty = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select a property';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                FormCardWidget(
-                  formCardTitle: 'Financial Record Information',
-                  noOfColumnsPerRow: 3,
-                  formInputs: [
-                    // ========================================================
-                    // AMOUNT PAID
-                    // ========================================================
-                    FormItemWidget(
-                      label: 'Amount Paid',
-                      required: true,
-                      child: FormFieldWidget(
-                        isMoneyField: true,
-                        controller: amountController,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,2}'),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // ============================================================
+                  // BASIC INFO
+                  // ============================================================
+                  FormCardWidget(
+                    noOfColumnsPerRow: 2,
+                    formCardTitle: 'Basic Information',
+                    formTitleIcon: Icons.apartment,
+                    formInputs: [
+                      // ========================================================
+                      // FINANCIAL RECORD TYPE
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Financial record type',
+                        required: true,
+                        child: DropdownButtonFormField<FinancialRecordTypes>(
+                          initialValue: financialRecordType,
+                          hint: Text(
+                            'Select type',
+                            style: CustomInputDecoration.textInputDecoration()
+                                .hintStyle,
                           ),
-                        ],
-
-                        hintText: 'Enter Amount',
-                      ),
-                    ),
-                    // ========================================================
-                    // DATE PAID
-                    // ========================================================
-                    FormItemWidget(
-                      label: 'Date Paid',
-                      required: true,
-                      child: FormFieldWidget(
-                        controller: datePaidController,
-                        keyboardType: TextInputType.datetime,
-                        hintText: 'Enter date (date / month / year)',
-                        inputFormatters: [DateInputFormatter()],
-                        onPressedCallBack: () async {
-                          final DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                            helpText: 'Select date',
-                          );
-
-                          if (pickedDate != null) {
-                            final formattedDate =
-                                '${pickedDate.day.toString().padLeft(2, '0')}/'
-                                '${pickedDate.month.toString().padLeft(2, '0')}/'
-                                '${pickedDate.year}';
-
-                            datePaidController.text = formattedDate;
-                            _updateDatePaid(formattedDate);
-                          }
-                        },
-                        onChangedCallBack: (value) {
-                          _updateDatePaid(value);
-                        },
-                      ),
-                    ),
-                    // ========================================================
-                    // PAYMENT BY
-                    // ========================================================
-                    FormItemWidget(
-                      label: 'Payment By',
-                      child: FormFieldWidget(
-                        controller: paymentByController,
-                        hintText: 'Enter Name',
-                      ),
-                    ),
-                    // ========================================================
-                    // PAYMENT METHOD
-                    // ========================================================
-                    FormItemWidget(
-                      label: 'Payment method',
-                      child: DropdownButtonFormField<PaymentMethods>(
-                        hint: Text(
-                          'Select',
-                          style: CustomInputDecoration.textInputDecoration()
-                              .hintStyle,
+                          decoration:
+                              CustomInputDecoration.textInputDecoration(),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          items: FinancialRecordTypes.values
+                              .where(
+                                (type) =>
+                                    type.nature ==
+                                    FinancialRecordNature.expense,
+                              )
+                              .map((type) {
+                                return DropdownMenuItem(
+                                  value: type,
+                                  child: Text(type.label),
+                                );
+                              })
+                              .toList(),
+                          onChanged: (value) async {
+                            setState(() {
+                              financialRecordType = value;
+                            });
+                          },
+                          onSaved: (value) async {
+                            setState(() {
+                              financialRecordType = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Select an option';
+                            }
+                            return null;
+                          },
                         ),
-                        decoration: CustomInputDecoration.textInputDecoration(),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-
-                        items: PaymentMethods.values.map((type) {
-                          return DropdownMenuItem(
-                            value: type,
-                            child: Text(type.label),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            paymentMethod = value;
-                          });
-                        },
-
-                        validator: (value) {
-                          if (value == null) {
-                            return ' Select an option';
-                          }
-                          return null;
-                        },
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30.0),
+                      // ========================================================
+                      // PROPERTY
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Property with the expense',
+                        required: true,
+                        child: DropdownButtonFormField<Property>(
+                          initialValue: selectedProperty,
+                          hint: Text(
+                            'Select property ',
+                            style: CustomInputDecoration.textInputDecoration()
+                                .hintStyle,
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration:
+                              CustomInputDecoration.textInputDecoration(),
+                          items: myProperties.map((property) {
+                            return DropdownMenuItem<Property>(
+                              value: property,
+                              child: Text(property.propertyName),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedProperty = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select a property';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      // ========================================================
+                      // Payment Description
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Enter Payment Description',
+                        required: false,
+                        child: FormFieldWidget(
+                          controller: paymentDescriptionController,
+                          hintText: 'Enter Payment Description',
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  FormCardWidget(
+                    formCardTitle: 'Financial Record Information',
+                    noOfColumnsPerRow: 3,
+                    formInputs: [
+                      // ========================================================
+                      // AMOUNT PAID
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Amount Paid',
+                        required: true,
+                        child: FormFieldWidget(
+                          isMoneyField: true,
+                          controller: amountController,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,2}'),
+                            ),
+                          ],
 
-                // ========================================================
-                // SUBMIT BUTTON
-                // ========================================================
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Clear Button
-                    if (!isUpdateMode)
+                          hintText: 'Enter Amount',
+                        ),
+                      ),
+                      // ========================================================
+                      // DATE PAID
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Date Paid',
+                        required: true,
+                        child: FormFieldWidget(
+                          controller: datePaidController,
+                          keyboardType: TextInputType.datetime,
+                          hintText: 'Enter date (date / month / year)',
+                          // inputFormatters: [DateInputFormatter()],
+                          onPressedCallBack: () async {
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              helpText: 'Select date',
+                            );
+
+                            if (pickedDate != null) {
+                              final formattedDate =
+                                  '${pickedDate.day.toString().padLeft(2, '0')}/'
+                                  '${pickedDate.month.toString().padLeft(2, '0')}/'
+                                  '${pickedDate.year}';
+
+                              datePaidController.text = formattedDate;
+
+                              _updateDatePaid(formattedDate);
+                            }
+                          },
+                          onChangedCallBack: (value) {
+                            _updateDatePaid(value);
+                          },
+                        ),
+                      ),
+                      // ========================================================
+                      // PAYMENT BY
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Payment By',
+                        child: FormFieldWidget(
+                          controller: paymentByController,
+                          hintText: 'Enter Name',
+                        ),
+                      ),
+                      // ========================================================
+                      // PAYMENT METHOD
+                      // ========================================================
+                      FormItemWidget(
+                        label: 'Payment method',
+                        child: DropdownButtonFormField<PaymentMethods>(
+                          hint: Text(
+                            'Select',
+                            style: CustomInputDecoration.textInputDecoration()
+                                .hintStyle,
+                          ),
+                          decoration:
+                              CustomInputDecoration.textInputDecoration(),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                          items: PaymentMethods.values.map((type) {
+                            return DropdownMenuItem(
+                              value: type,
+                              child: Text(type.label),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              paymentMethod = value;
+                            });
+                          },
+
+                          validator: (value) {
+                            if (value == null) {
+                              return ' Select an option';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30.0),
+
+                  // ========================================================
+                  // SUBMIT BUTTON
+                  // ========================================================
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Clear Button
+                      if (!isUpdateMode)
+                        ElevatedButtonWidget(
+                          buttonTitle: 'Reset',
+                          isClear: true,
+                          onButtonPressedCallBack: () async {
+                            _resetForm();
+                          },
+                        ),
+                      SizedBox(width: 10),
+                      //Submit button
                       ElevatedButtonWidget(
-                        buttonTitle: 'Reset',
-                        isClear: true,
+                        buttonTitle: isUpdateMode
+                            ? 'Update Record'
+                            : 'Add Record',
+                        buttonIcon: isUpdateMode
+                            ? Icon(CupertinoIcons.pen)
+                            : Icon(Icons.add),
                         onButtonPressedCallBack: () async {
-                          _resetForm();
+                          if (isUpdateMode) {
+                            await updateFinancialRecord(context, currentUser);
+                          } else {
+                            await createFinancialRecord(context, currentUser);
+                          }
                         },
                       ),
-                    SizedBox(width: 10),
-                    //Submit button
-                    ElevatedButtonWidget(
-                      buttonTitle: isUpdateMode
-                          ? 'Update Record'
-                          : 'Add Record',
-                      buttonIcon: isUpdateMode
-                          ? Icon(CupertinoIcons.pen)
-                          : Icon(Icons.add),
-                      onButtonPressedCallBack: () async {
-                        if (isUpdateMode) {
-                          await updateFinancialRecord(context, currentUser);
-                        } else {
-                          await createFinancialRecord(context, currentUser);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -384,16 +409,18 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     BuildContext context,
     User? currentUser,
   ) async {
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     if (!_formKey.currentState!.validate()) {
       return;
     }
-
+    log(
+      'Financial record type: $financialRecordType /n Payment date: $paymentDate',
+    );
     if (financialRecordType == null || paymentDate == null) {
-      displaySnackBar(
-        context,
-        'Enter all required fields',
-        AppColorsConstant.redColor,
-      );
+      displaySnackBar(context, 'Enter all required fields', dialogColor, false);
 
       return;
     }
@@ -401,17 +428,14 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       displaySnackBar(
         context,
         'No authenticated user found',
-        AppColorsConstant.redColor,
+        dialogColor,
+        false,
       );
       return;
     }
     final amount = double.tryParse(amountController.text.trim());
     if (amount == null) {
-      displaySnackBar(
-        context,
-        'Enter a valid amount',
-        AppColorsConstant.redColor,
-      );
+      displaySnackBar(context, 'Enter a valid amount', dialogColor, false);
 
       return;
     }
@@ -437,6 +461,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       propertyId: selectedProperty?.propertyId,
       paymentMethod: paymentMethod,
       recordId: financialRecordId,
+      paymentDescription: paymentByController.text,
     );
     try {
       final newRecord = await db.addRecord(financialRecord);
@@ -451,7 +476,8 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       displaySnackBar(
         context,
         'Error: $e occurred when adding the record',
-        AppColorsConstant.redColor,
+        dialogColor,
+        false,
       );
     } finally {
       if (mounted) {
@@ -467,16 +493,16 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     BuildContext context,
     User? currentUser,
   ) async {
+    final isDarkMode = ref.watch(themeIsDarkProvider);
+    Color dialogColor = isDarkMode
+        ? AppColors.darkElevatedCard
+        : AppColors.lightCard;
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
     if (financialRecordType == null || paymentDate == null) {
-      displaySnackBar(
-        context,
-        'Enter all required fields',
-        AppColorsConstant.redColor,
-      );
+      displaySnackBar(context, 'Enter all required fields', dialogColor, false);
 
       return;
     }
@@ -485,7 +511,8 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       displaySnackBar(
         context,
         'No authenticated user found',
-        AppColorsConstant.redColor,
+        dialogColor,
+        false,
       );
 
       return;
@@ -494,11 +521,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     final amount = double.tryParse(amountController.text.trim());
 
     if (amount == null) {
-      displaySnackBar(
-        context,
-        'Enter a valid amount',
-        AppColorsConstant.redColor,
-      );
+      displaySnackBar(context, 'Enter a valid amount', dialogColor, false);
 
       return;
     }
@@ -519,6 +542,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       userId: currentUser.uid,
       propertyId: selectedProperty?.propertyId,
       paymentMethod: paymentMethod,
+      paymentDescription: paymentByController.text,
     );
 
     try {
@@ -533,7 +557,8 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
       displaySnackBar(
         context,
         'Error: $e occurred when updating the record',
-        AppColorsConstant.redColor,
+        dialogColor,
+        false,
       );
     } finally {
       if (mounted) {

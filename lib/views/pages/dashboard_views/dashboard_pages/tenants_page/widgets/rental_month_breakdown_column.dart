@@ -2,12 +2,12 @@ import 'package:anyamar/commons/exports.dart';
 
 class RentalMonthBreakdownColumn extends ConsumerWidget {
   final RentalMonth rentalMonth;
-  final Tenant tenant;
+  final Tenant? tenant;
   final Unit? unit;
   const RentalMonthBreakdownColumn({
     super.key,
     required this.rentalMonth,
-    required this.tenant,
+    this.tenant,
     this.unit,
   });
 

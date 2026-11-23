@@ -45,17 +45,38 @@ class DbRentalService {
   }
 
   // Add rent History
-  Future<RentHistory?> addRentHistory(RentHistory record) async {
-    DocumentReference doc = _rentHistoryRef.doc();
-    final RentHistory newRecord = record.copyWith(historyId: record.tenantId);
-    try {
-      await doc.set(newRecord.toJson());
-    } on FirebaseException catch (e) {
-      log('${e.message}');
-    }
-    return newRecord;
-  }
+  // Future<RentHistory?> addRentHistory(RentHistory record) async {
+  //   DocumentReference doc = _rentHistoryRef.doc();
+  //   final RentHistory newRecord = record.copyWith(historyId: record.tenantId);
+  //   try {
+  //     await doc.set(newRecord.toJson());
+  //   } on FirebaseException catch (e) {
+  //     log('${e.message}');
+  //   }
+  //   return newRecord;
+  // }
+Future<RentHistory?> addRentHistory(RentHistory record) async {
+  final tenantId = record.tenantId;
 
+  if (tenantId.isEmpty) return null;
+
+  final doc = _rentHistoryRef.doc(tenantId);
+
+  final newRecord = record.copyWith(
+    historyId: tenantId,
+  );
+
+  try {
+    await doc.set(newRecord.toJson());
+    return newRecord;
+  } on FirebaseException catch (e, stackTrace) {
+    log(
+      'Error adding rent history: ${e.message}',
+      stackTrace: stackTrace,
+    );
+    return null;
+  }
+}
   //Get all tenants' rent histories belonging to a user
   Future<List<RentHistory>> getUserRentHistory(String? userId) async {
     try {

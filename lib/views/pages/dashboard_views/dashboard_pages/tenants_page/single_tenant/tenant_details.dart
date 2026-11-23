@@ -1,6 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 
-class TenantDetails extends StatefulWidget {
+class TenantDetails extends ConsumerStatefulWidget {
   final Tenant tenant;
   final Property property;
   final Unit unit;
@@ -12,26 +12,24 @@ class TenantDetails extends StatefulWidget {
   });
 
   @override
-  State<TenantDetails> createState() => _TenantDetailsState();
+  ConsumerState<TenantDetails> createState() => _TenantDetailsState();
 }
 
-class _TenantDetailsState extends State<TenantDetails> {
+class _TenantDetailsState extends ConsumerState<TenantDetails> {
   double totalAmountPayableMonthly = 0.0;
 
   @override
   void initState() {
     super.initState();
-    if (widget.unit.unitRent != null) {
-      widget.unit.unitRent!.rentAmount +
-          (widget.unit.unitRent?.utilities ?? []).fold<double>(
-            0,
-            (sum, utility) => sum + utility.amountPayable,
-          );
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final notifier = ref.read(userInformationProvider.notifier);
+
+    totalAmountPayableMonthly = notifier.calculateMonthlyAmountPayable(
+      widget.tenant.unitRent,
+    );
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10.0),
       child: Column(
@@ -110,7 +108,7 @@ class _TenantDetailsState extends State<TenantDetails> {
               Expanded(
                 child: InfoTile(
                   tileIcon: CupertinoIcons.calendar,
-                  tileTitle: 'Lease start',
+                  tileTitle: 'Start of Lease',
                   tileDescription: formatPrettyDate(widget.tenant.startOfLease),
                   onTapCallBack: () {},
                 ),
@@ -124,7 +122,7 @@ class _TenantDetailsState extends State<TenantDetails> {
                 Expanded(
                   child: InfoTile(
                     tileIcon: CupertinoIcons.calendar,
-                    tileTitle: 'Lease end',
+                    tileTitle: 'End of Lease',
                     tileDescription: formatPrettyDate(
                       widget.tenant.endOfLease!,
                     ),
@@ -139,9 +137,9 @@ class _TenantDetailsState extends State<TenantDetails> {
               Expanded(
                 child: InfoTile(
                   tileIcon: CupertinoIcons.money_dollar,
-                  tileTitle: 'Rent Deposit ',
+                  tileTitle: 'Rent Deposit Paid',
                   tileDescription:
-                      ' ${widget.unit.unitRent?.rentCurrency ?? 'Ksh'}  ${widget.unit.unitRent?.rentDeposit}',
+                      ' ${widget.tenant.unitRent?.rentCurrency ?? 'Ksh'}  ${widget.tenant.unitRent?.rentDeposit}',
                   onTapCallBack: () {},
                 ),
               ),
@@ -154,9 +152,9 @@ class _TenantDetailsState extends State<TenantDetails> {
                 child: InfoTile(
                   tileIcon: CupertinoIcons.money_dollar,
                   tileTitle:
-                      'Rent / ${widget.unit.unitRent?.paymentFrequency ?? 'Month'} ',
+                      'Rent / ${widget.tenant.unitRent?.paymentFrequency ?? 'Month'} ',
                   tileDescription:
-                      ' ${widget.unit.unitRent?.rentCurrency}  ${widget.unit.unitRent?.rentAmount}',
+                      ' ${widget.tenant.unitRent?.rentCurrency}  ${widget.tenant.unitRent?.rentAmount}',
                   onTapCallBack: () {},
                 ),
               ),
@@ -165,8 +163,8 @@ class _TenantDetailsState extends State<TenantDetails> {
 
           SizedBox(height: 10.0),
           // Utilities
-          if (widget.unit.unitRent?.utilities != null &&
-              widget.unit.unitRent!.utilities!.isNotEmpty)
+          if (widget.tenant.unitRent?.utilities != null &&
+              widget.tenant.unitRent!.utilities!.isNotEmpty)
             Padding(
               padding: EdgeInsets.only(left: 40.0),
               child: Column(
@@ -187,7 +185,7 @@ class _TenantDetailsState extends State<TenantDetails> {
 
                   const SizedBox(height: 7),
 
-                  ...widget.unit.unitRent!.utilities!.map((utility) {
+                  ...widget.tenant.unitRent!.utilities!.map((utility) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 4.0),
                       child: Row(

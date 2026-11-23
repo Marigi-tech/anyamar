@@ -26,7 +26,7 @@ class _ExpensesPerPropertyTableState
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
     final appData = ref.watch(userInformationProvider);
-
+    final notifier = ref.read(userInformationProvider.notifier);
     final TextStyle headerStyle = CustomTextStyles.cardDescriptionStyle
         .copyWith(
           color: themeIsDark == true
@@ -106,10 +106,7 @@ class _ExpensesPerPropertyTableState
         List<FinancialRecord> expenseRecords = expenses
             .where((record) => record.propertyId == property.propertyId)
             .toList();
-        final double totalExpense = expenseRecords.fold<double>(
-          0,
-          (sum, record) => sum + record.amountPaid,
-        );
+        final double totalExpense = notifier.calculateTotalExpenses(expenses);
 
         var number = index + 1;
 

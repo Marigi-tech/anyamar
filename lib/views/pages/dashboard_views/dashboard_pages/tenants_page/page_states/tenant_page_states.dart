@@ -8,8 +8,9 @@ import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/p
 
 class AddTenantState extends ConsumerWidget {
   final String introText;
+  final Unit? unit;
 
-  const AddTenantState({super.key, required this.introText});
+  const AddTenantState({super.key, required this.introText, this.unit});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,6 +33,7 @@ class AddTenantState extends ConsumerWidget {
       introButton: const IntroButtonWidget(),
       scrollableDashboardWidget: TenantForm(
         introText: '$introText / add tenant',
+        currentUnit: unit,
       ),
       unavailableInfo: showUnavailableOverlay
           ? UnavailableInfoModel(

@@ -16,13 +16,9 @@ class FinancesPageSummaryCards extends ConsumerWidget {
         .where((record) => record.recordNature == FinancialRecordNature.expense)
         .fold<double>(0, (sum, record) => sum + record.amountPaid);
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.numbers,
           title: 'Total records',
@@ -67,15 +63,11 @@ class SingleFinancialRecordSummaryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
+    final gridCount = Responsiveness.isMobile(context) ? 2 : 4;
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.person,
           title: 'Payment by :',
@@ -126,13 +118,9 @@ class SingleRentEntrySummaryCards extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gridCount = Responsiveness.isMobile(context) ? 1 : 4;
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.person,
           title: 'Payment By :',
@@ -181,34 +169,51 @@ class RentalMonthSummaryCards extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //theme
+    final themeIsDark = ref.watch(themeIsDarkProvider);
     // Grid count
-    final gridCount = Responsiveness.isMobile(context) ? 2 : 5;
+    final gridCount = Responsiveness.isMobile(context) ? 2 : 4;
     // Total
     double totalPaid = rentalMonth.rentEntries.fold<double>(
       0,
       (sum, amount) => sum + amount.amountPaid,
     );
     // Expected total
-    double expectedTotal = rentalMonth.map((month) {
-      double? total;
+    double expectedTotal = ref
+        .read(userInformationProvider.notifier)
+        .calculateMonthlyAmountPayable(rentalMonth.unitRent);
+    // Balance /  Excess
+    double balanceOrExcess = expectedTotal > totalPaid
+        ? ref
+              .read(userInformationProvider.notifier)
+              .calculateMonthlyOutstandingPayment(rentalMonth)
+        : expectedTotal < totalPaid
+        ? ref
+              .read(userInformationProvider.notifier)
+              .calculateMonthlyOverPayment(rentalMonth)
+        : 0.0;
 
-      if (month.unitRent != null) {
-        if (month.unitRent!.utilities != null) {
-          total =
-              month.unitRent!.rentAmount +
-              month.unitRent!.utilities!.fold<double>(
-                0,
-                (sum, utility) => utility.amountPayable,
-              );
-        }
-        if (month.unitRent?.utilities == null) {
-          total = month.unitRent!.rentAmount;
-        }
-      } else {
-        total = 0.0;
-      }
-      return total ?? 0.0;
-    });
+    // double expectedTotal = rentalMonth.map((month) {
+    //   double? total;
+
+    //   if (month.unitRent != null) {
+    //     if (month.unitRent!.utilities != null) {
+    //       total =
+    //           month.unitRent!.rentAmount +
+    //           month.unitRent!.utilities!.fold<double>(
+    //             0,
+    //             (sum, utility) => utility.amountPayable,
+    //           );
+    //     }
+    //     if (month.unitRent?.utilities == null) {
+    //       total = month.unitRent!.rentAmount;
+    //     }
+    //   } else {
+    //     total = 0.0;
+    //   }
+    //   return total ?? 0.0;
+    // });
+    //calculate balance
 
     //Payment Status
 
@@ -226,28 +231,15 @@ class RentalMonthSummaryCards extends ConsumerWidget {
       paymentStatus = PaymentStatus.undefined;
     }
 
-    return GridView.count(
-      crossAxisCount: gridCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 14,
-      childAspectRatio: 1.55,
-      children: [
-        SummaryCard(
-          icon: Icons.calendar_month,
-          title: 'Month/Year:',
-          value: rentalMonth.rentalMonth,
-          iconCardColor: AppColors.orange,
-          onPressedCallBack: () {},
-          // fontSize: 14,
-        ),
-
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: [
         SummaryCard(
           icon: Icons.info,
           title: 'No of records',
           value: rentalMonth.rentEntries.length.toString(),
           subtitle: '',
-          iconCardColor: AppColors.primaryBlue,
+          iconCardColor: AppColors.purpleColor,
           onPressedCallBack: () {},
           // fontSize: 14,
         ),
@@ -263,10 +255,10 @@ class RentalMonthSummaryCards extends ConsumerWidget {
 
         SummaryCard(
           icon: CupertinoIcons.question,
-          title: 'Total Paid ',
+          title: 'Amount Paid ',
           value: formatMoneyWithCurrency(totalPaid, 'Ksh'),
           subtitle: '',
-          iconCardColor: AppColors.lightGreen,
+          iconCardColor: AppColors.primaryBlue,
           onPressedCallBack: () {},
           // fontSize: 14,
         ),
@@ -274,8 +266,26 @@ class RentalMonthSummaryCards extends ConsumerWidget {
           icon: Icons.wallet,
           title: 'Payment Status',
           isWidget: true,
-          iconCardColor: AppColors.amber,
-          value: PaymentSatusBadge(status: paymentStatus),
+          iconCardColor: AppColors.pinkColor,
+          value: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PaymentSatusBadge(status: paymentStatus),
+              SizedBox(height: 2),
+              Text(
+                formatMoneyWithCurrency(balanceOrExcess, 'Ksh'),
+                softWrap: true,
+                style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                  color: themeIsDark ? AppColors.darkText : AppColors.lightText,
+                  fontFamily: 'Montserrat',
+                  fontSize: 22,
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+            ],
+          ),
           onPressedCallBack: () {},
         ),
       ],

@@ -16,7 +16,7 @@ class NextOfKinInformationColumn extends ConsumerWidget {
             children: [
               RowTitleWidget(icon: CupertinoIcons.info, text: 'Name '),
               Text(
-                person?.personName ?? '',
+                person?.personName ?? 'N/A',
                 style: CustomTextStyles.cardDescriptionStyle,
               ),
             ],
@@ -27,7 +27,7 @@ class NextOfKinInformationColumn extends ConsumerWidget {
             children: [
               RowTitleWidget(icon: CupertinoIcons.phone, text: 'Phone'),
               Text(
-                person?.personPhone ?? '',
+                person?.personPhone ?? 'N/A',
                 style: CustomTextStyles.cardDescriptionStyle,
               ),
             ],
@@ -66,7 +66,7 @@ class NextOfKinInformationColumn extends ConsumerWidget {
                 text: 'Relationship with Tenant',
               ),
               Text(
-                person?.relationship ?? '',
+                person?.relationship ?? 'N/A',
                 style: CustomTextStyles.cardDescriptionStyle,
               ),
             ],

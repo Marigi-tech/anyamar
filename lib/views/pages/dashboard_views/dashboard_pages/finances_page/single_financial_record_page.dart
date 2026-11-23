@@ -1,7 +1,6 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/financial_record_info_column.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/financial_summary_cards.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/finances_page/widgets/related_info_column.dart';
 
 class SingleFinancialRecordPage extends ConsumerWidget {
   final FinancialRecord? financialRecord;
@@ -16,30 +15,6 @@ class SingleFinancialRecordPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appData = ref.watch(userInformationProvider);
-
-    final personName = financialRecord != null
-        ? financialRecord?.paymentBy.personName
-        : rentEntry?.tenantName;
-    Unit? unit = appData.units
-        .where((u) => u.unitId == rentEntry?.unitId)
-        .singleOrNull;
-    // String? unitName = rentEntry != null
-    //     ? appData.units
-    //           .where((u) => u.unitId == rentEntry?.unitId)
-    //           .singleOrNull
-    //           ?.unitName
-    //     : null;
-    String? propertyName = financialRecord != null
-        ? appData.properties
-              .where((p) => p.propertyId == financialRecord?.propertyId)
-              .singleOrNull
-              ?.propertyName
-        : appData.properties
-              .where((p) => p.propertyId == unit?.propertyId)
-              .singleOrNull
-              ?.propertyName;
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -59,14 +34,9 @@ class SingleFinancialRecordPage extends ConsumerWidget {
                     financialRecord: financialRecord,
                     rentEntry: rentEntry,
                   ),
-                  // UnitInformationColumn(unit: widget.unit),
+             
                   SizedBox(height: 20.0),
-                  RelatedInfoColumn(
-                    personName: personName,
-                    unitName: unit?.unitName,
-                    propertyName: propertyName,
-                    isRent: rentEntry != null ? true : false,
-                  ),
+                 
                   SizedBox(height: 20.0),
                 ],
               )
@@ -75,7 +45,6 @@ class SingleFinancialRecordPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 2,
                     child: Column(
                       children: [
                         // --------------------------------------------
@@ -100,22 +69,6 @@ class SingleFinancialRecordPage extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(width: 25.0),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        RelatedInfoColumn(
-                          personName: personName,
-                          unitName: unit?.unitName,
-                          propertyName: propertyName,
-                          isRent: rentEntry != null ? true : false,
-                        ),
-
-                        SizedBox(height: 20.0),
-                      ],
-                    ),
-                  ),
                 ],
               ),
       ],

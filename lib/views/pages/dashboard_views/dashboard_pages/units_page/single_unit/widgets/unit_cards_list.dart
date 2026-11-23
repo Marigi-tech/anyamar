@@ -1,29 +1,53 @@
 import 'package:anyamar/commons/exports.dart';
 
-Widget buildUnitSummaryCards(Unit unit, int gridCount, String? tenantName) {
-  return GridView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: getUnitCards(unit, tenantName).length,
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: gridCount,
-      crossAxisSpacing: 15,
-      mainAxisSpacing: 15,
-      mainAxisExtent: 105,
-    ),
-    itemBuilder: (context, index) {
-      return getUnitCards(unit, tenantName)[index];
-    },
-  );
+//===============================================
+// Unit page summary cards
+//===============================================
+class UnitPageSummaryCards extends ConsumerWidget {
+  const UnitPageSummaryCards({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final int gridCount = Responsiveness.isMobile(context) ? 2 : 5;
+    final appData = ref.watch(userInformationProvider);
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: getUnitIntroCards(appData.units),
+    );
+  }
 }
 
-List<SummaryCard> getUnitCards(Unit unit, String? tenantName) {
-  final totalAmountPayableMonthly =
-      unit.unitRent!.rentAmount +
-      (unit.unitRent?.utilities ?? []).fold<double>(
-        0,
-        (sum, utility) => sum + utility.amountPayable,
-      );
+//*=============================================
+//* Single page summary cards
+//*===================================================
+class SingleUnitSummaryCards extends ConsumerWidget {
+  final Unit unit;
+  final String? tenantName;
+  const SingleUnitSummaryCards({
+    super.key,
+    required this.unit,
+    this.tenantName,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final int gridCount = Responsiveness.isMobile(context) ? 2 : 3;
+
+    return PageDisplayCardsWidget(
+      gridCount: gridCount,
+      cards: getUnitCards(unit, tenantName, ref),
+    );
+  }
+}
+
+List<SummaryCard> getUnitCards(Unit unit, String? tenantName, WidgetRef ref) {
+  final totalAmountPayableMonthly = ref
+      .read(userInformationProvider.notifier)
+      .calculateMonthlyAmountPayable(unit.unitRent);
+
+  final utilitiesCharge = ref
+      .read(userInformationProvider.notifier)
+      .calculateUtilitiesCharge(unit.unitRent);
 
   return [
     SummaryCard(
@@ -32,7 +56,7 @@ List<SummaryCard> getUnitCards(Unit unit, String? tenantName) {
       value: '${unit.unitType?.label}',
       subtitle: '',
       onPressedCallBack: () {},
-      iconCardColor: AppColors.primaryBlue,
+      iconCardColor: AppColors.purpleColor,
       fontSize: 12,
     ),
 
@@ -48,12 +72,15 @@ List<SummaryCard> getUnitCards(Unit unit, String? tenantName) {
     ),
 
     SummaryCard(
-      icon: Icons.people_outline,
-      title: 'Status',
-      value: unit.isOccupied ? 'Occupied' : 'Vacant',
-      subtitle: ' ${unit.isOccupied ? '$tenantName' : ''} ',
+      icon: Icons.wallet,
+      title: 'Utilites charge',
+      value:
+          '${unit.unitRent?.rentCurrency ?? 'Ksh'} ${formatMoney(utilitiesCharge as num)}',
+      subtitle: unit.unitRent?.utilities
+          ?.map((til) => til.utilityName.label)
+          .join(', '),
       onPressedCallBack: () {},
-      iconCardColor: unit.isOccupied ? AppColors.lightGreen : AppColors.red,
+      iconCardColor: AppColors.blackColor,
       fontSize: 12,
     ),
 
@@ -64,27 +91,19 @@ List<SummaryCard> getUnitCards(Unit unit, String? tenantName) {
           '${unit.unitRent?.rentCurrency ?? 'Ksh'} ${formatMoney(totalAmountPayableMonthly)}',
       subtitle: 'Every month',
       onPressedCallBack: () {},
-      iconCardColor: AppColors.info,
+      iconCardColor: AppColors.pinkColor,
+      fontSize: 12,
+    ),
+    SummaryCard(
+      icon: Icons.people_outline,
+      title: 'Status',
+      value: unit.isOccupied ? 'Occupied' : 'Vacant',
+      subtitle: ' ${unit.isOccupied ? '$tenantName' : ''} ',
+      onPressedCallBack: () {},
+      iconCardColor: unit.isOccupied ? AppColors.lightGreen : AppColors.red,
       fontSize: 12,
     ),
   ];
-}
-
-Widget buildUnitntroSummaryCards(List<Unit> units, int gridCount) {
-  return GridView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: getUnitIntroCards(units).length,
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: gridCount,
-      crossAxisSpacing: 15,
-      mainAxisSpacing: 15,
-      mainAxisExtent: 105,
-    ),
-    itemBuilder: (context, index) {
-      return getUnitIntroCards(units)[index];
-    },
-  );
 }
 
 double occupancyRate(List<Unit> units, List<Unit> occupiedUnits) {
@@ -151,7 +170,7 @@ List<SummaryCard> getUnitIntroCards(List<Unit> units) {
       value: 'Ksh ${formatMoney(totalPayable)}',
       subtitle: 'Every month',
       onPressedCallBack: () {},
-      iconCardColor: AppColors.info,
+      iconCardColor: AppColors.pinkColor,
     ),
   ];
 }

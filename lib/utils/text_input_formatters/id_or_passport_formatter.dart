@@ -22,7 +22,7 @@ class IdentityDocumentInputFormatter extends TextInputFormatter {
   }
 }
 
-String? validateIdentityDocument(String? value, {bool required = true}) {
+String? validateIdentityDocument(String? value, {bool required = false}) {
   final documentNumber = value?.trim() ?? '';
 
   if (documentNumber.isEmpty) {
@@ -32,7 +32,7 @@ String? validateIdentityDocument(String? value, {bool required = true}) {
   if (!RegExp(r'^[A-Z0-9]+$').hasMatch(documentNumber)) {
     return 'Use only letters and numbers';
   }
-    if (documentNumber.length < 6 || documentNumber.length > 15) {
+  if (documentNumber.length < 6 || documentNumber.length > 15) {
     return 'Enter a valid document number';
   }
 

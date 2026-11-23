@@ -12,6 +12,7 @@ class FinancialRecordInformationColumn extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appData = ref.watch(userInformationProvider);
     String? recordId = financialRecord != null
         ? financialRecord?.recordId
         : rentEntry?.rentEntryId;
@@ -33,6 +34,15 @@ class FinancialRecordInformationColumn extends ConsumerWidget {
     FinancialRecordNature? recordNature = financialRecord != null
         ? financialRecord?.recordNature
         : FinancialRecordNature.revenue;
+    String? propertyName = financialRecord != null
+        ? appData.properties
+              .where((p) => p.propertyId == financialRecord?.propertyId)
+              .singleOrNull
+              ?.propertyName
+        : appData.properties
+              .where((p) => p.propertyId == rentEntry?.propertyId)
+              .singleOrNull
+              ?.propertyName;
 
     return DashboardCardWidget(
       cardTitle: 'Basic Information',
@@ -123,6 +133,32 @@ class FinancialRecordInformationColumn extends ConsumerWidget {
               PaymentMethodBadge(method: paymentMethod),
             ],
           ),
+          CardItemSeparator(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RowTitleWidget(icon: Icons.apartment, text: 'Property'),
+              Text(
+                propertyName ?? '',
+                style: CustomTextStyles.cardDescriptionStyle,
+              ),
+            ],
+          ),
+          if (financialRecord != null &&
+              financialRecord?.paymentDescription != null)
+            CardItemSeparator(),
+          if (financialRecord != null &&
+              financialRecord?.paymentDescription != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RowTitleWidget(icon: Icons.info, text: 'Expense Decription'),
+                Text(
+                  financialRecord?.paymentDescription ?? '',
+                  style: CustomTextStyles.cardDescriptionStyle,
+                ),
+              ],
+            ),
         ],
       ),
     );

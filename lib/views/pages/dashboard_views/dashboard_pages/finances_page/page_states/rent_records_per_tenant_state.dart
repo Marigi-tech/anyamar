@@ -30,3 +30,29 @@ class RentRecordsPerTenantState extends ConsumerWidget {
     );
   }
 }
+
+//Rental records per property
+class RentRecordsPerPropertyState extends ConsumerWidget {
+  final String introText;
+  final Property property;
+  const RentRecordsPerPropertyState({
+    super.key,
+    required this.introText,
+    required this.property,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DashboardPageStructure(
+      introText: introText,
+      pageTitle: 'Rent records / property ',
+      supplementaryText: ' Property : ${property.propertyName} ',
+      introButton: IntroButtonWidget(),
+      introRowWidgets: [],
+      scrollableDashboardWidget: RentRecordsPerPropertyWidget(
+        introText: '$introText / rent records ',
+        property: property,
+      ),
+    );
+  }
+}

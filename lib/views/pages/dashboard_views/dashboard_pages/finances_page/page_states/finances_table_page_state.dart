@@ -18,7 +18,7 @@ class FinancesTablePage extends ConsumerWidget {
           'Every financial record is managed here, including all rental entries and expenses',
       introRowWidgets: [
         ElevatedButtonWidget(
-          buttonTitle: 'Add expense',
+          buttonTitle: 'Add Expense Record',
           buttonColor: AppColors.red,
           buttonIcon: Icon(Icons.add),
           onButtonPressedCallBack: () {
@@ -33,7 +33,7 @@ class FinancesTablePage extends ConsumerWidget {
         ),
         SizedBox(width: 20.0),
         ElevatedButtonWidget(
-          buttonTitle: 'Add rental record',
+          buttonTitle: 'Add Rental Record',
           buttonIcon: Icon(Icons.add),
           onButtonPressedCallBack: () {
             ref

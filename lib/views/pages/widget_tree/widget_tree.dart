@@ -11,42 +11,77 @@ class WidgetTree extends ConsumerStatefulWidget {
 }
 
 class _WidgetTreeState extends ConsumerState<WidgetTree> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     final authService = ref.watch(authServiceProvider);
-    return StreamBuilder(
-      stream: authService.authStateChanges,
+
+    return StreamBuilder<User?>(
+      stream: authService.userChanges,
       builder: (context, snapshot) {
-        Widget widget;
         if (snapshot.connectionState == ConnectionState.waiting &&
             authService.currentUser == null) {
           return LoadingScreen();
         }
-        //todo: uncomment this
-        // if (snapshot.hasData && authService.currentUser != null) {
-        //   widget = DashboardWidget();
-        // } else
-        if (snapshot.hasData &&
-            authService.currentUser != null &&
-            snapshot.data?.emailVerified == true) {
-          widget = DashboardWidget();
-        } else if (snapshot.hasData &&
-            authService.currentUser != null &&
-            snapshot.data?.emailVerified != true) {
-          widget = EmailVerifiationScreen();
-        } else {
-          widget = LandingPage();
+
+        final user = snapshot.data;
+
+        if (user == null) {
+          return LandingPage();
         }
-        return widget;
+
+        if (user.emailVerified) {
+          return DashboardWidget();
+        }
+
+        return EmailVerifiationScreen();
       },
     );
-    // return currentUser != null
-    //     //todo: complete this
-    //     // ? currentUser.emailVerified == true
-    //     ? DashboardWidget(webPages: webPages)
-    //     // : EmailVerificationPage()
-    //     : LandingPage();
   }
 }
+// class WidgetTree extends ConsumerStatefulWidget {
+//   const WidgetTree({super.key});
+
+//   @override
+//   ConsumerState<WidgetTree> createState() => _WidgetTreeState();
+// }
+
+// class _WidgetTreeState extends ConsumerState<WidgetTree> {
+//   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final authService = ref.watch(authServiceProvider);
+//     return StreamBuilder(
+//       stream: authService.authStateChanges,
+//       builder: (context, snapshot) {
+//         Widget widget;
+//         if (snapshot.connectionState == ConnectionState.waiting &&
+//             authService.currentUser == null) {
+//           return LoadingScreen();
+//         }
+//         //todo: uncomment this
+//         // if (snapshot.hasData && authService.currentUser != null) {
+//         //   widget = DashboardWidget();
+//         // } else
+//         if (snapshot.hasData &&
+//             authService.currentUser != null &&
+//             snapshot.data?.emailVerified == true) {
+//           widget = DashboardWidget();
+//         } else if (snapshot.hasData &&
+//             authService.currentUser != null &&
+//             snapshot.data?.emailVerified != true) {
+//           widget = EmailVerifiationScreen();
+//         } else {
+//           widget = LandingPage();
+//         }
+//         return widget;
+//       },
+//     );
+//     // return currentUser != null
+//     //     //todo: complete this
+//     //     // ? currentUser.emailVerified == true
+//     //     ? DashboardWidget(webPages: webPages)
+//     //     // : EmailVerificationPage()
+//     //     : LandingPage();
+//   }
+// }

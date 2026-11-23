@@ -19,6 +19,7 @@ _RentalRecord _$RentalRecordFromJson(Map<String, dynamic> json) =>
       rentHistory: RentHistory.fromJson(
         json['rentHistory'] as Map<String, dynamic>,
       ),
+      propertyId: json['propertyId'] as String,
     );
 
 Map<String, dynamic> _$RentalRecordToJson(_RentalRecord instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$RentalRecordToJson(_RentalRecord instance) =>
       'rentEntry': instance.rentEntry.toJson(),
       'rentalMonth': instance.rentalMonth.toJson(),
       'rentHistory': instance.rentHistory.toJson(),
+      'propertyId': instance.propertyId,
     };

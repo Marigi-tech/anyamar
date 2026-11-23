@@ -28,10 +28,12 @@ class _PropertyTenantsState extends ConsumerState<PropertyTenants> {
         )
         .toList();
 
-    return TenantsTable(
-      tenants: propertyTenants,
-      hasTitle: true,
-      introText: widget.introText,
+    return SingleChildScrollView(
+      child: TenantsTable(
+        tenants: propertyTenants,
+        hasTitle: true,
+        introText: widget.introText,
+      ),
     );
   }
 }
