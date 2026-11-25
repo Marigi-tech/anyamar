@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anyamar/commons/exports.dart';
 
 class SignUpForm extends ConsumerStatefulWidget {
@@ -15,10 +17,16 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
   String userTypeController = '';
   UserType? selectedUserType;
   Color? textColor;
+  Color? dialogColor;
   final _formKey = GlobalKey<FormState>();
   bool isSuccess = false;
   String? systemMessage;
   AppUser? createdUser;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -61,16 +69,6 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
   }
 
   // ============================================================
-  //REDIRECT TO DASHBOARD
-  // ============================================================
-  Future<void> _redirectToDashboard() async {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => WidgetTree()),
-    );
-  }
-
-  // ============================================================
   // DELETE FROM AUTHENTICATION
   // ============================================================
   Future<void> _deleteFromAuthentication() async {
@@ -91,10 +89,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = ref.watch(themeIsDarkProvider);
-    Color dialogColor = isDarkMode
-        ? AppColors.darkElevatedCard
-        : AppColors.lightCard;
+    Color dialogColor = isSuccess ? AppColors.lightGreen : AppColors.red;
     return FormPages(
       pageTitle: 'Create account',
       isSignInOrSignUp: true,
@@ -240,63 +235,119 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
               // ============================================================
               ElevatedButtonWidget(
                 onButtonPressedCallBack: () async {
-                  if (_formKey.currentState!.validate() &&
-                      selectedUserType != null) {
-                    LazyLoader lazyLoader = LazyLoader(context: context);
-                    lazyLoader.showLoader();
+                  if (!_formKey.currentState!.validate() ||
+                      selectedUserType == null) {
+                    return;
+                  }
+
+                  final lazyLoader = LazyLoader(context: context);
+                  lazyLoader.showLoader();
+
+                  try {
                     await _registerUser();
-                    //* If user is succesfully authenticated
-                    //* Add them to database
-                    final db = DbService(); //!instance of db
-                    if (isSuccess && createdUser != null) {
-                      // add user to db
-                      try {
-                        await db.createUser(createdUser!).then((value) {
-                          if (value != null) {
-                            setState(() {
-                              isSuccess = true;
-                              systemMessage = 'User created succesfully';
-                            });
-                            lazyLoader.hideLoader();
-                            displaySnackBar(
-                              context,
-                              '$systemMessage',
-                              dialogColor,
-                              isSuccess,
-                            );
-                            //Redirect to user dashboard
-                            _redirectToDashboard();
-                          }
-                        });
-                      } catch (e) {
-                        // if adding user to db fails // remove user from authentication
-                        _deleteFromAuthentication();
-                        setState(() {
-                          systemMessage = e.toString();
-                        });
-                        displaySnackBar(
-                          context,
-                          '$systemMessage',
-                          dialogColor,
-                          isSuccess,
-                        );
-                      }
-                    } else {
-                      setState(() {
-                        systemMessage = 'Authentication failed';
-                      });
-                      displaySnackBar(
-                        context,
-                        '$systemMessage',
-                        dialogColor,
-                        isSuccess,
-                      );
+
+                    if (!isSuccess || createdUser == null) {
+                      throw Exception('Authentication failed.');
                     }
+
+                    // Save user information in Firestore.
+                    final db = DbService();
+                    final result = await db.createUser(createdUser!);
+
+                    if (result == null) {
+                      throw Exception('Failed to save user information.');
+                    }
+
+                    // Send Firebase verification email.
+                    await ref.read(authServiceProvider).sendEmailVerification();
+
+                    if (!mounted) return;
+
+                    // Take the user to the widget tree
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const WidgetTree()),
+                    );
+                  } catch (e) {
+                    if (!mounted) return;
+                    //delete user from authentication
+                    await _deleteFromAuthentication();
+
+                    setState(() {
+                      systemMessage = e.toString();
+                      isSuccess = false;
+                    });
+
+                    displaySnackBar(
+                      context,
+                      'Authentication failed : ${systemMessage ?? ''}',
+                      dialogColor,
+                      isSuccess,
+                    );
+                  } finally {
+                    lazyLoader.hideLoader();
                   }
                 },
                 buttonTitle: 'Create account',
               ),
 
+              // ElevatedButtonWidget(
+              //   onButtonPressedCallBack: () async {
+              //     if (_formKey.currentState!.validate() &&
+              //         selectedUserType != null) {
+              //       LazyLoader lazyLoader = LazyLoader(context: context);
+              //       lazyLoader.showLoader();
+              //       await _registerUser();
+              //       //* If user is succesfully authenticated
+              //       //* Add them to database
+              //       final db = DbService(); //!instance of db
+              //       if (isSuccess && createdUser != null) {
+              //         // add user to db
+              //         try {
+              //           await db.createUser(createdUser!).then((value) async {
+              //             if (value != null) {
+              //               setState(() {
+              //                 isSuccess = true;
+              //               });
+              //               //Send email verification to email address
+              //               await _sendEmailVerification();
+              //               //Redirect to user dashboard
+              //               _redirectToDashboard().whenComplete(
+              //                 () => lazyLoader.hideLoader(),
+              //               );
+              //             }
+              //           });
+              //         } catch (e) {
+              //           // if adding user to db fails // remove user from authentication
+              //           _deleteFromAuthentication();
+              //           setState(() {
+              //             systemMessage = e.toString();
+              //           });
+              //           displaySnackBar(
+              //             context,
+              //             '$systemMessage',
+              //             dialogColor,
+              //             isSuccess,
+              //           );
+              //         } finally {
+              //           lazyLoader.hideLoader();
+              //         }
+              //       } else {
+              //         lazyLoader.hideLoader;
+              //         setState(() {
+              //           systemMessage = 'Authentication failed';
+              //         });
+              //         displaySnackBar(
+              //           context,
+              //           '$systemMessage',
+              //           dialogColor,
+              //           isSuccess,
+              //         );
+              //       }
+              //     }
+              //   },
+              //   buttonTitle: 'Create account',
+              // ),
               SizedBox(height: 15),
               SizedBox(height: 25),
             ],

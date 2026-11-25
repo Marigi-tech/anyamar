@@ -41,18 +41,29 @@ class _CustomBackButtonState extends ConsumerState<CustomBackButton> {
           isHovered = false;
         });
       },
-      child: Padding(
-        padding: EdgeInsets.only(top: 10, left: 20),
-        child: InkWell(
-          onTap: () => Navigator.maybePop(context),
-          child: CircleAvatar(
-            backgroundColor: backgroundColor,
-            radius: isHovered ? 20 : 18,
-            child: Icon(
+      child: AnimatedPadding(
+        padding: isHovered
+            ? const EdgeInsets.only(bottom: 3.0, top: 10, left: 20)
+            : const EdgeInsets.only(top: 10, left: 20),
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.linear,
+        child: AnimatedScale(
+          scale: isHovered ? 1.0001 : 1.0,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInCubic,
+          child: IconButton(
+            hoverColor: AppColors.primaryBlue,
+            color: isDark ? AppColors.darkElevatedCard : AppColors.lightCard,
+            icon: Icon(
               Icons.arrow_back,
-              size: isHovered ? 22 : 19,
-              color: textColor,
+              size: 18,
+              color: isHovered
+                  ? AppColors.darkText
+                  : isDark
+                  ? AppColors.darkText
+                  : AppColors.lightText,
             ),
+            onPressed: () => Navigator.maybePop(context),
           ),
         ),
       ),

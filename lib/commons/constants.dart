@@ -55,15 +55,18 @@ class CustomTextStyles {
     fontSize: 14,
     letterSpacing: -0.3,
     fontStyle: FontStyle.italic,
+    fontFamily: 'Lato',
   );
   static const TextStyle cardExtraDescriptionStyle = TextStyle(
     fontSize: 11,
     fontStyle: FontStyle.italic,
+    fontFamily: 'Lato',
   );
   static const TextStyle greenText = TextStyle(
     fontSize: 14,
     fontStyle: FontStyle.italic,
     color: AppColorsConstant.lightGreenColor,
+    fontFamily: 'Lato',
   );
 }
 

@@ -48,15 +48,19 @@ class LandingNavigation extends ConsumerWidget {
             ElevatedButtonWidget(
               buttonTitle: 'Sign Up',
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 16),
-              onButtonPressedCallBack: () => Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => SignUpPage())),
+              onButtonPressedCallBack: () async {
+                scaffoldKey.currentState?.closeEndDrawer();
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => SignUpPage()));
+              },
             ),
             const SizedBox(width: 15),
             ElevatedButtonWidget(
               buttonTitle: 'Sign In',
               isClear: true,
               onButtonPressedCallBack: () {
+                scaffoldKey.currentState?.closeEndDrawer();
                 Navigator.of(
                   context,
                 ).push(MaterialPageRoute(builder: (_) => LoginPage()));

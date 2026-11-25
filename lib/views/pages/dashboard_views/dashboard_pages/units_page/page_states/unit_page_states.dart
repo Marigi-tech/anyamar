@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/unavailable_info/unavailable_info_model.dart';
-import 'package:anyamar/forms/add_property_form.dart';
 //=====================================================
 //ADD UNIT
 //========================================================
@@ -38,17 +37,6 @@ class AddUnitState extends ConsumerWidget {
                     isClear: true,
                     onButtonPressedCallBack: () =>
                         ref.read(workspaceProvider.notifier).closeWorkspace(),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButtonWidget(
-                    buttonTitle: 'Add property',
-                    onButtonPressedCallBack: () => ref
-                        .read(workspaceProvider.notifier)
-                        .openForm(
-                          AddPropertyForm(
-                            introText: '$introText / add unit / add property',
-                          ),
-                        ),
                   ),
                 ],
               ),

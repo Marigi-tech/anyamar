@@ -38,53 +38,55 @@ class IntroRowWidget extends ConsumerWidget {
           const SizedBox(width: 30),
 
           Expanded(
-            child: SizedBox(
-              height: 42,
-              child: TextField(
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.text,
-                decoration: CustomInputDecoration.textInputDecoration(
-                  hintText: 'Search',
-                  prefixIcon: const Icon(CupertinoIcons.search),
-                ),
-                // ),
-              ),
-            ),
+            child: SizedBox.shrink(),
+            //todo: enable search capability
+            // child: SizedBox(
+            //   height: 42,
+            //   child: TextField(
+            //     textInputAction: TextInputAction.done,
+            //     keyboardType: TextInputType.text,
+            //     decoration: CustomInputDecoration.textInputDecoration(
+            //       hintText: 'Search',
+            //       prefixIcon: const Icon(CupertinoIcons.search),
+            //     ),
+            //     // ),
+            //   ),
+            // ),
           ),
 
           const SizedBox(width: 30),
 
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_none),
-              ),
+          // Stack(
+          //   children: [
+          //     // IconButton(
+          //     //   onPressed: () {},
+          //     //   icon: const Icon(Icons.notifications_none),
+          //     // ),
 
-              Positioned(
-                right: 5,
-                top: 5,
-                child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '5',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          //     Positioned(
+          //       right: 5,
+          //       top: 5,
+          //       child: Container(
+          //         width: 18,
+          //         height: 18,
+          //         decoration: const BoxDecoration(
+          //           color: Colors.red,
+          //           shape: BoxShape.circle,
+          //         ),
+          //         child: const Center(
+          //           child: Text(
+          //             '5',
+          //             style: TextStyle(
+          //               color: Colors.white,
+          //               fontSize: 10,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           ThemeToggleWidget(),
           const SizedBox(width: 12),
 

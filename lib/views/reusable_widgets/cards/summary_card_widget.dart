@@ -34,9 +34,8 @@ class _SummaryCardState extends ConsumerState<SummaryCard> {
   @override
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
-
     final accentColor = widget.iconCardColor ?? AppColors.primaryBlue;
-
+    bool isMobile = Responsiveness.isMobile(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
 
@@ -180,7 +179,9 @@ class _SummaryCardState extends ConsumerState<SummaryCard> {
                                                                   .lightText,
                                                         fontFamily:
                                                             'Montserrat',
-                                                        fontSize: 22,
+                                                        fontSize: isMobile
+                                                            ? 13
+                                                            : 22,
                                                         fontStyle:
                                                             FontStyle.normal,
                                                       ),

@@ -1,19 +1,24 @@
 import 'package:anyamar/commons/exports.dart';
-import 'package:anyamar/data/providers/page_providers/selected_page_provider/selected_page_notifier.dart';
-import 'package:anyamar/data/providers/workspace/workspace_notifier.dart';
+import 'package:anyamar/data/models/unavailable_info/unavailable_info_model.dart';
 import 'package:anyamar/views/pages/dashboard_views/dashboard_widgets/logo_widget/logo_widget.dart';
 import 'package:anyamar/views/pages/widget_tree/intro_row/welcome_text.dart';
 
 class SidebarWidget extends ConsumerWidget {
   final List<dynamic> pages;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const SidebarWidget({super.key, required this.pages});
+  const SidebarWidget({
+    super.key,
+    required this.pages,
+    required this.scaffoldKey,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appData = ref.watch(userInformationProvider);
     final appUser = appData.appUser;
     final themeIsDark = ref.watch(themeIsDarkProvider);
+    bool isMobile = Responsiveness.isMobile(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -53,10 +58,16 @@ class SidebarWidget extends ConsumerWidget {
                     title: item.title,
                     index: item.index,
                     onPressedCallBack: () async {
-                      ref.read(workspaceProvider.notifier).closeWorkspace();
-                      ref
+                      await ref
+                          .read(workspaceProvider.notifier)
+                          .closeWorkspace();
+                      await ref
                           .read(selectedPageProvider.notifier)
                           .selectPage(item.index!);
+                      //close drawer if in mobile mode
+                      if (isMobile) {
+                        scaffoldKey.currentState?.closeDrawer();
+                      }
                     },
                   );
                 },
@@ -75,6 +86,7 @@ class SidebarWidget extends ConsumerWidget {
                     border: Border(top: BorderSide(color: Color(0xff18365F))),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const CircleAvatar(
                         radius: 22,
@@ -87,9 +99,10 @@ class SidebarWidget extends ConsumerWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             UserNameText(),
-
                             SizedBox(height: 3),
                             Text(
                               appUser?.userType ?? '',
@@ -103,30 +116,78 @@ class SidebarWidget extends ConsumerWidget {
                       ),
 
                       IconButton(
-                        onPressed: () => showDialog<bool>(
+                        onPressed: () => showGeneralDialog(
                           context: context,
-                          builder: (dialogContext) {
-                            return AlertModal(
-                              dialogTitle: 'Log Out',
-                              isDeleteModal: false,
-                              dialogInformation:
-                                  ' Hello  ${appUser?.userName} \n Are you sure you want to log out of your account ?',
-                              buttonTitle: 'Log out',
-                              onButtonPressedCallBack: () async {
-                                ref
-                                    .read(selectedPageProvider.notifier)
-                                    .selectPage(0);
-                                //       //todo: Dispose all providers
+                          useRootNavigator: true,
+                          barrierDismissible: false,
+                          barrierLabel: 'Log Out',
+                          barrierColor: Colors.transparent,
+                          transitionDuration: const Duration(milliseconds: 250),
 
-                                //Log out
-                                await ref
-                                    .read(authServiceProvider)
-                                    .signOutUser();
-                                Navigator.pop(context);
+                          pageBuilder:
+                              (dialogContext, animation, secondaryAnimation) {
+                                return Material(
+                                  color: Colors.transparent,
+                                  child: InfoUnavailableOverlay(
+                                    isError: true,
+                                    unavailableInfo: UnavailableInfoModel(
+                                      text: 'Log Out',
+                                      supplementaryText:
+                                          ' Hello  ${appUser?.userName} \n Are you sure you want to log out of your account ?',
+                                      closeMethod: () {
+                                        Navigator.of(
+                                          dialogContext,
+                                          rootNavigator: true,
+                                        ).pop();
+                                      },
+                                      ctaButtonWidget: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          ElevatedButtonWidget(
+                                            isClear: true,
+                                            buttonTitle: 'Cancel',
+                                            onButtonPressedCallBack: () =>
+                                                Navigator.pop(context),
+                                          ),
+                                          SizedBox(width: 06),
+                                          ElevatedButtonWidget(
+                                            buttonTitle: 'Log Out',
+                                            buttonColor: AppColors.red,
+                                            onButtonPressedCallBack: () async {
+                                              await ref
+                                                  .read(
+                                                    selectedPageProvider
+                                                        .notifier,
+                                                  )
+                                                  .selectPage(0);
+                                              //dispose providers??
+
+                                              //Log out
+                                              await ref
+                                                  .read(authServiceProvider)
+                                                  .signOutUser();
+                                              //dismiss alert
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    child: const SizedBox.expand(),
+                                  ),
+                                );
                               },
-                            );
-                          },
+
+                          transitionBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
                         ),
+
                         icon: Icon(Icons.keyboard_arrow_down),
                         color: Colors.white,
                       ),

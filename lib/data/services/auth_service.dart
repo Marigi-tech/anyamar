@@ -22,8 +22,6 @@ class AuthService {
   Stream<User?> get authStateChanges =>
       _firebaseAuth.authStateChanges(); //checking connection
 
-
-
   // Emits updates when the user's Firebase information changes.
   Stream<User?> get userChanges => _firebaseAuth.userChanges();
 
@@ -100,14 +98,31 @@ class AuthService {
   }
 
   //verify email
-  Future<void> verifyEmail() async {
-    try {
-      await _firebaseAuth.currentUser?.sendEmailVerification();
-    } on FirebaseAuthException catch (e) {
-      log(e.message.toString());
-      rethrow;
+  Future<void> sendEmailVerification() async {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw Exception('No authenticated user found.');
+    }
+
+    if (!user.emailVerified) {
+      try {
+        await user.sendEmailVerification();
+      } on FirebaseAuthException catch (e) {
+        log(e.message.toString());
+      } catch (e) {
+        log(e.toString());
+      }
     }
   }
+  // Future<void> verifyEmail() async {
+  //   try {
+  //     await _firebaseAuth.currentUser?.sendEmailVerification();
+  //   } on FirebaseAuthException catch (e) {
+  //     log(e.message.toString());
+  //     rethrow;
+  //   }
+  // }
   //Sign in with google
   // Future<void> signInWithGoogle ()async  {
   //   final googleProvider = GoogleAuthProvider();

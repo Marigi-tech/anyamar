@@ -28,7 +28,10 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
           ? AppColors.darkBackground
           : AppColors.lightBackground,
       drawer: isSidebarVisible && Responsiveness.isMobile(context)
-          ? Drawer(elevation: 6, child: SidebarWidget(pages: webPages))
+          ? Drawer(
+              elevation: 6,
+              child: SidebarWidget(pages: webPages, scaffoldKey: _scaffoldKey),
+            )
           : null,
 
       body: DataLoadingOverlay(
@@ -55,7 +58,10 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                   duration: const Duration(milliseconds: 100),
                   curve: Curves.easeInOut,
                   width: 220,
-                  child: SidebarWidget(pages: webPages),
+                  child: SidebarWidget(
+                    pages: webPages,
+                    scaffoldKey: _scaffoldKey,
+                  ),
                 ),
 
               // Page Area

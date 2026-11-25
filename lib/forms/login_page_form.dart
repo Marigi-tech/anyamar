@@ -25,9 +25,6 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
   // ============================================================
   // SIGN IN USER METHOD
   // ============================================================
-  // ============================================================
-  // SIGN IN USER METHOD
-  // ============================================================
 
   Future<void> _signInUser() async {
     final lazyLoader = LazyLoader(context: context);
@@ -64,13 +61,6 @@ class _LogInPageFormState extends ConsumerState<LogInPageForm> {
 
         return;
       }
-      // displaySnackBar(
-      //   context,
-      //   'Something went wrong, restart the app and try again',
-      //   dialogColor,
-      //   false,
-      // );
-      lazyLoader.hideLoader();
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 

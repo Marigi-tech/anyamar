@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/exports.dart';
 import 'package:anyamar/data/models/unavailable_info/unavailable_info_model.dart';
-import 'package:anyamar/views/pages/dashboard_views/dashboard_pages/units_page/page_states/unit_page_states.dart';
 
 //=====================================================
 // ADD TENANT
@@ -49,15 +48,6 @@ class AddTenantState extends ConsumerWidget {
                     isClear: true,
                     onButtonPressedCallBack: () =>
                         ref.read(workspaceProvider.notifier).closeWorkspace(),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButtonWidget(
-                    buttonTitle: 'Add Unit',
-                    onButtonPressedCallBack: () => ref
-                        .read(workspaceProvider.notifier)
-                        .openForm(
-                          AddUnitState(introText: '$introText / add tenant'),
-                        ),
                   ),
                 ],
               ),

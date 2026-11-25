@@ -2,7 +2,7 @@ import 'package:anyamar/commons/exports.dart';
 
 class PageDisplayCardsWidget extends ConsumerWidget {
   final int gridCount;
-  final List<SummaryCard> cards;
+  final List<Widget> cards;
   const PageDisplayCardsWidget({
     super.key,
     required this.gridCount,
