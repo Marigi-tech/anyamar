@@ -30,7 +30,7 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
     final units = appData.units;
     final TextStyle headerStyle = CustomTextStyles.cardDescriptionStyle
         .copyWith(
-          color: themeIsDark == true
+          color: themeIsDark != false
               ? AppColors.whiteColor
               : AppColors.blueGreyColor,
           fontStyle: FontStyle.normal,
@@ -38,7 +38,7 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
           letterSpacing: 0.6,
         );
     final TextStyle labelStyle = CustomTextStyles.cardDescriptionStyle.copyWith(
-      color: themeIsDark == true ? AppColors.whiteColor : AppColors.lightText,
+      color: themeIsDark != false ? AppColors.whiteColor : AppColors.lightText,
       fontStyle: FontStyle.normal,
       fontSize: 13,
       letterSpacing: 0.3,
@@ -144,7 +144,7 @@ class _TenantsTableState extends ConsumerState<TenantsTable> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: themeIsDark == true
+                          color: themeIsDark != false
                               ? AppColors.whiteColor
                               : Color(0xff172554),
                         ),

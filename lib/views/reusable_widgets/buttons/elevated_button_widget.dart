@@ -64,20 +64,20 @@ class ElevatedButtonWidgetState extends ConsumerState<ElevatedButtonWidget> {
               shadowColor: isHovered
                   ? widget.buttonColor ??
                         AppColors.primaryBlue.withValues(alpha: 0.5)
-                  : themeIsDark == true
+                  : themeIsDark != false
                   ? AppColors.darkElevatedCard.withValues(alpha: 0.9)
                   : AppColors.whiteColor.withValues(alpha: 0.9),
 
               backgroundColor: widget.isOutlined == true
                   ? null
                   : widget.isClear == true
-                  ? themeIsDark == true
+                  ? themeIsDark != false
                         ? AppColors.darkCard
                         : AppColors.lightCard
                   : widget.buttonColor ?? AppColors.buttonBlueColor,
               foregroundColor:
                   widget.isClear == true || widget.isOutlined == true
-                  ? themeIsDark == true
+                  ? themeIsDark != false
                         ? AppColors.darkText
                         : AppColors.lightText
                   : AppColors.whiteColor,

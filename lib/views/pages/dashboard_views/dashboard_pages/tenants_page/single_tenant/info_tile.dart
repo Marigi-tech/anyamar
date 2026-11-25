@@ -38,7 +38,9 @@ class InfoTile extends ConsumerWidget {
           fontStyle: FontStyle.normal,
           // fontSize: fontSize ?? 14,
           // fontFamily: 'Lato',
-          color: themeIsDark == true ? AppColors.darkText : AppColors.lightText,
+          color: themeIsDark != false
+              ? AppColors.darkText
+              : AppColors.lightText,
         ),
       ),
       trailing:

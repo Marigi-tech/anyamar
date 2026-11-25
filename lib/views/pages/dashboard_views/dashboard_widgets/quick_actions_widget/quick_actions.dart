@@ -32,33 +32,40 @@ class _QWidgetState extends ConsumerState<QWidget> {
   Widget build(BuildContext context) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
 
-    Color hoverBackground = themeIsDark == true
-        ? AppColors.darkBlue.withValues(alpha: 0.9)
-        : AppColorsConstant.kPrimaryColor.withValues(alpha: 0.9);
     Color background = themeIsDark == true
-        ? AppColors.darkCard.withValues(alpha: 0.9)
+        ? AppColors.darkBlue.withValues(alpha: 0.035)
         : AppColors.lightCard.withValues(alpha: 0.9);
+    Color hoverBackground = themeIsDark == true
+        ? AppColors.darkCard.withValues(alpha: 0.9)
+        : AppColorsConstant.kPrimaryColor.withValues(alpha: 0.95);
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onHover: (event) {
-        setState(() {
-          isHovered = true;
-        });
-      },
-      onExit: (event) {
-        setState(() {
-          isHovered = false;
-        });
-      },
-      child: GestureDetector(
-        onTap: widget.onPressedCallBack,
-        child: Container(
-          decoration: BoxDecoration(
-            color: isHovered ? hoverBackground : background,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onHover: (event) {
+            setState(() {
+              isHovered = true;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              isHovered = false;
+            });
+          },
+          child: GestureDetector(
+            onTap: widget.onPressedCallBack,
+            child: Container(
+              decoration: BoxDecoration(
+                color: isHovered ? hoverBackground : background,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.0),
+              child: widget.child,
+            ),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10.0),
-          child: widget.child,
         ),
       ),
     );

@@ -197,10 +197,19 @@ class _PageHeader extends StatelessWidget {
         // ------------------------------------------
         if (introRowWidgets.isNotEmpty)
           Flexible(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: introRowWidgets,
-            ),
+            child: !Responsiveness.isDesktop(context)
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    spacing: 6,
+                    children: introRowWidgets,
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 6,
+                    children: introRowWidgets,
+                  ),
           ),
       ],
     );

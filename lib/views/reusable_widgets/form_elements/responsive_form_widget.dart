@@ -18,12 +18,12 @@ class ResponsiveFormWidget extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
       decoration: BoxDecoration(
-        color: themeIsDark == true
+        color: themeIsDark != false
             ? AppColors.darkElevatedCard
             : AppColors.whiteColor,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: themeIsDark == true
+          color: themeIsDark != false
               ? AppColors.darkBorder
               : const Color(0xffE5EAF1),
         ),

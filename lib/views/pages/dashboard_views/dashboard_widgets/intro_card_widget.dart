@@ -73,10 +73,10 @@ class _IntroCardWidgetState extends ConsumerState<IntroCardWidget> {
                   elevation: isHovered ? 14.0 : 4.0,
                   shadowColor: isHovered
                       ? AppColors.primaryBlue.withValues(alpha: 0.5)
-                      : themeIsDark == true
+                      : themeIsDark != false
                       ? AppColors.darkElevatedCard.withValues(alpha: 0.9)
                       : AppColors.whiteColor.withValues(alpha: 0.9),
-                  color: themeIsDark == true
+                  color: themeIsDark != false
                       ? AppColors.darkCard.withValues(alpha: 0.9)
                       : AppColors.lightCard.withValues(alpha: 0.9),
                   // shadowColor: isHovered ? AppColorsConstant.blueGreyColor : null,
@@ -147,7 +147,7 @@ class _IntroCardWidgetState extends ConsumerState<IntroCardWidget> {
 
                                           color: isHovered
                                               ? AppColors.whiteColor
-                                              : themeIsDark == true
+                                              : themeIsDark != false
                                               ? AppColors.whiteColor
                                               : Color(0xff718096),
                                         ),
@@ -175,7 +175,7 @@ class _IntroCardWidgetState extends ConsumerState<IntroCardWidget> {
                                           // fontWeight: FontWeight.w700,
                                           color: isHovered
                                               ? AppColors.whiteColor
-                                              : themeIsDark == true
+                                              : themeIsDark != false
                                               ? AppColors.whiteColor
                                               : Color(0xff12234A),
                                         ),
@@ -195,7 +195,7 @@ class _IntroCardWidgetState extends ConsumerState<IntroCardWidget> {
                                           fontSize: 14,
                                           color: isHovered
                                               ? AppColors.whiteColor
-                                              : themeIsDark == true
+                                              : themeIsDark != false
                                               ? AppColors.whiteColor
                                               : Color(0xff718096),
                                         ),

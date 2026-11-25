@@ -22,47 +22,6 @@ class QuickFinancesActions extends ConsumerWidget {
         : true;
     return QuickActionsWidget(
       children: [
-        // if (financialRecord != null || rentEntry != null) CardItemSeparator(),
-        // //Add Expense Record
-        // QWidget(
-        //   onPressedCallBack: () => ref
-        //       .read(workspaceProvider.notifier)
-        //       .openForm(
-        //         AddExpensesStatePage(
-        //           introText: '$introText / add expense record',
-        //         ),
-        //       ),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       RowTitleWidget(
-        //         text: 'Add expense record',
-        //         icon: CupertinoIcons.add,
-        //       ),
-        //       Icon(CupertinoIcons.chevron_right, size: 15),
-        //     ],
-        //   ),
-        // ),
-        // CardItemSeparator(),
-        // //Add Rent Entry
-        // QWidget(
-        //   onPressedCallBack: () => ref
-        //       .read(workspaceProvider.notifier)
-        //       .openForm(
-        //         AddIncomeStatePage(introText: '$introText / add rent record'),
-        //       ),
-
-        //   // onPressedCallBack: () =>
-        //   //     ref.read(financesPageProvider.notifier).addIncomeRecord(),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       RowTitleWidget(text: 'Add rent record', icon: CupertinoIcons.add),
-        //       Icon(CupertinoIcons.chevron_right, size: 15),
-        //     ],
-        //   ),
-        // ),
-        // CardItemSeparator(),
         //View expense records
         if (isGeneralPage)
           QWidget(

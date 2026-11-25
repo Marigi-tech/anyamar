@@ -67,7 +67,7 @@ class _AddOrUpdateUnitFormState extends ConsumerState<AddOrUpdateUnitForm> {
       currency = Currencies.ksh;
       selectedCurrency = currency?.label;
       selectedPaymentFrequency = PaymentFrequency.monthly;
-      freqShortHand = selectedPaymentFrequency?.label ?? 'month';
+      freqShortHand = getFreqFromPaymentFrequency(selectedPaymentFrequency);
       floorController.text = '';
 
       return;

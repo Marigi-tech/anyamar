@@ -54,7 +54,7 @@ class _ExpenseRecordFormState extends ConsumerState<ExpenseRecordForm> {
     paymentMethod = record.paymentMethod;
     paymentDescriptionController.text = record.paymentDescription.toString();
   }
- 
+
   void _updateDatePaid(String value) {
     final parts = value.split('/');
     if (parts.length != 3) return;

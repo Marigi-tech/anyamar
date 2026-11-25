@@ -34,7 +34,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         tileIcon: CupertinoIcons.gear,
                         tileTitle: 'Theme',
                         tileDescription:
-                            'Current Theme : ${isDark == true ? 'Dark' : 'Light'} ',
+                            'Current Theme : ${isDark != false ? 'Dark' : 'Light'} ',
                         onTapCallBack: () {
                           ref.read(themeIsDarkProvider.notifier).toggleTheme();
                         },

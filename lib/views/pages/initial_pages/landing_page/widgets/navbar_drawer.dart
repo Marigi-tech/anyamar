@@ -22,8 +22,6 @@ class NavBarDrawer extends ConsumerWidget {
         ),
       ),
       margin: EdgeInsets.zero,
-
-      // padding: const EdgeInsets.fromLTRB(15, 28, 10, 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
 
@@ -47,9 +45,12 @@ class NavBarDrawer extends ConsumerWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(35),
             ),
-            onButtonPressedCallBack: () => Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => SignUpPage())),
+            onButtonPressedCallBack: () {
+              scaffoldKey.currentState?.closeEndDrawer();
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => SignUpPage()));
+            },
           ),
           SizedBox(height: 20.0),
           ElevatedButtonWidget(
@@ -60,6 +61,7 @@ class NavBarDrawer extends ConsumerWidget {
               borderRadius: BorderRadius.circular(35),
             ),
             onButtonPressedCallBack: () {
+              scaffoldKey.currentState?.closeEndDrawer();
               Navigator.of(
                 context,
               ).push(MaterialPageRoute(builder: (_) => LoginPage()));

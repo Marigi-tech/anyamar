@@ -1,7 +1,4 @@
-
-
 import 'package:anyamar/commons/exports.dart';
-
 
 class SettingsDialog extends ConsumerWidget {
   const SettingsDialog({super.key});
@@ -38,7 +35,7 @@ class SettingsDialog extends ConsumerWidget {
 
                 child: ListTile(
                   leading: Icon(
-                    themeIsDark == true ? Icons.dark_mode : Icons.light_mode,
+                    themeIsDark != false ? Icons.dark_mode : Icons.light_mode,
 
                     size: 16,
                     color: AppColorsConstant.blueGreyColor,
