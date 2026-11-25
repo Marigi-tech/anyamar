@@ -17,8 +17,8 @@ class HomePage extends ConsumerWidget {
       supplementaryText: 'Here\'s what happening with your properties today',
       introRowWidgets: [
         ElevatedButtonWidget(
-          buttonTitle: 'Add New',
-          buttonIcon: Icon(Icons.add),
+          buttonTitle: 'Actions',
+          buttonIcon: Icon(Icons.info),
           onButtonPressedCallBack: () {
             showDialog(
               context: context,

@@ -11,7 +11,7 @@ class ThemeNotifier extends Notifier<bool> {
   @override
   bool build() {
     _loadTheme();
-    return false; // default (light)
+    return true; // default (dark)
   }
 
   void _loadTheme() async {

@@ -75,10 +75,9 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
                     });
                   },
                   child: Icon(
-                    passwordIsVisible
-                        ? CupertinoIcons.eye_slash
-                        : CupertinoIcons.eye,
-                    size: 18,
+                    passwordIsVisible ? Icons.visibility : Icons.visibility_off,
+                    size: 15,
+                  
                   ),
                 ),
               )

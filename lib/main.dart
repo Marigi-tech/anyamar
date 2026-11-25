@@ -1,6 +1,5 @@
 import 'package:anyamar/commons/app_theme.dart';
 import 'package:anyamar/commons/exports.dart';
-
 import 'firebase_options.dart';
 import 'package:web/web.dart' as web;
 

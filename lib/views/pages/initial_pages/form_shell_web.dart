@@ -37,49 +37,48 @@ class _FormShellWebState extends ConsumerState<FormShellWeb> {
 
     containerColor = isDark ? AppColors.darkElevatedCard : AppColors.lightCard;
     return Scaffold(
-      // backgroundColor: backgroundColor,
+      backgroundColor: isMobile ? containerColor : null,
       body: SafeArea(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              colors: [
-                AppColors.buttonBlueColor.withValues(alpha: 0.95),
-                AppColors.buttonBlueColor.withValues(alpha: 0.45),
-                AppColors.buttonBlueColor.withValues(alpha: 0.045),
-                backgroundColor.withValues(alpha: 0.025),
-                backgroundColor.withValues(alpha: 0.25),
-                backgroundColor.withValues(alpha: 0.95),
-                backgroundColor.withValues(alpha: 0.25),
-                backgroundColor.withValues(alpha: 0.025),
-                AppColors.buttonBlueColor.withValues(alpha: 0.045),
-                AppColors.buttonBlueColor.withValues(alpha: 0.45),
-                AppColors.buttonBlueColor.withValues(alpha: 0.95),
-                // AppColors.buttonBlueColor.withValues(alpha: 0.45),
-                // AppColors.buttonBlueColor.withValues(alpha: 0.0045),
-                // AppColors.buttonBlueColor.withValues(alpha: 0.95),
-              ],
-              stops: const [
-                0.0,
-                0.09,
-                0.18,
-                0.24,
-                0.31,
-                0.42,
-                0.58,
-                0.65,
-                0.73,
-                0.88,
-                1.0,
-              ],
-            ),
-          ),
+        child: isMobile
+            ? _buildMobileLayout()
+            : Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: [
+                      AppColors.buttonBlueColor.withValues(alpha: 0.95),
+                      AppColors.buttonBlueColor.withValues(alpha: 0.45),
+                      AppColors.buttonBlueColor.withValues(alpha: 0.045),
+                      backgroundColor.withValues(alpha: 0.025),
+                      backgroundColor.withValues(alpha: 0.25),
+                      backgroundColor.withValues(alpha: 0.95),
+                      backgroundColor.withValues(alpha: 0.25),
+                      backgroundColor.withValues(alpha: 0.025),
+                      AppColors.buttonBlueColor.withValues(alpha: 0.045),
+                      AppColors.buttonBlueColor.withValues(alpha: 0.45),
+                      AppColors.buttonBlueColor.withValues(alpha: 0.95),
+                    ],
+                    stops: const [
+                      0.0,
+                      0.09,
+                      0.18,
+                      0.24,
+                      0.31,
+                      0.42,
+                      0.58,
+                      0.65,
+                      0.73,
+                      0.88,
+                      1.0,
+                    ],
+                  ),
+                ),
 
-          child: isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
-        ),
+                child: _buildDesktopLayout(),
+              ),
       ),
     );
   }
@@ -142,7 +141,6 @@ class _FormShellWebState extends ConsumerState<FormShellWeb> {
                     // Image section
                     Expanded(flex: 6, child: _buildImageSection()),
                     Expanded(flex: 1, child: SizedBox()),
-
                     Expanded(
                       flex: 5,
                       child: SingleChildScrollView(
@@ -150,9 +148,6 @@ class _FormShellWebState extends ConsumerState<FormShellWeb> {
                         child: widget.webForm,
                       ),
                     ),
-                    //   ],
-                    // ),
-                    // ),
                     Expanded(flex: 1, child: SizedBox()),
                   ],
                 ),
@@ -166,27 +161,28 @@ class _FormShellWebState extends ConsumerState<FormShellWeb> {
   // ============================================================
 
   Widget _buildMobileLayout() {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20.0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomBackButton(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(25),
-              child: widget.webForm,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomBackButton(),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: ThemeToggleWidget(iconSize: 15),
             ),
+          ],
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(25),
+            child: widget.webForm,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

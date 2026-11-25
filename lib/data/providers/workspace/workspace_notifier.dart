@@ -29,7 +29,7 @@ class WorkspaceNotifier extends _$WorkspaceNotifier {
     state = WidgetWorkspaceView(form);
   }
 
-  void closeWorkspace() {
+  Future<void> closeWorkspace() async{
     if (_history.isEmpty) {
       state = null;
       return;

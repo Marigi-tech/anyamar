@@ -1,5 +1,3 @@
-
-import 'package:anyamar/commons/exports.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'selected_page_notifier.g.dart';
@@ -12,7 +10,7 @@ class SelectedPageNotifier extends _$SelectedPageNotifier {
   }
 
   /// Select a page using its index.
-  void selectPage(int pageIndex) {
+  Future<void> selectPage(int pageIndex) async {
     if (pageIndex < 0) return;
 
     state = pageIndex;

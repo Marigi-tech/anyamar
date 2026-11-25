@@ -26,170 +26,155 @@ class VerificationScreen extends ConsumerStatefulWidget {
   const VerificationScreen({super.key});
 
   @override
-  ConsumerState<VerificationScreen> createState() => _VerificationScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _VerificationScreenState();
 }
 
 class _VerificationScreenState extends ConsumerState<VerificationScreen> {
-  String message = '';
-  bool isSuccess = false;
-
-  Timer? _verificationTimer;
-  bool _isChecking = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Check Firebase every 5 seconds.
-    _verificationTimer = Timer.periodic(
-      const Duration(seconds: 5),
-      (_) => _checkEmailVerification(),
-    );
+  bool isChecking = false;
+  bool isResending = false;
+  Future<void> _redirectToWidgetTree() async {
+    LazyLoader lazyLoader = LazyLoader(context: context);
+    lazyLoader.showLoader();
+    await Navigator.of(
+      context,
+    ).pushReplacement((MaterialPageRoute(builder: (_) => WidgetTree())));
+    lazyLoader.hideLoader();
   }
 
-  Future<void> _checkEmailVerification() async {
-    if (!mounted || _isChecking) return;
-
-    _isChecking = true;
+  Future<void> _checkVerification() async {
+    LazyLoader lazyLoader = LazyLoader(context: context);
+    lazyLoader.showLoader();
+    setState(() => isChecking = true);
 
     try {
-      final authService = ref.read(authServiceProvider);
+      await FirebaseAuth.instance.currentUser?.reload();
 
-      final isVerified = await authService.reloadAndCheckEmailVerification();
+      final user = FirebaseAuth.instance.currentUser;
 
-      if (!mounted) return;
-
-      if (isVerified) {
-        _verificationTimer?.cancel();
-
-        setState(() {
-          isSuccess = true;
-          message = 'Your email has been successfully verified!';
-        });
-
-        // No manual navigation is necessary.
-        // WidgetTree will automatically display DashboardWidget.
+      if (user != null && user.emailVerified) {
+        await _redirectToWidgetTree();
+      } else {
+        displaySnackBar(
+          context,
+          'Your email has not been verfied yet. \n Please check your emails and click the verification link',
+          AppColors.darkElevatedCard,
+          false,
+        );
       }
     } catch (e) {
-      debugPrint('Email verification check failed: $e');
+      debugPrint('Verification check failed: $e');
     } finally {
-      _isChecking = false;
+      if (mounted) {
+        setState(() => isChecking = false);
+      }
+      lazyLoader.hideLoader();
+    }
+  }
+
+  Future<void> _resendVerification() async {
+    LazyLoader lazyLoader = LazyLoader(context: context);
+    lazyLoader.showLoader();
+    setState(() => isResending = true);
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+
+        if (!mounted) return;
+
+        displaySnackBar(
+          context,
+          'Email verification link sent succesfully',
+          AppColors.darkElevatedCard,
+          true,
+        );
+      }
+    } catch (e) {
+      debugPrint('Resending verification failed: $e');
+    } finally {
+      if (mounted) {
+        setState(() => isResending = false);
+      }
+      lazyLoader.showLoader();
     }
   }
 
   @override
-  void dispose() {
-    _verificationTimer?.cancel();
-    super.dispose();
-  }
-
-  // String message = '';
-  // bool isSuccess = false;
-  Widget _messageWidget() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
-      child: Text(
-        message,
-        style: CustomTextStyles.cardDescriptionStyle.copyWith(
-          fontSize: 15,
-          color: isSuccess
-              ? AppColorsConstant.greenColor
-              : AppColorsConstant.redColor,
-        ),
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final authService = ref.watch(authServiceProvider);
-    final imagePath = authService.currentUser?.emailVerified == true
-        ? 'assets/images/face.png'
-        : 'assets/images/email.png';
-
-    return Align(
-      alignment: Alignment.topLeft,
+    final email = FirebaseAuth.instance.currentUser?.email ?? '';
+    bool isDark = ref.watch(themeIsDarkProvider);
+    return Padding(
+      padding: const EdgeInsets.all(24),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 30.0),
-          Image(image: AssetImage(imagePath), height: 60, width: 60),
-          SizedBox(height: 10.0),
-          Text(
-            authService.currentUser?.emailVerified == true
-                ? 'Your account has been verified'
-                : 'Click the button below to receive an email verification link',
-            textAlign: TextAlign.center,
-            style: CustomTextStyles.cardDescriptionStyle.copyWith(fontSize: 20),
+          const Icon(
+            Icons.mark_email_unread_outlined,
+            size: 70,
+            color: LandingHeroColors.muted,
           ),
-          _messageWidget(),
-          SizedBox(height: 30.0),
+          const SizedBox(height: 40),
+          Text(
+            'Verify your email address',
+            style: CustomTextStyles.cardDescriptionStyle.copyWith(
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.normal,
+            ),
+          ),
+          SizedBox(height: 6),
+          Container(
+            width: 190,
+            height: 2,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 4, 73, 221),
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 20),
+          RichText(
+            textAlign: TextAlign.center,
+            softWrap: true,
+            text: TextSpan(
+              text: 'We have sent a verification link to ',
+              children: [
+                TextSpan(
+                  text: email,
+                  style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                    color: AppColors.primaryBlue,
+                    fontSize: 16,
+                    letterSpacing: -0.4,
+                  ),
+                ),
+                TextSpan(text: '. Please verify your email before continuing.'),
+              ],
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButtonWidget(
-                onButtonPressedCallBack: () async {
-                  final authService = ref.read(authServiceProvider);
-
-                  try {
-                    // First check whether the user has already verified their email.
-                    final isVerified = await authService
-                        .reloadAndCheckEmailVerification();
-
-                    if (!mounted) return;
-
-                    if (isVerified) {
-                      _verificationTimer?.cancel();
-
-                      setState(() {
-                        isSuccess = true;
-                        message = 'Your email has been successfully verified!';
-                      });
-
-                      return;
-                    }
-
-                    // If not verified, send another verification link.
-                    await authService.verifyEmail();
-
-                    if (!mounted) return;
-
-                    setState(() {
-                      isSuccess = true;
-                      message =
-                          'A verification link has been sent to your email.';
-                    });
-                  } on FirebaseAuthException catch (e) {
-                    if (!mounted) return;
-
-                    setState(() {
-                      isSuccess = false;
-                      message = e.message ?? e.code;
-                    });
-                  } catch (e) {
-                    if (!mounted) return;
-
-                    setState(() {
-                      isSuccess = false;
-                      message = 'Something went wrong. Please try again.';
-                    });
-                  }
-                },
-
-                buttonTitle: 'Send Link',
+              style: CustomTextStyles.cardDescriptionStyle.copyWith(
+                color: isDark ? AppColors.darkText : LandingHeroColors.muted,
+                fontSize: 16,
+                fontStyle: FontStyle.normal,
               ),
-              SizedBox(width: 20),
-              //       //Temporarily log out
-              ElevatedButtonWidget(
-                isClear: true,
-                onButtonPressedCallBack: () async {
-                  await AuthService().signOutUser();
-                },
-                buttonTitle: 'Back to home page  ->',
-              ),
-            ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          ElevatedButtonWidget(
+            isClear: true,
+            onButtonPressedCallBack: () =>
+                isChecking ? null : _checkVerification,
+            buttonTitle: isChecking ? 'Checking' : "I've verified my email",
+          ),
+          SizedBox(height: 10.0),
+          ElevatedButtonWidget(
+            onButtonPressedCallBack: () =>
+                isResending ? null : _resendVerification,
+            buttonTitle: isResending
+                ? 'Sending...'
+                : 'Resend verification email',
+            buttonIcon: Icon(CupertinoIcons.envelope),
           ),
         ],
       ),

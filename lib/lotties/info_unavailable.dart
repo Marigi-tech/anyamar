@@ -10,12 +10,14 @@ class InfoUnavailableOverlay extends ConsumerWidget {
   final Widget child;
   final UnavailableInfoModel? unavailableInfo;
   final bool? isError;
+  final String? customLottiePath;
 
   const InfoUnavailableOverlay({
     super.key,
     this.unavailableInfo,
     required this.child,
     this.isError,
+    this.customLottiePath,
   });
 
   @override
@@ -104,9 +106,10 @@ class InfoUnavailableOverlay extends ConsumerWidget {
                               height: 150,
                               width: 150,
                               child: Lottie.asset(
-                                isError != true
-                                    ? 'assets/lotties/login.json'
-                                    : 'assets/lotties/help.json',
+                                customLottiePath ??
+                                    (isError != true
+                                        ? 'assets/lotties/login.json'
+                                        : 'assets/lotties/help.json'),
                               ),
                             ),
                             const SizedBox(height: 10),

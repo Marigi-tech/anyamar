@@ -44,23 +44,23 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       pageTitle: 'My Account',
       supplementaryText: 'account details',
       introRowWidgets: [
-        ElevatedButtonWidget(
-          buttonTitle: isUpdateMode == true
-              ? 'Go back'
-              : 'Click here to update your profile',
-          isClear: true,
-          onButtonPressedCallBack: () {
-            setState(() {
-              isUpdateMode = !isUpdateMode;
-            });
-          },
-        ),
+        // ElevatedButtonWidget(
+        //   buttonTitle: isUpdateMode == true
+        //       ? 'Go back'
+        //       : 'Click here to update your profile',
+        //   isClear: true,
+        //   onButtonPressedCallBack: () {
+        //     setState(() {
+        //       isUpdateMode = !isUpdateMode;
+        //     });
+        //   },
+        // ),
       ],
       scrollableDashboardWidget: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 600),
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: Form(
               key: _formKey,
               child: Column(
@@ -68,7 +68,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 50,
+                    radius: 40,
                     backgroundColor:
                         avatarBackgroundColors[appUser!.userName[0].length %
                             avatarBackgroundColors.length],
@@ -82,148 +82,79 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  isUpdateMode
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FormLabel(label: 'User Name', isRequired: true),
-                            SizedBox(height: 6),
-                            FormFieldWidget(
-                              controller: userNameController,
-                              keyboardType: TextInputType.text,
-                              hintText: 'User Name',
-                            ),
-                            SizedBox(height: 15),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Expanded(
-                              child: InfoTile(
-                                tileIcon: CupertinoIcons.person,
-                                tileTitle: 'Name',
-                                tileDescription: appUser.userName,
-                                onTapCallBack: () {},
-                              ),
-                            ),
-                          ],
-                        ),
+                  SizedBox(height: 15),
+                  FormLabel(label: 'User Name', isRequired: true),
+                  SizedBox(height: 6),
+                  FormFieldWidget(
+                    controller: userNameController,
+                    keyboardType: TextInputType.text,
+                    hintText: 'User Name',
+                  ),
+                  SizedBox(height: 15),
+                  FormLabel(label: 'Email', isRequired: false),
+                  SizedBox(height: 6),
+                  FormFieldWidget(
+                    controller: userEmailController,
+                    keyboardType: TextInputType.emailAddress,
+                    hintText: 'Email address',
+                    isReadOnly: false,
+                  ),
+                  SizedBox(height: 15),
+                  FormLabel(label: 'Phone Number', isRequired: true),
+                  SizedBox(height: 6),
+                  FormFieldWidget(
+                    controller: userPhoneController,
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    hintText: 'Phone Number',
+                    required: false,
+                  ),
 
-                  //Email
-                  isUpdateMode
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FormLabel(label: 'Email', isRequired: false),
-                            SizedBox(height: 6),
-                            FormFieldWidget(
-                              controller: userEmailController,
-                              keyboardType: TextInputType.emailAddress,
-                              hintText: 'Email address',
-                              isReadOnly: false,
-                            ),
-                            SizedBox(height: 15),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Expanded(
-                              child: InfoTile(
-                                tileIcon: CupertinoIcons.envelope,
-                                tileTitle: 'Email',
-                                tileDescription: appUser.userEmail,
-                                onTapCallBack: () {},
-                              ),
-                            ),
-                          ],
-                        ),
-                  //Phone number
-                  isUpdateMode
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FormLabel(label: 'Phone Number', isRequired: true),
-                            SizedBox(height: 6),
-                            FormFieldWidget(
-                              controller: userPhoneController,
-                              keyboardType: TextInputType.text,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              hintText: 'Phone Number',
-                              required: false,
-                            ),
-                            SizedBox(height: 15),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Expanded(
-                              child: InfoTile(
-                                tileIcon: CupertinoIcons.phone,
-                                tileTitle: 'Phone',
-                                tileDescription: appUser.userPhoneNumber != null
-                                    ? appUser.userPhoneNumber.toString()
-                                    : '',
-                                onTapCallBack: () {},
-                              ),
-                            ),
-                          ],
-                        ),
                   SizedBox(height: 20),
                   //Update Button
-                  isUpdateMode
-                      ? ElevatedButtonWidget(
-                          buttonTitle: 'Update Profile',
-                       buttonIcon: Icon(CupertinoIcons.pen),
-                          onButtonPressedCallBack: () async {
-                            if (_formKey.currentState!.validate()) {
-                              final LazyLoader lazyLoader = LazyLoader(
-                                context: context,
-                              );
-                              lazyLoader.showLoader();
-                              final db = DbService();
-                              final AppUser tobeUpdated = appUser.copyWith(
-                                userName: userNameController.text.trim(),
-                                userPhoneNumber: userPhoneController.text
-                                    .trim(),
-                              );
-                              log(
-                                'User Name : ${tobeUpdated.userName}, User Phone : ${tobeUpdated.userEmail}',
-                              );
-                              try {
-                                AppUser? updatedUser = await db.updateUser(
-                                  tobeUpdated,
-                                );
-                                //  final AppUser updatedUser =    await    ref
-                                //               .read(appUserProvider.notifier)
-                                //               .updateAppUser(updatedUser);
-                                //local change
-                                if (updatedUser != null) {
-                                  notifier.updateUser(updatedUser);
+                  ElevatedButtonWidget(
+                    buttonTitle: 'Update Profile',
+                    buttonIcon: Icon(CupertinoIcons.pen),
+                    onButtonPressedCallBack: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final LazyLoader lazyLoader = LazyLoader(
+                          context: context,
+                        );
+                        lazyLoader.showLoader();
+                        final db = DbService();
+                        final AppUser tobeUpdated = appUser.copyWith(
+                          userName: userNameController.text.trim(),
+                          userPhoneNumber: userPhoneController.text.trim(),
+                        );
+                        log(
+                          'User Name : ${tobeUpdated.userName}, User Phone : ${tobeUpdated.userEmail}',
+                        );
+                        try {
+                          AppUser? updatedUser = await db.updateUser(
+                            tobeUpdated,
+                          );
 
-                                  setState(() {
-                                    isUpdateMode = false;
-                                  });
-                                }
-                              } catch (e) {
-                                displaySnackBar(
-                                  context,
-                                  'Error : $e',
-                                  dialogColor,
-                                  false,
-                                );
-                              } finally {
-                                lazyLoader.hideLoader();
-                              }
-                            }
-                          },
-                        )
-                      : SizedBox(),
+                          //local change
+                          if (updatedUser != null) {
+                            notifier.updateUser(updatedUser);
+
+                            setState(() {
+                              isUpdateMode = false;
+                            });
+                          }
+                        } catch (e) {
+                          displaySnackBar(
+                            context,
+                            'Error : $e',
+                            dialogColor,
+                            false,
+                          );
+                        } finally {
+                          lazyLoader.hideLoader();
+                        }
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
