@@ -127,7 +127,6 @@ class _UnitsTableState extends ConsumerState<UnitsTable> {
                             SingleUnitWidget(
                               unit: unit,
                               introText: '${widget.introText} / unit',
-                              
                             ),
                           );
                     },

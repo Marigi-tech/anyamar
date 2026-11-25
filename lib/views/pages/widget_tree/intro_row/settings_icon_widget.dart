@@ -54,7 +54,7 @@ class SettingsIconWidget extends ConsumerWidget {
 
                             child: ListTile(
                               leading: Icon(
-                                themeIsDark == true
+                                themeIsDark != false
                                     ? Icons.light_mode
                                     : Icons.dark_mode,
 

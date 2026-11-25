@@ -23,7 +23,7 @@ class RowTitleWidget extends ConsumerWidget {
           text,
           style: CustomTextStyles.cardDescriptionStyle.copyWith(
             fontStyle: FontStyle.normal,
-            color: themeIsDark == true
+            color: themeIsDark != false
                 ? AppColors.darkText
                 : AppColors.lightText,
           ),

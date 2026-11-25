@@ -34,7 +34,7 @@ class _PropertyRentHistoryState extends ConsumerState<PropertyRentHistory> {
     String introText = widget.introText;
     final TextStyle headerStyle = CustomTextStyles.cardDescriptionStyle
         .copyWith(
-          color: themeIsDark == true
+          color: themeIsDark != false
               ? AppColors.whiteColor
               : AppColors.blueGreyColor,
 
@@ -44,7 +44,7 @@ class _PropertyRentHistoryState extends ConsumerState<PropertyRentHistory> {
           fontSize: 14,
         );
     final TextStyle labelStyle = CustomTextStyles.cardDescriptionStyle.copyWith(
-      color: themeIsDark == true ? AppColors.whiteColor : AppColors.lightText,
+      color: themeIsDark != false ? AppColors.whiteColor : AppColors.lightText,
       fontStyle: FontStyle.normal,
       fontSize: 13,
       letterSpacing: 0.3,
@@ -171,11 +171,13 @@ class _PropertyRentHistoryState extends ConsumerState<PropertyRentHistory> {
                               supplementaryText:
                                   'Property : ${widget.property.propertyName}',
                               introRowWidgets: [
-                                ElevatedButtonWidget(buttonTitle: 'Export', 
-                                buttonColor: AppColors.purpleColor,
-                                onButtonPressedCallBack: (){
-                                 // toDo: Generate receipt
-                                })
+                                ElevatedButtonWidget(
+                                  buttonTitle: 'Export',
+                                  buttonColor: AppColors.purpleColor,
+                                  onButtonPressedCallBack: () {
+                                    // toDo: Generate receipt
+                                  },
+                                ),
                               ],
                               introButton: IntroButtonWidget(),
                               scrollableDashboardWidget:

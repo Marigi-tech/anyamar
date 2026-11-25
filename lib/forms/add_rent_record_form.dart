@@ -597,7 +597,7 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
       );
 
       // 5. Create the actual payment transaction.
-      final rentEntry = SingleRentEntry(
+      SingleRentEntry? rentEntry = SingleRentEntry(
         paymentDate: datePaid!,
         amountPayable: amountPayable,
         amountPaid: double.parse(amountController.text.replaceAll(',', '')),
@@ -643,8 +643,12 @@ class _RentalRecordFormState extends ConsumerState<RentalRecordForm> {
           paymentBy: Person(personName: tenant.tenantName),
         ),
       );
+      //9. Append local rent records
+      // if(rentEntry != null){
+      // notifier.appendRentRecords(RentalRecord(tenantId: rentEntry.tenantId!, unitId: rentEntry.unitId!, rentEntry: rentEntry, rentalMonth: rentEntry.rentalMonth!, rentHistory: rentHistory, propertyId: propertyId))
+      // }
 
-      // 9. Close workspace.
+      // 10. Close workspace.
       ref.read(workspaceProvider.notifier).closeWorkspace();
 
       displaySnackBar(

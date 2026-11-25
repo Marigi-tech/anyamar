@@ -172,12 +172,12 @@ class _ReusableDataTableWidgetState<T>
           // ==========================================
           child: Container(
             decoration: BoxDecoration(
-              color: themeIsDark == true
+              color: themeIsDark != false
                   ? AppColors.darkElevatedCard
                   : AppColors.whiteColor,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
-                color: themeIsDark == true
+                color: themeIsDark != false
                     ? AppColors.darkBorder
                     : const Color(0xffE5EAF1),
               ),

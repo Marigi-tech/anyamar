@@ -41,7 +41,9 @@ class AlertDialogWidget extends ConsumerWidget {
         style: AppTextStylesConstant.cardDescriptionStyle.copyWith(
           fontStyle: FontStyle.normal,
           fontSize: 17,
-          color: themeIsDark == true ? AppColors.darkText : AppColors.lightText,
+          color: themeIsDark != false
+              ? AppColors.darkText
+              : AppColors.lightText,
         ),
       ),
       content: Column(
@@ -63,7 +65,7 @@ class AlertDialogWidget extends ConsumerWidget {
             style: AppTextStylesConstant.cardDescriptionStyle.copyWith(
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: themeIsDark == true
+              color: themeIsDark != false
                   ? AppColors.darkText
                   : AppColors.lightText,
             ),
@@ -80,7 +82,7 @@ class AlertDialogWidget extends ConsumerWidget {
         FilledButton(
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.red,
-            foregroundColor: themeIsDark == true
+            foregroundColor: themeIsDark != false
                 ? AppColors.darkCard
                 : AppColors.lightCard,
           ),
@@ -94,7 +96,7 @@ class AlertDialogWidget extends ConsumerWidget {
             style: AppTextStylesConstant.cardDescriptionStyle.copyWith(
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: themeIsDark == true
+              color: themeIsDark != false
                   ? AppColors.darkText
                   : AppColors.lightText,
             ),

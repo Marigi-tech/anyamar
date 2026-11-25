@@ -27,7 +27,7 @@ class FormLabel extends ConsumerWidget {
           style: CustomTextStyles.cardDescriptionStyle.copyWith(
             fontStyle: FontStyle.normal,
             fontSize: 15,
-            color: themeIsDark == true ? AppColorsConstant.whiteColor : null,
+            color: themeIsDark != false ? AppColorsConstant.whiteColor : null,
           ),
         ),
       ),

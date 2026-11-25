@@ -80,11 +80,11 @@ class _SummaryCardState extends ConsumerState<SummaryCard> {
                     shadowColor: isHovered
                         ? widget.iconCardColor?.withValues(alpha: 0.5) ??
                               AppColors.primaryBlue.withValues(alpha: 0.5)
-                        : themeIsDark == true
+                        : themeIsDark != false
                         ? AppColors.darkElevatedCard.withValues(alpha: 0.9)
                         : AppColors.whiteColor.withValues(alpha: 0.9),
 
-                    color: themeIsDark == true
+                    color: themeIsDark != false
                         ? AppColors.darkCard.withValues(alpha: 0.9)
                         : AppColors.lightCard.withValues(alpha: 0.9),
 

@@ -133,7 +133,7 @@ class ItemCell extends ConsumerWidget {
       style: CustomTextStyles.cardDescriptionStyle.copyWith(
         fontSize: 12,
         fontStyle: FontStyle.normal,
-        color: themeIsDark == true
+        color: themeIsDark != false
             ? AppColors.darkText
             : const Color(0xFF344055),
       ),

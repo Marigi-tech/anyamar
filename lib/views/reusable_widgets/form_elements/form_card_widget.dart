@@ -20,7 +20,7 @@ class FormCardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeIsDark = ref.watch(themeIsDarkProvider);
-    final isDark = themeIsDark == true;
+    final isDark = themeIsDark != false;
 
     const accentColor = AppColors.primaryBlue;
 
@@ -316,7 +316,7 @@ class FormCardWidget extends ConsumerWidget {
 //   @override
 //   Widget build(BuildContext context, WidgetRef ref) {
 //     final themeIsDark = ref.watch(themeIsDarkProvider);
-//     final isDark = themeIsDark == true;
+//     final isDark = themeIsDark != false;
 
 //     const accentColor = AppColors.primaryBlue;
 
@@ -570,7 +570,7 @@ class FormCardWidget extends ConsumerWidget {
 //   @override
 //   Widget build(BuildContext context, WidgetRef ref) {
 //     final themeIsDark = ref.watch(themeIsDarkProvider);
-//     final isDark = themeIsDark == true;
+//     final isDark = themeIsDark != false;
 
 //     const accentColor = AppColors.primaryBlue;
 
@@ -706,13 +706,13 @@ class FormCardWidget extends ConsumerWidget {
 //       shape: RoundedRectangleBorder(
 //         borderRadius: BorderRadius.circular(10),
 //         side: BorderSide(
-//           color: themeIsDark == true
+//           color: themeIsDark != false
 //               ? AppColors.darkBorder
 //               : const Color(0xffE5EAF1),
 //         ),
 //       ),
 
-//       color: themeIsDark == true
+//       color: themeIsDark != false
 //           ? AppColors.darkElevatedCard
 //           : AppColors.whiteColor,
 

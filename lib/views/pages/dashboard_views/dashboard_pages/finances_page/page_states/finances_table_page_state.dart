@@ -31,7 +31,7 @@ class FinancesTablePage extends ConsumerWidget {
                 );
           },
         ),
-        SizedBox(width: 20.0),
+        // SizedBox(width: 20.0),
         ElevatedButtonWidget(
           buttonTitle: 'Add Rental Record',
           buttonIcon: Icon(Icons.add),
@@ -44,35 +44,47 @@ class FinancesTablePage extends ConsumerWidget {
           },
         ),
       ],
-      scrollableDashboardWidget: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Column(
+      scrollableDashboardWidget: Responsiveness.isMobile(context)
+          ? Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FinancesPageSummaryCards(),
                 SizedBox(height: 15.0),
                 FinancesTable(introText: 'finances'),
+                SizedBox(height: 25.0),
+                QuickFinancesActions(introText: introText),
               ],
-            ),
-          ),
-          SizedBox(width: 15.0),
-          Expanded(
-            child: Column(
+            )
+          : Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                QuickFinancesActions(introText: introText),
-                SizedBox(height: 20.0),
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FinancesPageSummaryCards(),
+                      SizedBox(height: 15.0),
+                      FinancesTable(introText: 'finances'),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 15.0),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      QuickFinancesActions(introText: introText),
+                      SizedBox(height: 20.0),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

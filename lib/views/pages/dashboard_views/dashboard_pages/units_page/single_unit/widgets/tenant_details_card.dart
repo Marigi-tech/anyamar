@@ -64,7 +64,7 @@ class TenantDetailsCard extends ConsumerWidget {
                                 .copyWith(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 17,
-                                  color: themeIsDark == true
+                                  color: themeIsDark != false
                                       ? AppColors.darkText
                                       : AppColors.lightText,
                                 ),

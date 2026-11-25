@@ -102,7 +102,7 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
         padding: const EdgeInsets.only(left: 15, top: 3, bottom: 3),
         decoration: BoxDecoration(
           border: Border.all(
-            color: themeIsDark == true
+            color: themeIsDark != false
                 ? AppColors.darkCard
                 : const Color(0xFFDCE2EB),
           ),
@@ -121,7 +121,7 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
                 style: CustomTextStyles.cardDescriptionStyle.copyWith(
                   fontSize: 12,
                   fontStyle: FontStyle.normal,
-                  color: themeIsDark == true
+                  color: themeIsDark != false
                       ? AppColors.darkText
                       : const Color(0xFF25344B),
                 ),
@@ -210,7 +210,7 @@ class _RentCollectionCardState extends ConsumerState<RentCollectionCard> {
                             style: AppTextStylesConstant.cardDescriptionStyle
                                 .copyWith(
                                   fontSize: 11,
-                                  color: themeIsDark == true
+                                  color: themeIsDark != false
                                       ? AppColors.darkText
                                       : const Color(0xFF25344B),
                                 ),
@@ -310,7 +310,7 @@ class _CollectionRow extends ConsumerWidget {
                     fontFamily: 'Lato',
                     fontSize: 12,
                     fontStyle: FontStyle.normal,
-                    color: themeIsDark == true
+                    color: themeIsDark != false
                         ? AppColors.darkText
                         : const Color(0xFF39465A),
                   ),
@@ -325,7 +325,7 @@ class _CollectionRow extends ConsumerWidget {
               fontSize: 12,
 
               fontWeight: FontWeight.w600,
-              color: themeIsDark == true
+              color: themeIsDark != false
                   ? AppColors.darkText
                   : const Color(0xFF17243B),
             ),

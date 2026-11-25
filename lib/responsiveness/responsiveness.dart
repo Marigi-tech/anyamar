@@ -14,11 +14,11 @@ class Responsiveness extends StatelessWidget {
   //Check screen size
   //? Mobile screen
   static bool isMobile(BuildContext context) =>
-      getSizeFromContext(context).width < 850;
+      getSizeFromContext(context).width < 950;
   //? Tablet screen
   static bool isTablet(BuildContext context) =>
       getSizeFromContext(context).width < 1100 &&
-      getSizeFromContext(context).width >= 850;
+      getSizeFromContext(context).width >= 950;
   //? Desktop screens
   static bool isDesktop(BuildContext context) =>
       getSizeFromContext(context).width >= 1100;

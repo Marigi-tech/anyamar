@@ -107,7 +107,7 @@ class _ClearButtonWidgetState extends ConsumerState<ClearButtonWidget> {
       child: GestureDetector(
         onTap: widget.onPressedCallBack,
         child: Card(
-          color: themeIsDark == true
+          color: themeIsDark != false
               ? AppColors.darkElevatedCard.withValues(alpha: 0.9)
               : AppColors.lightCard.withValues(alpha: 0.9),
           margin: EdgeInsets.only(right: 20.0),
@@ -169,7 +169,7 @@ class _ClearButtonWidgetState extends ConsumerState<ClearButtonWidget> {
                               fontWeight: FontWeight.normal,
                               fontSize: 13,
 
-                              color: themeIsDark == true
+                              color: themeIsDark != false
                                   ? AppColors.whiteColor
                                   : Color(0xff718096),
                             ),
@@ -187,7 +187,7 @@ class _ClearButtonWidgetState extends ConsumerState<ClearButtonWidget> {
                                 fontStyle: FontStyle.normal,
                                 // fontSize: 19,
                                 // fontWeight: FontWeight.w700,
-                                color: themeIsDark == true
+                                color: themeIsDark != false
                                     ? AppColors.whiteColor
                                     : Color(0xff12234A),
                               ),
@@ -203,7 +203,7 @@ class _ClearButtonWidgetState extends ConsumerState<ClearButtonWidget> {
                                 letterSpacing: 0.4,
                                 fontStyle: FontStyle.italic,
                                 fontSize: 14,
-                                color: themeIsDark == true
+                                color: themeIsDark != false
                                     ? AppColors.whiteColor
                                     : Color(0xff718096),
                               ),

@@ -59,11 +59,11 @@ class _DashboardCardWidgetState extends ConsumerState<DashboardCardWidget> {
                 elevation: isHovered ? 12.0 : 4.0,
                 shadowColor: isHovered
                     ? AppColors.primaryBlue.withValues(alpha: 0.5)
-                    : themeIsDark == true
+                    : themeIsDark != false
                     ? AppColors.darkElevatedCard.withValues(alpha: 0.9)
                     : AppColors.whiteColor.withValues(alpha: 0.9),
 
-                color: themeIsDark == true
+                color: themeIsDark != false
                     ? AppColors.darkElevatedCard.withValues(alpha: 0.9)
                     : AppColors.whiteColor.withValues(alpha: 0.9),
 
@@ -85,7 +85,7 @@ class _DashboardCardWidgetState extends ConsumerState<DashboardCardWidget> {
                             widget.cardTitle,
                             style: AppTextStylesConstant.cardDescriptionStyle
                                 .copyWith(
-                                  color: themeIsDark == true
+                                  color: themeIsDark != false
                                       ? AppColors.whiteColor
                                       : AppColors.blueGreyColor,
                                   fontStyle: FontStyle.normal,

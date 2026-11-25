@@ -17,7 +17,7 @@ class LandingNavigation extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 20 : 25,
-        vertical: 13,
+        vertical: 06,
       ),
       decoration: BoxDecoration(
         color: isDark
@@ -39,17 +39,10 @@ class LandingNavigation extends ConsumerWidget {
           const Spacer(),
 
           if (!isMobile) ...[
-            // _navItem('Home', true),
-            // _navItem('Features', false),
-            // _navItem('About', false),
-            // _navItem('Contact', false),
-
-            // const SizedBox(width: 25),
             ElevatedButtonWidget(
               buttonTitle: 'Sign Up',
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 16),
               onButtonPressedCallBack: () async {
-                scaffoldKey.currentState?.closeEndDrawer();
                 Navigator.of(
                   context,
                 ).push(MaterialPageRoute(builder: (_) => SignUpPage()));
@@ -59,8 +52,7 @@ class LandingNavigation extends ConsumerWidget {
             ElevatedButtonWidget(
               buttonTitle: 'Sign In',
               isClear: true,
-              onButtonPressedCallBack: () {
-                scaffoldKey.currentState?.closeEndDrawer();
+              onButtonPressedCallBack: () async {
                 Navigator.of(
                   context,
                 ).push(MaterialPageRoute(builder: (_) => LoginPage()));

@@ -10,20 +10,18 @@ enum PaymentFrequency {
 }
 
 getFreqFromPaymentFrequency(PaymentFrequency? paymentFrequency) {
-  String freq = '';
   if (paymentFrequency == PaymentFrequency.daily) {
-    freq = 'day';
+    return 'day';
   }
   if (paymentFrequency == PaymentFrequency.monthly) {
-    freq = 'month';
+    return 'month';
   }
   if (paymentFrequency == PaymentFrequency.yearly) {
-    freq = 'year';
+    return 'year';
   }
   if (paymentFrequency == PaymentFrequency.weekly) {
-    freq = 'week';
+    return 'week';
   }
-  return freq;
 }
 
 getFrequencyFromFreq(String? frequency) {

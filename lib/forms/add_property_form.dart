@@ -375,12 +375,12 @@ class _AddPropertyFormState extends ConsumerState<AddPropertyForm> {
       } else {
         try {
           // 1. Save the newproperty to Firestore.
-          await db.addProperty(property);
+          final addedProperty = await db.addProperty(property);
 
           // 2. Update local provider state with new property.
           await ref
               .read(userInformationProvider.notifier)
-              .appendProperty(property);
+              .appendProperty(addedProperty);
 
           // 3. Close the workspace
           ref.read(workspaceProvider.notifier).closeWorkspace();
